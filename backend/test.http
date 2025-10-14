@@ -1,0 +1,10 @@
+### Lägg till en användare
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "name": "Johnny"
+}
+
+### Hämta alla användare
+GET http://localhost:8080/users
