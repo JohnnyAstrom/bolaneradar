@@ -3,74 +3,69 @@ package com.bolaneradar.backend.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
+/**
+ * Representerar en specifik bolåneränta kopplad till en bank.
+ * Exempel: Swedbank, 3 års bunden ränta, 4.25 %, giltig från 2025-03-01.
+ */
 @Entity
 @Table(name = "mortgage_rates")
 public class MortgageRate {
-
-    /**
-     * Enum som listar de bindningstider vi vill stödja.
-     * Bara dessa värden är giltiga i databasen.
-     */
-    public enum RateTerm {
-        VARIABLE_3M,   // rörlig ränta (3 månader)
-        FIXED_1Y,      // bunden 1 år
-        FIXED_2Y,      // bunden 2 år
-        FIXED_3Y,      // bunden 3 år
-        FIXED_5Y       // bunden 5 år
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * Varje ränta hör till en bank.
-     * "bank_id" blir foreign key i tabellen mortgage_rates.
+     * Räntan tillhör en bank.
+     * Foreign key skapas automatiskt (bank_id i tabellen).
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_id", nullable = false)
-    @com.fasterxml.jackson.annotation.JsonBackReference
+    @JsonBackReference
     private Bank bank;
 
-
     /**
-     * Bindningstid – sparas som text (ex. "FIXED_3Y").
+     * Bindningstiden (t.ex. FIXED_3Y eller VARIABLE_3M).
+     * Sparas som text i databasen tack vare EnumType.STRING.
      */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RateTerm term;
+    private MortgageTerm term;
 
     /**
-     * Själva räntesatsen, t.ex. 4.85 %.
-     * NUMERIC(4,2) = max 99.99, två decimaler.
+     * Själva räntesatsen i procent, t.ex. 4.85.
+     * NUMERIC(4,2) innebär max 99.99 med två decimaler.
      */
     @Column(nullable = false, precision = 4, scale = 2)
     private BigDecimal ratePercent;
 
     /**
-     * Datum då räntan började gälla.
+     * Datumet då räntan började gälla.
      */
     @Column(nullable = false)
     private LocalDate effectiveDate;
 
+    // 🔹 Standardkonstruktör krävs av JPA
     public MortgageRate() {}
 
-    public MortgageRate(Bank bank, RateTerm term, BigDecimal ratePercent, LocalDate effectiveDate) {
+    // 🔹 Praktisk konstruktör för enklare instansiering
+    public MortgageRate(Bank bank, MortgageTerm term, BigDecimal ratePercent, LocalDate effectiveDate) {
         this.bank = bank;
         this.term = term;
         this.ratePercent = ratePercent;
         this.effectiveDate = effectiveDate;
     }
 
-    // Getters & setters
+    // 🔹 Getters & setters
     public Long getId() { return id; }
 
     public Bank getBank() { return bank; }
     public void setBank(Bank bank) { this.bank = bank; }
 
-    public RateTerm getTerm() { return term; }
-    public void setTerm(RateTerm term) { this.term = term; }
+    public MortgageTerm getTerm() { return term; }
+    public void setTerm(MortgageTerm term) { this.term = term; }
 
     public BigDecimal getRatePercent() { return ratePercent; }
     public void setRatePercent(BigDecimal ratePercent) { this.ratePercent = ratePercent; }

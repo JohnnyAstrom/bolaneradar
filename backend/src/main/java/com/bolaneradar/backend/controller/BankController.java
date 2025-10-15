@@ -1,5 +1,7 @@
 package com.bolaneradar.backend.controller;
 
+import com.bolaneradar.backend.dto.BankDto;
+import com.bolaneradar.backend.dto.mapper.BankMapper;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.service.BankService;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +28,11 @@ public class BankController {
      * Returnerar en lista över alla banker i databasen.
      */
     @GetMapping
-    public List<Bank> getAllBanks() {
-        return bankService.getAllBanks();
+    public List<BankDto> getAllBanks() {
+        return bankService.getAllBanks()
+                .stream()
+                .map(BankMapper::toDto)
+                .toList();
     }
 
     /**
@@ -35,9 +40,9 @@ public class BankController {
      * Returnerar en specifik bank om den finns, annars 404.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Bank> getBankById(@PathVariable Long id) {
+    public ResponseEntity<BankDto> getBankById(@PathVariable Long id) {
         return bankService.getBankById(id)
-                .map(ResponseEntity::ok)
+                .map(bank -> ResponseEntity.ok(BankMapper.toDto(bank)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
