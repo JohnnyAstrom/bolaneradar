@@ -30,5 +30,8 @@ Content-Type: application/json
   "effectiveDate": "2025-10-15"
 }
 
-### Hämta alla räntor för Swedbank (bankId = 1)
+### Hämta alla räntor för Swedbank (bankId =
 GET http://localhost:8080/api/rates/bank/1
+
+### Importera exempeldata
+POST http://localhost:8080/api/import/example

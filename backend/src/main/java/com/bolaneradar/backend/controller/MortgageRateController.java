@@ -4,6 +4,7 @@ import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
 import com.bolaneradar.backend.service.BankService;
 import com.bolaneradar.backend.service.MortgageRateService;
+import com.bolaneradar.backend.dto.RateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class MortgageRateController {
     private final MortgageRateService mortgageRateService;
     private final BankService bankService;
 
-    // Vi använder både RateService och BankService
+    // Konstruktor med dependency injection för tjänsterna
     public MortgageRateController(MortgageRateService mortgageRateService, BankService bankService) {
         this.mortgageRateService = mortgageRateService;
         this.bankService = bankService;
@@ -49,6 +50,7 @@ public class MortgageRateController {
     /**
      * POST /api/rates
      * Skapar en ny ränta kopplad till en befintlig bank.
+     *
      * Exempel på JSON-data som kan skickas:
      * {
      *   "bankId": 1,
@@ -72,13 +74,4 @@ public class MortgageRateController {
                 })
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
-
-    /**
-     * En intern record-klass som beskriver JSON-formatet vi tar emot i POST-anrop.
-     * Gör koden tydligare och enklare att förstå.
-     */
-    public record RateRequest(Long bankId,
-                              MortgageRate.RateTerm term,
-                              java.math.BigDecimal ratePercent,
-                              java.time.LocalDate effectiveDate) {}
 }
