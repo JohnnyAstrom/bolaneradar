@@ -44,18 +44,29 @@ public class DataImportService {
         // enklare: skapa deleteAll() i RateUpdateLogRepository
         rateUpdateService.deleteAllLogs(); // (se steg nedan)
 
-        // Rensa banker
-        bankRepository.deleteAll();
+        // Skapa (eller hämta) banker utan att ta bort gamla
+        Bank swedbank = bankRepository.findByName("Swedbank");
+        if (swedbank == null) {
+            swedbank = new Bank("Swedbank", "https://www.swedbank.se");
+            bankRepository.save(swedbank);
+        }
 
-        // Skapa ny bank och räntor
-        Bank swedbank = new Bank("Swedbank", "https://www.swedbank.se");
-        bankRepository.save(swedbank);
+        Bank nordea = bankRepository.findByName("Nordea");
+        if (nordea == null) {
+            nordea = new Bank("Nordea", "https://www.nordea.se");
+            bankRepository.save(nordea);
+        }
 
         List<MortgageRate> rates = List.of(
-                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.25"), LocalDate.now()),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.10"), LocalDate.now()),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.95"), LocalDate.now()),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.80"), LocalDate.now())
+                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.05"), LocalDate.now()),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.20"), LocalDate.now()),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.70"), LocalDate.now().minusDays(7)),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.60"), LocalDate.now().minusDays(15)),
+
+                new MortgageRate(nordea, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.30"), LocalDate.now().minusDays(1)),
+                new MortgageRate(nordea, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.20"), LocalDate.now().minusDays(5)),
+                new MortgageRate(nordea, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.99"), LocalDate.now().minusDays(7)),
+                new MortgageRate(nordea, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.85"), LocalDate.now().minusDays(30))
         );
 
         rateRepository.saveAll(rates);
