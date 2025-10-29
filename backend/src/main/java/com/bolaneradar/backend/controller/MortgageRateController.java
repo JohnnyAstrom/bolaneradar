@@ -1,5 +1,6 @@
 package com.bolaneradar.backend.controller;
 
+import com.bolaneradar.backend.dto.BankHistoryDto;
 import com.bolaneradar.backend.dto.LatestRateDto;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
@@ -76,5 +77,27 @@ public class MortgageRateController {
     @GetMapping("/latest")
     public List<LatestRateDto> getLatestRates() {
         return mortgageRateService.getLatestRatesPerBank();
+    }
+
+    /**
+     * GET /api/rates/history/{bankId}
+     * Hämtar alla historiska räntor för en viss bank.
+     */
+    @GetMapping("/history/{bankId}")
+    public ResponseEntity<List<LatestRateDto>> getRateHistoryForBank(@PathVariable Long bankId) {
+        return bankService.getBankById(bankId)
+                .map(bank -> ResponseEntity.ok(mortgageRateService.getRateHistoryForBank(bank)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    /**
+     * GET /api/rates/history
+     * Returnerar alla bankers historiska räntor.
+     */
+    @GetMapping("/history")
+    public ResponseEntity<List<BankHistoryDto>> getAllBanksRateHistory() {
+        List<Bank> banks = bankService.getAllBanks();
+        List<BankHistoryDto> history = mortgageRateService.getAllBanksRateHistory(banks);
+        return ResponseEntity.ok(history);
     }
 }
