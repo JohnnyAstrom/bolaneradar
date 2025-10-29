@@ -1,5 +1,6 @@
 package com.bolaneradar.backend.controller;
 
+import com.bolaneradar.backend.dto.LatestRateDto;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
 import com.bolaneradar.backend.service.BankService;
@@ -50,14 +51,6 @@ public class MortgageRateController {
     /**
      * POST /api/rates
      * Skapar en ny ränta kopplad till en befintlig bank.
-     *
-     * Exempel på JSON-data som kan skickas:
-     * {
-     *   "bankId": 1,
-     *   "term": "FIXED_3Y",
-     *   "ratePercent": 4.85,
-     *   "effectiveDate": "2025-10-15"
-     * }
      */
     @PostMapping
     public ResponseEntity<MortgageRate> createRate(@RequestBody RateRequest request) {
@@ -74,5 +67,14 @@ public class MortgageRateController {
                     return ResponseEntity.ok(saved);
                 })
                 .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    /**
+     * GET /api/rates/latest
+     * Returnerar den senaste räntan (senaste effectiveDate) per bank.
+     */
+    @GetMapping("/latest")
+    public List<LatestRateDto> getLatestRates() {
+        return mortgageRateService.getLatestRatesPerBank();
     }
 }
