@@ -7,6 +7,7 @@ import com.bolaneradar.backend.model.MortgageRate;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -101,10 +102,39 @@ public class MortgageRateService {
 
     /**
      * Hämtar hela historiken av räntor för en viss bank,
-     * sorterat efter datum (senaste först).
+     * med valfri filtrering och sortering.
      */
-    public List<LatestRateDto> getRateHistoryForBank(Bank bank) {
+    public List<LatestRateDto> getRateHistoryForBank(
+            Bank bank,
+            LocalDate from,
+            LocalDate to,
+            String sort
+    ) {
         List<MortgageRate> rates = mortgageRateRepository.findByBank(bank);
+
+        // Filtrering
+        if (from != null) {
+            rates = rates.stream()
+                    .filter(rate -> !rate.getEffectiveDate().isBefore(from))
+                    .toList();
+        }
+        if (to != null) {
+            rates = rates.stream()
+                    .filter(rate -> !rate.getEffectiveDate().isAfter(to))
+                    .toList();
+        }
+
+        // Sortering
+        if (sort == null || sort.isBlank()) {
+            sort = "desc";
+        }
+
+        Comparator<MortgageRate> comparator = Comparator.comparing(MortgageRate::getEffectiveDate);
+        if ("desc".equalsIgnoreCase(sort)) {
+            comparator = comparator.reversed();
+        }
+        rates = rates.stream().sorted(comparator).toList();
+
 
         return rates.stream()
                 .map(rate -> new LatestRateDto(
@@ -120,22 +150,17 @@ public class MortgageRateService {
     /**
      * Hämtar historiska bolåneräntor för alla banker.
      * Varje bank returneras tillsammans med sina räntor,
-     * sorterade efter datum (senaste först) inom varje bank.
+     * med valfri filtrering och sortering.
      */
-    public List<BankHistoryDto> getAllBanksRateHistory(List<Bank> banks) {
+    public List<BankHistoryDto> getAllBanksRateHistory(
+            List<Bank> banks,
+            LocalDate from,
+            LocalDate to,
+            String sort
+    ) {
         return banks.stream()
                 .map(bank -> {
-                    List<LatestRateDto> rates = mortgageRateRepository.findByBank(bank).stream()
-                            .sorted(Comparator.comparing(MortgageRate::getEffectiveDate).reversed())
-                            .map(rate -> new LatestRateDto(
-                                    bank.getName(),
-                                    rate.getTerm().name(),
-                                    rate.getRateType().name(),
-                                    rate.getRatePercent(),
-                                    rate.getEffectiveDate()
-                            ))
-                            .toList();
-
+                    List<LatestRateDto> rates = getRateHistoryForBank(bank, from, to, sort);
                     return new BankHistoryDto(bank.getName(), rates);
                 })
                 .toList();

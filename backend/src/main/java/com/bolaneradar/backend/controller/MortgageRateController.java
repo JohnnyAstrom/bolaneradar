@@ -10,6 +10,7 @@ import com.bolaneradar.backend.dto.RateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -82,22 +83,40 @@ public class MortgageRateController {
     /**
      * GET /api/rates/history/{bankId}
      * Hämtar alla historiska räntor för en viss bank.
+     * Parametrar:
+     * - from: startdatum (frivilligt)
+     * - to: slutdatum (frivilligt)
+     * - sort: "asc" eller "desc" (default = desc)
      */
     @GetMapping("/history/{bankId}")
-    public ResponseEntity<List<LatestRateDto>> getRateHistoryForBank(@PathVariable Long bankId) {
+    public ResponseEntity<List<LatestRateDto>> getRateHistoryForBank(
+            @PathVariable Long bankId,
+            @RequestParam(required = false) LocalDate from,
+            @RequestParam(required = false) LocalDate to,
+            @RequestParam(required = false) String sort) {
+
         return bankService.getBankById(bankId)
-                .map(bank -> ResponseEntity.ok(mortgageRateService.getRateHistoryForBank(bank)))
+                .map(bank -> ResponseEntity.ok(
+                        mortgageRateService.getRateHistoryForBank(bank, from, to, sort)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**
      * GET /api/rates/history
      * Returnerar alla bankers historiska räntor.
+     * Parametrar:
+     * - from: startdatum (frivilligt)
+     * - to: slutdatum (frivilligt)
+     * - sort: "asc" eller "desc" (default = desc)
      */
     @GetMapping("/history")
-    public ResponseEntity<List<BankHistoryDto>> getAllBanksRateHistory() {
+    public ResponseEntity<List<BankHistoryDto>> getAllBanksRateHistory(
+            @RequestParam(required = false) LocalDate from,
+            @RequestParam(required = false) LocalDate to,
+            @RequestParam(required = false) String sort) {
+
         List<Bank> banks = bankService.getAllBanks();
-        List<BankHistoryDto> history = mortgageRateService.getAllBanksRateHistory(banks);
+        List<BankHistoryDto> history = mortgageRateService.getAllBanksRateHistory(banks, from, to, sort);
         return ResponseEntity.ok(history);
     }
 }
