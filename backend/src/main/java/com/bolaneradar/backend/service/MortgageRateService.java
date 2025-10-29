@@ -1,5 +1,6 @@
 package com.bolaneradar.backend.service;
 
+import com.bolaneradar.backend.dto.BankHistoryDto;
 import com.bolaneradar.backend.dto.LatestRateDto;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
@@ -96,5 +97,47 @@ public class MortgageRateService {
             case "FIXED_5Y" -> 5;
             default -> 99;
         };
+    }
+
+    /**
+     * Hämtar hela historiken av räntor för en viss bank,
+     * sorterat efter datum (senaste först).
+     */
+    public List<LatestRateDto> getRateHistoryForBank(Bank bank) {
+        List<MortgageRate> rates = mortgageRateRepository.findByBank(bank);
+
+        return rates.stream()
+                .map(rate -> new LatestRateDto(
+                        bank.getName(),
+                        rate.getTerm().name(),
+                        rate.getRateType().name(),
+                        rate.getRatePercent(),
+                        rate.getEffectiveDate()
+                ))
+                .toList();
+    }
+
+    /**
+     * Hämtar historiska bolåneräntor för alla banker.
+     * Varje bank returneras tillsammans med sina räntor,
+     * sorterade efter datum (senaste först) inom varje bank.
+     */
+    public List<BankHistoryDto> getAllBanksRateHistory(List<Bank> banks) {
+        return banks.stream()
+                .map(bank -> {
+                    List<LatestRateDto> rates = mortgageRateRepository.findByBank(bank).stream()
+                            .sorted(Comparator.comparing(MortgageRate::getEffectiveDate).reversed())
+                            .map(rate -> new LatestRateDto(
+                                    bank.getName(),
+                                    rate.getTerm().name(),
+                                    rate.getRateType().name(),
+                                    rate.getRatePercent(),
+                                    rate.getEffectiveDate()
+                            ))
+                            .toList();
+
+                    return new BankHistoryDto(bank.getName(), rates);
+                })
+                .toList();
     }
 }
