@@ -1,6 +1,8 @@
 package com.bolaneradar.backend.dto;
 
 import com.bolaneradar.backend.model.MortgageTerm;
+import com.bolaneradar.backend.model.RateType;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -11,6 +13,7 @@ import java.time.LocalDate;
 public record RateRequest(
         Long bankId,
         MortgageTerm term,
+        RateType rateType,
         BigDecimal ratePercent,
         LocalDate effectiveDate
 ) {}

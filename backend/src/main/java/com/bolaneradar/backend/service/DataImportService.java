@@ -3,6 +3,7 @@ package com.bolaneradar.backend.service;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
 import com.bolaneradar.backend.model.MortgageTerm;
+import com.bolaneradar.backend.model.RateType;
 import com.bolaneradar.backend.repository.BankRepository;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import org.springframework.stereotype.Service;
@@ -51,10 +52,10 @@ public class DataImportService {
         bankRepository.save(swedbank);
 
         List<MortgageRate> rates = List.of(
-                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, new BigDecimal("4.25"), LocalDate.now()),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, new BigDecimal("4.10"), LocalDate.now()),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, new BigDecimal("3.95"), LocalDate.now()),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, new BigDecimal("3.80"), LocalDate.now())
+                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.25"), LocalDate.now()),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.10"), LocalDate.now()),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.95"), LocalDate.now()),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.80"), LocalDate.now())
         );
 
         rateRepository.saveAll(rates);

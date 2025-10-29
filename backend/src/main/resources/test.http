@@ -26,6 +26,7 @@ Content-Type: application/json
 {
   "bankId": 1,
   "term": "FIXED_3Y",
+  "rateType": "LISTRATE",
   "ratePercent": 4.85,
   "effectiveDate": "2025-10-15"
 }

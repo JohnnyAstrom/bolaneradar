@@ -66,6 +66,7 @@ public class MortgageRateController {
                     MortgageRate rate = new MortgageRate(
                             bank,
                             request.term(),
+                            request.rateType(),
                             request.ratePercent(),
                             request.effectiveDate()
                     );

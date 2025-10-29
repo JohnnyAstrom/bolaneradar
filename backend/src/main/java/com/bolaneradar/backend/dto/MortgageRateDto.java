@@ -6,6 +6,7 @@ import java.time.LocalDate;
 public record MortgageRateDto(
         Long id,
         String term,
+        String rateType,
         BigDecimal ratePercent,
         LocalDate effectiveDate
 ) {}

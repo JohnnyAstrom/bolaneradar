@@ -35,6 +35,14 @@ public class MortgageRate {
     private MortgageTerm term;
 
     /**
+     * Typ av ränta (listränta/snittränta)
+     * Sparas som text i databasen tack vare EnumType.STRING.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RateType rateType;
+
+    /**
      * Själva räntesatsen i procent, t.ex. 4.85.
      * NUMERIC(4,2) innebär max 99.99 med två decimaler.
      */
@@ -51,9 +59,11 @@ public class MortgageRate {
     public MortgageRate() {}
 
     // 🔹 Praktisk konstruktör för enklare instansiering
-    public MortgageRate(Bank bank, MortgageTerm term, BigDecimal ratePercent, LocalDate effectiveDate) {
+    public MortgageRate(Bank bank, MortgageTerm term, RateType rateType,
+                        BigDecimal ratePercent, LocalDate effectiveDate) {
         this.bank = bank;
         this.term = term;
+        this.rateType = rateType;
         this.ratePercent = ratePercent;
         this.effectiveDate = effectiveDate;
     }
@@ -66,6 +76,9 @@ public class MortgageRate {
 
     public MortgageTerm getTerm() { return term; }
     public void setTerm(MortgageTerm term) { this.term = term; }
+
+    public RateType getRateType() { return rateType; }
+    public void setRateType(RateType rateType) { this.rateType = rateType; }
 
     public BigDecimal getRatePercent() { return ratePercent; }
     public void setRatePercent(BigDecimal ratePercent) { this.ratePercent = ratePercent; }
