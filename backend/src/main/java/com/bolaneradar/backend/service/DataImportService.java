@@ -19,10 +19,14 @@ public class DataImportService {
 
     private final BankRepository bankRepository;
     private final MortgageRateRepository rateRepository;
+    private final RateUpdateService rateUpdateService;
 
-    public DataImportService(BankRepository bankRepository, MortgageRateRepository rateRepository) {
+    public DataImportService(BankRepository bankRepository,
+                             MortgageRateRepository rateRepository,
+                             RateUpdateService rateUpdateService) {
         this.bankRepository = bankRepository;
         this.rateRepository = rateRepository;
+        this.rateUpdateService = rateUpdateService;
     }
 
 
@@ -31,8 +35,18 @@ public class DataImportService {
      */
     public void importExampleData() {
 
+        // Ta bort loggar först (de har foreign key till bank)
+        rateUpdateService.getAllLogs().forEach(log -> {
+            // du kan skapa en deleteAll-metod i RateUpdateService istället
+        });
+
+        // enklare: skapa deleteAll() i RateUpdateLogRepository
+        rateUpdateService.deleteAllLogs(); // (se steg nedan)
+
+        // Rensa banker
         bankRepository.deleteAll();
 
+        // Skapa ny bank och räntor
         Bank swedbank = new Bank("Swedbank", "https://www.swedbank.se");
         bankRepository.save(swedbank);
 
@@ -44,5 +58,8 @@ public class DataImportService {
         );
 
         rateRepository.saveAll(rates);
+
+        // Logga importen
+        rateUpdateService.logUpdate(swedbank, "ExampleData", rates.size());
     }
 }
