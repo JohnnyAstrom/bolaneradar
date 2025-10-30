@@ -20,4 +20,6 @@ public interface BankRepository extends JpaRepository<Bank, Long> {
      * Den här låter oss hitta en bank via dess namn.
      */
     Bank findByName(String name);
+
+    Bank findByNameIgnoreCase(String name);
 }
