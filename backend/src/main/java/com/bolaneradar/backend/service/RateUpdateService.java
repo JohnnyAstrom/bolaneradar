@@ -4,57 +4,75 @@ import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.RateUpdateLog;
 import com.bolaneradar.backend.repository.RateUpdateLogRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Service som hanterar loggning av datainsamlingar och uppdateringar.
- * Varje gång data importeras eller uppdateras skapas en loggrad i databasen.
+ * Service som hanterar loggning av räntedataimporter.
+ * Används av ScraperService för att registrera när och hur många räntor
+ * som importerades för varje bank.
  */
 @Service
 public class RateUpdateService {
 
-    private final RateUpdateLogRepository logRepository;
+    private final RateUpdateLogRepository rateUpdateLogRepository;
 
-    // Konstruktorinjektion – Spring hanterar beroendet automatiskt
-    public RateUpdateService(RateUpdateLogRepository logRepository) {
-        this.logRepository = logRepository;
+    public RateUpdateService(RateUpdateLogRepository rateUpdateLogRepository) {
+        this.rateUpdateLogRepository = rateUpdateLogRepository;
     }
 
     /**
-     * Loggar en ny uppdatering till databasen.
+     * Skapar en ny loggpost för en bank när dess räntor uppdateras.
      *
-     * @param bank den bank uppdateringen gäller (kan vara null om generell)
-     * @param sourceName källa för uppdateringen, t.ex. "ExampleData" eller "Swedbank Scraper"
-     * @param importedCount hur många poster som importerades/uppdaterades
-     * @return den sparade loggposten
+     * @param bank den bank vars räntor uppdaterades
+     * @param sourceName varifrån uppdateringen kom (t.ex. "ScraperService" eller "ManualImport")
+     * @param importedCount hur många räntor som importerades
      */
-    public RateUpdateLog logUpdate(Bank bank, String sourceName, int importedCount) {
+    @Transactional
+    public void logUpdate(Bank bank, String sourceName, int importedCount) {
         RateUpdateLog log = new RateUpdateLog(
                 LocalDateTime.now(),
                 sourceName,
                 importedCount,
                 bank
         );
-        return logRepository.save(log);
+        rateUpdateLogRepository.save(log);
     }
 
     /**
-     * Hämtar alla loggar (senaste först).
+     * Hämtar alla loggar, sorterade efter datum (senaste först).
      */
+    @Transactional(readOnly = true)
     public List<RateUpdateLog> getAllLogs() {
-        return logRepository.findAllByOrderByOccurredAtDesc();
+        List<RateUpdateLog> logs = rateUpdateLogRepository.findAllByOrderByOccurredAtDesc();
+
+        // Ladda in banknamn manuellt för att undvika LazyInitializationException
+        logs.forEach(log -> {
+            if (log.getBank() != null) {
+                log.getBank().getName(); // tvingar fram lazy load
+            }
+        });
+
+        return logs;
     }
 
     /**
-     * Hämtar loggar för en specifik bank (senaste först).
+     * Hämtar loggar för en specifik bank, sorterade efter datum (senaste först).
+     *
+     * @param bank den bank vars loggar ska hämtas
      */
+    @Transactional(readOnly = true)
     public List<RateUpdateLog> getLogsForBank(Bank bank) {
-        return logRepository.findByBankOrderByOccurredAtDesc(bank);
-    }
+        List<RateUpdateLog> logs = rateUpdateLogRepository.findByBankOrderByOccurredAtDesc(bank);
 
-    public void deleteAllLogs() {
-        logRepository.deleteAll();
+        logs.forEach(log -> {
+            if (log.getBank() != null) {
+                log.getBank().getName(); // tvingar fram lazy load
+            }
+        });
+
+        return logs;
     }
 }
