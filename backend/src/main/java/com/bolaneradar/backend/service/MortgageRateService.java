@@ -2,15 +2,14 @@ package com.bolaneradar.backend.service;
 
 import com.bolaneradar.backend.dto.BankHistoryDto;
 import com.bolaneradar.backend.dto.LatestRateDto;
+import com.bolaneradar.backend.dto.RateTrendDto;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -164,5 +163,155 @@ public class MortgageRateService {
                     return new BankHistoryDto(bank.getName(), rates);
                 })
                 .toList();
+    }
+
+    /**
+     * Beräknar förändringen i bolåneräntor mellan två valfria mättillfällen.
+     * <p>
+     * Om parametrarna {@code from} och {@code to} inte anges används de två senaste datumen
+     * som finns i databasen. Resultatet innehåller en post per bank, bindningstid och räntetyp
+     * som visar skillnaden i räntenivå mellan dessa två mättillfällen.
+     *
+     * @param from      (valfritt) Startdatum för jämförelse.
+     * @param to        (valfritt) Slutdatum för jämförelse.
+     * @param rateType  (valfritt) Filtrerar på räntetyp, t.ex. "LISTRATE" eller "AVERAGERATE".
+     * @return Lista över förändringar i räntenivå mellan de valda datumen.
+     */
+    public List<RateTrendDto> getRateTrends(LocalDate from, LocalDate to, String rateType) {
+        List<LocalDate> dates = mortgageRateRepository.findDistinctEffectiveDatesDesc();
+
+        if (from == null || to == null) {
+            if (dates.size() < 2) {
+                System.out.println("Inte tillräckligt många mättillfällen för att beräkna trender.");
+                return Collections.emptyList();
+            }
+            to = dates.get(0);
+            from = dates.get(1);
+        }
+
+        System.out.println("Jämför datum: " + from + " → " + to);
+
+        List<MortgageRate> latestRates = mortgageRateRepository.findByEffectiveDate(to);
+        List<MortgageRate> previousRates = mortgageRateRepository.findByEffectiveDate(from);
+
+        // Filtrera på rateType om parameter finns (LISTRATE eller AVERAGERATE)
+        if (rateType != null && !rateType.isBlank()) {
+            latestRates = latestRates.stream()
+                    .filter(r -> r.getRateType().name().equalsIgnoreCase(rateType))
+                    .toList();
+
+            previousRates = previousRates.stream()
+                    .filter(r -> r.getRateType().name().equalsIgnoreCase(rateType))
+                    .toList();
+        }
+
+        // Gör en mapp för tidigare räntor
+        Map<String, Double> previousMap = previousRates.stream()
+                .collect(Collectors.toMap(
+                        r -> r.getBank().getName() + "_" + r.getTerm() + "_" + r.getRateType(),
+                        r -> r.getRatePercent().doubleValue(),
+                        (a, b) -> b
+                ));
+
+        List<RateTrendDto> trends = new ArrayList<>();
+
+        for (MortgageRate rate : latestRates) {
+            String key = rate.getBank().getName() + "_" + rate.getTerm() + "_" + rate.getRateType();
+            Double prev = previousMap.get(key);
+            if (prev != null) {
+                trends.add(new RateTrendDto(
+                        rate.getBank().getName(),
+                        rate.getTerm().name(),
+                        rate.getRateType().name(),
+                        prev,
+                        rate.getRatePercent().doubleValue(),
+                        from,
+                        to
+                ));
+            }
+        }
+
+        // Sortera – först på rateType, sedan på störst förändring
+        trends.sort(Comparator
+                .comparing(RateTrendDto::rateType)
+                .thenComparingDouble(RateTrendDto::change)
+                .reversed());
+
+        System.out.println("Beräknade " + trends.size() + " trendposter mellan " + from + " och " + to);
+        return trends;
+    }
+
+    /**
+     * Beräknar alla förändringar i bolåneräntor inom ett valt tidsintervall.
+     * <p>
+     * Funktionen hämtar samtliga mätningar mellan {@code from} och {@code to}, grupperar dem per
+     * bank, bindningstid och räntetyp, och jämför varje mättillfälle med nästa i ordningen.
+     * Endast faktiska förändringar (där räntan skiljer sig från föregående mätning) inkluderas
+     * i resultatet.
+     * <p>
+     * Detta möjliggör en fullständig översikt av alla ränteändringar under en vald period,
+     * exempelvis för att visa trender eller grafer över tid.
+     *
+     * @param from      Startdatum för intervallet (inklusive).
+     * @param to        Slutdatum för intervallet (inklusive).
+     * @param rateType  (valfritt) Filtrerar på räntetyp, t.ex. "LISTRATE" eller "AVERAGERATE".
+     * @return Lista över samtliga registrerade ränteändringar inom perioden.
+     */
+    public List<RateTrendDto> getRateTrendsInRange(LocalDate from, LocalDate to, String rateType) {
+        // Hämta alla räntor i intervallet
+        List<MortgageRate> rates = mortgageRateRepository.findByEffectiveDateBetween(from, to);
+
+        // Filtrera på räntetyp om angivet
+        if (rateType != null && !rateType.isBlank()) {
+            rates = rates.stream()
+                    .filter(r -> r.getRateType().name().equalsIgnoreCase(rateType))
+                    .toList();
+        }
+
+        // Gruppera per bank + term + rateType
+        Map<String, List<MortgageRate>> grouped = rates.stream()
+                .collect(Collectors.groupingBy(r ->
+                        r.getBank().getName() + "_" + r.getTerm() + "_" + r.getRateType()
+                ));
+
+        List<RateTrendDto> allTrends = new ArrayList<>();
+
+        // Gå igenom varje grupp (bank+term+typ)
+        for (List<MortgageRate> group : grouped.values()) {
+            // Sortera efter datum (äldst först)
+            group.sort(Comparator.comparing(MortgageRate::getEffectiveDate));
+
+            // Jämför varje mättillfälle med nästa
+            for (int i = 0; i < group.size() - 1; i++) {
+                MortgageRate prev = group.get(i);
+                MortgageRate next = group.get(i + 1);
+
+                double previousRate = prev.getRatePercent().doubleValue();
+                double currentRate = next.getRatePercent().doubleValue();
+                double change = currentRate - previousRate;
+
+                // Avrunda till 2 decimaler
+                double roundedChange = Math.round(change * 100.0) / 100.0;
+
+                allTrends.add(new RateTrendDto(
+                        prev.getBank().getName(),
+                        prev.getTerm().name(),
+                        prev.getRateType().name(),
+                        previousRate,
+                        currentRate,
+                        prev.getEffectiveDate(),
+                        next.getEffectiveDate(),
+                        roundedChange
+                ));
+            }
+        }
+
+        // Sortera resultatet efter störst förändring först
+        allTrends.sort(Comparator.comparingDouble(RateTrendDto::change).reversed());
+
+        System.out.println("Beräknade " + allTrends.size() +
+                " trendposter mellan " + from + " och " + to);
+
+        return allTrends;
     }
 }

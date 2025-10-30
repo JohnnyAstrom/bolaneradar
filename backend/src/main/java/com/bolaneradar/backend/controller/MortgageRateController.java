@@ -2,6 +2,7 @@ package com.bolaneradar.backend.controller;
 
 import com.bolaneradar.backend.dto.BankHistoryDto;
 import com.bolaneradar.backend.dto.LatestRateDto;
+import com.bolaneradar.backend.dto.RateTrendDto;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
 import com.bolaneradar.backend.service.BankService;
@@ -119,4 +120,34 @@ public class MortgageRateController {
         List<BankHistoryDto> history = mortgageRateService.getAllBanksRateHistory(banks, from, to, sort);
         return ResponseEntity.ok(history);
     }
+
+    /**
+     * GET /api/rates/trends
+     * <p>
+     * Returnerar förändringen i bolåneräntor mellan två valda mättillfällen.
+     * Om "from" och "to" inte anges används de två senaste datumen som finns i databasen.
+     */
+    @GetMapping("/trends")
+    public List<RateTrendDto> getRateTrends(
+            @RequestParam(required = false) LocalDate from,
+            @RequestParam(required = false) LocalDate to,
+            @RequestParam(required = false) String rateType
+    ) {
+        return mortgageRateService.getRateTrends(from, to, rateType);
+    }
+
+    /**
+     * GET /api/rates/trends/range
+     * Returnerar alla registrerade ränteändringar som inträffat inom ett valt tidsintervall.
+     */
+    @GetMapping("/trends/range")
+    public List<RateTrendDto> getRateTrendsInRange(
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to,
+            @RequestParam(required = false) String rateType
+    ) {
+        return mortgageRateService.getRateTrendsInRange(from, to, rateType);
+    }
+
+
 }

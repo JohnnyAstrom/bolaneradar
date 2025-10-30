@@ -41,8 +41,8 @@ public class DataImportService {
 
         });
 
-        // ta bort alla räntor
-        rateRepository.deleteAll();
+//        // ta bort alla räntor
+//        rateRepository.deleteAll();
 
         // Skapa (eller hämta) banker utan att ta bort gamla
         Bank swedbank = bankRepository.findByName("Swedbank");
@@ -76,37 +76,29 @@ public class DataImportService {
         }
 
 
-//        List<MortgageRate> rates = List.of(
-//                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("3.75"), LocalDate.now()),
-//                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("3.80"), LocalDate.now()),
-//                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.50"), LocalDate.now()),
-//                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.30"), LocalDate.now()),
-//                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(1)),
-//                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(1)),
-//                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.60"), LocalDate.now().minusDays(1)),
-//                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.40"), LocalDate.now().minusDays(1)),
-//                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.05"), LocalDate.now().minusDays(2)),
-//                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(2)),
-//                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.60"), LocalDate.now().minusDays(2)),
-//                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.40"), LocalDate.now().minusDays(2)),
-//
-//                new MortgageRate(nordea, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("3.85"), LocalDate.now()),
-//                new MortgageRate(nordea, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now()),
-//                new MortgageRate(nordea, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.70"), LocalDate.now()),
-//                new MortgageRate(nordea, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.75"), LocalDate.now()),
-//                new MortgageRate(nordea, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.00"), LocalDate.now().minusDays(1)),
-//                new MortgageRate(nordea, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.00"), LocalDate.now().minusDays(1)),
-//                new MortgageRate(nordea, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.80"), LocalDate.now().minusDays(1)),
-//                new MortgageRate(nordea, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.65"), LocalDate.now().minusDays(1)),
-//                new MortgageRate(nordea, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.20"), LocalDate.now().minusDays(2)),
-//                new MortgageRate(nordea, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.10"), LocalDate.now().minusDays(2)),
-//                new MortgageRate(nordea, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.80"), LocalDate.now().minusDays(2)),
-//                new MortgageRate(nordea, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.65"), LocalDate.now().minusDays(2))
-//        );
-//
-//        rateRepository.saveAll(rates);
-//
-//        // Logga importen
-//        rateUpdateService.logUpdate(swedbank, "ExampleData", rates.size());
+        List<MortgageRate> rates = List.of(
+                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(1)),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(1)),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.60"), LocalDate.now().minusDays(1)),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.40"), LocalDate.now().minusDays(1)),
+                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.05"), LocalDate.now().minusDays(2)),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(2)),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.60"), LocalDate.now().minusDays(2)),
+                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.40"), LocalDate.now().minusDays(2)),
+
+                new MortgageRate(nordea, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.00"), LocalDate.now().minusDays(1)),
+                new MortgageRate(nordea, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.00"), LocalDate.now().minusDays(1)),
+                new MortgageRate(nordea, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.80"), LocalDate.now().minusDays(1)),
+                new MortgageRate(nordea, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.65"), LocalDate.now().minusDays(1)),
+                new MortgageRate(nordea, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.20"), LocalDate.now().minusDays(2)),
+                new MortgageRate(nordea, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.10"), LocalDate.now().minusDays(2)),
+                new MortgageRate(nordea, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.80"), LocalDate.now().minusDays(2)),
+                new MortgageRate(nordea, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.65"), LocalDate.now().minusDays(2))
+        );
+
+        rateRepository.saveAll(rates);
+
+        // Logga importen
+        rateUpdateService.logUpdate(swedbank, "ExampleData", rates.size());
     }
 }
