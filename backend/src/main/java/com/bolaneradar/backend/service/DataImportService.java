@@ -41,9 +41,6 @@ public class DataImportService {
 
         });
 
-        // enklare: skapa deleteAll() i RateUpdateLogRepository
-        rateUpdateService.deleteAllLogs();
-
         // ta bort alla räntor
         rateRepository.deleteAll();
 

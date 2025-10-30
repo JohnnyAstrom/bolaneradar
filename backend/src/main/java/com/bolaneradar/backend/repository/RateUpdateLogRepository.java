@@ -9,8 +9,6 @@ import java.util.List;
 
 @Repository
 public interface RateUpdateLogRepository extends JpaRepository<RateUpdateLog, Long> {
-
     List<RateUpdateLog> findAllByOrderByOccurredAtDesc();
-
     List<RateUpdateLog> findByBankOrderByOccurredAtDesc(Bank bank);
 }
