@@ -40,7 +40,7 @@ public class SEBScraper implements BankScraper {
         WebDriver driver = new ChromeDriver(options);
 
         try {
-            System.out.println("🔎 SEB: öppnar sida...");
+            System.out.println("SEB: öppnar sida...");
             driver.get(BASE_URL);
             Thread.sleep(3000); // Vänta på att iframes laddas
 
@@ -57,14 +57,14 @@ public class SEBScraper implements BankScraper {
                 } catch (Exception ignored) {}
             }
 
-            System.out.println("🔗 Hittade iframe-URL:er:");
+            System.out.println("Hittade iframe-URL:er:");
             iframeUrls.forEach(url -> System.out.println("   " + url));
 
             driver.quit(); // Stäng första drivrutinen (vi öppnar nya för varje iframe)
 
             for (String iframeUrl : iframeUrls) {
                 RateType rateType = iframeUrl.contains("average") ? RateType.AVERAGERATE : RateType.LISTRATE;
-                System.out.println("➡️  Bearbetar iframe: " + iframeUrl + " (" + rateType + ")");
+                System.out.println("Bearbetar iframe: " + iframeUrl + " (" + rateType + ")");
 
                 // Ny headless session för varje iframe (mer stabilt)
                 ChromeDriver iframeDriver = new ChromeDriver(options);
@@ -74,7 +74,7 @@ public class SEBScraper implements BankScraper {
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("table tbody tr")));
 
                 List<WebElement> rows = iframeDriver.findElements(By.cssSelector("table tbody tr"));
-                System.out.println("   Hittade " + rows.size() + " rader i " + rateType + "-tabell.");
+                System.out.println("Hittade " + rows.size() + " rader i " + rateType + "-tabell.");
 
                 for (WebElement row : rows) {
                     List<WebElement> cols = row.findElements(By.tagName("td"));
@@ -98,10 +98,10 @@ public class SEBScraper implements BankScraper {
                 iframeDriver.quit();
             }
 
-            System.out.println("✅ SEB: hittade totalt " + rates.size() + " räntor.");
+            System.out.println("SEB: hittade totalt " + rates.size() + " räntor.");
 
         } catch (Exception e) {
-            System.err.println("⚠️ Fel vid SEB-scraping: " + e.getMessage());
+            System.err.println("Fel vid SEB-scraping: " + e.getMessage());
         } finally {
             try {
                 driver.quit();
