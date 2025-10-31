@@ -24,6 +24,7 @@ public class BankMapper {
     private static MortgageRateDto toRateDto(MortgageRate rate) {
         return new MortgageRateDto(
                 rate.getId(),
+                rate.getBank().getName(),
                 rate.getTerm().name(),// om term är enum
                 rate.getRateType().name(), // om term är enum
                 rate.getRatePercent(),
