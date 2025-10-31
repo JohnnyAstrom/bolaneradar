@@ -21,6 +21,12 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
     List<MortgageRate> findByBank(Bank bank);
 
     /**
+     * Ta bort alla räntor för en specifik bank.
+     * Används t.ex. i AdminDataService för att rensa data under test.
+     */
+    void deleteByBank(Bank bank);
+
+    /**
      * Hämta alla räntor för ett specifikt datum.
      */
     List<MortgageRate> findByEffectiveDate(LocalDate effectiveDate);

@@ -38,13 +38,13 @@ public class AdminDataService {
      */
     @Transactional
     public void clearDatabase() {
-        System.out.println("🧹 Rensar databas...");
+        System.out.println("Rensar databas...");
 
         // Ta bort räntor först
         rateRepository.deleteAll();
 
         // Ta bort loggar (om de finns)
-        rateUpdateService.clearAllLogs(); // 🔹 kräver liten tilläggsmetod i RateUpdateService
+        rateUpdateService.clearAllLogs();
 
         System.out.println("Databasen rensad på räntor och loggar.");
     }
@@ -63,6 +63,7 @@ public class AdminDataService {
         Bank handelsbanken = getOrCreateBank("Handelsbanken", "https://www.handelsbanken.se");
         Bank seb = getOrCreateBank("SEB", "https://seb.se");
         Bank sbab = getOrCreateBank("SBAB", "https://www.sbab.se");
+        Bank icabanken = getOrCreateBank("ICA Banken", "https://www.icabanken.se");
 
         // Skapa exempelräntor
         List<MortgageRate> rates = List.of(
@@ -104,5 +105,20 @@ public class AdminDataService {
             System.out.println("Bank finns redan: " + name);
         }
         return bank;
+    }
+
+    // Rensa räntor för en specifik bank
+    @Transactional
+    public String deleteRatesForBank(String bankName) {
+        Bank bank = bankRepository.findByNameIgnoreCase(bankName);
+        if (bank == null) {
+            return "Ingen bank hittades med namn: " + bankName;
+        }
+
+        int countBefore = rateRepository.findByBank(bank).size();
+        rateRepository.deleteByBank(bank);
+
+        System.out.println("Rensade " + countBefore + " räntor för " + bank.getName());
+        return "Rensade " + countBefore + " räntor för " + bank.getName() + ".";
     }
 }
