@@ -28,26 +28,39 @@ public class Bank {
     private String website;
 
     /**
-     * En bank kan ha många räntor kopplade till sig
+     * En bank kan ha många räntor kopplade till sig.
      * Motsvarar fältet 'bank' i MortgageRate.
      *
-     * mappedBy = "bank" betyder att MortgageRate äger relationen (Det är där foreignkey finns)
-     * cascade = All betyder om du sparar en bank med nya räntor så sparas de automatiskt
-     * orphanRemoval = true betyder om du tar bort en ränta från lsitan så tas den även bort ur databasen
+     * mappedBy = "bank" → MortgageRate äger relationen (foreign key finns där).
+     * cascade = ALL → sparar eller tar bort räntor automatiskt med banken.
+     * orphanRemoval = true → tar bort räntor som inte längre hör till någon bank.
      */
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     @com.fasterxml.jackson.annotation.JsonManagedReference
     private List<MortgageRate> mortgageRates = new ArrayList<>();
 
-    public Bank() {}
+    /**
+     * Standardkonstruktor krävs av JPA.
+     * Initierar listan för att undvika NullPointerExceptions.
+     */
+    public Bank() {
+        this.mortgageRates = new ArrayList<>();
+    }
 
+    /**
+     * Skapar en ny bank med namn och webbplats.
+     * Listan med räntor initieras automatiskt.
+     */
     public Bank(String name, String website) {
         this.name = name;
         this.website = website;
+        this.mortgageRates = new ArrayList<>();
     }
 
-    // Getters & setters
+    // --- Getters & setters ---
+
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -56,7 +69,17 @@ public class Bank {
     public void setWebsite(String website) { this.website = website; }
 
     public List<MortgageRate> getMortgageRates() { return mortgageRates; }
-    public void setMortgageRates(List<MortgageRate> mortgageRates) { this.mortgageRates = mortgageRates; }
+
+    /**
+     * Säker setter för räntor.
+     * Behåller kopplingar mellan bank och ränta, även vid uppdateringar.
+     */
+    public void setMortgageRates(List<MortgageRate> mortgageRates) {
+        this.mortgageRates.clear();
+        if (mortgageRates != null) {
+            mortgageRates.forEach(this::addMortgageRate);
+        }
+    }
 
     /**
      * Hjälpmetod för att lägga till en ränta till banken.

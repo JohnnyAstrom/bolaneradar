@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Koordinator som hanterar anrop till olika bank-scrapers.
- * Ansvarar för att hämta alla banker, köra deras respektive scraper
+ * Ansvarar för att hämta banker, köra respektive scraper
  * och spara resultaten i databasen.
  */
 @Service
@@ -40,35 +40,53 @@ public class ScraperService {
      * Resultaten sparas och loggas per bank.
      */
     public void scrapeAllBanks() throws IOException {
-        System.out.println("Aktiva scrapers:");
-        scrapers.forEach(s -> System.out.println(" - " + s.getClass().getSimpleName()));
-        System.out.println("-------------------------------------------");
-
+        System.out.println("=== Startar skrapning av alla banker ===");
         List<Bank> banks = bankRepository.findAll();
 
         for (Bank bank : banks) {
-            BankScraper matchingScraper = getScraperForBank(bank);
-            if (matchingScraper != null) {
-                System.out.println("Hämtar räntor för " + bank.getName() + "...");
-
-                List<MortgageRate> rates = matchingScraper.scrapeRates(bank);
-
-                if (!rates.isEmpty()) {
-                    // Spara direkt för denna bank
-                    mortgageRateRepository.saveAll(rates);
-
-                    // Logga uppdateringen
-                    rateUpdateService.logUpdate(bank, "ScraperService", rates.size());
-
-                    System.out.println("Sparade " + rates.size() + " räntor och loggade uppdatering för " + bank.getName());
-                } else {
-                    System.out.println("Inga räntor hittades för " + bank.getName());
-                }
-
-            } else {
-                System.out.println("Ingen scraper hittades för: " + bank.getName());
+            try {
+                String result = scrapeSingleBank(bank.getName());
+                System.out.println(result);
+            } catch (IOException e) {
+                System.err.println("Fel vid skrapning av " + bank.getName() + ": " + e.getMessage());
             }
         }
+
+        System.out.println("=== Skrapning klar ===");
+    }
+
+    /**
+     * Kör skrapning för en specifik bank via dess namn.
+     *
+     * @param bankName Namnet på banken (t.ex. "Swedbank")
+     * @return Textmeddelande med resultatet (t.ex. "5 räntor sparade för Swedbank")
+     * @throws IOException vid nätverks- eller scrapingfel
+     */
+    public String scrapeSingleBank(String bankName) throws IOException {
+        Bank bank = bankRepository.findByNameIgnoreCase(bankName);
+        if (bank == null) {
+            return "Ingen bank hittades med namn: " + bankName;
+        }
+
+        BankScraper scraper = getScraperForBank(bank);
+        if (scraper == null) {
+            return "Ingen scraper hittades för: " + bank.getName();
+        }
+
+        System.out.println("▶️ Startar skrapning för " + bank.getName() + "...");
+        List<MortgageRate> rates = scraper.scrapeRates(bank);
+
+        if (rates.isEmpty()) {
+            return "Inga räntor hittades för " + bank.getName();
+        }
+
+        // Spara nya räntor i databasen
+        mortgageRateRepository.saveAll(rates);
+
+        // Logga uppdateringen
+        rateUpdateService.logUpdate(bank, "ScraperService", rates.size());
+
+        return rates.size() + " räntor sparade för " + bank.getName();
     }
 
     /**

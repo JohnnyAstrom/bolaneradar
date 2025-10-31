@@ -75,4 +75,10 @@ public class RateUpdateService {
 
         return logs;
     }
+
+    @Transactional
+    public void clearAllLogs() {
+        rateUpdateLogRepository.deleteAll();
+        System.out.println("Alla uppdateringsloggar borttagna.");
+    }
 }
