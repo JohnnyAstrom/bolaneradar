@@ -7,5 +7,5 @@ import java.util.List;
  */
 public record BankHistoryDto (
     String bankName,
-    List<LatestRateDto> rates
+    List<MortgageRateDto> rates
 ) {}

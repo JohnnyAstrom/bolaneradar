@@ -36,11 +36,11 @@ public class DataImportService {
      */
     public void importExampleData() {
 
-        // Ta bort loggar först (de har foreign key till bank)
-        rateUpdateService.getAllLogs().forEach(log -> {
-
-        });
-
+//        // Ta bort loggar först (de har foreign key till bank)
+//        rateUpdateService.getAllLogs().forEach(log -> {
+//
+//        });
+//
 //        // ta bort alla räntor
 //        rateRepository.deleteAll();
 

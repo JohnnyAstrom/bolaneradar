@@ -1,8 +1,9 @@
 package com.bolaneradar.backend.service;
 
 import com.bolaneradar.backend.dto.BankHistoryDto;
-import com.bolaneradar.backend.dto.LatestRateDto;
 import com.bolaneradar.backend.dto.RateTrendDto;
+import com.bolaneradar.backend.dto.MortgageRateDto;
+import com.bolaneradar.backend.dto.mapper.MortgageRateMapper;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
@@ -27,6 +28,17 @@ public class MortgageRateService {
      */
     public List<MortgageRate> getAllRates() {
         return mortgageRateRepository.findAll();
+    }
+
+    /**
+     * Hämtar alla bolåneräntor som DTO-objekt.
+     * Inkluderar bankens namn men inte hela bankobjektet.
+     */
+    public List<MortgageRateDto> getAllRatesAsDto() {
+        return mortgageRateRepository.findAll()
+                .stream()
+                .map(MortgageRateMapper::toDto)
+                .toList();
     }
 
     /**
@@ -56,7 +68,7 @@ public class MortgageRateService {
      * så att varje bank får sin senaste ränta för varje term, även om
      * olika bindningstider har uppdaterats vid olika datum.
      */
-    public List<LatestRateDto> getLatestRatesPerBank() {
+    public List<MortgageRateDto> getLatestRatesPerBank() {
         List<MortgageRate> allRates = mortgageRateRepository.findAll();
 
         return allRates.stream()
@@ -71,7 +83,8 @@ public class MortgageRateService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 // Mappa till DTO (för frontend)
-                .map(rate -> new LatestRateDto(
+                .map(rate -> new MortgageRateDto(
+                        rate.getId(),
                         rate.getBank().getName(),
                         rate.getTerm().name(),
                         rate.getRateType().name(),
@@ -80,7 +93,7 @@ public class MortgageRateService {
                 ))
                 // Sortera: först per bank, sedan per term
                 .sorted(Comparator
-                        .comparing(LatestRateDto::bankName)
+                        .comparing(MortgageRateDto::bankName)
                         .thenComparing(dto -> sortOrder(dto.term())))
                 .toList();
     }
@@ -103,7 +116,7 @@ public class MortgageRateService {
      * Hämtar hela historiken av räntor för en viss bank,
      * med valfri filtrering och sortering.
      */
-    public List<LatestRateDto> getRateHistoryForBank(
+    public List<MortgageRateDto> getRateHistoryForBank(
             Bank bank,
             LocalDate from,
             LocalDate to,
@@ -136,8 +149,9 @@ public class MortgageRateService {
 
 
         return rates.stream()
-                .map(rate -> new LatestRateDto(
-                        bank.getName(),
+                .map(rate -> new MortgageRateDto(
+                        rate.getId(),
+                        rate.getBank().getName(),
                         rate.getTerm().name(),
                         rate.getRateType().name(),
                         rate.getRatePercent(),
@@ -159,7 +173,7 @@ public class MortgageRateService {
     ) {
         return banks.stream()
                 .map(bank -> {
-                    List<LatestRateDto> rates = getRateHistoryForBank(bank, from, to, sort);
+                    List<MortgageRateDto> rates = getRateHistoryForBank(bank, from, to, sort);
                     return new BankHistoryDto(bank.getName(), rates);
                 })
                 .toList();
