@@ -2,19 +2,16 @@ package com.bolaneradar.backend.controller;
 
 import com.bolaneradar.backend.dto.RateUpdateLogDto;
 import com.bolaneradar.backend.dto.mapper.RateUpdateMapper;
-import com.bolaneradar.backend.model.RateUpdateLog;
 import com.bolaneradar.backend.service.BankService;
 import com.bolaneradar.backend.service.RateUpdateService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-/**
- * Controller som hanterar HTTP-anrop för loggar av ränteuppdateringar.
- * Gör det möjligt att hämta alla loggar eller loggar för en viss bank.
- */
+@Tag(name = "Rate Updates", description = "Endpoints för loggar av ränteuppdateringar")
 @RestController
 @RequestMapping("/api/rates/updates")
 public class RateUpdateController {
@@ -27,20 +24,13 @@ public class RateUpdateController {
         this.bankService = bankService;
     }
 
-    /**
-     * GET /api/rates/updates
-     * Returnerar alla uppdateringsloggar (senaste först).
-     */
+    @Operation(summary = "Hämta alla uppdateringsloggar", description = "Returnerar alla uppdateringsloggar i systemet.")
     @GetMapping
     public List<RateUpdateLogDto> getAllUpdateLogs() {
         return RateUpdateMapper.toDtoList(rateUpdateService.getAllLogs());
     }
 
-
-    /**
-     * GET /api/rates/updates/bank/{bankId}
-     * Returnerar loggar för en specifik bank (senaste först).
-     */
+    @Operation(summary = "Hämta loggar för en bank", description = "Returnerar uppdateringsloggar för en specifik bank baserat på ID.")
     @GetMapping("/bank/{bankId}")
     public ResponseEntity<List<RateUpdateLogDto>> getLogsForBank(@PathVariable Long bankId) {
         return bankService.getBankById(bankId)

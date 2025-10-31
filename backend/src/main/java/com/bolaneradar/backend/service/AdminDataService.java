@@ -7,75 +7,64 @@ import com.bolaneradar.backend.model.RateType;
 import com.bolaneradar.backend.repository.BankRepository;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
- * En enkel tjänst som kan skapa exempeldata i databasen.
- * På sikt kommer denna hämta riktiga data från bankernas sidor.
+ * Service för administrativ datahantering under utveckling.
+ * Kan användas för att skapa exempeldata eller rensa databasen.
  */
 @Service
-public class DataImportService {
+public class AdminDataService {
 
     private final BankRepository bankRepository;
     private final MortgageRateRepository rateRepository;
     private final RateUpdateService rateUpdateService;
 
-    public DataImportService(BankRepository bankRepository,
-                             MortgageRateRepository rateRepository,
-                             RateUpdateService rateUpdateService) {
+    public AdminDataService(BankRepository bankRepository,
+                            MortgageRateRepository rateRepository,
+                            RateUpdateService rateUpdateService) {
         this.bankRepository = bankRepository;
         this.rateRepository = rateRepository;
         this.rateUpdateService = rateUpdateService;
     }
 
+    /**
+     * Rensar databasen på all bolåneräntedata och uppdateringsloggar.
+     * Används endast i utvecklingssyfte.
+     */
+    @Transactional
+    public void clearDatabase() {
+        System.out.println("🧹 Rensar databas...");
+
+        // Ta bort räntor först
+        rateRepository.deleteAll();
+
+        // Ta bort loggar (om de finns)
+        rateUpdateService.clearAllLogs(); // 🔹 kräver liten tilläggsmetod i RateUpdateService
+
+        System.out.println("Databasen rensad på räntor och loggar.");
+    }
 
     /**
      * Skapar exempeldata för att testa systemet.
+     * Banker läggs till om de inte redan finns.
      */
+    @Transactional
     public void importExampleData() {
+        System.out.println("Importerar exempeldata...");
 
-//        // Ta bort loggar först (de har foreign key till bank)
-//        rateUpdateService.getAllLogs().forEach(log -> {
-//
-//        });
-//
-//        // ta bort alla räntor
-//        rateRepository.deleteAll();
+        // Skapa banker (endast om de inte redan finns)
+        Bank swedbank = getOrCreateBank("Swedbank", "https://www.swedbank.se");
+        Bank nordea = getOrCreateBank("Nordea", "https://www.nordea.se");
+        Bank handelsbanken = getOrCreateBank("Handelsbanken", "https://www.handelsbanken.se");
+        Bank seb = getOrCreateBank("SEB", "https://seb.se");
+        Bank sbab = getOrCreateBank("SBAB", "https://www.sbab.se");
 
-        // Skapa (eller hämta) banker utan att ta bort gamla
-        Bank swedbank = bankRepository.findByName("Swedbank");
-        if (swedbank == null) {
-            swedbank = new Bank("Swedbank", "https://www.swedbank.se");
-            bankRepository.save(swedbank);
-        }
-
-        Bank nordea = bankRepository.findByName("Nordea");
-        if (nordea == null) {
-            nordea = new Bank("Nordea", "https://www.nordea.se");
-            bankRepository.save(nordea);
-        }
-
-        Bank handelsbanken = bankRepository.findByName("Handelsbanken");
-        if (handelsbanken == null) {
-            handelsbanken = new Bank("Handelsbanken", "https://www.handelsbanken.se");
-            bankRepository.save(handelsbanken);
-        }
-
-        Bank seb = bankRepository.findByName("SEB");
-        if (seb == null) {
-            seb = new Bank("SEB", "https://seb.se");
-            bankRepository.save(seb);
-        }
-
-        Bank sbab = bankRepository.findByName("SBAB");
-        if (sbab == null) {
-            sbab = new Bank("SBAB", "https://www.sbab.se");
-            bankRepository.save(sbab);
-        }
-
-
+        // Skapa exempelräntor
         List<MortgageRate> rates = List.of(
                 new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(1)),
                 new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(1)),
@@ -97,8 +86,23 @@ public class DataImportService {
         );
 
         rateRepository.saveAll(rates);
-
-        // Logga importen
         rateUpdateService.logUpdate(swedbank, "ExampleData", rates.size());
+
+        System.out.println("Exempeldata importerad!");
+    }
+
+    /**
+     * Hjälpmetod för att skapa bank endast om den inte redan finns.
+     */
+    private Bank getOrCreateBank(String name, String website) {
+        Bank bank = bankRepository.findByName(name);
+        if (bank == null) {
+            bank = new Bank(name, website);
+            bankRepository.save(bank);
+            System.out.println("Skapade bank: " + name);
+        } else {
+            System.out.println("Bank finns redan: " + name);
+        }
+        return bank;
     }
 }

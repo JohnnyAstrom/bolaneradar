@@ -4,29 +4,24 @@ import com.bolaneradar.backend.dto.BankDto;
 import com.bolaneradar.backend.dto.mapper.BankMapper;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.service.BankService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-/**
- * Controller som hanterar HTTP-anrop relaterade till banker.
- * Tar emot requests och skickar dem vidare till BankService.
- */
+@Tag(name = "Banks", description = "Endpoints för att hantera banker i systemet")
 @RestController
 @RequestMapping("/api/banks")
 public class BankController {
 
     private final BankService bankService;
 
-    // Konstruktor-injektion: Spring skapar automatiskt BankService-objektet åt oss
     public BankController(BankService bankService) {
         this.bankService = bankService;
     }
 
-    /**
-     * GET /api/banks
-     * Returnerar en lista över alla banker i databasen.
-     */
+    @Operation(summary = "Hämta alla banker", description = "Returnerar en lista över alla banker i databasen.")
     @GetMapping
     public List<BankDto> getAllBanks() {
         return bankService.getAllBanks()
@@ -35,10 +30,7 @@ public class BankController {
                 .toList();
     }
 
-    /**
-     * GET /api/banks/{id}
-     * Returnerar en specifik bank om den finns, annars 404.
-     */
+    @Operation(summary = "Hämta en specifik bank", description = "Returnerar en bank baserat på dess ID.")
     @GetMapping("/{id}")
     public ResponseEntity<BankDto> getBankById(@PathVariable Long id) {
         return bankService.getBankById(id)
@@ -46,25 +38,15 @@ public class BankController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    /**
-     * POST /api/banks
-     * Skapar en ny bank. Datan skickas som JSON i request body.
-     * Exempel:
-     * {
-     *   "name": "Swedbank",
-     *   "website": "https://swedbank.se"
-     * }
-     */
+    @Operation(summary = "Skapa en ny bank", description = "Lägger till en ny bank i systemet.")
     @PostMapping
-    public ResponseEntity<Bank> createBank(@RequestBody Bank bank) {
+    public ResponseEntity<BankDto> createBank(@RequestBody BankDto bankDto) {
+        Bank bank = BankMapper.toEntity(bankDto);
         Bank savedBank = bankService.saveBank(bank);
-        return ResponseEntity.ok(savedBank);  // Returnerar den sparade banken som JSON
+        return ResponseEntity.status(201).body(BankMapper.toDto(savedBank)); // 201 Created
     }
 
-    /**
-     * DELETE /api/banks/{id}
-     * Tar bort en bank via dess ID.
-     */
+    @Operation(summary = "Radera en bank", description = "Tar bort en bank baserat på dess ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBank(@PathVariable Long id) {
         bankService.deleteBank(id);

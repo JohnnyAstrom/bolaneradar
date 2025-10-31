@@ -6,16 +6,14 @@ import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
 import com.bolaneradar.backend.service.BankService;
 import com.bolaneradar.backend.service.MortgageRateService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Controller för att hantera bolåneräntor.
- * Tar emot HTTP-anrop och skickar vidare till MortgageRateService.
- */
+@Tag(name = "Mortgage Rates", description = "Endpoints för att hantera bolåneräntor och trender")
 @RestController
 @RequestMapping("/api/rates")
 public class MortgageRateController {
@@ -23,25 +21,18 @@ public class MortgageRateController {
     private final MortgageRateService mortgageRateService;
     private final BankService bankService;
 
-    // Konstruktor med dependency injection för tjänsterna
     public MortgageRateController(MortgageRateService mortgageRateService, BankService bankService) {
         this.mortgageRateService = mortgageRateService;
         this.bankService = bankService;
     }
 
-    /**
-     * GET /api/rates
-     * Hämtar alla bolåneräntor i databasen.
-     */
+    @Operation(summary = "Hämta alla bolåneräntor", description = "Returnerar alla registrerade bolåneräntor i databasen.")
     @GetMapping
     public List<MortgageRateDto> getAllRates() {
         return mortgageRateService.getAllRatesAsDto();
     }
 
-    /**
-     * GET /api/rates/bank/{bankId}
-     * Hämtar alla räntor för en specifik bank (via bankens ID).
-     */
+    @Operation(summary = "Hämta alla räntor för en bank", description = "Returnerar alla räntor för en viss bank baserat på bankens ID.")
     @GetMapping("/bank/{bankId}")
     public ResponseEntity<List<MortgageRateDto>> getRatesByBank(@PathVariable Long bankId) {
         return bankService.getBankById(bankId)
@@ -53,10 +44,7 @@ public class MortgageRateController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    /**
-     * POST /api/rates
-     * Skapar en ny ränta kopplad till en befintlig bank.
-     */
+    @Operation(summary = "Skapa en ny ränta", description = "Lägger till en ny bolåneränta kopplad till en befintlig bank.")
     @PostMapping
     public ResponseEntity<MortgageRateDto> createRate(@RequestBody RateRequest request) {
         return bankService.getBankById(request.bankId())
@@ -69,28 +57,18 @@ public class MortgageRateController {
                             request.effectiveDate()
                     );
                     MortgageRate saved = mortgageRateService.saveRate(rate);
-                    return ResponseEntity.ok(MortgageRateMapper.toDto(saved));
+                    return ResponseEntity.status(201).body(MortgageRateMapper.toDto(saved)); // 201 Created
                 })
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    /**
-     * GET /api/rates/latest
-     * Returnerar den senaste räntan (senaste effectiveDate) per bank.
-     */
+    @Operation(summary = "Hämta senaste räntor", description = "Returnerar den senaste räntan per bank och bindningstid.")
     @GetMapping("/latest")
     public List<MortgageRateDto> getLatestRates() {
         return mortgageRateService.getLatestRatesPerBank();
     }
 
-    /**
-     * GET /api/rates/history/{bankId}
-     * Hämtar alla historiska räntor för en viss bank.
-     * Parametrar:
-     * - from: startdatum (frivilligt)
-     * - to: slutdatum (frivilligt)
-     * - sort: "asc" eller "desc" (default = desc)
-     */
+    @Operation(summary = "Hämta historik för en bank", description = "Returnerar en banks historiska räntor mellan valfria datum.")
     @GetMapping("/history/{bankId}")
     public ResponseEntity<List<MortgageRateDto>> getRateHistoryForBank(
             @PathVariable Long bankId,
@@ -104,14 +82,7 @@ public class MortgageRateController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    /**
-     * GET /api/rates/history
-     * Returnerar alla bankers historiska räntor.
-     * Parametrar:
-     * - from: startdatum (frivilligt)
-     * - to: slutdatum (frivilligt)
-     * - sort: "asc" eller "desc" (default = desc)
-     */
+    @Operation(summary = "Hämta historik för alla banker", description = "Returnerar historiska räntor för alla banker.")
     @GetMapping("/history")
     public ResponseEntity<List<BankHistoryDto>> getAllBanksRateHistory(
             @RequestParam(required = false) LocalDate from,
@@ -123,12 +94,7 @@ public class MortgageRateController {
         return ResponseEntity.ok(history);
     }
 
-    /**
-     * GET /api/rates/trends
-     * <p>
-     * Returnerar förändringen i bolåneräntor mellan två valda mättillfällen.
-     * Om "from" och "to" inte anges används de två senaste datumen som finns i databasen.
-     */
+    @Operation(summary = "Beräkna ränteförändringar", description = "Returnerar skillnader i bolåneräntor mellan två mättillfällen.")
     @GetMapping("/trends")
     public List<RateTrendDto> getRateTrends(
             @RequestParam(required = false) LocalDate from,
@@ -138,11 +104,7 @@ public class MortgageRateController {
         return mortgageRateService.getRateTrends(from, to, rateType);
     }
 
-    /**
-     * GET /api/rates/trends/range
-     * Returnerar alla räntor (inklusive oförändrade dagar)
-     * inom ett valt tidsintervall, valfritt filtrerat efter rateType.
-     */
+    @Operation(summary = "Beräkna förändringar inom intervall", description = "Returnerar alla ränteförändringar inom ett valt tidsintervall.")
     @GetMapping("/trends/range")
     public List<RateTrendDto> getRateTrendsInRange(
             @RequestParam LocalDate from,
@@ -151,6 +113,4 @@ public class MortgageRateController {
     ) {
         return mortgageRateService.getRateTrendsInRange(from, to, rateType);
     }
-
-
 }
