@@ -92,12 +92,28 @@ public class ScraperService {
     /**
      * Hittar rätt scraper baserat på bankens namn.
      * Matchar t.ex. 'Swedbank' mot 'SwedbankScraper'.
+     * Normaliserar även svenska tecken (å, ä, ö).
      */
     public BankScraper getScraperForBank(Bank bank) {
-        String bankName = bank.getName().toLowerCase();
+        String bankName = normalize(bank.getName());
+
         return scrapers.stream()
-                .filter(s -> s.getClass().getSimpleName().toLowerCase().contains(bankName))
+                .filter(s -> normalize(s.getClass().getSimpleName()).contains(bankName))
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Hjälpmetod som normaliserar namn:
+     * - Tar bort mellanslag
+     * - Ersätter å, ä, ö med a/o
+     * - Gör allt till gemener
+     */
+    private String normalize(String text) {
+        return text.toLowerCase()
+                .replaceAll("\\s+", "")
+                .replace("å", "a")
+                .replace("ä", "a")
+                .replace("ö", "o");
     }
 }
