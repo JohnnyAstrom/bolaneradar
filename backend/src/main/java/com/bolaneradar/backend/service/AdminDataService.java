@@ -58,12 +58,19 @@ public class AdminDataService {
         System.out.println("Importerar exempeldata...");
 
         // Skapa banker (endast om de inte redan finns)
-        Bank swedbank = getOrCreateBank("Swedbank", "https://www.swedbank.se");
-        Bank nordea = getOrCreateBank("Nordea", "https://www.nordea.se");
-        Bank handelsbanken = getOrCreateBank("Handelsbanken", "https://www.handelsbanken.se");
-        Bank seb = getOrCreateBank("SEB", "https://seb.se");
-        Bank sbab = getOrCreateBank("SBAB", "https://www.sbab.se");
-        Bank icabanken = getOrCreateBank("ICA Banken", "https://www.icabanken.se");
+        Bank swedbank = getOrCreateBank("Swedbank", "https://www.swedbank.se/privat/boende-och-bolan/bolanerantor");
+        Bank nordea = getOrCreateBank("Nordea", "https://www.nordea.se/privat/produkter/bolan/bolanerantor");
+        Bank handelsbanken = getOrCreateBank("Handelsbanken", "https://www.handelsbanken.se/sv/privat/bolan/bolanerantor");
+        Bank seb = getOrCreateBank("SEB", "https://seb.se/privat/bolan/bolanerantor");
+        Bank sbab = getOrCreateBank("SBAB", "https://www.sbab.se/1/privat/vara_rantor");
+        Bank icabanken = getOrCreateBank("ICA Banken", "https://www.icabanken.se/lana/bolan/bolanerantor/");
+        Bank lansforsakringar = getOrCreateBank("Länsförsäkringar Bank", "https://www.lansforsakringar.se/norrbotten/privat/bank/bolan/bolaneranta");
+        Bank danskebank = getOrCreateBank("Danske Bank", "https://danskebank.se/privat/produkter/bolan/relaterat/aktuella-bolanerantor");
+        Bank Skandia = getOrCreateBank("Skandiabanken", "https://www.skandia.se/lana/bolan/bolanerantor/");
+        Bank landshypotekbank = getOrCreateBank("Landshypotek Bank", "https://www.landshypotek.se/lana/bolanerantor/");
+        Bank alandsbanken = getOrCreateBank("Ålandsbanken", "https://www.alandsbanken.se/banktjanster/lana-pengar/bolan");
+        Bank ikanobank = getOrCreateBank("Ikano Bank", "https://ikanobank.se/bolan/bolanerantor");
+
 
         // Skapa exempelräntor
         List<MortgageRate> rates = List.of(

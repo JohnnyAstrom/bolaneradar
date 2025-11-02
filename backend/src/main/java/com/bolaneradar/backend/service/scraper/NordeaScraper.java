@@ -16,7 +16,8 @@ import java.util.Objects;
 
 /**
  * Webbskrapare för Nordea.
- * Hämtar deras aktuella bolåneräntor från nordeas webbplats.
+ * Hämtar både listräntor och snitträntor från Nordeas bolånesida.
+ * Hoppar över tomma eller ogiltiga värden (t.ex. "N/A" under uppdatering).
  */
 @Service
 public class NordeaScraper implements BankScraper {
@@ -32,7 +33,7 @@ public class NordeaScraper implements BankScraper {
                 .referrer("https://www.google.com")
                 .timeout(10_000)
                 .get();
-        // Hitta alla tabeller
+
         Elements tables = doc.select("table");
 
         for (Element table : tables) {
@@ -43,7 +44,7 @@ public class NordeaScraper implements BankScraper {
                 continue;
             }
 
-            // Försök avgöra om det är snitträntor eller listräntor
+            // Avgör typ av tabell
             String contextText = table.previousElementSibling() != null
                     ? Objects.requireNonNull(table.previousElementSibling()).text().toLowerCase()
                     : "";
@@ -53,18 +54,23 @@ public class NordeaScraper implements BankScraper {
             Elements rows = table.select("tbody tr");
             for (Element row : rows) {
                 Elements cols = row.select("td");
-                if (cols.size() >= 2) {
-                    String termText = cols.get(0).text().toLowerCase();
-                    String rateText = cols.get(1).text()
-                            .replace("%", "")
-                            .replace(",", ".")
-                            .trim();
+                if (cols.size() < 2) continue;
 
-                    MortgageTerm term = ScraperUtils.parseTerm(termText);
-                    if (term != null && !rateText.isEmpty()) {
-                        BigDecimal rate = new BigDecimal(rateText);
-                        rates.add(new MortgageRate(bank, term, rateType, rate, LocalDate.now()));
-                    }
+                String termText = cols.get(0).text().toLowerCase().trim();
+                String rateText = cols.get(1).text()
+                        .replace("%", "")
+                        .replace(",", ".")
+                        .trim()
+                        .toLowerCase();
+
+                // 🛡️ hoppa över tomma, "n/a" eller ogiltiga värden
+                if (rateText.isEmpty() || rateText.contains("n") || rateText.contains("-")) continue;
+
+                MortgageTerm term = ScraperUtils.parseTerm(termText);
+                BigDecimal rate = ScraperUtils.parseRate(rateText);
+
+                if (term != null && rate != null) {
+                    rates.add(new MortgageRate(bank, term, rateType, rate, LocalDate.now()));
                 }
             }
         }
