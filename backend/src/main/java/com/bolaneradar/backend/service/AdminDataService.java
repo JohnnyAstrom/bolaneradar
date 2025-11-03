@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service för administrativ datahantering under utveckling.
@@ -119,25 +120,25 @@ public class AdminDataService {
      * Hjälpmetod för att skapa bank endast om den inte redan finns.
      */
     private Bank getOrCreateBank(String name, String website) {
-        Bank bank = bankRepository.findByName(name);
-        if (bank == null) {
-            bank = new Bank(name, website);
-            bankRepository.save(bank);
-            System.out.println("Skapade bank: " + name);
-        } else {
-            System.out.println("Bank finns redan: " + name);
-        }
-        return bank;
+        return bankRepository.findByName(name)
+                .orElseGet(() -> {
+                    Bank newBank = new Bank(name, website);
+                    bankRepository.save(newBank);
+                    System.out.println("Skapade bank: " + name);
+                    return newBank;
+                });
     }
 
     // Rensa räntor för en specifik bank
     @Transactional
     public String deleteRatesForBank(String bankName) {
-        Bank bank = bankRepository.findByNameIgnoreCase(bankName);
-        if (bank == null) {
+        Optional<Bank> optionalBank = bankRepository.findByNameIgnoreCase(bankName);
+
+        if (optionalBank.isEmpty()) {
             return "Ingen bank hittades med namn: " + bankName;
         }
 
+        Bank bank = optionalBank.get();
         int countBefore = rateRepository.findByBank(bank).size();
         rateRepository.deleteByBank(bank);
 

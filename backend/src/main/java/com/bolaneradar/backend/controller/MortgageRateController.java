@@ -12,7 +12,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Tag(name = "Mortgage Rates", description = "Endpoints för att hantera bolåneräntor och trender")
 @RestController
@@ -45,23 +47,39 @@ public class MortgageRateController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Skapa en ny ränta", description = "Lägger till en ny bolåneränta kopplad till en befintlig bank.")
+    @Operation(summary = "Skapa nya räntor", description = "Lägger till en eller flera bolåneräntor kopplade till befintliga banker.")
     @PostMapping
-    public ResponseEntity<MortgageRateDto> createRate(@RequestBody RateRequest request) {
-        return bankService.getBankById(request.bankId())
-                .map(bank -> {
-                    MortgageRate rate = new MortgageRate(
-                            bank,
-                            request.term(),
-                            request.rateType(),
-                            request.ratePercent(),
-                            request.effectiveDate()
-                    );
-                    MortgageRate saved = mortgageRateService.saveRate(rate);
-                    return ResponseEntity.status(201).body(MortgageRateMapper.toDto(saved)); // 201 Created
-                })
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+    public ResponseEntity<List<MortgageRateDto>> createRates(@RequestBody List<RateRequestDto> requests) {
+        List<MortgageRateDto> savedRates = new ArrayList<>();
+
+        for (RateRequestDto request : requests) {
+            Optional<Bank> optionalBank = bankService.getBankByName(request.bankName());
+            if (optionalBank.isEmpty()) {
+                System.err.println("Ingen bank hittades med namn: " + request.bankName());
+                continue; // hoppa över denna post
+            }
+
+            Bank bank = optionalBank.get();
+
+            MortgageRate rate = new MortgageRate(
+                    bank,
+                    request.term(),
+                    request.rateType(),
+                    request.ratePercent(),
+                    request.effectiveDate()
+            );
+
+            MortgageRate saved = mortgageRateService.saveRate(rate);
+            savedRates.add(MortgageRateMapper.toDto(saved));
+        }
+
+        if (savedRates.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.status(201).body(savedRates);
     }
+
 
     @Operation(summary = "Hämta senaste listräntor", description = "Returnerar de senaste listräntorna per bank och bindningstid.")
     @GetMapping("/latest/listrates")

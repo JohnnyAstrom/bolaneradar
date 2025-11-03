@@ -10,8 +10,8 @@ import java.time.LocalDate;
  * DTO (Data Transfer Object) för att skapa en ny bolåneränta.
  * Motsvarar JSON-strukturen klienten skickar in till /api/rates.
  */
-public record RateRequest(
-        Long bankId,
+public record RateRequestDto(
+        String bankName,
         MortgageTerm term,
         RateType rateType,
         BigDecimal ratePercent,
