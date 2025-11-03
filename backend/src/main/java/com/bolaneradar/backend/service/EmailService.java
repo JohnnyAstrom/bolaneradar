@@ -6,7 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 /**
- * Hanterar e-postutskick vid fel eller notifieringar.
+ * Handles email notifications when scraping errors occur.
  */
 @Service
 public class EmailService {
@@ -21,10 +21,7 @@ public class EmailService {
     }
 
     /**
-     * Skickar ett e-postmeddelande med felinformation.
-     *
-     * @param subject Rubrik för meddelandet
-     * @param message Innehåll i mejlet
+     * Sends an email notification describing the error.
      */
     public void sendErrorNotification(String subject, String message) {
         try {
@@ -33,9 +30,9 @@ public class EmailService {
             mail.setSubject(subject);
             mail.setText(message);
             mailSender.send(mail);
-            System.out.println("Felrapport skickad till " + toEmail);
+            System.out.println("Error report sent to " + toEmail);
         } catch (Exception e) {
-            System.err.println("Kunde inte skicka e-post: " + e.getMessage());
+            System.err.println("Could not send email: " + e.getMessage());
         }
     }
 }

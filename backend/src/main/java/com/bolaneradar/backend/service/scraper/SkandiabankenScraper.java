@@ -25,7 +25,7 @@ import java.util.Random;
  * Därför används en full webbläsarsimulering (icke-headless Chrome) med mänsklig interaktion.
  */
 @Service
-public class SkandiaScraper implements BankScraper {
+public class SkandiabankenScraper implements BankScraper {
 
     private static final String URL = "https://www.skandia.se/lana/bolan/bolanerantor/";
     private static final Random RAND = new Random();

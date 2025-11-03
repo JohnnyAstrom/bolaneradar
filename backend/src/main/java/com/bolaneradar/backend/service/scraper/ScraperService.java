@@ -120,15 +120,15 @@ public class ScraperService {
      * @param bankName Namnet på banken (t.ex. "Swedbank")
      * @return Textmeddelande med resultatet (t.ex. "5 räntor sparade för Swedbank")
      */
-    public String scrapeSingleBank(String bankName) {
+    public String scrapeSingleBank(String bankName) throws Exception {
         Bank bank = bankRepository.findByNameIgnoreCase(bankName);
         if (bank == null) {
-            return "Ingen bank hittades med namn: " + bankName;
+            throw new Exception("Ingen bank hittades med namn: " + bankName);
         }
 
         BankScraper scraper = getScraperForBank(bank);
         if (scraper == null) {
-            return "Ingen scraper hittades för: " + bank.getName();
+            throw new Exception("Ingen scraper hittades för: " + bank.getName());
         }
 
         System.out.println("Startar skrapning för " + bank.getName() + "...");
@@ -139,23 +139,21 @@ public class ScraperService {
         int importedCount = 0;
 
         try {
-            // Kör scraping
             List<MortgageRate> rates = scraper.scrapeRates(bank);
 
             if (rates.isEmpty()) {
-                errorMessage = "Inga räntor hittades för " + bank.getName();
-                System.err.println(errorMessage);
-            } else {
-                // Spara räntor i databasen
-                mortgageRateRepository.saveAll(rates);
-                importedCount = rates.size();
-                success = true;
-                System.out.println(importedCount + " räntor sparade för " + bank.getName());
+                throw new Exception("Inga räntor hittades för " + bank.getName());
             }
+
+            mortgageRateRepository.saveAll(rates);
+            importedCount = rates.size();
+            success = true;
+            System.out.println(importedCount + " räntor sparade för " + bank.getName());
 
         } catch (Exception e) {
             errorMessage = e.getMessage();
             System.err.println("Fel vid skrapning av " + bank.getName() + ": " + e.getMessage());
+            throw e; // <-- Skickar vidare felet till scrapeAllBanks()
 
         } finally {
             long duration = System.currentTimeMillis() - startTime;
@@ -164,25 +162,25 @@ public class ScraperService {
                     + " (success=" + success + ", time=" + duration + "ms)");
         }
 
-        if (success) {
-            return importedCount + " räntor sparade för " + bank.getName();
-        } else if (errorMessage != null) {
-            return "Fel vid skrapning av " + bank.getName() + ": " + errorMessage;
-        } else {
-            return "Okänt resultat för " + bank.getName();
-        }
+        return importedCount + " räntor sparade för " + bank.getName();
     }
 
     /**
      * Hittar rätt scraper baserat på bankens namn.
-     * Matchar t.ex. 'Swedbank' mot 'SwedbankScraper'.
-     * Normaliserar även svenska tecken (å, ä, ö).
+     * Matchar t.ex. "Swedbank" mot "SwedbankScraper".
+     * Normaliserar även svenska tecken (å, ä, ö) och tar bort mellanslag.
+     * Gör matchningen flexibel åt båda håll (banknamn <-> scraper-namn).
      */
     public BankScraper getScraperForBank(Bank bank) {
-        String bankName = normalize(bank.getName());
+        String bankNameNorm = normalize(bank.getName());
 
         return scrapers.stream()
-                .filter(s -> normalize(s.getClass().getSimpleName()).contains(bankName))
+                .filter(s -> {
+                    String scraperNameNorm = normalize(s.getClass().getSimpleName());
+
+                    // Gör matchningen flexibel åt båda håll
+                    return scraperNameNorm.contains(bankNameNorm) || bankNameNorm.contains(scraperNameNorm);
+                })
                 .findFirst()
                 .orElse(null);
     }
@@ -194,6 +192,7 @@ public class ScraperService {
      * - Gör allt till gemener
      */
     private String normalize(String text) {
+        if (text == null) return "";
         return text.toLowerCase()
                 .replaceAll("\\s+", "")
                 .replace("å", "a")
