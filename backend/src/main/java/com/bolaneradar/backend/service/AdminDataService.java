@@ -17,6 +17,7 @@ import java.util.List;
  * Service för administrativ datahantering under utveckling.
  * Kan användas för att skapa exempeldata eller rensa databasen.
  */
+@SuppressWarnings("unused")
 @Service
 public class AdminDataService {
 
@@ -93,8 +94,23 @@ public class AdminDataService {
                 new MortgageRate(nordea, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.65"), LocalDate.now().minusDays(2))
         );
 
-        rateRepository.saveAll(rates);
-        rateUpdateService.logUpdate(swedbank, "ExampleData", rates.size());
+        long startTime = System.currentTimeMillis();
+
+        try {
+            rateRepository.saveAll(rates);
+            long duration = System.currentTimeMillis() - startTime;
+
+            // Lyckad import
+            rateUpdateService.logUpdate(swedbank, "ExampleData", rates.size(), true, null, duration);
+
+        } catch (Exception e) {
+            long duration = System.currentTimeMillis() - startTime;
+
+            // Misslyckad import
+            rateUpdateService.logUpdate(swedbank, "ExampleData", 0, false, e.getMessage(), duration);
+            throw e; // om du vill att felet fortfarande bubblar upp
+        }
+
 
         System.out.println("Exempeldata importerad!");
     }

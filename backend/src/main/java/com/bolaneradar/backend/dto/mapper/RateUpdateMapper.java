@@ -11,13 +11,16 @@ import java.util.List;
 public class RateUpdateMapper {
 
     public static RateUpdateLogDto toDto(RateUpdateLog log) {
-        String bankName = log.getBank() != null ? log.getBank().getName() : "N/A";
+        String bankName = log.getBank() != null ? log.getBank().getName() : null;
 
         return new RateUpdateLogDto(
                 log.getId(),
                 bankName,
                 log.getSourceName(),
                 log.getImportedCount(),
+                log.isSuccess(),
+                log.getErrorMessage(),
+                log.getDurationMs(),
                 log.getOccurredAt()
         );
     }

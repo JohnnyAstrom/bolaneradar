@@ -4,12 +4,15 @@ import java.time.LocalDateTime;
 
 /**
  * DTO för att skicka ut loggdata till klienten.
- * Innehåller bara relevant information (inte hela Bank-objektet).
+ * Innehåller relevant information utan att exponera hela Bank-objektet.
  */
 public record RateUpdateLogDto(
         Long id,
         String bankName,
         String sourceName,
         int importedCount,
+        boolean success,
+        String errorMessage,
+        long durationMs,
         LocalDateTime occurredAt
 ) {}

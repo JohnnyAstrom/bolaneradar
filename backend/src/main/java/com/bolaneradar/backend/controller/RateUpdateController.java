@@ -24,13 +24,19 @@ public class RateUpdateController {
         this.bankService = bankService;
     }
 
-    @Operation(summary = "Hämta alla uppdateringsloggar", description = "Returnerar alla uppdateringsloggar i systemet.")
+    @Operation(
+            summary = "Hämta alla uppdateringsloggar",
+            description = "Returnerar alla uppdateringsloggar i systemet, sorterade efter datum (senaste först)."
+    )
     @GetMapping
     public List<RateUpdateLogDto> getAllUpdateLogs() {
         return RateUpdateMapper.toDtoList(rateUpdateService.getAllLogs());
     }
 
-    @Operation(summary = "Hämta loggar för en bank", description = "Returnerar uppdateringsloggar för en specifik bank baserat på ID.")
+    @Operation(
+            summary = "Hämta loggar för en bank",
+            description = "Returnerar uppdateringsloggar för en specifik bank baserat på dess ID."
+    )
     @GetMapping("/bank/{bankId}")
     public ResponseEntity<List<RateUpdateLogDto>> getLogsForBank(@PathVariable Long bankId) {
         return bankService.getBankById(bankId)
@@ -38,5 +44,15 @@ public class RateUpdateController {
                         RateUpdateMapper.toDtoList(rateUpdateService.getLogsForBank(bank))
                 ))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Operation(
+            summary = "Hämta senaste uppdateringen per bank",
+            description = "Returnerar endast den senaste uppdateringen för varje bank. "
+                    + "Används för att snabbt visa senaste status utan att hämta hela logghistoriken."
+    )
+    @GetMapping("/latest")
+    public List<RateUpdateLogDto> getLatestUpdatesPerBank() {
+        return rateUpdateService.getLatestUpdatesPerBank();
     }
 }
