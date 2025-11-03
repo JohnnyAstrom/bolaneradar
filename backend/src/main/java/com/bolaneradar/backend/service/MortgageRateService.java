@@ -6,6 +6,7 @@ import com.bolaneradar.backend.dto.MortgageRateDto;
 import com.bolaneradar.backend.dto.mapper.MortgageRateMapper;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
+import com.bolaneradar.backend.model.RateType;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,6 @@ public class MortgageRateService {
     // Konstruktorinjektion – Spring sköter kopplingen
     public MortgageRateService(MortgageRateRepository mortgageRateRepository) {
         this.mortgageRateRepository = mortgageRateRepository;
-    }
-
-    /**
-     * Hämta alla bolåneräntor.
-     */
-    public List<MortgageRate> getAllRates() {
-        return mortgageRateRepository.findAll();
     }
 
     /**
@@ -57,46 +51,28 @@ public class MortgageRateService {
     }
 
     /**
-     * Ta bort en ränta baserat på ID (för framtida användning).
+     * Hämtar de senaste bolåneräntorna per bank och bindningstid
+     * för en specifik räntetyp (LISTRATE eller AVERAGERATE).
+     * <p>
+     * Exempel:
+     * <ul>
+     *   <li>RateType.LISTRATE → hämtar bankernas aktuella listräntor</li>
+     *   <li>RateType.AVERAGERATE → hämtar bankernas senaste snitträntor</li>
+     * </ul>
+     * SQL-frågan i repositoryn ser till att endast den senaste posten
+     * per bank och bindningstid returneras, vilket ger en effektivare
+     * hantering jämfört med manuell gruppering i Java.
+     *
+     * @param rateType vilken typ av ränta som ska hämtas
+     * @return lista med senaste räntor per bank och term för vald typ
      */
-    public void deleteRate(Long id) {
-        mortgageRateRepository.deleteById(id);
-    }
-
-    /**
-     * Hämtar den senaste räntan per bank OCH term (bindningstid),
-     * så att varje bank får sin senaste ränta för varje term, även om
-     * olika bindningstider har uppdaterats vid olika datum.
-     */
-    public List<MortgageRateDto> getLatestRatesPerBank() {
-        List<MortgageRate> allRates = mortgageRateRepository.findAll();
-
-        return allRates.stream()
-                // Gruppar efter kombinationen (bank + term)
-                .collect(Collectors.groupingBy(
-                        rate -> rate.getBank().getName() + "-" + rate.getTerm().name(),
-                        Collectors.maxBy(Comparator
-                                .comparing(MortgageRate::getEffectiveDate)
-                                .thenComparing(MortgageRate::getId))
-                ))
-                .values().stream()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                // Mappa till DTO (för frontend)
-                .map(rate -> new MortgageRateDto(
-                        rate.getId(),
-                        rate.getBank().getName(),
-                        rate.getTerm().name(),
-                        rate.getRateType().name(),
-                        rate.getRatePercent(),
-                        rate.getEffectiveDate()
-                ))
-                // Sortera: först per bank, sedan per term
-                .sorted(Comparator
-                        .comparing(MortgageRateDto::bankName)
-                        .thenComparing(dto -> sortOrder(dto.term())))
+    public List<MortgageRateDto> getLatestRatesByType(RateType rateType) {
+        return mortgageRateRepository.findLatestRatesByType(rateType)
+                .stream()
+                .map(MortgageRateMapper::toDto)
                 .toList();
     }
+
 
     /**
      * Bestämmer sorteringsordningen för ränteterm.

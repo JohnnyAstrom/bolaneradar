@@ -2,8 +2,10 @@ package com.bolaneradar.backend.repository;
 
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
+import com.bolaneradar.backend.model.RateType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -43,4 +45,24 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
      * Används av getRateTrendsInRange() för att visa alla ändringar inom en period.
      */
     List<MortgageRate> findByEffectiveDateBetween(LocalDate from, LocalDate to);
+
+    /**
+     * Hämtar de senaste räntorna per bank och bindningstid
+     * för en specifik räntetyp (LISTRATE eller AVERAGERATE).
+     * <p>
+     * SQL-frågan använder subquery för att endast hämta de nyaste posterna
+     * per (bank, term, rateType).
+     */
+    @Query("""
+        SELECT m FROM MortgageRate m
+        WHERE m.rateType = :rateType AND m.effectiveDate = (
+            SELECT MAX(m2.effectiveDate)
+            FROM MortgageRate m2
+            WHERE m2.bank = m.bank
+              AND m2.term = m.term
+              AND m2.rateType = m.rateType
+        )
+        ORDER BY m.bank.name, m.term
+    """)
+    List<MortgageRate> findLatestRatesByType(@Param("rateType") RateType rateType);
 }

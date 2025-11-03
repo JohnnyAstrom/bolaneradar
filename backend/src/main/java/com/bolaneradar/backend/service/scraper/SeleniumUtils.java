@@ -7,15 +7,23 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class SeleniumUtils {
 
     /** Standardinställningar för alla Selenium-scrapers. */
     public static ChromeOptions createDefaultOptions() {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--window-size=1366,1100");
-        options.addArguments("--no-sandbox", "--disable-dev-shm-usage");
-        options.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141 Safari/537.36");
+        options.addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage");
+
+        try {
+            Path tempProfile = Files.createTempDirectory("selenium-profile-");
+            options.addArguments("--user-data-dir=" + tempProfile.toAbsolutePath());
+        } catch (Exception e) {
+            System.err.println("Kunde inte skapa temporär Selenium-profil: " + e.getMessage());
+        }
+
         return options;
     }
 

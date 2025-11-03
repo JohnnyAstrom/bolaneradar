@@ -18,7 +18,7 @@ public class ScraperScheduler {
      * Kör scraping varje dag kl. 09:00.
      * Cron-format: sekunder, minuter, timmar, dag, månad, veckodag
      */
-    @Scheduled(cron = "0 0 09 * * *")
+    @Scheduled(cron = "0 07 09 * * *")
     public void runDailyScraping() throws IOException {
         System.out.println("Schemalagd scraping startar kl 09:00...");
         scraperService.scrapeAllBanks();

@@ -4,6 +4,7 @@ import com.bolaneradar.backend.dto.*;
 import com.bolaneradar.backend.dto.mapper.MortgageRateMapper;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
+import com.bolaneradar.backend.model.RateType;
 import com.bolaneradar.backend.service.BankService;
 import com.bolaneradar.backend.service.MortgageRateService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,10 +63,16 @@ public class MortgageRateController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @Operation(summary = "Hämta senaste räntor", description = "Returnerar den senaste räntan per bank och bindningstid.")
-    @GetMapping("/latest")
-    public List<MortgageRateDto> getLatestRates() {
-        return mortgageRateService.getLatestRatesPerBank();
+    @Operation(summary = "Hämta senaste listräntor", description = "Returnerar de senaste listräntorna per bank och bindningstid.")
+    @GetMapping("/latest/listrates")
+    public List<MortgageRateDto> getLatestListRates() {
+        return mortgageRateService.getLatestRatesByType(RateType.LISTRATE);
+    }
+
+    @Operation(summary = "Hämta senaste snitträntor", description = "Returnerar de senaste snitträntorna per bank och bindningstid.")
+    @GetMapping("/latest/averagerates")
+    public List<MortgageRateDto> getLatestAverageRates() {
+        return mortgageRateService.getLatestRatesByType(RateType.AVERAGERATE);
     }
 
     @Operation(summary = "Hämta historik för en bank", description = "Returnerar en banks historiska räntor mellan valfria datum.")

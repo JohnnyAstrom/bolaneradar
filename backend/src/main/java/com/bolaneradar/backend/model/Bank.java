@@ -17,20 +17,20 @@ public class Bank {
     private Long id;
 
     /**
-     * Bankens namn (Exempelvis: Swedbank)
+     * Bankens namn
      */
     @Column(nullable = false, unique = true)
     private String name;
 
     /**
-     * Bankens webbplats (Exempelvis: https://www.swedbank.se)
+     * Bankens webbplats
      */
     private String website;
 
     /**
      * En bank kan ha många räntor kopplade till sig.
      * Motsvarar fältet 'bank' i MortgageRate.
-     *
+     * <p>
      * mappedBy = "bank" → MortgageRate äger relationen (foreign key finns där).
      * cascade = ALL → sparar eller tar bort räntor automatiskt med banken.
      * orphanRemoval = true → tar bort räntor som inte längre hör till någon bank.
