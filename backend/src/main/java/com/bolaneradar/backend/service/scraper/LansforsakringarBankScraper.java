@@ -19,7 +19,7 @@ import java.util.List;
  * från den regionala webbsidan.
  */
 @Service
-public class LansforsakringarScraper implements BankScraper {
+public class LansforsakringarBankScraper implements BankScraper {
 
     private static final String URL =
             "https://www.lansforsakringar.se/norrbotten/privat/bank/bolan/bolaneranta/";

@@ -21,15 +21,24 @@ public class ScraperController {
 
     @Operation(summary = "Kör scraping för alla banker", description = "Startar webbskrapning för samtliga registrerade banker.")
     @GetMapping("/all")
-    public ResponseEntity<String> scrapeAll() throws IOException {
-        scraperService.scrapeAllBanks();
-        return ResponseEntity.ok("Skrapning av alla banker körd (se loggen för resultat).");
+    public ResponseEntity<String> scrapeAllBanks() {
+        try {
+            scraperService.scrapeAllBanks();
+            return ResponseEntity.ok("Scraping completed");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
     }
-
     @Operation(summary = "Kör scraping för en specifik bank", description = "Startar webbskrapning för en viss bank via namn.")
     @GetMapping("/{bankName}")
-    public ResponseEntity<String> scrapeSingleBank(@PathVariable String bankName) throws IOException {
-        String result = scraperService.scrapeSingleBank(bankName);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<String> scrapeBank(@PathVariable String bankName) {
+        try {
+            String result = scraperService.scrapeSingleBank(bankName);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .internalServerError()
+                    .body("Error while scraping " + bankName + ": " + e.getMessage());
+        }
     }
 }
