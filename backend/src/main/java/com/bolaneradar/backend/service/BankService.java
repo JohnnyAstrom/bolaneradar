@@ -35,6 +35,13 @@ public class BankService {
     }
 
     /**
+     * Hämta en bank baserat på dess namn.
+     */
+    public Optional<Bank> getBankByName(String name) {
+        return bankRepository.findByName(name);
+    }
+
+    /**
      * Skapa eller uppdatera bank.
      * /Spring avgör auitomatiskt om det är insert eller update)
      */

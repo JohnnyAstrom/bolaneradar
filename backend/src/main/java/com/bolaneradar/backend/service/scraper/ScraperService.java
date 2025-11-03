@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Koordinator som hanterar anrop till olika bank-scrapers.
@@ -121,12 +122,15 @@ public class ScraperService {
      * @return Textmeddelande med resultatet (t.ex. "5 räntor sparade för Swedbank")
      */
     public String scrapeSingleBank(String bankName) throws Exception {
-        Bank bank = bankRepository.findByNameIgnoreCase(bankName);
-        if (bank == null) {
+        Optional<Bank> optionalBank = bankRepository.findByNameIgnoreCase(bankName);
+
+        if (optionalBank.isEmpty()) {
             throw new Exception("Ingen bank hittades med namn: " + bankName);
         }
 
+        Bank bank = optionalBank.get();
         BankScraper scraper = getScraperForBank(bank);
+
         if (scraper == null) {
             throw new Exception("Ingen scraper hittades för: " + bank.getName());
         }
@@ -153,7 +157,7 @@ public class ScraperService {
         } catch (Exception e) {
             errorMessage = e.getMessage();
             System.err.println("Fel vid skrapning av " + bank.getName() + ": " + e.getMessage());
-            throw e; // <-- Skickar vidare felet till scrapeAllBanks()
+            throw e; // skickar vidare felet till scrapeAllBanks()
 
         } finally {
             long duration = System.currentTimeMillis() - startTime;
@@ -164,6 +168,7 @@ public class ScraperService {
 
         return importedCount + " räntor sparade för " + bank.getName();
     }
+
 
     /**
      * Hittar rätt scraper baserat på bankens namn.

@@ -4,6 +4,8 @@ import com.bolaneradar.backend.model.Bank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Hanterar databasoperationer för Bank.
  * JpaRepository ger oss färdiga metoder som:
@@ -16,10 +18,12 @@ import org.springframework.stereotype.Repository;
 public interface BankRepository extends JpaRepository<Bank, Long> {
 
     /**
-     * Exempel på egen metod – vi kan lägga till fler senare.
-     * Den här låter oss hitta en bank via dess namn.
+     * Hitta en bank via dess namn (skiftlägeskänsligt).
      */
-    Bank findByName(String name);
+    Optional<Bank> findByName(String name);
 
-    Bank findByNameIgnoreCase(String name);
+    /**
+     * Hitta en bank via namn utan att bry sig om versaler/gemener.
+     */
+    Optional<Bank> findByNameIgnoreCase(String name);
 }
