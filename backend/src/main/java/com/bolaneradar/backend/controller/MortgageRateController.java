@@ -3,11 +3,13 @@ package com.bolaneradar.backend.controller;
 import com.bolaneradar.backend.dto.*;
 import com.bolaneradar.backend.dto.mapper.MortgageRateMapper;
 import com.bolaneradar.backend.model.Bank;
+import com.bolaneradar.backend.model.MortgageTerm;
 import com.bolaneradar.backend.model.RateType;
 import com.bolaneradar.backend.service.BankService;
 import com.bolaneradar.backend.service.MortgageRateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
@@ -68,17 +70,31 @@ public class MortgageRateController {
         return mortgageRateService.getLatestRatesByType(RateType.AVERAGERATE);
     }
 
-    @Operation(summary = "Hämta historik för en bank", description = "Returnerar en banks historiska räntor mellan valfria datum.")
+    @Operation(
+            summary = "Hämta historiska räntor för en viss bank",
+            description = "Returnerar historik per term och räntetyp. Filtrera med rateType (LISTRATE/AVERAGERATE), term (t.ex. FIXED_3Y) samt datumintervall."
+    )
     @GetMapping("/history/{bankId}")
-    public ResponseEntity<List<MortgageRateDto>> getRateHistoryForBank(
+    public ResponseEntity<List<BankHistoryDto>> getRateHistoryForBank(
             @PathVariable Long bankId,
-            @RequestParam(required = false) LocalDate from,
-            @RequestParam(required = false) LocalDate to,
-            @RequestParam(required = false) String sort) {
+            @RequestParam(required = false) RateType rateType,
+            @RequestParam(required = false) MortgageTerm term,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(required = false, defaultValue = "asc") String sort
+    ) {
+        // enkel validering av intervall
+        if (from != null && to != null && from.isAfter(to)) {
+            return ResponseEntity.badRequest().build();
+        }
 
         return bankService.getBankById(bankId)
-                .map(bank -> ResponseEntity.ok(
-                        mortgageRateService.getRateHistoryForBank(bank, from, to, sort)))
+                .map(bank -> {
+                    List<BankHistoryDto> result = mortgageRateService.getRateHistoryForBank(
+                            bank, from, to, sort, rateType, term   // ⬅️ matcha din nya service-signatur
+                    );
+                    return ResponseEntity.ok(result);
+                })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
