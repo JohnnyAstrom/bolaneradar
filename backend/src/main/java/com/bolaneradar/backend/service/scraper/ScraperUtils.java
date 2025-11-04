@@ -22,6 +22,7 @@ public class ScraperUtils {
         if (text.contains("6 år")) return MortgageTerm.FIXED_6Y;
         if (text.contains("7 år")) return MortgageTerm.FIXED_7Y;
         if (text.contains("8 år")) return MortgageTerm.FIXED_8Y;
+        if (text.contains("9 år")) return MortgageTerm.FIXED_9Y;
         if (text.contains("10 år")) return MortgageTerm.FIXED_10Y;
 
         // Engelska versioner (för banker som Hypoteket)
@@ -31,7 +32,10 @@ public class ScraperUtils {
         if (text.contains("three year")) return MortgageTerm.FIXED_3Y;
         if (text.contains("four year")) return MortgageTerm.FIXED_4Y;
         if (text.contains("five year")) return MortgageTerm.FIXED_5Y;
+        if (text.contains("six year")) return MortgageTerm.FIXED_6Y;
         if (text.contains("seven year")) return MortgageTerm.FIXED_7Y;
+        if (text.contains("eight year")) return MortgageTerm.FIXED_8Y;
+        if (text.contains("nine year")) return MortgageTerm.FIXED_9Y;
         if (text.contains("ten year")) return MortgageTerm.FIXED_10Y;
 
         return null;

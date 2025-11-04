@@ -74,46 +74,46 @@ public class AdminDataService {
         Bank ikanobank = getOrCreateBank("Ikano Bank", "https://ikanobank.se/bolan/bolanerantor");
 
 
-        // Skapa exempelräntor
-        List<MortgageRate> rates = List.of(
-                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(1)),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(1)),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.60"), LocalDate.now().minusDays(1)),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.40"), LocalDate.now().minusDays(1)),
-                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.05"), LocalDate.now().minusDays(2)),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(2)),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.60"), LocalDate.now().minusDays(2)),
-                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.40"), LocalDate.now().minusDays(2)),
+//        // Skapa exempelräntor
+//        List<MortgageRate> rates = List.of(
+//                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(1)),
+//                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(1)),
+//                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.60"), LocalDate.now().minusDays(1)),
+//                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.40"), LocalDate.now().minusDays(1)),
+//                new MortgageRate(swedbank, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.05"), LocalDate.now().minusDays(2)),
+//                new MortgageRate(swedbank, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("3.90"), LocalDate.now().minusDays(2)),
+//                new MortgageRate(swedbank, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.60"), LocalDate.now().minusDays(2)),
+//                new MortgageRate(swedbank, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.40"), LocalDate.now().minusDays(2)),
+//
+//                new MortgageRate(nordea, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.00"), LocalDate.now().minusDays(1)),
+//                new MortgageRate(nordea, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.00"), LocalDate.now().minusDays(1)),
+//                new MortgageRate(nordea, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.80"), LocalDate.now().minusDays(1)),
+//                new MortgageRate(nordea, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.65"), LocalDate.now().minusDays(1)),
+//                new MortgageRate(nordea, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.20"), LocalDate.now().minusDays(2)),
+//                new MortgageRate(nordea, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.10"), LocalDate.now().minusDays(2)),
+//                new MortgageRate(nordea, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.80"), LocalDate.now().minusDays(2)),
+//                new MortgageRate(nordea, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.65"), LocalDate.now().minusDays(2))
+//        );
 
-                new MortgageRate(nordea, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.00"), LocalDate.now().minusDays(1)),
-                new MortgageRate(nordea, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.00"), LocalDate.now().minusDays(1)),
-                new MortgageRate(nordea, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.80"), LocalDate.now().minusDays(1)),
-                new MortgageRate(nordea, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.65"), LocalDate.now().minusDays(1)),
-                new MortgageRate(nordea, MortgageTerm.VARIABLE_3M, RateType.LISTRATE, new BigDecimal("4.20"), LocalDate.now().minusDays(2)),
-                new MortgageRate(nordea, MortgageTerm.FIXED_1Y, RateType.LISTRATE, new BigDecimal("4.10"), LocalDate.now().minusDays(2)),
-                new MortgageRate(nordea, MortgageTerm.FIXED_3Y, RateType.LISTRATE, new BigDecimal("3.80"), LocalDate.now().minusDays(2)),
-                new MortgageRate(nordea, MortgageTerm.FIXED_5Y, RateType.LISTRATE, new BigDecimal("3.65"), LocalDate.now().minusDays(2))
-        );
+//        long startTime = System.currentTimeMillis();
 
-        long startTime = System.currentTimeMillis();
+//        try {
+//            rateRepository.saveAll(rates);
+//            long duration = System.currentTimeMillis() - startTime;
+//
+//            // Lyckad import
+//            rateUpdateService.logUpdate(swedbank, "ExampleData", rates.size(), true, null, duration);
 
-        try {
-            rateRepository.saveAll(rates);
-            long duration = System.currentTimeMillis() - startTime;
-
-            // Lyckad import
-            rateUpdateService.logUpdate(swedbank, "ExampleData", rates.size(), true, null, duration);
-
-        } catch (Exception e) {
-            long duration = System.currentTimeMillis() - startTime;
-
-            // Misslyckad import
-            rateUpdateService.logUpdate(swedbank, "ExampleData", 0, false, e.getMessage(), duration);
-            throw e; // om du vill att felet fortfarande bubblar upp
-        }
-
-
-        System.out.println("Exempeldata importerad!");
+//        } catch (Exception e) {
+//            long duration = System.currentTimeMillis() - startTime;
+//
+//            // Misslyckad import
+//            rateUpdateService.logUpdate(swedbank, "ExampleData", 0, false, e.getMessage(), duration);
+//            throw e; // om du vill att felet fortfarande bubblar upp
+//        }
+//
+//
+//        System.out.println("Exempeldata importerad!");
     }
 
     /**
