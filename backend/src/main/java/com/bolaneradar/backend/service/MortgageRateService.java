@@ -1,12 +1,10 @@
 package com.bolaneradar.backend.service;
 
-import com.bolaneradar.backend.dto.BankHistoryDto;
-import com.bolaneradar.backend.dto.MortgageRateDto;
-import com.bolaneradar.backend.dto.RateTrendDto;
-import com.bolaneradar.backend.dto.RateRequestDto;
+import com.bolaneradar.backend.dto.*;
 import com.bolaneradar.backend.dto.mapper.MortgageRateMapper;
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
+import com.bolaneradar.backend.model.MortgageTerm;
 import com.bolaneradar.backend.model.RateType;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import org.springframework.stereotype.Service;
@@ -108,15 +106,23 @@ public class MortgageRateService {
         };
     }
 
-    /** Hämtar hela historiken av räntor för en viss bank. */
-    public List<MortgageRateDto> getRateHistoryForBank(
+    /**
+     * Hämtar historiska bolåneräntor för en viss bank,
+     * grupperat per term och rateType.
+     * Möjlighet att filtrera på term, rateType och datumintervall.
+     */
+    public List<BankHistoryDto> getRateHistoryForBank(
             Bank bank,
             LocalDate from,
             LocalDate to,
-            String sort
+            String sort,
+            RateType rateType,
+            MortgageTerm term
     ) {
+        // 1️⃣ Hämta alla räntor för banken
         List<MortgageRate> rates = mortgageRateRepository.findByBank(bank);
 
+        // 2️⃣ Filtrera på datumintervall
         if (from != null) {
             rates = rates.stream()
                     .filter(rate -> !rate.getEffectiveDate().isBefore(from))
@@ -128,49 +134,84 @@ public class MortgageRateService {
                     .toList();
         }
 
-        if (sort == null || sort.isBlank()) {
-            sort = "desc";
+        // 3️⃣ Filtrera på rateType och term (om angivna)
+        if (rateType != null) {
+            rates = rates.stream()
+                    .filter(rate -> rate.getRateType() == rateType)
+                    .toList();
+        }
+        if (term != null) {
+            rates = rates.stream()
+                    .filter(rate -> rate.getTerm() == term)
+                    .toList();
         }
 
-        Comparator<MortgageRate> comparator = Comparator
-                .comparing((MortgageRate r) -> r.getBank().getName())
-                .thenComparing(MortgageRate::getEffectiveDate)
-                .thenComparing(r -> sortOrder(r.getTerm().name()));
+        // 4️⃣ Bestäm sorteringsordning — skapa en ny oföränderlig variabel
+        final String sortOrder = (sort == null || sort.isBlank()) ? "asc" : sort;
 
-        if ("desc".equalsIgnoreCase(sort)) {
-            comparator = comparator.reversed();
-        }
+        // Gör komparatorn direkt final – inga if-satser som ändrar den
+        final Comparator<MortgageRate> comparator =
+                "desc".equalsIgnoreCase(sortOrder)
+                        ? Comparator.comparing(MortgageRate::getEffectiveDate).reversed()
+                        : Comparator.comparing(MortgageRate::getEffectiveDate);
 
-        rates = rates.stream().sorted(comparator).toList();
 
-        return rates.stream()
-                .map(rate -> new MortgageRateDto(
-                        rate.getId(),
-                        rate.getBank().getName(),
-                        rate.getTerm(),
-                        rate.getRateType(),
-                        rate.getRatePercent(),
-                        rate.getEffectiveDate(),
-                        rate.getRateChange(),
-                        rate.getLastChangedDate()
-                ))
+        // 5️⃣ Gruppera per term + rateType
+        Map<String, List<MortgageRate>> grouped = rates.stream()
+                .collect(Collectors.groupingBy(rate ->
+                        rate.getTerm() + "|" + rate.getRateType()
+                ));
+
+        // 6️⃣ Konvertera till BankHistoryDto med RatePointDto
+        return grouped.values().stream()
+                .map(group -> {
+                    MortgageRate first = group.get(0);
+                    List<RatePointDto> history = group.stream()
+                            .sorted(comparator)
+                            .map(r -> new RatePointDto(
+                                    r.getEffectiveDate().toString(),
+                                    r.getRatePercent()
+                            ))
+                            .toList();
+
+                    return new BankHistoryDto(
+                            bank.getName(),
+                            first.getTerm(),
+                            first.getRateType(),
+                            history
+                    );
+                })
+                .sorted(Comparator
+                        .comparing(BankHistoryDto::term)
+                        .thenComparing(BankHistoryDto::rateType))
                 .toList();
     }
 
-    /** Hämtar historiska bolåneräntor för alla banker. */
+    /**
+     * Hämtar historiska bolåneräntor för alla banker i strukturerat DTO-format.
+     * Grupperar data per bank, term och räntetyp.
+     */
     public List<BankHistoryDto> getAllBanksRateHistory(
             List<Bank> banks,
             LocalDate from,
             LocalDate to,
             String sort
     ) {
-        return banks.stream()
-                .map(bank -> {
-                    List<MortgageRateDto> rates = getRateHistoryForBank(bank, from, to, sort);
-                    return new BankHistoryDto(bank.getName(), rates);
-                })
+        // 1️⃣ Hämta historik för varje bank (direkt som BankHistoryDto)
+        List<BankHistoryDto> allHistories = banks.stream()
+                .flatMap(bank -> getRateHistoryForBank(bank, from, to, sort, null, null).stream())
+                .toList();
+
+        // 2️⃣ Sortera för konsekvent presentation (valfritt)
+        return allHistories.stream()
+                .sorted(Comparator
+                        .comparing(BankHistoryDto::bankName)
+                        .thenComparing(BankHistoryDto::term)
+                        .thenComparing(BankHistoryDto::rateType))
                 .toList();
     }
+
+
 
     /** Beräknar förändringen i bolåneräntor mellan två mättillfällen. */
     public List<RateTrendDto> getRateTrends(LocalDate from, LocalDate to, String rateType) {
