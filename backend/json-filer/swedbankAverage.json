@@ -1,0 +1,793 @@
+[
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.72,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.74,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.91,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.99,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.11,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.24,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_6Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.24,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_7Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.53,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.71,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.89,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.85,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.71,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.91,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.01,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.06,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.21,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_7Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.30,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.56,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.65,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.90,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.59,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.88,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.95,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.00,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.16,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.57,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.03,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.85,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.01,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.08,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.23,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.30,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.51,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.14,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.84,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.02,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.10,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.27,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.32,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.86,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.13,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.92,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.06,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.14,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.26,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.33,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_6Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.53,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_7Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.43,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.58,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_9Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.70,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.94,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.15,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.08,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.07,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.13,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.17,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.22,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_6Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.30,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_7Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.36,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.32,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_9Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.49,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 4.08,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.20,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.19,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.03,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.02,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.04,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.08,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_6Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.24,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_7Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.20,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.16,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_9Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.29,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.95,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.39,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.34,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.06,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.07,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.08,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.10,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_6Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.23,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_7Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.20,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.23,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_9Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.30,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 4.30,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.52,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.31,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.01,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.03,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.06,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.08,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_6Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.15,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_7Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.37,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.16,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_9Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.24,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 4.14,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.74,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.30,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.98,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.02,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.07,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.03,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_6Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.17,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_7Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.09,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.11,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_9Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.30,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 4.27,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 4.09,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.42,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.98,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.03,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.05,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.04,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 4.83,
+    "effectiveDate": "2024-10-01"
+  }
+]

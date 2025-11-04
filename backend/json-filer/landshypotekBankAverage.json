@@ -1,0 +1,464 @@
+[
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.75,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.71,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.84,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.91,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.98,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.13,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.76,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.70,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.83,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.91,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.16,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.76,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.72,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.83,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.92,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.84,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.90,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.97,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.06,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.98,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.95,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.97,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.14,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.37,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.05,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.05,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.24,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.32,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.37,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.45,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.01,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.07,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.11,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.28,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.24,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.32,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.00,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.97,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.96,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.08,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.12,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.17,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.17,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.16,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.13,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.24,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.34,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.35,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.20,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.99,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.88,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.85,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.08,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.94,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.34,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.11,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.96,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.96,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.00,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.05,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.78,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.31,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.97,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.97,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.01,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.01,
+    "effectiveDate": "2024-10-01"
+  }
+]

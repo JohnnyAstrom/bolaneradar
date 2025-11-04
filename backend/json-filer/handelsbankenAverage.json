@@ -1,0 +1,541 @@
+[
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.77,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.86,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.86,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.02,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.23,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.61,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.79,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.83,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.89,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.89,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.06,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.25,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.56,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.79,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.81,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.98,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.92,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.07,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.27,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.54,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.81,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.01,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.10,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.02,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.14,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.31,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.64,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.79,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.07,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.11,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.07,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.23,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.39,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.67,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.81,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.06,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.17,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.16,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.29,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.46,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.74,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.84,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.11,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.17,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.17,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.33,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.43,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.63,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.79,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.22,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.17,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.10,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.23,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.29,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.48,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.68,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.38,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.20,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.13,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.26,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.32,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.55,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.63,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.52,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.13,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.95,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.10,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.12,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.29,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.47,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.86,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.25,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.96,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.16,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.17,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.23,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.54,
+    "effectiveDate": "2024-11-01"
+  }
+]

@@ -1,0 +1,499 @@
+[
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.58,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.87,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.84,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.08,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.17,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.03,
+    "effectiveDate": "2025-09-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.73,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.94,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.86,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.91,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.91,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.08,
+    "effectiveDate": "2025-08-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.74,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.92,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.85,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.11,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.13,
+    "effectiveDate": "2025-07-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.74,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.85,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.87,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.90,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.30,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.26,
+    "effectiveDate": "2025-06-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.98,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.93,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.91,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.18,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.22,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.30,
+    "effectiveDate": "2025-05-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.97,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.04,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.03,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.15,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.22,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.29,
+    "effectiveDate": "2025-04-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.01,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.05,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.09,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.21,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.29,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.28,
+    "effectiveDate": "2025-03-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.02,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.98,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.04,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.05,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.15,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.16,
+    "effectiveDate": "2025-02-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.27,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.02,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.97,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.12,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.03,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.09,
+    "effectiveDate": "2025-01-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.28,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.90,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.99,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.93,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.03,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.03,
+    "effectiveDate": "2024-12-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.56,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.99,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.97,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.02,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.09,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.91,
+    "effectiveDate": "2024-11-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 4.03,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.18,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.02,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.09,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 3.10,
+    "effectiveDate": "2024-10-01"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "AVERAGERATE",
+    "ratePercent": 2.96,
+    "effectiveDate": "2024-10-01"
+  }
+]
