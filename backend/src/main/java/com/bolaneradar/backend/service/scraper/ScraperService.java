@@ -149,9 +149,35 @@ public class ScraperService {
                 throw new Exception("Inga räntor hittades för " + bank.getName());
             }
 
+            // Jämför med tidigare räntor för att beräkna förändring
+            for (MortgageRate newRate : rates) {
+                List<MortgageRate> previousRates =
+                        mortgageRateRepository.findByBankAndTermAndRateTypeOrderByEffectiveDateDesc(
+                                newRate.getBank(),
+                                newRate.getTerm(),
+                                newRate.getRateType()
+                        );
+
+                if (!previousRates.isEmpty()) {
+                    MortgageRate latest = previousRates.get(0);
+
+                    // Endast uppdatera om den nya räntan är nyare och har ett annat värde
+                    if (newRate.getEffectiveDate().isAfter(latest.getEffectiveDate())) {
+                        if (newRate.getRatePercent().compareTo(latest.getRatePercent()) != 0) {
+                            newRate.setRateChange(
+                                    newRate.getRatePercent().subtract(latest.getRatePercent())
+                            );
+                            newRate.setLastChangedDate(newRate.getEffectiveDate());
+                        }
+                    }
+                }
+            }
+
+            // Spara alla nya räntor i databasen
             mortgageRateRepository.saveAll(rates);
             importedCount = rates.size();
             success = true;
+
             System.out.println(importedCount + " räntor sparade för " + bank.getName());
 
         } catch (Exception e) {

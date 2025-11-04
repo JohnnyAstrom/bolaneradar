@@ -3,7 +3,6 @@ package com.bolaneradar.backend.controller;
 import com.bolaneradar.backend.dto.*;
 import com.bolaneradar.backend.dto.mapper.MortgageRateMapper;
 import com.bolaneradar.backend.model.Bank;
-import com.bolaneradar.backend.model.MortgageRate;
 import com.bolaneradar.backend.model.RateType;
 import com.bolaneradar.backend.service.BankService;
 import com.bolaneradar.backend.service.MortgageRateService;
@@ -12,9 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Tag(name = "Mortgage Rates", description = "Endpoints för att hantera bolåneräntor och trender")
 @RestController
@@ -47,31 +44,10 @@ public class MortgageRateController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Skapa nya räntor", description = "Lägger till en eller flera bolåneräntor kopplade till befintliga banker.")
     @PostMapping
+    @Operation(summary = "Skapa nya räntor", description = "Lägger till en eller flera bolåneräntor kopplade till befintliga banker.")
     public ResponseEntity<List<MortgageRateDto>> createRates(@RequestBody List<RateRequestDto> requests) {
-        List<MortgageRateDto> savedRates = new ArrayList<>();
-
-        for (RateRequestDto request : requests) {
-            Optional<Bank> optionalBank = bankService.getBankByName(request.bankName());
-            if (optionalBank.isEmpty()) {
-                System.err.println("Ingen bank hittades med namn: " + request.bankName());
-                continue; // hoppa över denna post
-            }
-
-            Bank bank = optionalBank.get();
-
-            MortgageRate rate = new MortgageRate(
-                    bank,
-                    request.term(),
-                    request.rateType(),
-                    request.ratePercent(),
-                    request.effectiveDate()
-            );
-
-            MortgageRate saved = mortgageRateService.saveRate(rate);
-            savedRates.add(MortgageRateMapper.toDto(saved));
-        }
+        List<MortgageRateDto> savedRates = mortgageRateService.createRates(requests);
 
         if (savedRates.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -79,7 +55,6 @@ public class MortgageRateController {
 
         return ResponseEntity.status(201).body(savedRates);
     }
-
 
     @Operation(summary = "Hämta senaste listräntor", description = "Returnerar de senaste listräntorna per bank och bindningstid.")
     @GetMapping("/latest/listrates")

@@ -31,10 +31,12 @@ public class BankMapper {
         return new MortgageRateDto(
                 rate.getId(),
                 rate.getBank().getName(),
-                rate.getTerm().name(),
-                rate.getRateType().name(),
+                rate.getTerm(),
+                rate.getRateType(),
                 rate.getRatePercent(),
-                rate.getEffectiveDate()
+                rate.getEffectiveDate(),
+                rate.getRateChange(),
+                rate.getLastChangedDate()
         );
     }
 

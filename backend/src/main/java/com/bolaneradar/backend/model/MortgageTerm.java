@@ -14,5 +14,6 @@ public enum MortgageTerm {
     FIXED_6Y,       // bunden 6 år
     FIXED_7Y,       // bunden 7 år
     FIXED_8Y,       // bunden 8 år
+    FIXED_9Y,
     FIXED_10Y       // bunden 10 år
 }

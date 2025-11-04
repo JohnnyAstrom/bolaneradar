@@ -55,6 +55,19 @@ public class MortgageRate {
     @Column(nullable = false)
     private LocalDate effectiveDate;
 
+    /**
+     * Senaste förändringen i procent jämfört med föregående värde (t.ex. -0.20).
+     * Kan sättas manuellt eller beräknas automatiskt vid scraping.
+     */
+    @Column(precision = 4, scale = 2)
+    private BigDecimal rateChange;
+
+    /**
+     * Datumet då räntan senast ändrades.
+     * Kan sättas manuellt eller uppdateras automatiskt via scraping.
+     */
+    private LocalDate lastChangedDate;
+
     // 🔹 Standardkonstruktör krävs av JPA
     public MortgageRate() {}
 
@@ -85,4 +98,10 @@ public class MortgageRate {
 
     public LocalDate getEffectiveDate() { return effectiveDate; }
     public void setEffectiveDate(LocalDate effectiveDate) { this.effectiveDate = effectiveDate; }
+
+    public BigDecimal getRateChange() { return rateChange; }
+    public void setRateChange(BigDecimal rateChange) { this.rateChange = rateChange; }
+
+    public LocalDate getLastChangedDate() { return lastChangedDate; }
+    public void setLastChangedDate(LocalDate lastChangedDate) { this.lastChangedDate = lastChangedDate; }
 }

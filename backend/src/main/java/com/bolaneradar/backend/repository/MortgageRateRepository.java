@@ -49,20 +49,30 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
     /**
      * Hämtar de senaste räntorna per bank och bindningstid
      * för en specifik räntetyp (LISTRATE eller AVERAGERATE).
-     * <p>
-     * SQL-frågan använder subquery för att endast hämta de nyaste posterna
-     * per (bank, term, rateType).
      */
     @Query("""
-        SELECT m FROM MortgageRate m
-        WHERE m.rateType = :rateType AND m.effectiveDate = (
-            SELECT MAX(m2.effectiveDate)
-            FROM MortgageRate m2
-            WHERE m2.bank = m.bank
-              AND m2.term = m.term
-              AND m2.rateType = m.rateType
-        )
-        ORDER BY m.bank.name, m.term
+    SELECT m
+    FROM MortgageRate m
+    WHERE m.rateType = :rateType
+      AND m.effectiveDate = (
+          SELECT MAX(m2.effectiveDate)
+          FROM MortgageRate m2
+          WHERE m2.bank = m.bank
+            AND m2.term = m.term
+            AND m2.rateType = :rateType
+      )
     """)
     List<MortgageRate> findLatestRatesByType(@Param("rateType") RateType rateType);
+
+
+    /**
+     * Hämta tidigare räntor för en specifik bank, term och räntetyp
+     * sorterade efter datum (nyast först).
+     * Används för att kunna beräkna förändringen mot föregående värde.
+     */
+    List<MortgageRate> findByBankAndTermAndRateTypeOrderByEffectiveDateDesc(
+            Bank bank,
+            com.bolaneradar.backend.model.MortgageTerm term,
+            com.bolaneradar.backend.model.RateType rateType
+    );
 }

@@ -15,5 +15,7 @@ public record RateRequestDto(
         MortgageTerm term,
         RateType rateType,
         BigDecimal ratePercent,
-        LocalDate effectiveDate
+        LocalDate effectiveDate,
+        BigDecimal rateChange,
+        LocalDate lastChangedDate
 ) {}
