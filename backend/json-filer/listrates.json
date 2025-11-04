@@ -1,0 +1,882 @@
+//Swedbank listränta
+[
+  {
+    "bankName": "Swedbank",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.79,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.20,
+    "lastChangedDate": "2025-09-25"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.34,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-07-09"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.39,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-06-19"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.49,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.49,
+    "lastChangedDate": "2025-07-09"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_4Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.64,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-07-09"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.79,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-06-19"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_6Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.99,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.35,
+    "lastChangedDate": "2025-09-25"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_7Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.99,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.35,
+    "lastChangedDate": "2025-09-25"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_8Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.99,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.35,
+    "lastChangedDate": "2025-09-25"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_9Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.99,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.35,
+    "lastChangedDate": "2025-09-25"
+  },
+  {
+    "bankName": "Swedbank",
+    "term": "FIXED_10Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.99,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.35,
+    "lastChangedDate": "2025-09-25"
+  }
+]
+
+// Nordea listränta
+
+[
+  {
+    "bankName": "Nordea",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.84,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-09-25"
+  },
+  {
+    "bankName": "Nordea",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.43,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-06-30"
+  },
+  {
+    "bankName": "Nordea",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.38,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-06-30"
+  },
+  {
+    "bankName": "Nordea",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.48,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.05,
+    "lastChangedDate": "2025-06-30"
+  },
+  {
+    "bankName": "Nordea",
+    "term": "FIXED_4Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.63,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.05,
+    "lastChangedDate": "2025-06-30"
+  },
+  {
+    "bankName": "Nordea",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.78,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-06-16"
+  },
+  {
+    "bankName": "Nordea",
+    "term": "FIXED_8Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.94,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.10,
+    "lastChangedDate": "2025-03-26"
+  }
+]
+
+// SEB listränta
+
+[
+  {
+    "bankName": "SEB",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.84,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-09-25"
+  },
+  {
+    "bankName": "SEB",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.44,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-07-10"
+  },
+  {
+    "bankName": "SEB",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.39,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-07-10"
+  },
+  {
+    "bankName": "SEB",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.49,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-07-10"
+  },
+  {
+    "bankName": "SEB",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.79,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.20,
+    "lastChangedDate": "2025-03-26"
+  },
+  {
+    "bankName": "SEB",
+    "term": "FIXED_7Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.94,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.20,
+    "lastChangedDate": "2025-03-26"
+  },
+  {
+    "bankName": "SEB",
+    "term": "FIXED_10Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.09,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.30,
+    "lastChangedDate": "2025-03-26"
+  }
+]
+
+// Handelsbanken listränta
+
+[
+  {
+    "bankName": "Handelsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.84,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-09-25"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.44,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.25,
+    "lastChangedDate": "2025-07-04"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.39,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-07-04"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.49,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-07-04"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.74,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.05,
+    "lastChangedDate": "2025-09-25"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_8Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.84,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.20,
+    "lastChangedDate": "2025-03-18"
+  },
+  {
+    "bankName": "Handelsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.94,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.20,
+    "lastChangedDate": "2025-03-18"
+  }
+]
+
+// SBAB listränta
+
+[
+  {
+    "bankName": "SBAB",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.05,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-09-29"
+  },
+  {
+    "bankName": "SBAB",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.17,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-07-04"
+  },
+  {
+    "bankName": "SBAB",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.29,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-07-04"
+  },
+  {
+    "bankName": "SBAB",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.39,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-07-04"
+  },
+  {
+    "bankName": "SBAB",
+    "term": "FIXED_4Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.49,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-07-04"
+  },
+  {
+    "bankName": "SBAB",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.59,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-07-04"
+  },
+  {
+    "bankName": "SBAB",
+    "term": "FIXED_7Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.83,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-07-04"
+  },
+  {
+    "bankName": "SBAB",
+    "term": "FIXED_10Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.09,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-04-29"
+  }
+]
+
+// Länsförsäkringar Bank
+
+[
+  {
+    "bankName": "Länsförsäkringar Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.84,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-10-02"
+  },
+  {
+    "bankName": "Länsförsäkringar Bank",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.44,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-06-23"
+  },
+  {
+    "bankName": "Länsförsäkringar Bank",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.39,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-06-23"
+  },
+  {
+    "bankName": "Länsförsäkringar Bank",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.55,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-06-23"
+  },
+  {
+    "bankName": "Länsförsäkringar Bank",
+    "term": "FIXED_4Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.74,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.05,
+    "lastChangedDate": "2025-06-23"
+  },
+  {
+    "bankName": "Länsförsäkringar Bank",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.79,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.05,
+    "lastChangedDate": "2025-06-23"
+  },
+  {
+    "bankName": "Länsförsäkringar Bank",
+    "term": "FIXED_7Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.05,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.30,
+    "lastChangedDate": "2025-03-14"
+  },
+  {
+    "bankName": "Länsförsäkringar Bank",
+    "term": "FIXED_10Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.15,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.30,
+    "lastChangedDate": "2025-03-14"
+  }
+]
+
+
+// Danskebank
+
+[
+  {
+    "bankName": "Danske Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.74,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-09-26"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.19,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.05,
+    "lastChangedDate": "2025-09-26"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.21,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.05,
+    "lastChangedDate": "2025-08-22"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.39,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.05,
+    "lastChangedDate": "2025-09-26"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_4Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.59,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-05-12"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.59,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.05,
+    "lastChangedDate": "2025-09-26"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_6Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.74,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-05-12"
+  },
+  {
+    "bankName": "Danske Bank",
+    "term": "FIXED_10Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.09,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-05-12"
+  }
+]
+
+// Skandiabanken
+
+[
+  {
+    "bankName": "Skandiabanken",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.45,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-09-30"
+  },
+  {
+    "bankName": "Skandiabanken",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.68,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-07-03"
+  },
+  {
+    "bankName": "Skandiabanken",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.68,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-07-03"
+  },
+  {
+    "bankName": "Skandiabanken",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.80,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-07-03"
+  },
+  {
+    "bankName": "Skandiabanken",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.99,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-07-03"
+  }
+]
+
+
+// Ikano Bank
+
+[
+  {
+    "bankName": "Ikano Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.48,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-10-06"
+  },
+  {
+    "bankName": "Ikano Bank",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.08,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-10-02"
+  },
+  {
+    "bankName": "Ikano Bank",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.42,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.05,
+    "lastChangedDate": "2025-08-01"
+  },
+  {
+    "bankName": "Ikano Bank",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.62,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.10,
+    "lastChangedDate": "2025-08-01"
+  },
+  {
+    "bankName": "Ikano Bank",
+    "term": "FIXED_4Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.87,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.18,
+    "lastChangedDate": "2025-08-01"
+  },
+  {
+    "bankName": "Ikano Bank",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.12,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.20,
+    "lastChangedDate": "2025-08-01"
+  },
+  {
+    "bankName": "Ikano Bank",
+    "term": "FIXED_7Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.37,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.20,
+    "lastChangedDate": "2025-08-01"
+  },
+  {
+    "bankName": "Ikano Bank",
+    "term": "FIXED_10Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.58,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.10,
+    "lastChangedDate": "2025-08-01"
+  }
+]
+
+// Ica Banken
+
+[
+  {
+    "bankName": "ICA Banken",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.33,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-10-06"
+  },
+  {
+    "bankName": "ICA Banken",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.38,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-10-02"
+  },
+  {
+    "bankName": "ICA Banken",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.70,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.05,
+    "lastChangedDate": "2025-08-04"
+  },
+  {
+    "bankName": "ICA Banken",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.90,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.10,
+    "lastChangedDate": "2025-08-04"
+  },
+  {
+    "bankName": "ICA Banken",
+    "term": "FIXED_4Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.15,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.18,
+    "lastChangedDate": "2025-08-04"
+  },
+  {
+    "bankName": "ICA Banken",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.42,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.20,
+    "lastChangedDate": "2025-08-04"
+  },
+  {
+    "bankName": "ICA Banken",
+    "term": "FIXED_7Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.61,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.20,
+    "lastChangedDate": "2025-08-04"
+  },
+  {
+    "bankName": "ICA Banken",
+    "term": "FIXED_10Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.82,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.10,
+    "lastChangedDate": "2025-08-04"
+  }
+]
+
+
+// Ålandsbanken
+
+[
+  {
+    "bankName": "Ålandsbanken",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.85,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-10-03"
+  },
+  {
+    "bankName": "Ålandsbanken",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.45,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-10-03"
+  },
+  {
+    "bankName": "Ålandsbanken",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.60,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-05-13"
+  },
+  {
+    "bankName": "Ålandsbanken",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.70,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-05-13"
+  },
+  {
+    "bankName": "Ålandsbanken",
+    "term": "FIXED_4Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.70,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-05-13"
+  },
+  {
+    "bankName": "Ålandsbanken",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.90,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.25,
+    "lastChangedDate": "2025-05-13"
+  },
+  {
+    "bankName": "Ålandsbanken",
+    "term": "FIXED_7Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.05,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.10,
+    "lastChangedDate": "2025-10-03"
+  },
+  {
+    "bankName": "Ålandsbanken",
+    "term": "FIXED_10Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 4.30,
+    "effectiveDate": "2025-11-03",
+    "rateChange": 0.10,
+    "lastChangedDate": "2025-10-03"
+  }
+]
+
+
+// LandshypotekBank
+
+[
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "VARIABLE_3M",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.04,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.20,
+    "lastChangedDate": "2025-10-01"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_1Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.19,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.15,
+    "lastChangedDate": "2025-07-02"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_2Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.25,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.05,
+    "lastChangedDate": "2025-10-22"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_3Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.35,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.05,
+    "lastChangedDate": "2025-10-22"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_4Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.50,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-07-02"
+  },
+  {
+    "bankName": "Landshypotek Bank",
+    "term": "FIXED_5Y",
+    "rateType": "LISTRATE",
+    "ratePercent": 3.60,
+    "effectiveDate": "2025-11-03",
+    "rateChange": -0.10,
+    "lastChangedDate": "2025-07-02"
+  }
+]
+
