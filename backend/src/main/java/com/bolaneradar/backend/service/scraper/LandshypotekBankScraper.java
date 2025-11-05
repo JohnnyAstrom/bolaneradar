@@ -11,12 +11,16 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Webbskrapare för Landshypotek Bank.
- * Hämtar både aktuella (listräntor) och genomsnittliga (snitträntor) bolåneräntor.
+ * Hämtar både aktuella (listräntor) och genomsnittliga (snitträntor).
+ * <p>
+ * Selenium används eftersom sidan laddas dynamiskt.
+ * Parseringshjälp sker via ScraperUtils.
  */
 @Service
 public class LandshypotekBankScraper implements BankScraper {
@@ -30,89 +34,79 @@ public class LandshypotekBankScraper implements BankScraper {
 
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage");
+
         WebDriver driver = new ChromeDriver(options);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(3));
 
         try {
             driver.get(URL);
+            handleCookieBanner(driver, shortWait);
 
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(3));
-
-            // === 1️⃣ Hantera cookie-banner (Cookiebot) ===
-            try {
-                List<By> cookieButtons = List.of(
-                        By.id("CybotCookiebotDialogBodyButtonAccept"),
-                        By.id("CybotCookiebotDialogBodyButtonAllowAll"),
-                        By.id("CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"),
-                        By.id("CybotCookiebotDialogBodyLevelButtonAccept"),
-                        By.id("CybotCookiebotDialogBodyButtonDecline"),
-                        By.xpath("//button[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'godkänn')]"),
-                        By.xpath("//button[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'tillåt')]"),
-                        By.xpath("//button[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'acceptera')]")
-                );
-
-                boolean cookieClosed = false;
-                for (By selector : cookieButtons) {
-                    try {
-                        WebElement btn = shortWait.until(ExpectedConditions.presenceOfElementLocated(selector));
-                        if (btn.isDisplayed()) {
-                            btn.click();
-                            System.out.println("Cookie-banner stängd via selector: " + selector);
-                            cookieClosed = true;
-                            break;
-                        }
-                    } catch (Exception ignored) {}
-                }
-
-                if (!cookieClosed) {
-                    ((JavascriptExecutor) driver).executeScript("""
-                        var el = document.getElementById('CybotCookiebotDialog');
-                        if (el) el.remove();
-                    """);
-                    System.out.println("Cookie-banner borttagen med JavaScript.");
-                }
-            } catch (Exception e) {
-                System.out.println("Ingen cookie-banner att stänga.");
-            }
-
-            // === 2️⃣ Klicka upp "Listräntor för bolån" ===
+            // === Listräntor === (oförändrad)
             WebElement listRateButton = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(.,'Listräntor för bolån')]")
-            ));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", listRateButton);
-            listRateButton.click();
+                    By.xpath("//button[contains(.,'Listräntor för bolån')]")));
+            scrollAndClick(driver, listRateButton);
 
             WebElement listRateTable = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//button[contains(.,'Listräntor för bolån')]/following::table[1]")
-            ));
+                    By.xpath("//button[contains(.,'Listräntor för bolån')]/following::table[1]")));
+
             extractRatesFromTable(bank, listRateTable, RateType.LISTRATE, rates, LocalDate.now());
             System.out.println("Hämtade listräntor.");
 
-            // === 3️⃣ Klicka upp "Snitträntor för bolån senaste månaden" ===
-            WebElement avgRateButton = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(.,'Snitträntor')]")
-            ));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", avgRateButton);
-            avgRateButton.click();
-
-            // 🟢 Hämta månadsrubriken precis ovanför tabellen (t.ex. "Oktober")
-            String monthText = "";
+            // === Snitträntor (från "Historisk snittränta för bolån") ===
             try {
-                WebElement monthElement = driver.findElement(By.xpath("//button[contains(.,'Snitträntor')]/following::p[1]"));
-                monthText = monthElement.getText().toLowerCase().trim();
-                System.out.println("Snitträntor gäller månad: " + monthText);
-            } catch (Exception ignored) {}
+                WebElement historyButton = wait.until(ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[.//span[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ','abcdefghijklmnopqrstuvwxyzåäö'),'historisk snittränta')]]")
+                ));
+                scrollAndClick(driver, historyButton);
 
-            // 🟢 Konvertera till LocalDate
-            LocalDate avgDate = parseMonthToDate(monthText);
+                WebElement historyTable = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//button[.//span[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ','abcdefghijklmnopqrstuvwxyzåäö'),'historisk snittränta')]]/following::table[1]")
+                ));
 
-            WebElement avgRateTable = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//button[contains(.,'Snitträntor')]/following::table[1]")
-            ));
-            extractRatesFromTable(bank, avgRateTable, RateType.AVERAGERATE, rates, avgDate);
-            System.out.println("Hämtade snitträntor för " + avgDate + ".");
+                List<WebElement> rows = historyTable.findElements(By.cssSelector("tbody tr"));
+                if (rows.isEmpty()) rows = historyTable.findElements(By.tagName("tr"));
 
-            System.out.println("Landshypotek Bank: totalt " + rates.size() + " räntor hittade.");
+                if (rows.isEmpty()) {
+                    System.out.println("Ingen rad hittades i tabellen för historisk snittränta.");
+                } else {
+                    WebElement firstRow = rows.get(0);
+                    // Läs både <th> och <td>
+                    List<WebElement> cols = firstRow.findElements(By.xpath("./th|./td"));
+
+                    if (cols.size() >= 3) {
+                        String yearText = cols.get(0).getText().trim();
+                        String monthText = cols.get(1).getText().trim();
+
+                        String monthYear = monthText + " " + yearText;
+                        YearMonth ym = ScraperUtils.parseSwedishMonth(monthYear);
+                        LocalDate date = ym.atDay(1);
+                        System.out.println("Historisk snittränta gäller: " + date + " (" + monthYear + ")");
+
+                        // Rubriker för bindningstider
+                        List<WebElement> headers = historyTable.findElements(By.cssSelector("thead th, thead td"));
+
+                        for (int i = 2; i < cols.size(); i++) {
+                            String headerText = headers.size() > i ? headers.get(i).getText() : "";
+                            MortgageTerm term = ScraperUtils.parseTerm(headerText);
+                            BigDecimal rate = ScraperUtils.parseRate(cols.get(i).getText());
+
+                            if (term != null && rate != null) {
+                                rates.add(new MortgageRate(bank, term, RateType.AVERAGERATE, rate, date));
+                                System.out.println("→ Snittränta: " + term + " = " + rate + "%");
+                            }
+                        }
+                        System.out.println("Hämtade historiska snitträntor för " + date + ".");
+                    } else {
+                        System.out.println("Tabellen hittades men hade för få kolumner.");
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Kunde inte hämta historisk snittränta: " + e.getMessage());
+            }
+
+            ScraperUtils.logResult("Landshypotek Bank", rates.size());
 
         } catch (Exception e) {
             System.err.println("Fel vid skrapning av Landshypotek Bank: " + e.getMessage());
@@ -123,55 +117,67 @@ public class LandshypotekBankScraper implements BankScraper {
         return rates;
     }
 
-    private void extractRatesFromTable(Bank bank, WebElement table, RateType rateType, List<MortgageRate> rates, LocalDate date) {
-        List<WebElement> rows = table.findElements(By.tagName("tr"));
+    // =================== Hjälpmetoder ===================
 
+    /** Hanterar cookie-bannern (Cookiebot) */
+    private void handleCookieBanner(WebDriver driver, WebDriverWait shortWait) {
+        try {
+            List<By> cookieButtons = List.of(
+                    By.id("CybotCookiebotDialogBodyButtonAccept"),
+                    By.id("CybotCookiebotDialogBodyButtonAllowAll"),
+                    By.id("CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"),
+                    By.id("CybotCookiebotDialogBodyButtonDecline"),
+                    By.xpath("//button[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'godkänn')]"),
+                    By.xpath("//button[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'tillåt')]"),
+                    By.xpath("//button[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'acceptera')]")
+            );
+
+            boolean cookieClosed = false;
+            for (By selector : cookieButtons) {
+                try {
+                    WebElement btn = shortWait.until(ExpectedConditions.presenceOfElementLocated(selector));
+                    if (btn.isDisplayed()) {
+                        btn.click();
+                        System.out.println("Cookie-banner stängd via selector: " + selector);
+                        cookieClosed = true;
+                        break;
+                    }
+                } catch (Exception ignored) {}
+            }
+
+            if (!cookieClosed) {
+                ((JavascriptExecutor) driver).executeScript("""
+                    var el = document.getElementById('CybotCookiebotDialog');
+                    if (el) el.remove();
+                """);
+                System.out.println("Cookie-banner borttagen med JavaScript.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Ingen cookie-banner att stänga.");
+        }
+    }
+
+    /** Scrollar till och klickar på ett element */
+    private void scrollAndClick(WebDriver driver, WebElement element) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        element.click();
+    }
+
+    /** Extraherar räntor från tabell för angivet rateType */
+    private void extractRatesFromTable(Bank bank, WebElement table, RateType rateType,
+                                       List<MortgageRate> rates, LocalDate date) {
+        List<WebElement> rows = table.findElements(By.tagName("tr"));
         for (int i = 1; i < rows.size(); i++) { // hoppa över rubrikraden
             List<WebElement> cols = rows.get(i).findElements(By.tagName("td"));
             if (cols.size() < 2) continue;
 
-            String termText = cols.get(0).getText().toLowerCase().trim();
-            String rateText = cols.get(1).getText()
-                    .replace("%", "")
-                    .replace(",", ".")
-                    .trim();
-
-            MortgageTerm term = ScraperUtils.parseTerm(termText);
-            BigDecimal rate = ScraperUtils.parseRate(rateText);
+            MortgageTerm term = ScraperUtils.parseTerm(cols.get(0).getText());
+            BigDecimal rate = ScraperUtils.parseRate(cols.get(1).getText());
 
             if (term != null && rate != null) {
                 rates.add(new MortgageRate(bank, term, rateType, rate, date));
-                System.out.println(rateType + " | " + termText + " = " + rate + "% (" + date + ")");
             }
         }
-    }
-
-    private LocalDate parseMonthToDate(String monthText) {
-        int month = switch (monthText) {
-            case "januari" -> 1;
-            case "februari" -> 2;
-            case "mars" -> 3;
-            case "april" -> 4;
-            case "maj" -> 5;
-            case "juni" -> 6;
-            case "juli" -> 7;
-            case "augusti" -> 8;
-            case "september" -> 9;
-            case "oktober" -> 10;
-            case "november" -> 11;
-            case "december" -> 12;
-            default -> LocalDate.now().getMonthValue();
-        };
-
-        int year = LocalDate.now().getYear();
-
-        // 🟢 Justera om vi är i början av året och sidan visar "januari" (föregående år)
-        if (month == 12 && LocalDate.now().getMonthValue() == 1) {
-            year -= 1;
-        }
-
-        // 🟢 Eftersom Landshypotek alltid visar *föregående månad*, dra bort en månad
-        LocalDate baseDate = LocalDate.of(year, month, 1);
-        return baseDate.minusMonths(1);
     }
 }

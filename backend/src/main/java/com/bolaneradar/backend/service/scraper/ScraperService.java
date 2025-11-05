@@ -149,10 +149,10 @@ public class ScraperService {
                 throw new Exception("Inga räntor hittades för " + bank.getName());
             }
 
-            // ✅ Skapa lista för slutgiltiga räntor som verkligen ska sparas
+            // Skapa lista för slutgiltiga räntor som verkligen ska sparas
             List<MortgageRate> finalRatesToSave = new ArrayList<>();
 
-            // 🧠 Kontrollera varje ny ränta
+            // Kontrollera varje ny ränta
             for (MortgageRate newRate : rates) {
                 List<MortgageRate> previousRates =
                         mortgageRateRepository.findByBankAndTermAndRateTypeOrderByEffectiveDateDesc(
@@ -176,7 +176,7 @@ public class ScraperService {
                         }
                     }
 
-                    // 🔄 Beräkna förändring (för både list- och snitträntor)
+                    // Beräkna förändring (för både list- och snitträntor)
                     if (newRate.getEffectiveDate().isAfter(latest.getEffectiveDate())) {
                         if (newRate.getRatePercent().compareTo(latest.getRatePercent()) != 0) {
                             newRate.setRateChange(
@@ -187,11 +187,11 @@ public class ScraperService {
                     }
                 }
 
-                // ✅ Lägg till i listan för sparning
+                // Lägg till i listan för sparning
                 finalRatesToSave.add(newRate);
             }
 
-            // 💾 Spara bara de nya/ändrade räntorna
+            // Spara bara de nya/ändrade räntorna
             if (!finalRatesToSave.isEmpty()) {
                 mortgageRateRepository.saveAll(finalRatesToSave);
             }

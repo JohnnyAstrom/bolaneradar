@@ -65,7 +65,7 @@ public class AlandsbankenScraper implements BankScraper {
             System.out.println("Hittade ingen tabell för snitträntor.");
         }
 
-        System.out.println("🏁 Alandsbanken: totalt " + rates.size() + " räntor hittade.");
+        System.out.println("Alandsbanken: totalt " + rates.size() + " räntor hittade.");
         return rates;
     }
 

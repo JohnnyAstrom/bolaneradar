@@ -31,7 +31,7 @@ public class SkandiabankenScraper implements BankScraper {
 
     @Override
     public List<MortgageRate> scrapeRates(Bank bank) {
-        System.out.println("🏦 Startar skrapning för Skandia...");
+        System.out.println("Startar skrapning för Skandia...");
         List<MortgageRate> rates = new ArrayList<>();
 
         WebDriverManager.chromedriver().setup();
@@ -47,7 +47,7 @@ public class SkandiabankenScraper implements BankScraper {
         try {
             driver.get(URL);
 
-            // === 1️⃣ Stäng cookie-popup ===
+            // === Stäng cookie-popup ===
             List<By> cookieSelectors = List.of(
                     By.id("onetrust-accept-btn-handler"),
                     By.cssSelector("button[id*='accept']"),
@@ -76,7 +76,7 @@ public class SkandiabankenScraper implements BankScraper {
                 System.out.println("[Skandia] Ingen cookie-popup eller borttagen via JS.");
             }
 
-            // === 2️⃣ Simulera enkel interaktion för att trigga rendering ===
+            // === Simulera enkel interaktion för att trigga rendering ===
             try {
                 Actions actions = new Actions(driver);
                 actions.moveByOffset(100, 100).perform();
@@ -86,18 +86,18 @@ public class SkandiabankenScraper implements BankScraper {
                 Thread.sleep(700);
             } catch (Exception ignored) {}
 
-            // === 3️⃣ Vänta in tabeller ===
+            // === Vänta in tabeller ===
             wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("table tbody tr")));
             List<WebElement> tables = driver.findElements(By.cssSelector("table"));
             System.out.println("[Skandia] Hittade " + tables.size() + " tabeller.");
 
-            // === 4️⃣ Hämta datum för snitträntor från rubriken "Snitträntor oktober 2025" ===
+            // === Hämta datum för snitträntor från rubriken "Snitträntor oktober 2025" ===
             LocalDate averageDate = extractAverageDate(driver);
             if (averageDate != null) {
                 System.out.println("[Skandia] Snitträntor gäller " + averageDate);
             }
 
-            // === 5️⃣ Extrahera tabeller ===
+            // === Extrahera tabeller ===
             int tableIndex = 1;
             for (WebElement table : tables) {
                 RateType rateType = (tableIndex == 1) ? RateType.AVERAGERATE : RateType.LISTRATE;
@@ -124,12 +124,12 @@ public class SkandiabankenScraper implements BankScraper {
             }
 
         } catch (Exception e) {
-            System.err.println("⚠️ Fel vid Skandia-scraping: " + e.getMessage());
+            System.err.println("Fel vid Skandia-scraping: " + e.getMessage());
         } finally {
             driver.quit();
         }
 
-        System.out.println("✅ Skandia: totalt " + rates.size() + " räntor hittade.");
+        System.out.println("Skandia: totalt " + rates.size() + " räntor hittade.");
         return rates;
     }
 
