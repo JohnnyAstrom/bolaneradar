@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * Hämtar SBAB:s bolåneräntor via deras publika JSON-API.
- * Inkluderar både aktuella listräntor och senaste snitträntor (senaste månad).
+ * Inkluderar både aktuella listräntor och snitträntor (senaste tolv månaderna).
  */
 @Service
 public class SBABScraper implements BankScraper {
@@ -40,7 +40,7 @@ public class SBABScraper implements BankScraper {
         return rates;
     }
 
-    /** Hämtar listräntor */
+    /** Hämtar aktuella listräntor */
     private List<MortgageRate> fetchListRates(Bank bank) throws IOException {
         List<MortgageRate> listRates = new ArrayList<>();
 
@@ -79,7 +79,7 @@ public class SBABScraper implements BankScraper {
         return listRates;
     }
 
-    /** Hämtar snitträntor från senaste månaden */
+    /** Hämtar snitträntor från senaste månaden (eller flera om behövs) */
     private List<MortgageRate> fetchAverageRates(Bank bank) throws IOException {
         List<MortgageRate> averageRates = new ArrayList<>();
 
@@ -98,16 +98,19 @@ public class SBABScraper implements BankScraper {
 
             JsonNode root = mapper.readTree(response.body()).path("average_interest_rate_last_twelve_months");
             if (root.isArray() && !root.isEmpty()) {
-                JsonNode latest = root.get(0); // Senaste månaden (överst i listan)
+                JsonNode latest = root.get(0); // Senaste månad (index 0)
 
-                addIfPresent(averageRates, bank, latest, "three_months", MortgageTerm.VARIABLE_3M);
-                addIfPresent(averageRates, bank, latest, "one_year", MortgageTerm.FIXED_1Y);
-                addIfPresent(averageRates, bank, latest, "two_years", MortgageTerm.FIXED_2Y);
-                addIfPresent(averageRates, bank, latest, "three_years", MortgageTerm.FIXED_3Y);
-                addIfPresent(averageRates, bank, latest, "four_years", MortgageTerm.FIXED_4Y);
-                addIfPresent(averageRates, bank, latest, "five_years", MortgageTerm.FIXED_5Y);
-                addIfPresent(averageRates, bank, latest, "seven_years", MortgageTerm.FIXED_7Y);
-                addIfPresent(averageRates, bank, latest, "ten_years", MortgageTerm.FIXED_10Y);
+                LocalDate date = parseDate(latest.path("period").asText(null));
+                System.out.println("SBAB: snitträntor gäller månad " + date);
+
+                addIfPresent(averageRates, bank, latest, "three_months", MortgageTerm.VARIABLE_3M, date);
+                addIfPresent(averageRates, bank, latest, "one_year", MortgageTerm.FIXED_1Y, date);
+                addIfPresent(averageRates, bank, latest, "two_years", MortgageTerm.FIXED_2Y, date);
+                addIfPresent(averageRates, bank, latest, "three_years", MortgageTerm.FIXED_3Y, date);
+                addIfPresent(averageRates, bank, latest, "four_years", MortgageTerm.FIXED_4Y, date);
+                addIfPresent(averageRates, bank, latest, "five_years", MortgageTerm.FIXED_5Y, date);
+                addIfPresent(averageRates, bank, latest, "seven_years", MortgageTerm.FIXED_7Y, date);
+                addIfPresent(averageRates, bank, latest, "ten_years", MortgageTerm.FIXED_10Y, date);
             }
 
             System.out.println("SBAB: hittade " + averageRates.size() + " snitträntor.");
@@ -119,15 +122,19 @@ public class SBABScraper implements BankScraper {
         return averageRates;
     }
 
-    /** Hjälpmetod: lägg till ränta om värdet finns */
-    private void addIfPresent(List<MortgageRate> list, Bank bank, JsonNode node, String field, MortgageTerm term) {
+    /** Lägg till ränta om fältet finns */
+    private void addIfPresent(List<MortgageRate> list, Bank bank, JsonNode node,
+                              String field, MortgageTerm term, LocalDate date) {
         if (node.hasNonNull(field)) {
-            BigDecimal rate = node.get(field).decimalValue();
-            list.add(new MortgageRate(bank, term, RateType.AVERAGERATE, rate, LocalDate.now()));
+            try {
+                BigDecimal rate = node.get(field).decimalValue();
+                list.add(new MortgageRate(bank, term, RateType.AVERAGERATE, rate, date));
+                System.out.println("AVERAGE | " + term + " = " + rate + "% (" + date + ")");
+            } catch (Exception ignored) {}
         }
     }
 
-    /** Mappning från period till enum */
+    /** Tolkar periodsträng till MortgageTerm */
     private MortgageTerm mapToMortgageTerm(String period) {
         return switch (period) {
             case "P_3_MONTHS" -> MortgageTerm.VARIABLE_3M;
@@ -140,5 +147,20 @@ public class SBABScraper implements BankScraper {
             case "P_10_YEARS" -> MortgageTerm.FIXED_10Y;
             default -> null;
         };
+    }
+
+    /** Tolkar datumsträng "2025-09" eller "2025-09-01" till LocalDate */
+    private LocalDate parseDate(String text) {
+        if (text == null || text.isEmpty()) return LocalDate.now();
+        try {
+            if (text.length() == 7) { // format "YYYY-MM"
+                return LocalDate.parse(text + "-01");
+            } else {
+                return LocalDate.parse(text);
+            }
+        } catch (Exception e) {
+            System.err.println("SBAB: kunde inte tolka datum: " + text);
+            return LocalDate.now();
+        }
     }
 }

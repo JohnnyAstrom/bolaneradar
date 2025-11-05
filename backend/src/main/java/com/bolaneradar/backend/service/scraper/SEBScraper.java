@@ -27,7 +27,6 @@ import java.util.List;
  *   <li>Öppnar varje iframe separat och hämtar tabellrader med räntor</li>
  *   <li>Returnerar alla räntor som MortgageRate-objekt</li>
  * </ul>
- * Optimerad för snabbare körning och enhetlig Selenium-hantering.
  */
 @Service
 public class SEBScraper implements BankScraper {
@@ -83,7 +82,10 @@ public class SEBScraper implements BankScraper {
         return rates;
     }
 
-    /** Läser en iframe och returnerar extraherade räntor. */
+    /**
+     * Läser en iframe och returnerar extraherade räntor.
+     * Hanterar både listräntor och snitträntor.
+     */
     private List<MortgageRate> scrapeIframe(Bank bank, String url, RateType rateType, ChromeOptions options) {
         List<MortgageRate> list = new ArrayList<>();
         WebDriver iframeDriver = new ChromeDriver(options);
@@ -96,17 +98,26 @@ public class SEBScraper implements BankScraper {
             List<WebElement> rows = iframeDriver.findElements(By.cssSelector("table tbody tr"));
             for (WebElement row : rows) {
                 List<WebElement> cols = row.findElements(By.tagName("td"));
-                if (cols.size() < 2) continue;
+                if (cols.isEmpty()) continue;
 
                 String termText = cols.get(0).getText().toLowerCase().trim();
-                String rateText = cols.get(1).getText().replace("%", "").replace(",", ".").trim();
+                String rateText = cols.size() > 1 ? cols.get(1).getText().replace("%", "").replace(",", ".").trim() : null;
+                String monthText = (rateType == RateType.AVERAGERATE && cols.size() > 2)
+                        ? cols.get(2).getText().trim()
+                        : null;
 
                 MortgageTerm term = ScraperUtils.parseTerm(termText);
                 BigDecimal rate = ScraperUtils.parseRate(rateText);
+                LocalDate date = LocalDate.now();
+
+                // 🗓 Om det är snittränta (AVERAGERATE), försök tolka “Avser månad”
+                if (rateType == RateType.AVERAGERATE && monthText != null && !monthText.isEmpty()) {
+                    date = parseMonthYear(monthText);
+                }
 
                 if (term != null && rate != null) {
-                    list.add(new MortgageRate(bank, term, rateType, rate, LocalDate.now()));
-                    System.out.println(rateType + " | " + termText + " = " + rate + "%");
+                    list.add(new MortgageRate(bank, term, rateType, rate, date));
+                    System.out.println(rateType + " | " + termText + " = " + rate + "% (" + date + ")");
                 }
             }
 
@@ -117,5 +128,37 @@ public class SEBScraper implements BankScraper {
         }
 
         return list;
+    }
+
+    /**
+     * Konverterar text som "September 2025" till LocalDate (första dagen i månaden).
+     */
+    private LocalDate parseMonthYear(String text) {
+        try {
+            String[] parts = text.split(" ");
+            if (parts.length == 2) {
+                String monthName = parts[0].toLowerCase();
+                int year = Integer.parseInt(parts[1]);
+                int month = switch (monthName) {
+                    case "januari", "january" -> 1;
+                    case "februari", "february" -> 2;
+                    case "mars", "march" -> 3;
+                    case "april" -> 4;
+                    case "maj", "may" -> 5;
+                    case "juni", "june" -> 6;
+                    case "juli", "july" -> 7;
+                    case "augusti", "august" -> 8;
+                    case "september" -> 9;
+                    case "oktober", "october" -> 10;
+                    case "november" -> 11;
+                    case "december" -> 12;
+                    default -> 1;
+                };
+                return LocalDate.of(year, month, 1);
+            }
+        } catch (Exception e) {
+            System.err.println("Kunde inte tolka månad/år: " + text);
+        }
+        return LocalDate.now();
     }
 }

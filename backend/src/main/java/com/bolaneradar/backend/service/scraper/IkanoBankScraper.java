@@ -28,8 +28,8 @@ public class IkanoBankScraper implements BankScraper {
         List<MortgageRate> rates = new ArrayList<>();
 
         try {
+            // === 1️⃣ Listräntor via JSON-API ===
             @SuppressWarnings("unchecked")
-            // === Listräntor via JSON-API ===
             var dataList = (List<Map<String, Object>>) Objects.requireNonNull(new RestTemplate()
                             .getForObject(API_URL, Map.class))
                     .get("dataList");
@@ -47,33 +47,42 @@ public class IkanoBankScraper implements BankScraper {
                 if (term == null) return;
 
                 double rate = toDouble(i.get("listPrice"));
-                double ltvMin = toDouble(i.get("ltvGroupMinLtv"));
-                double ltvMax = toDouble(i.get("ltvGroupMaxLtv"));
-
                 rates.add(new MortgageRate(bank, term, RateType.LISTRATE, BigDecimal.valueOf(rate), LocalDate.now()));
-                System.out.printf("→ %s %.2f%% (%.0f–%.0f%% LTV)%n", term, rate, ltvMin, ltvMax);
+                System.out.printf("→ LISTRATE %s %.2f%%%n", term, rate);
             });
 
-            // === Snitträntor via HTML ===
-            Elements rows = Jsoup.connect(SNITT_URL)
-                    .userAgent("Mozilla/5.0").timeout(10000).get()
-                    .select("table:last-of-type tbody tr");
-            if (!rows.isEmpty()) {
-                Elements cols = Objects.requireNonNull(rows.last()).select("td");
+            // === 2️⃣ Snitträntor via HTML ===
+            Document doc = Jsoup.connect(SNITT_URL)
+                    .userAgent("Mozilla/5.0").timeout(10000).get();
+
+            Elements rows = doc.select("table:last-of-type tbody tr");
+            if (rows.isEmpty()) {
+                System.out.println("⚠️ Hittade ingen snitträntetabell.");
+            } else {
+                // 🟢 Ta sista raden (senaste månad)
+                Element lastRow = rows.last();
+                Elements cols = lastRow.select("td");
+
+                // Datum (första kolumnen, t.ex. "2025 10")
+                LocalDate date = parseMonthColumn(cols.get(0).text());
+
+                // Gå igenom räntorna per bindningstid
                 for (int i = 1; i < cols.size(); i++) {
                     BigDecimal rate = ScraperUtils.parseRate(cols.get(i).text());
                     MortgageTerm term = ScraperUtils.parseTerm(getTermFromIndex(i));
-                    if (term != null && rate != null)
-                        rates.add(new MortgageRate(bank, term, RateType.AVERAGERATE, rate, LocalDate.now()));
+                    if (term != null && rate != null) {
+                        rates.add(new MortgageRate(bank, term, RateType.AVERAGERATE, rate, date));
+                        System.out.printf("→ AVERAGERATE %s = %.2f%% (%s)%n", term, rate, date);
+                    }
                 }
-                System.out.println("Snitträntor hämtade.");
+                System.out.println("Snitträntor hämtade för " + date + ".");
             }
 
         } catch (Exception e) {
             System.err.println("Fel vid Ikano Bank-scraping: " + e.getMessage());
         }
 
-        System.out.println("Ikano Bank: totalt " + rates.size() + " räntor hittade.");
+        System.out.println("🏁 Ikano Bank: totalt " + rates.size() + " räntor hittade.");
         return rates;
     }
 
@@ -108,5 +117,18 @@ public class IkanoBankScraper implements BankScraper {
             case 4 -> "3 år"; case 5 -> "4 år"; case 6 -> "5 år";
             case 7 -> "7 år"; case 8 -> "10 år"; default -> null;
         };
+    }
+
+    /** Konverterar t.ex. "2025 10" → LocalDate(2025-10-01) */
+    private static LocalDate parseMonthColumn(String text) {
+        try {
+            String[] parts = text.trim().split("\\s+");
+            if (parts.length < 2) return LocalDate.now();
+            int year = Integer.parseInt(parts[0]);
+            int month = Integer.parseInt(parts[1]);
+            return LocalDate.of(year, month, 1);
+        } catch (Exception e) {
+            return LocalDate.now();
+        }
     }
 }

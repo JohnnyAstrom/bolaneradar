@@ -2,6 +2,7 @@ package com.bolaneradar.backend.service.scraper;
 
 import com.bolaneradar.backend.model.Bank;
 import com.bolaneradar.backend.model.MortgageRate;
+import com.bolaneradar.backend.model.RateType;
 import com.bolaneradar.backend.repository.BankRepository;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import com.bolaneradar.backend.service.EmailService;
@@ -114,7 +115,6 @@ public class ScraperService {
             System.out.println("Alla banker skrapades utan fel!");
         }
     }
-
     /**
      * Kör skrapning för en specifik bank via dess namn.
      *
@@ -149,7 +149,10 @@ public class ScraperService {
                 throw new Exception("Inga räntor hittades för " + bank.getName());
             }
 
-            // Jämför med tidigare räntor för att beräkna förändring
+            // ✅ Skapa lista för slutgiltiga räntor som verkligen ska sparas
+            List<MortgageRate> finalRatesToSave = new ArrayList<>();
+
+            // 🧠 Kontrollera varje ny ränta
             for (MortgageRate newRate : rates) {
                 List<MortgageRate> previousRates =
                         mortgageRateRepository.findByBankAndTermAndRateTypeOrderByEffectiveDateDesc(
@@ -161,7 +164,19 @@ public class ScraperService {
                 if (!previousRates.isEmpty()) {
                     MortgageRate latest = previousRates.get(0);
 
-                    // Endast uppdatera om den nya räntan är nyare och har ett annat värde
+                    // 💡 Om det är snittränta: hoppa över dubbletter (samma månad + samma värde)
+                    if (newRate.getRateType() == RateType.AVERAGERATE) {
+                        boolean sameMonth = newRate.getEffectiveDate().equals(latest.getEffectiveDate());
+                        boolean sameRate = newRate.getRatePercent().compareTo(latest.getRatePercent()) == 0;
+
+                        if (sameMonth && sameRate) {
+                            System.out.println("⏸ Hoppar över oförändrad snittränta för "
+                                    + bank.getName() + " (" + newRate.getTerm() + ")");
+                            continue; // hoppa över – ingen förändring
+                        }
+                    }
+
+                    // 🔄 Beräkna förändring (för både list- och snitträntor)
                     if (newRate.getEffectiveDate().isAfter(latest.getEffectiveDate())) {
                         if (newRate.getRatePercent().compareTo(latest.getRatePercent()) != 0) {
                             newRate.setRateChange(
@@ -171,11 +186,17 @@ public class ScraperService {
                         }
                     }
                 }
+
+                // ✅ Lägg till i listan för sparning
+                finalRatesToSave.add(newRate);
             }
 
-            // Spara alla nya räntor i databasen
-            mortgageRateRepository.saveAll(rates);
-            importedCount = rates.size();
+            // 💾 Spara bara de nya/ändrade räntorna
+            if (!finalRatesToSave.isEmpty()) {
+                mortgageRateRepository.saveAll(finalRatesToSave);
+            }
+
+            importedCount = finalRatesToSave.size();
             success = true;
 
             System.out.println(importedCount + " räntor sparade för " + bank.getName());
@@ -183,7 +204,7 @@ public class ScraperService {
         } catch (Exception e) {
             errorMessage = e.getMessage();
             System.err.println("Fel vid skrapning av " + bank.getName() + ": " + e.getMessage());
-            throw e; // skickar vidare felet till scrapeAllBanks()
+            throw e;
 
         } finally {
             long duration = System.currentTimeMillis() - startTime;

@@ -21,8 +21,7 @@ import java.util.Random;
  * Webbskrapare för Skandia.
  * Hämtar både aktuella (listräntor) och genomsnittliga (snitträntor) bolåneräntor.
  * <p>
- * Skandia skyddar sin sida med Akamai-botfilter och laddar innehållet dynamiskt via JavaScript.
- * Därför används en full webbläsarsimulering (icke-headless Chrome) med mänsklig interaktion.
+ * Snitträntor får korrekt månad och år från rubriken "Snitträntor oktober 2025".
  */
 @Service
 public class SkandiabankenScraper implements BankScraper {
@@ -48,7 +47,7 @@ public class SkandiabankenScraper implements BankScraper {
         try {
             driver.get(URL);
 
-            // === 1️⃣ Försök stänga cookie-popup ===
+            // === 1️⃣ Stäng cookie-popup ===
             List<By> cookieSelectors = List.of(
                     By.id("onetrust-accept-btn-handler"),
                     By.cssSelector("button[id*='accept']"),
@@ -92,10 +91,19 @@ public class SkandiabankenScraper implements BankScraper {
             List<WebElement> tables = driver.findElements(By.cssSelector("table"));
             System.out.println("[Skandia] Hittade " + tables.size() + " tabeller.");
 
-            // === 4️⃣ Extrahera data ===
+            // === 4️⃣ Hämta datum för snitträntor från rubriken "Snitträntor oktober 2025" ===
+            LocalDate averageDate = extractAverageDate(driver);
+            if (averageDate != null) {
+                System.out.println("[Skandia] Snitträntor gäller " + averageDate);
+            }
+
+            // === 5️⃣ Extrahera tabeller ===
             int tableIndex = 1;
             for (WebElement table : tables) {
                 RateType rateType = (tableIndex == 1) ? RateType.AVERAGERATE : RateType.LISTRATE;
+                LocalDate date = (rateType == RateType.AVERAGERATE && averageDate != null)
+                        ? averageDate
+                        : LocalDate.now();
 
                 for (WebElement row : table.findElements(By.cssSelector("tbody tr"))) {
                     List<WebElement> cols = row.findElements(By.tagName("td"));
@@ -108,8 +116,8 @@ public class SkandiabankenScraper implements BankScraper {
                     BigDecimal rate = ScraperUtils.parseRate(rateText);
 
                     if (term != null && rate != null) {
-                        rates.add(new MortgageRate(bank, term, rateType, rate, LocalDate.now()));
-                        System.out.println("[Skandia] " + rateType + " | " + termText + " = " + rate + "%");
+                        rates.add(new MortgageRate(bank, term, rateType, rate, date));
+                        System.out.println("[Skandia] " + rateType + " | " + termText + " = " + rate + "% (" + date + ")");
                     }
                 }
                 tableIndex++;
@@ -123,5 +131,52 @@ public class SkandiabankenScraper implements BankScraper {
 
         System.out.println("✅ Skandia: totalt " + rates.size() + " räntor hittade.");
         return rates;
+    }
+
+    /** Hämtar datum från rubriken, t.ex. "Snitträntor oktober 2025" */
+    private LocalDate extractAverageDate(WebDriver driver) {
+        try {
+            List<WebElement> headings = driver.findElements(By.xpath("//*[contains(text(),'Snitträntor')]"));
+            for (WebElement h : headings) {
+                String text = h.getText().toLowerCase().trim();
+                if (text.matches(".*\\b(januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december)\\b\\s+\\d{4}")) {
+                    String monthYear = text.replaceAll(".*snitträntor\\s*", "").trim();
+                    return parseMonthYear(monthYear);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("[Skandia] Kunde inte hitta snitträntedatum: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /** Konverterar t.ex. "oktober 2025" till LocalDate (2025-10-01) */
+    private LocalDate parseMonthYear(String text) {
+        try {
+            String[] parts = text.split("\\s+");
+            if (parts.length >= 2) {
+                String monthName = parts[0].toLowerCase();
+                int year = Integer.parseInt(parts[1]);
+                int month = switch (monthName) {
+                    case "januari","january" -> 1;
+                    case "februari","february" -> 2;
+                    case "mars","march" -> 3;
+                    case "april" -> 4;
+                    case "maj","may" -> 5;
+                    case "juni","june" -> 6;
+                    case "juli","july" -> 7;
+                    case "augusti","august" -> 8;
+                    case "september" -> 9;
+                    case "oktober","october" -> 10;
+                    case "november" -> 11;
+                    case "december" -> 12;
+                    default -> 1;
+                };
+                return LocalDate.of(year, month, 1);
+            }
+        } catch (Exception e) {
+            System.err.println("[Skandia] Kunde inte tolka månad/år: " + text);
+        }
+        return LocalDate.now();
     }
 }

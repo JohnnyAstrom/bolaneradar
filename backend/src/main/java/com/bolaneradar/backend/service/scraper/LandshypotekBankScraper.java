@@ -17,17 +17,6 @@ import java.util.List;
 /**
  * Webbskrapare för Landshypotek Bank.
  * Hämtar både aktuella (listräntor) och genomsnittliga (snitträntor) bolåneräntor.
- * <p>
- * Räntorna presenteras i två separata sektioner (accordion-komponenter) där innehållet
- * renderas dynamiskt av JavaScript först efter att sektionen expanderats.
- * Selenium används för att:
- * <ul>
- *   <li>Öppna sidan i headless-läge.</li>
- *   <li>Hantera cookie-bannern (Cookiebot) via klick på kända knappar, eller ta bort bannern med JavaScript om den blockerar interaktion.</li>
- *   <li>Klicka upp sektionerna "Listräntor för bolån" och "Snitträntor för bolån senaste månaden".</li>
- *   <li>Extrahera tabellvärden dynamiskt när sektionen är synlig i DOM.</li>
- * </ul>
- * Optimerad för kortare körningstid (~10–15 sekunder).
  */
 @Service
 public class LandshypotekBankScraper implements BankScraper {
@@ -96,7 +85,7 @@ public class LandshypotekBankScraper implements BankScraper {
             WebElement listRateTable = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//button[contains(.,'Listräntor för bolån')]/following::table[1]")
             ));
-            extractRatesFromTable(bank, listRateTable, RateType.LISTRATE, rates);
+            extractRatesFromTable(bank, listRateTable, RateType.LISTRATE, rates, LocalDate.now());
             System.out.println("Hämtade listräntor.");
 
             // === 3️⃣ Klicka upp "Snitträntor för bolån senaste månaden" ===
@@ -106,11 +95,22 @@ public class LandshypotekBankScraper implements BankScraper {
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", avgRateButton);
             avgRateButton.click();
 
+            // 🟢 Hämta månadsrubriken precis ovanför tabellen (t.ex. "Oktober")
+            String monthText = "";
+            try {
+                WebElement monthElement = driver.findElement(By.xpath("//button[contains(.,'Snitträntor')]/following::p[1]"));
+                monthText = monthElement.getText().toLowerCase().trim();
+                System.out.println("Snitträntor gäller månad: " + monthText);
+            } catch (Exception ignored) {}
+
+            // 🟢 Konvertera till LocalDate
+            LocalDate avgDate = parseMonthToDate(monthText);
+
             WebElement avgRateTable = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//button[contains(.,'Snitträntor')]/following::table[1]")
             ));
-            extractRatesFromTable(bank, avgRateTable, RateType.AVERAGERATE, rates);
-            System.out.println("Hämtade snitträntor.");
+            extractRatesFromTable(bank, avgRateTable, RateType.AVERAGERATE, rates, avgDate);
+            System.out.println("Hämtade snitträntor för " + avgDate + ".");
 
             System.out.println("Landshypotek Bank: totalt " + rates.size() + " räntor hittade.");
 
@@ -123,7 +123,7 @@ public class LandshypotekBankScraper implements BankScraper {
         return rates;
     }
 
-    private void extractRatesFromTable(Bank bank, WebElement table, RateType rateType, List<MortgageRate> rates) {
+    private void extractRatesFromTable(Bank bank, WebElement table, RateType rateType, List<MortgageRate> rates, LocalDate date) {
         List<WebElement> rows = table.findElements(By.tagName("tr"));
 
         for (int i = 1; i < rows.size(); i++) { // hoppa över rubrikraden
@@ -140,9 +140,38 @@ public class LandshypotekBankScraper implements BankScraper {
             BigDecimal rate = ScraperUtils.parseRate(rateText);
 
             if (term != null && rate != null) {
-                rates.add(new MortgageRate(bank, term, rateType, rate, LocalDate.now()));
-                System.out.println(rateType + " | " + termText + " = " + rate + "%");
+                rates.add(new MortgageRate(bank, term, rateType, rate, date));
+                System.out.println(rateType + " | " + termText + " = " + rate + "% (" + date + ")");
             }
         }
+    }
+
+    private LocalDate parseMonthToDate(String monthText) {
+        int month = switch (monthText) {
+            case "januari" -> 1;
+            case "februari" -> 2;
+            case "mars" -> 3;
+            case "april" -> 4;
+            case "maj" -> 5;
+            case "juni" -> 6;
+            case "juli" -> 7;
+            case "augusti" -> 8;
+            case "september" -> 9;
+            case "oktober" -> 10;
+            case "november" -> 11;
+            case "december" -> 12;
+            default -> LocalDate.now().getMonthValue();
+        };
+
+        int year = LocalDate.now().getYear();
+
+        // 🟢 Justera om vi är i början av året och sidan visar "januari" (föregående år)
+        if (month == 12 && LocalDate.now().getMonthValue() == 1) {
+            year -= 1;
+        }
+
+        // 🟢 Eftersom Landshypotek alltid visar *föregående månad*, dra bort en månad
+        LocalDate baseDate = LocalDate.of(year, month, 1);
+        return baseDate.minusMonths(1);
     }
 }
