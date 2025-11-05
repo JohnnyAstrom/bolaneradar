@@ -44,9 +44,9 @@ public class DanskeBankScraper implements BankScraper {
             }
 
             RateType rateType;
-            if (heading.contains("snitt")) {
+            if (heading.contains("snitt") || heading.contains("genomsnitt")) {
                 rateType = RateType.AVERAGERATE;
-                if (addedAverage) continue; // ta bara senaste månadens snitträntor
+                if (addedAverage) continue; // endast senaste snitträntan
             } else if (heading.contains("list") || heading.contains("aktuell")) {
                 rateType = RateType.LISTRATE;
             } else continue;
@@ -57,13 +57,18 @@ public class DanskeBankScraper implements BankScraper {
                 Elements cols = row.select("td");
                 if (cols.isEmpty()) continue;
 
-                // 🟢 Snitträntor – endast första giltiga raden
+                // 🟢 SNITTRÄNTOR
                 if (rateType == RateType.AVERAGERATE) {
+                    // Första giltiga raden = senaste månad
                     if (addedAverage) break;
                     if (cols.size() < 2) continue;
-                    String monthText = cols.get(0).text().trim();
-                    if (monthText.toLowerCase().contains("genomsnitt")) continue;
 
+                    // Kolumn 0 = månad + år
+                    String monthText = cols.get(0).text().trim();
+                    LocalDate date = parseMonthYear(monthText);
+                    if (date == null) continue;
+
+                    // Kolumnerna efter = räntor för olika bindningstider
                     MortgageTerm[] terms = {
                             MortgageTerm.VARIABLE_3M,
                             MortgageTerm.FIXED_1Y,
@@ -83,15 +88,15 @@ public class DanskeBankScraper implements BankScraper {
                         if (rateText.isEmpty() || rateText.equals("-")) continue;
 
                         try {
-                            rates.add(new MortgageRate(bank, terms[i - 1], rateType,
-                                    new BigDecimal(rateText), LocalDate.now()));
+                            BigDecimal rate = new BigDecimal(rateText);
+                            rates.add(new MortgageRate(bank, terms[i - 1], rateType, rate, date));
                         } catch (NumberFormatException ignored) {}
                     }
                     addedAverage = true;
                     continue;
                 }
 
-                // 🟣 Listräntor
+                // 🟣 LISTRÄNTOR
                 if (rateType == RateType.LISTRATE && cols.size() >= 4) {
                     String termText = cols.get(0).wholeText().toLowerCase().trim();
                     String rateText = cols.get(3).wholeText()
@@ -117,5 +122,35 @@ public class DanskeBankScraper implements BankScraper {
                 rates.stream().filter(r -> r.getRateType() == RateType.AVERAGERATE).count() + " snitt).");
 
         return rates;
+    }
+
+    /** Konverterar t.ex. "Oktober 2025" till LocalDate (2025-10-01) */
+    private LocalDate parseMonthYear(String text) {
+        try {
+            String[] parts = text.split("\\s+");
+            if (parts.length == 2) {
+                String monthName = parts[0].toLowerCase();
+                int year = Integer.parseInt(parts[1]);
+                int month = switch (monthName) {
+                    case "januari", "january" -> 1;
+                    case "februari", "february" -> 2;
+                    case "mars", "march" -> 3;
+                    case "april" -> 4;
+                    case "maj", "may" -> 5;
+                    case "juni", "june" -> 6;
+                    case "juli", "july" -> 7;
+                    case "augusti", "august" -> 8;
+                    case "september" -> 9;
+                    case "oktober", "october" -> 10;
+                    case "november" -> 11;
+                    case "december" -> 12;
+                    default -> 1;
+                };
+                return LocalDate.of(year, month, 1);
+            }
+        } catch (Exception e) {
+            System.err.println("Danske Bank: kunde inte tolka månad/år: " + text);
+        }
+        return null;
     }
 }

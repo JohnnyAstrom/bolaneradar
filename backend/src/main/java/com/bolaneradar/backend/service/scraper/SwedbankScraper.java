@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.YearMonth;
+import java.util.*;
+import java.util.regex.*;
 
 /**
  * Webbskrapare för Swedbank.
@@ -32,21 +33,24 @@ public class SwedbankScraper implements BankScraper {
                 .timeout(10_000)
                 .get();
 
-        // Hitta alla tabeller
+        // 🔹 Försök hitta texten som anger vilken månad snitträntan gäller för
+        // Exempel: "Genomsnittsränta, september 2025"
+        String monthText = doc.text();
+        YearMonth averageMonth = parseReportedMonth(monthText);
+        LocalDate averageEffectiveDate = averageMonth.atDay(1);
+
         Elements tables = doc.select("table");
         System.out.println("🔍 Antal tabeller hittade: " + tables.size());
 
         for (Element table : tables) {
-            // Kolla om tabellen har en caption eller rubrik i närheten
             String caption = "";
             Element capEl = table.selectFirst("caption");
             if (capEl != null) caption = capEl.text().toLowerCase();
 
-            // Om inget caption, försök hitta rubrik före tabellen
             String heading = "";
             Element prev = table.previousElementSibling();
             int checkDepth = 0;
-            while (prev != null && checkDepth < 5) { // titta några steg bakåt
+            while (prev != null && checkDepth < 5) {
                 if (prev.tagName().matches("h2|h3|h4|strong|p")) {
                     heading = prev.text().toLowerCase();
                     break;
@@ -57,18 +61,17 @@ public class SwedbankScraper implements BankScraper {
 
             String context = caption + " " + heading;
 
-            // Identifiera typ baserat på text
             RateType rateType;
             if (context.contains("genomsnitt")) {
                 rateType = RateType.AVERAGERATE;
             } else if (context.contains("aktuella") || context.contains("list")) {
                 rateType = RateType.LISTRATE;
             } else {
-                continue; // hoppa över tabeller utan relevant rubrik
+                continue;
             }
 
             Elements rows = table.select("tbody tr");
-            if (rows.isEmpty()) rows = table.select("tr"); // fallback
+            if (rows.isEmpty()) rows = table.select("tr");
 
             for (Element row : rows) {
                 Elements cols = row.select("td");
@@ -84,7 +87,13 @@ public class SwedbankScraper implements BankScraper {
                 if (term != null && !rateText.isEmpty()) {
                     try {
                         BigDecimal rate = new BigDecimal(rateText);
-                        rates.add(new MortgageRate(bank, term, rateType, rate, LocalDate.now()));
+
+                        // 💡 Här skiljer vi logiken för LISTRATE och AVERAGERATE
+                        LocalDate effectiveDate = (rateType == RateType.AVERAGERATE)
+                                ? averageEffectiveDate
+                                : LocalDate.now();
+
+                        rates.add(new MortgageRate(bank, term, rateType, rate, effectiveDate));
                     } catch (NumberFormatException ignored) {}
                 }
             }
@@ -92,5 +101,34 @@ public class SwedbankScraper implements BankScraper {
 
         System.out.println("Swedbank: hittade " + rates.size() + " räntor totalt.");
         return rates;
+    }
+
+    /**
+     * Tolkar text som "Genomsnittsränta, september 2025" → YearMonth(2025, 9)
+     */
+    private YearMonth parseReportedMonth(String text) {
+        Map<String, Integer> months = Map.ofEntries(
+                Map.entry("januari", 1), Map.entry("februari", 2),
+                Map.entry("mars", 3), Map.entry("april", 4),
+                Map.entry("maj", 5), Map.entry("juni", 6),
+                Map.entry("juli", 7), Map.entry("augusti", 8),
+                Map.entry("september", 9), Map.entry("oktober", 10),
+                Map.entry("november", 11), Map.entry("december", 12)
+        );
+
+        String lower = text.toLowerCase(Locale.ROOT);
+        for (String key : months.keySet()) {
+            if (lower.contains(key)) {
+                Matcher matcher = Pattern.compile("(20\\d{2})").matcher(lower);
+                if (matcher.find()) {
+                    int year = Integer.parseInt(matcher.group(1));
+                    return YearMonth.of(year, months.get(key));
+                }
+            }
+        }
+
+        // Om inget hittas, fallback till nuvarande månad
+        System.out.println("⚠️ Kunde inte tolka månad för snittränta, använder nuvarande månad.");
+        return YearMonth.from(LocalDate.now());
     }
 }

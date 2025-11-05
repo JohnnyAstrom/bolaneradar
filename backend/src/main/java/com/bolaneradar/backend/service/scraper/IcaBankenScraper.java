@@ -12,11 +12,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Webbskrapare för ICA Banken.
- * Hämtar både listräntor och snitträntor från samma sida.
+ * Hämtar både listräntor (överst på sidan) och endast den senaste månadens snitträntor.
  */
 @Service
 public class IcaBankenScraper implements BankScraper {
@@ -39,18 +38,17 @@ public class IcaBankenScraper implements BankScraper {
             parseListRates(listTable, bank, rates);
         }
 
-        // === Hämta snitträntor (tabellen efter h2 med text "Snitträntor för bolån") ===
-        Element snittSection = doc.selectFirst("h2:matchesOwn((?i)Snitträntor för bolån)");
-        if (snittSection != null) {
-            assert snittSection.parent() != null;
-            Element snittTable = snittSection.parent().selectFirst("table");
+        // === Hämta snitträntor (tabellen efter "Snitträntor för bolån") ===
+        Element snittHeader = doc.selectFirst("h2:matchesOwn((?i)Snitträntor för bolån)");
+        if (snittHeader != null) {
+            Element snittTable = snittHeader.parent().selectFirst("table");
             if (snittTable != null) {
-                parseAverageRates(snittTable, bank, rates);
+                parseLatestAverageRates(snittTable, bank, rates);
             } else {
-                System.out.println("Kunde inte hitta tabellen under 'Snitträntor för bolån'");
+                System.out.println("ICA Banken: kunde inte hitta tabellen för snitträntor.");
             }
         } else {
-            System.out.println("Kunde inte hitta rubriken 'Snitträntor för bolån'");
+            System.out.println("ICA Banken: kunde inte hitta rubriken 'Snitträntor för bolån'.");
         }
 
         long listCount = rates.stream().filter(r -> r.getRateType() == RateType.LISTRATE).count();
@@ -62,6 +60,7 @@ public class IcaBankenScraper implements BankScraper {
         return rates;
     }
 
+    /** Hämtar listräntor */
     private void parseListRates(Element table, Bank bank, List<MortgageRate> rates) {
         Elements rows = table.select("tbody tr");
         if (rows.isEmpty()) rows = table.select("tr");
@@ -83,25 +82,51 @@ public class IcaBankenScraper implements BankScraper {
         }
     }
 
-    private void parseAverageRates(Element table, Bank bank, List<MortgageRate> rates) {
-        Elements headerCols = table.select("thead td");
-        Elements firstRow = Objects.requireNonNull(table.select("tbody tr").first()).select("td");
+    /** Hämtar enbart senaste månadens snitträntor */
+    private void parseLatestAverageRates(Element table, Bank bank, List<MortgageRate> rates) {
+        Elements rows = table.select("tbody tr");
+        if (rows.isEmpty()) rows = table.select("tr");
+        if (rows.isEmpty()) return;
 
-        if (headerCols.size() <= 1) return;
+        // Första raden = senaste månaden
+        Element latestRow = rows.first();
+        Elements cols = latestRow.select("td");
+        Elements headers = table.select("thead th, thead td");
 
-        for (int i = 1; i < headerCols.size() && i < firstRow.size(); i++) {
-            String termText = headerCols.get(i).text().toLowerCase();
-            String rateText = firstRow.get(i).text().replace("%", "").replace(",", ".").trim();
+        if (cols.isEmpty() || headers.isEmpty()) return;
 
-            if (rateText.equals("-*") || rateText.isEmpty()) continue;
+        String dateText = cols.get(0).text().trim();
+        LocalDate date = parseYearMonth(dateText);
+        System.out.println("ICA Banken: snitträntor gäller månad " + date);
 
-            MortgageTerm term = ScraperUtils.parseTerm(termText);
+        for (int i = 1; i < cols.size() && i < headers.size(); i++) {
+            String headerText = headers.get(i).text().toLowerCase();
+            String rateText = cols.get(i).text().replace("%", "").replace(",", ".").trim();
+
+            if (rateText.isEmpty() || rateText.equals("-*")) continue;
+
+            MortgageTerm term = ScraperUtils.parseTerm(headerText);
             if (term == null) continue;
 
             try {
                 BigDecimal rate = new BigDecimal(rateText);
-                rates.add(new MortgageRate(bank, term, RateType.AVERAGERATE, rate, LocalDate.now()));
+                rates.add(new MortgageRate(bank, term, RateType.AVERAGERATE, rate, date));
             } catch (NumberFormatException ignored) {}
         }
+    }
+
+    /** Konverterar t.ex. "2025 09" till LocalDate.of(2025, 9, 1) */
+    private LocalDate parseYearMonth(String text) {
+        try {
+            String[] parts = text.split("\\s+");
+            if (parts.length >= 2) {
+                int year = Integer.parseInt(parts[0]);
+                int month = Integer.parseInt(parts[1]);
+                return LocalDate.of(year, month, 1);
+            }
+        } catch (Exception e) {
+            System.err.println("ICA Banken: kunde inte tolka år/månad: " + text);
+        }
+        return LocalDate.now();
     }
 }

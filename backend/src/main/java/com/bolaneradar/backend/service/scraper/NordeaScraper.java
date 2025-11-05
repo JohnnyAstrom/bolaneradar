@@ -16,8 +16,8 @@ import java.util.Objects;
 
 /**
  * Webbskrapare för Nordea.
- * Hämtar både listräntor och snitträntor från Nordeas bolånesida.
- * Hoppar över tomma eller ogiltiga värden (t.ex. "N/A" under uppdatering).
+ * Hämtar både listräntor och snitträntor.
+ * Identifierar även vilken månad snitträntorna gäller (ex. 202510 → oktober 2025).
  */
 @Service
 public class NordeaScraper implements BankScraper {
@@ -34,17 +34,21 @@ public class NordeaScraper implements BankScraper {
                 .timeout(10_000)
                 .get();
 
+        // 🔹 Försök hitta en månadskod, ex "202510"
+        LocalDate avgRateMonth = extractAverageRateMonth(doc);
+        if (avgRateMonth == null) {
+            System.out.println("Kunde inte hitta månad för Nordeas snittränta, använder dagens datum.");
+            avgRateMonth = LocalDate.now();
+        }
+
         Elements tables = doc.select("table");
 
         for (Element table : tables) {
-            // Hoppa över tabellen "Bolån med räntetak"
             String tableText = table.text().toLowerCase();
             if (tableText.contains("takränta") || tableText.contains("premie")) {
-                System.out.println("Hoppar över tabell: Bolån med räntetak");
                 continue;
             }
 
-            // Avgör typ av tabell
             String contextText = table.previousElementSibling() != null
                     ? Objects.requireNonNull(table.previousElementSibling()).text().toLowerCase()
                     : "";
@@ -63,19 +67,68 @@ public class NordeaScraper implements BankScraper {
                         .trim()
                         .toLowerCase();
 
-                // 🛡️ hoppa över tomma, "n/a" eller ogiltiga värden
                 if (rateText.isEmpty() || rateText.contains("n") || rateText.contains("-")) continue;
 
                 MortgageTerm term = ScraperUtils.parseTerm(termText);
                 BigDecimal rate = ScraperUtils.parseRate(rateText);
 
                 if (term != null && rate != null) {
-                    rates.add(new MortgageRate(bank, term, rateType, rate, LocalDate.now()));
+                    LocalDate dateToUse = (rateType == RateType.AVERAGERATE)
+                            ? avgRateMonth
+                            : LocalDate.now();
+
+                    rates.add(new MortgageRate(bank, term, rateType, rate, dateToUse));
                 }
             }
         }
 
         System.out.println("Nordea: hittade " + rates.size() + " räntor.");
         return rates;
+    }
+
+    /**
+     * Försöker hitta en månadskod på sidan, t.ex. "202510" (oktober 2025),
+     * och returnerar LocalDate motsvarande den månadens första dag.
+     */
+    private LocalDate extractAverageRateMonth(Document doc) {
+        // Hitta tabellen som innehåller ordet "genomsnitt" eller "snittränt"
+        Element table = doc.selectFirst("table:matchesOwn((?i)snittr|genomsnitt)");
+        if (table == null) {
+            // fallback – prova via title eller caption
+            table = doc.selectFirst("table[title*=Snitträntor i], table[title*=Snitträntor]");
+        }
+        if (table == null) {
+            System.out.println("⚠️ Ingen snitträntetabell hittades på Nordea-sidan.");
+            return null;
+        }
+
+        // Plocka den andra TH (kolumnrubrik) som innehåller något i stil med 202510
+        Element codeTh = table.selectFirst("thead th:nth-of-type(2)");
+        if (codeTh == null) {
+            System.out.println("⚠️ Ingen månadskod hittades i tabellhuvudet.");
+            return null;
+        }
+
+        // Extrahera endast siffror (ta bort citationstecken och mellanslag)
+        String digits = codeTh.text().replaceAll("[^0-9]", "").trim();
+
+        if (digits.length() < 6) {
+            System.out.println("⚠️ Ogiltig kod i TH: " + codeTh.text());
+            return null;
+        }
+
+        String code = digits.substring(0, 6); // YYYYMM
+        try {
+            int year = Integer.parseInt(code.substring(0, 4));
+            int month = Integer.parseInt(code.substring(4, 6));
+            if (month < 1 || month > 12) return null;
+
+            LocalDate parsed = LocalDate.of(year, month, 1);
+            System.out.println("✅ Identifierad snitträntemånad för Nordea: " + parsed);
+            return parsed;
+        } catch (Exception e) {
+            System.out.println("⚠️ Kunde inte tolka kod: " + code);
+            return null;
+        }
     }
 }
