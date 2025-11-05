@@ -1,7 +1,6 @@
 package com.bolaneradar.backend.service.scraper;
 
 import com.bolaneradar.backend.model.*;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -16,6 +15,9 @@ import java.util.List;
 /**
  * Webbskrapare för Danske Bank.
  * Hämtar både aktuella (listräntor) och senaste månadens snitträntor.
+ *
+ * Använder ScraperUtils för parsing, men behåller egen parseMonthYear()
+ * eftersom Danske Bank har unikt datumformat ("Oktober 2025").
  */
 @Service
 public class DanskeBankScraper implements BankScraper {
@@ -27,11 +29,8 @@ public class DanskeBankScraper implements BankScraper {
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
         List<MortgageRate> rates = new ArrayList<>();
 
-        Document doc = Jsoup.connect(URL)
-                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
-                .timeout(15000)
-                .get();
-
+        // Hämta dokument via ScraperUtils
+        Document doc = ScraperUtils.fetchDocument(URL);
         Elements articles = doc.select("article.responsive-nav-article");
 
         boolean addedAverage = false;
@@ -39,36 +38,35 @@ public class DanskeBankScraper implements BankScraper {
         for (Element article : articles) {
             String heading = "";
             Element headingEl = article.previousElementSibling();
-            if (headingEl != null && headingEl.tagName().equals("button")) {
+            if (headingEl != null && "button".equals(headingEl.tagName())) {
                 heading = headingEl.text().toLowerCase();
             }
 
             RateType rateType;
             if (heading.contains("snitt") || heading.contains("genomsnitt")) {
                 rateType = RateType.AVERAGERATE;
-                if (addedAverage) continue; // endast senaste snitträntan
+                if (addedAverage) continue;
             } else if (heading.contains("list") || heading.contains("aktuell")) {
                 rateType = RateType.LISTRATE;
-            } else continue;
+            } else {
+                continue;
+            }
 
             Elements rows = article.select("tbody tr");
-
             for (Element row : rows) {
                 Elements cols = row.select("td");
                 if (cols.isEmpty()) continue;
 
-                // 🟢 SNITTRÄNTOR
+                // --- SNITTRÄNTOR ---
                 if (rateType == RateType.AVERAGERATE) {
-                    // Första giltiga raden = senaste månad
                     if (addedAverage) break;
                     if (cols.size() < 2) continue;
 
-                    // Kolumn 0 = månad + år
-                    String monthText = cols.get(0).text().trim();
-                    LocalDate date = parseMonthYear(monthText);
+                    // Datum (månad + år)
+                    LocalDate date = parseMonthYear(cols.get(0).text());
                     if (date == null) continue;
 
-                    // Kolumnerna efter = räntor för olika bindningstider
+                    // Bindningstider
                     MortgageTerm[] terms = {
                             MortgageTerm.VARIABLE_3M,
                             MortgageTerm.FIXED_1Y,
@@ -79,56 +77,39 @@ public class DanskeBankScraper implements BankScraper {
                             MortgageTerm.FIXED_10Y
                     };
 
+                    // Hämta endast första raden (senaste månaden)
                     for (int i = 1; i < cols.size() && i <= terms.length; i++) {
-                        String rateText = cols.get(i).wholeText()
-                                .replace("%", "")
-                                .replace(",", ".")
-                                .replace("\u00a0", "")
-                                .trim();
-                        if (rateText.isEmpty() || rateText.equals("-")) continue;
-
-                        try {
-                            BigDecimal rate = new BigDecimal(rateText);
-                            rates.add(new MortgageRate(bank, terms[i - 1], rateType, rate, date));
-                        } catch (NumberFormatException ignored) {}
+                        BigDecimal rate = ScraperUtils.parseRate(cols.get(i).text());
+                        if (rate != null) {
+                            rates.add(new MortgageRate(bank, terms[i - 1], RateType.AVERAGERATE, rate, date));
+                        }
                     }
+
                     addedAverage = true;
                     continue;
                 }
 
-                // 🟣 LISTRÄNTOR
+                // --- LISTRÄNTOR ---
                 if (rateType == RateType.LISTRATE && cols.size() >= 4) {
-                    String termText = cols.get(0).wholeText().toLowerCase().trim();
-                    String rateText = cols.get(3).wholeText()
-                            .replace("%", "")
-                            .replace(",", ".")
-                            .replace("\u00a0", "")
-                            .trim();
-
-                    MortgageTerm term = ScraperUtils.parseTerm(termText);
-                    if (term != null && !rateText.isEmpty() && !rateText.equals("-")) {
-                        try {
-                            rates.add(new MortgageRate(bank, term, rateType,
-                                    new BigDecimal(rateText), LocalDate.now()));
-                        } catch (NumberFormatException ignored) {}
+                    MortgageTerm term = ScraperUtils.parseTerm(cols.get(0).text());
+                    BigDecimal rate = ScraperUtils.parseRate(cols.get(3).text());
+                    if (term != null && rate != null) {
+                        rates.add(new MortgageRate(bank, term, RateType.LISTRATE, rate, LocalDate.now()));
                     }
                 }
             }
         }
 
-        System.out.println("Danske Bank: hittade totalt " + rates.size() +
-                " räntor (" +
-                rates.stream().filter(r -> r.getRateType() == RateType.LISTRATE).count() + " list, " +
-                rates.stream().filter(r -> r.getRateType() == RateType.AVERAGERATE).count() + " snitt).");
-
+        ScraperUtils.logResult("Danske Bank", rates.size());
         return rates;
     }
 
-    /** Konverterar t.ex. "Oktober 2025" till LocalDate (2025-10-01) */
+    /** Konverterar t.ex. "Oktober 2025" till LocalDate (2025-10-01).
+     *  Behålls lokalt eftersom Danske Bank använder unikt format. */
     private LocalDate parseMonthYear(String text) {
         try {
-            String[] parts = text.split("\\s+");
-            if (parts.length == 2) {
+            String[] parts = text.trim().split("\\s+");
+            if (parts.length >= 2) {
                 String monthName = parts[0].toLowerCase();
                 int year = Integer.parseInt(parts[1]);
                 int month = switch (monthName) {
@@ -144,9 +125,9 @@ public class DanskeBankScraper implements BankScraper {
                     case "oktober", "october" -> 10;
                     case "november" -> 11;
                     case "december" -> 12;
-                    default -> 1;
+                    default -> 0;
                 };
-                return LocalDate.of(year, month, 1);
+                return month > 0 ? LocalDate.of(year, month, 1) : null;
             }
         } catch (Exception e) {
             System.err.println("Danske Bank: kunde inte tolka månad/år: " + text);
