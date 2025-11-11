@@ -1,6 +1,6 @@
 package com.bolaneradar.backend.controller;
 
-import com.bolaneradar.backend.service.AdminDataService;
+import com.bolaneradar.backend.service.core.AdminDataService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

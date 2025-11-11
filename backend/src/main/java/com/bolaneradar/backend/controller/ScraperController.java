@@ -1,12 +1,10 @@
 package com.bolaneradar.backend.controller;
 
-import com.bolaneradar.backend.service.scraper.ScraperService;
+import com.bolaneradar.backend.service.integration.scraper.ScraperService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @Tag(name = "Scraper", description = "Manuella endpoints för att trigga webbskrapning av banker")
 @RestController

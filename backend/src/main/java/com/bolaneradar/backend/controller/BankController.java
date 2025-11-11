@@ -2,8 +2,8 @@ package com.bolaneradar.backend.controller;
 
 import com.bolaneradar.backend.dto.BankDto;
 import com.bolaneradar.backend.dto.mapper.BankMapper;
-import com.bolaneradar.backend.model.Bank;
-import com.bolaneradar.backend.service.BankService;
+import com.bolaneradar.backend.entity.Bank;
+import com.bolaneradar.backend.service.core.BankService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

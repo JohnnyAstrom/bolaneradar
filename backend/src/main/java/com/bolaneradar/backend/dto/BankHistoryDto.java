@@ -1,7 +1,7 @@
 package com.bolaneradar.backend.dto;
 
-import com.bolaneradar.backend.model.MortgageTerm;
-import com.bolaneradar.backend.model.RateType;
+import com.bolaneradar.backend.entity.enums.MortgageTerm;
+import com.bolaneradar.backend.entity.enums.RateType;
 import java.util.List;
 
 /**
@@ -12,5 +12,5 @@ public record BankHistoryDto(
         String bankName,
         MortgageTerm term,
         RateType rateType,
-        List<RatePointDto> history
+        List<MortgageRateHistoryPointDto> history
 ) {}
