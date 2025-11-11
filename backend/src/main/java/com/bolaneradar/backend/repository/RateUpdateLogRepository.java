@@ -1,7 +1,7 @@
 package com.bolaneradar.backend.repository;
 
-import com.bolaneradar.backend.model.Bank;
-import com.bolaneradar.backend.model.RateUpdateLog;
+import com.bolaneradar.backend.entity.Bank;
+import com.bolaneradar.backend.entity.RateUpdateLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

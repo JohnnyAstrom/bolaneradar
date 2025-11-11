@@ -2,10 +2,17 @@ package com.bolaneradar.backend.dto.mapper;
 
 import com.bolaneradar.backend.dto.BankDto;
 import com.bolaneradar.backend.dto.MortgageRateDto;
-import com.bolaneradar.backend.model.Bank;
-import com.bolaneradar.backend.model.MortgageRate;
+import com.bolaneradar.backend.entity.Bank;
+import com.bolaneradar.backend.entity.MortgageRate;
 import java.util.List;
 
+/**
+ * Mapper som konverterar mellan Bank-entiteter och BankDto.
+ * Används för att separera datalager (entity) från API-lagret.
+ *
+ * Inkluderar även inbäddad konvertering av MortgageRate till MortgageRateDto
+ * för att kunna returnera banker med tillhörande räntor i samma respons.
+ */
 public class BankMapper {
 
     /**

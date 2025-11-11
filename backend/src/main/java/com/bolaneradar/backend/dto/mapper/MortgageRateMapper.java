@@ -1,11 +1,12 @@
 package com.bolaneradar.backend.dto.mapper;
 
 import com.bolaneradar.backend.dto.MortgageRateDto;
-import com.bolaneradar.backend.model.MortgageRate;
+import com.bolaneradar.backend.entity.MortgageRate;
 
 /**
- * Mapper som konverterar MortgageRate-objekt till MortgageRateDto.
- * Används för att exponera bolåneräntor i API-svaren utan att direkt returnera entiteter.
+ * Mapper som konverterar MortgageRate-entiteter till MortgageRateDto.
+ * Används av controller-lagret vid GET-anrop för att returnera
+ * läsbara objekt utan att exponera JPA-entiteter direkt.
  */
 public class MortgageRateMapper {
 

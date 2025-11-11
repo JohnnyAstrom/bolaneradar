@@ -2,14 +2,15 @@ package com.bolaneradar.backend.dto;
 
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * Data Transfer Object för att exponera bolåneräntor till frontend.
+ * DTO (Data Transfer Object) för att skapa en ny bolåneränta.
+ * Motsvarar JSON-strukturen klienten skickar in till /api/rates.
  */
-public record MortgageRateDto(
-        Long id,
+public record MortgageRateRequestDto(
         String bankName,
         MortgageTerm term,
         RateType rateType,

@@ -1,8 +1,9 @@
 package com.bolaneradar.backend.repository;
 
-import com.bolaneradar.backend.model.Bank;
-import com.bolaneradar.backend.model.MortgageRate;
-import com.bolaneradar.backend.model.RateType;
+import com.bolaneradar.backend.entity.Bank;
+import com.bolaneradar.backend.entity.MortgageRate;
+import com.bolaneradar.backend.entity.enums.RateType;
+import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -42,8 +43,8 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
 
     List<MortgageRate> findByBankAndTermAndRateTypeOrderByEffectiveDateDesc(
             Bank bank,
-            com.bolaneradar.backend.model.MortgageTerm term,
-            com.bolaneradar.backend.model.RateType rateType
+            MortgageTerm term,
+            RateType rateType
     );
 
     @Query("""
