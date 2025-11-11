@@ -3,6 +3,7 @@ package com.bolaneradar.backend.entity;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * Representerar en bank i systemet.
@@ -36,7 +37,7 @@ public class Bank {
      * orphanRemoval = true → tar bort räntor som inte längre hör till någon bank.
      */
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
-    @com.fasterxml.jackson.annotation.JsonManagedReference
+    @JsonManagedReference
     private List<MortgageRate> mortgageRates = new ArrayList<>();
 
     /**

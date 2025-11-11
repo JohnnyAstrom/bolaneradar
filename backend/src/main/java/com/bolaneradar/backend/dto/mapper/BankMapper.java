@@ -32,6 +32,18 @@ public class BankMapper {
     }
 
     /**
+     * Konverterar en BankDto till en Bank-entitet.
+     * Används t.ex. vid skapande av ny bank (POST).
+     */
+    public static Bank toEntity(BankDto dto) {
+        Bank bank = new Bank();
+        bank.setId(dto.id());
+        bank.setName(dto.name());
+        bank.setWebsite(dto.website());
+        return bank;
+    }
+
+    /**
      * Konverterar en MortgageRate till MortgageRateDto (för inbäddad data i BankDto).
      */
     private static MortgageRateDto toRateDto(MortgageRate rate) {
@@ -45,17 +57,5 @@ public class BankMapper {
                 rate.getRateChange(),
                 rate.getLastChangedDate()
         );
-    }
-
-    /**
-     * Konverterar en BankDto till en Bank-entitet.
-     * Används t.ex. vid skapande av ny bank (POST).
-     */
-    public static Bank toEntity(BankDto dto) {
-        Bank bank = new Bank();
-        bank.setId(dto.id());
-        bank.setName(dto.name());
-        bank.setWebsite(dto.website());
-        return bank;
     }
 }

@@ -3,6 +3,7 @@ package com.bolaneradar.backend.service.core.analytics;
 import com.bolaneradar.backend.entity.Bank;
 import com.bolaneradar.backend.entity.MortgageRate;
 import com.bolaneradar.backend.entity.analytics.RateTrend;
+import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import com.bolaneradar.backend.service.core.BankService;
@@ -13,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Service-lager som ansvarar för analys, jämförelse och trendberäkningar
+ * Service-lager som ansvarar för analys, historik och trendberäkningar
  * av bolåneräntor mellan olika banker och datum.
  *
  * Arbetar enbart med entiteter. Mapping till DTO sker i controller-lagret.
@@ -30,7 +31,79 @@ public class RateAnalyticsService {
     }
 
     // ===========================================================
-    // =============       TREND-BERÄKNINGAR       ===============
+    // =============       HISTORIK & FILTRERING     =============
+    // ===========================================================
+
+    /**
+     * Hämtar historiska bolåneräntor för en viss bank,
+     * grupperat per bindningstid (term) och räntetyp (rateType).
+     *
+     * Möjlighet finns att filtrera på term, rateType och datumintervall.
+     */
+    public List<MortgageRate> getRateHistoryForBank(
+            Bank bank,
+            LocalDate from,
+            LocalDate to,
+            String sort,
+            RateType rateType,
+            MortgageTerm term
+    ) {
+        List<MortgageRate> rates = mortgageRateRepository.findByBank(bank);
+
+        // Filtrera på datumintervall
+        if (from != null) {
+            rates = rates.stream()
+                    .filter(rate -> !rate.getEffectiveDate().isBefore(from))
+                    .toList();
+        }
+        if (to != null) {
+            rates = rates.stream()
+                    .filter(rate -> !rate.getEffectiveDate().isAfter(to))
+                    .toList();
+        }
+
+        // Filtrera på rateType och term (om angivna)
+        if (rateType != null) {
+            rates = rates.stream()
+                    .filter(rate -> rate.getRateType() == rateType)
+                    .toList();
+        }
+        if (term != null) {
+            rates = rates.stream()
+                    .filter(rate -> rate.getTerm() == term)
+                    .toList();
+        }
+
+        // Sortering stigande eller fallande efter datum
+        final String sortOrder = (sort == null || sort.isBlank()) ? "asc" : sort;
+        final Comparator<MortgageRate> comparator =
+                "desc".equalsIgnoreCase(sortOrder)
+                        ? Comparator.comparing(MortgageRate::getEffectiveDate).reversed()
+                        : Comparator.comparing(MortgageRate::getEffectiveDate);
+
+        // Returnerar filtrerade och sorterade räntor
+        return rates.stream().sorted(comparator).toList();
+    }
+
+    /**
+     * Hämtar alla historiska räntor för flera banker inom valt intervall.
+     * Används för trend- och jämförelseanalys.
+     */
+    public Map<String, List<MortgageRate>> getAllBanksRateHistory(
+            List<Bank> banks,
+            LocalDate from,
+            LocalDate to,
+            String sort
+    ) {
+        return banks.stream()
+                .collect(Collectors.toMap(
+                        Bank::getName,
+                        bank -> getRateHistoryForBank(bank, from, to, sort, null, null)
+                ));
+    }
+
+    // ===========================================================
+    // =============         TREND-BERÄKNINGAR       =============
     // ===========================================================
 
     /**
