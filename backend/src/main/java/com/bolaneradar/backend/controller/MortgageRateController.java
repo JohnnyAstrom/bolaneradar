@@ -2,7 +2,6 @@ package com.bolaneradar.backend.controller;
 
 import com.bolaneradar.backend.dto.*;
 import com.bolaneradar.backend.dto.mapper.MortgageRateMapper;
-import com.bolaneradar.backend.dto.mapper.MortgageRateRequestMapper;
 import com.bolaneradar.backend.dto.mapper.RateTrendMapper;
 import com.bolaneradar.backend.entity.Bank;
 import com.bolaneradar.backend.entity.MortgageRate;
@@ -111,21 +110,14 @@ public class MortgageRateController {
      */
     @Operation(summary = "Skapa nya räntor", description = "Lägger till en eller flera bolåneräntor kopplade till befintliga banker.")
     @PostMapping
-    public ResponseEntity<List<MortgageRateDto>> createRates(@RequestBody List<MortgageRateRequestDto> requests) {
-        // DTO → Entity
-        List<MortgageRate> entities = requests.stream()
-                .map(dto -> MortgageRateRequestMapper.toEntity(dto, bankService))
+    public ResponseEntity<List<MortgageRateDto>> createRates(@RequestBody List<MortgageRateDto> requests) {
+
+        // Hanteras nu helt i MortgageRateService (bank-check + mappning + sparning)
+        List<MortgageRateDto> savedRates = requests.stream()
+                .map(mortgageRateService::createRate)
                 .toList();
 
-        // Spara entiteter via service
-        List<MortgageRate> saved = mortgageRateService.saveAll(entities);
-
-        // Entity → DTO (tillbaka till klienten)
-        List<MortgageRateDto> dtos = saved.stream()
-                .map(MortgageRateMapper::toDto)
-                .toList();
-
-        return ResponseEntity.status(201).body(dtos);
+        return ResponseEntity.status(201).body(savedRates);
     }
 
     // =====================================================
@@ -155,7 +147,7 @@ public class MortgageRateController {
 
         return bankService.getBankById(bankId)
                 .map(bank -> {
-                    List<MortgageRate> history = mortgageRateService.getRateHistoryForBank(
+                    List<MortgageRate> history = rateAnalyticsService.getRateHistoryForBank(
                             bank, from, to, sort, rateType, term);
                     List<MortgageRateDto> dtos = history.stream()
                             .map(MortgageRateMapper::toDto)
@@ -169,7 +161,10 @@ public class MortgageRateController {
      * Hämtar historiska bolåneräntor för alla banker inom ett visst intervall.
      * Returnerar en lista av BankHistoryDto för jämförelse mellan banker.
      */
-    @Operation(summary = "Hämta historik för alla banker", description = "Returnerar historiska räntor för alla banker.")
+    @Operation(
+            summary = "Hämta historik för alla banker",
+            description = "Returnerar historiska räntor för alla banker."
+    )
     @GetMapping("/history")
     public ResponseEntity<List<BankHistoryDto>> getAllBanksRateHistory(
             @RequestParam(required = false) LocalDate from,
@@ -177,18 +172,25 @@ public class MortgageRateController {
             @RequestParam(required = false) String sort) {
 
         List<Bank> banks = bankService.getAllBanks();
-        var allHistory = mortgageRateService.getAllBanksRateHistory(banks, from, to, sort);
+        var allHistory = rateAnalyticsService.getAllBanksRateHistory(banks, from, to, sort);
 
         // Mappa till BankHistoryDto
         List<BankHistoryDto> dtos = allHistory.entrySet().stream()
-                .map(entry -> new BankHistoryDto(entry.getKey(), null, null, // bankName + tomma fält just nu
+                .map(entry -> new BankHistoryDto(
+                        entry.getKey(),
+                        null, // t.ex. rateType om du vill lägga till i framtiden
+                        null, // term om du vill utöka med mer metadata
                         entry.getValue().stream()
-                                .map(rate -> new MortgageRateHistoryPointDto(rate.getEffectiveDate().toString(), rate.getRatePercent()))
-                                .toList()))
+                                .map(rate -> new MortgageRateHistoryPointDto(
+                                        rate.getEffectiveDate().toString(),
+                                        rate.getRatePercent()))
+                                .toList()
+                ))
                 .toList();
 
         return ResponseEntity.ok(dtos);
     }
+
 
     // =====================================================
     // ==============     TREND-ANALYSER     ================
