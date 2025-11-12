@@ -1,6 +1,6 @@
 package com.bolaneradar.backend.scheduler;
 
-import com.bolaneradar.backend.service.integration.scraper.ScraperService;
+import com.bolaneradar.backend.service.integration.scraper.core.ScraperService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import java.io.IOException;

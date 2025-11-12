@@ -1,6 +1,6 @@
 package com.bolaneradar.backend.controller;
 
-import com.bolaneradar.backend.service.integration.scraper.ScraperService;
+import com.bolaneradar.backend.service.integration.scraper.core.ScraperService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

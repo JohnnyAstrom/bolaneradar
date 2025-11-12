@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.integration.scraper;
+package com.bolaneradar.backend.service.integration.scraper.api;
 
 import com.bolaneradar.backend.entity.Bank;
 import com.bolaneradar.backend.entity.MortgageRate;

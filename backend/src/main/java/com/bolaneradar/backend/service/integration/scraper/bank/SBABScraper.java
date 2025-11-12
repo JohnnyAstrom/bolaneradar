@@ -1,8 +1,10 @@
-package com.bolaneradar.backend.service.integration.scraper;
+package com.bolaneradar.backend.service.integration.scraper.bank;
 
 import com.bolaneradar.backend.entity.*;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
+import com.bolaneradar.backend.service.integration.scraper.api.BankScraper;
+import com.bolaneradar.backend.service.integration.scraper.support.ScraperUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
