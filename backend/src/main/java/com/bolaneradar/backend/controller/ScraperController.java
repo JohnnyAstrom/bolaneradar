@@ -57,20 +57,4 @@ public class ScraperController {
             return ResponseEntity.internalServerError().body(errorMessage);
         }
     }
-
-    // ============================================================
-    // GET /api/scrape/{bankName}/json  -> scraping för en specifik bank (JSON)
-    // ============================================================
-
-    @Operation(summary = "Kör scraping för en specifik bank (JSON)",
-            description = "Startar webbskrapning för en viss bank och returnerar ett JSON-objekt med resultatet.")
-    @GetMapping("/{bankName}/json")
-    public ResponseEntity<ScrapeResult> scrapeBankJson(@PathVariable String bankName) {
-        ScrapeResult result = scraperService.scrapeSingleBankResult(bankName);
-        if (result.success()) {
-            return ResponseEntity.ok(result);
-        } else {
-            return ResponseEntity.status(500).body(result);
-        }
-    }
 }

@@ -14,8 +14,12 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Koordinator som hanterar anrop till olika bank-scrapers.
+ * Koordinator som hanterar scraping-anrop till olika bank-scrapers.
  * Ansvarar för att hämta banker, köra respektive scraper och spara resultaten i databasen.
+ *
+ * Används av controller-endpoints:
+ *  - GET /api/scrape/all
+ *  - GET /api/scrape/{bankName}
  */
 @Service
 public class ScraperService {
@@ -41,8 +45,8 @@ public class ScraperService {
     }
 
     /**
-     * Kör webbskrapning för alla banker med tillgänglig scraper.
-     * En förenklad, lättläst loop som använder typat resultat.
+     * Kör scraping för alla banker med tillgänglig scraper.
+     * Skickar e-postnotifiering om någon bank misslyckas.
      */
     public void scrapeAllBanks() {
         System.out.println("Startar skrapning av alla banker");
@@ -71,40 +75,36 @@ public class ScraperService {
     }
 
     /**
-     * Bakåtkompatibel metod för controllers som vill ha text.
-     * Returnerar ett läsbart meddelande vid success, kastar Exception vid fel.
+     * Kör scraping för en specifik bank och returnerar ett textmeddelande.
+     * Vid fel kastas Exception med beskrivande felmeddelande.
      */
     public String scrapeSingleBank(String bankName) throws Exception {
-        ScrapeResult r = scrapeSingleBankResult(bankName);
-        if (r.success()) {
-            return r.importedCount() + " räntor sparade för " + r.bankName();
+        ScrapeResult result = scrapeSingleBankResult(bankName);
+        if (result.success()) {
+            return result.importedCount() + " räntor sparade för " + result.bankName();
         }
-        throw new Exception(r.error() != null ? r.error() : "Okänt fel vid scraping av " + bankName);
+        throw new Exception(result.error() != null ? result.error() : "Okänt fel vid scraping av " + bankName);
     }
 
     /**
-     * Typat huvudflöde för en specifik bank.
-     * Kastar inte Exception, utan kapslar utfallet i ScrapeResult.
-     * Loggar alltid resultat i RateUpdateLogService.
+     * Intern metod som utför den faktiska scraping-logiken.
+     * Används av scrapeAllBanks() och scrapeSingleBank().
      */
-    public ScrapeResult scrapeSingleBankResult(String bankName) {
+    ScrapeResult scrapeSingleBankResult(String bankName) {
         long startTime = System.currentTimeMillis();
 
         Optional<Bank> optionalBank = bankRepository.findByNameIgnoreCase(bankName);
         if (optionalBank.isEmpty()) {
             long duration = System.currentTimeMillis() - startTime;
             System.err.println("Ingen bank hittades med namn: " + bankName);
-            // Ingen logUpdate här eftersom vi saknar Bank-entitet
             return new ScrapeResult(bankName, 0, false, "Ingen bank hittades med namn: " + bankName, duration);
         }
 
         Bank bank = optionalBank.get();
-
         BankScraper scraper = getScraperForBank(bank);
         if (scraper == null) {
             long duration = System.currentTimeMillis() - startTime;
             System.err.println("Ingen scraper hittades för: " + bank.getName());
-            // Logga misslyckandet på banken
             rateUpdateLogService.logUpdate(bank, "ScraperService", 0, false,
                     "Ingen scraper hittades för banken", duration);
             return new ScrapeResult(bank.getName(), 0, false,
@@ -184,23 +184,23 @@ public class ScraperService {
     }
 
     /**
-     * Hjälpare som returnerar endast antal importerade räntor.
-     */
-    public int scrapeSingleBankCount(String bankName) {
-        return scrapeSingleBankResult(bankName).importedCount();
-    }
-
-    /**
      * Hittar rätt scraper baserat på bankens namn.
      * Matchar t.ex. "Swedbank" mot "SwedbankScraper".
+     * Har även stöd för mockar vars klassnamn inte matchar exakt
+     * (t.ex. "BankScraper$MockitoMock$12345") genom att också
+     * kolla på objektets toString()-namn.
      */
     public BankScraper getScraperForBank(Bank bank) {
         String bankNameNorm = normalize(bank.getName());
 
         return scrapers.stream()
                 .filter(s -> {
-                    String scraperNameNorm = normalize(s.getClass().getSimpleName());
-                    return scraperNameNorm.contains(bankNameNorm) || bankNameNorm.contains(scraperNameNorm);
+                    String className = normalize(s.getClass().getSimpleName());
+                    String displayName = normalize(s.toString());
+                    return className.contains(bankNameNorm)
+                            || displayName.contains(bankNameNorm)
+                            || bankNameNorm.contains(className)
+                            || bankNameNorm.contains(displayName);
                 })
                 .findFirst()
                 .orElse(null);
