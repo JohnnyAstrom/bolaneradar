@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Controller för hantering av uppdateringsloggar för bolåneräntor.
- * Exponerar endpoints för att hämta loggar, per bank eller globalt.
- * Använder rateUpdateLogService för logik och RateUpdateLogMapper för DTO-konvertering.
+ * Controller för att hämta uppdateringsloggar för bolåneräntor.
+ * Flöde: Controller -> Service -> Mapper -> DTO -> JSON
  */
 @Tag(name = "Rate Update Logs", description = "Endpoints för loggar av ränteuppdateringar")
 @RestController
@@ -30,58 +29,76 @@ public class RateUpdateLogController {
     }
 
     // ============================================================
-    // ===================     HÄMTA LOGGAR     ===================
+    // GET /api/rates/updates  -> alla loggar
     // ============================================================
 
-    /**
-     * Hämtar alla uppdateringsloggar i systemet.
-     * Returnerar en lista med RateUpdateLogDto, sorterade efter datum (senaste först).
-     */
     @Operation(
             summary = "Hämta alla uppdateringsloggar",
             description = "Returnerar alla uppdateringsloggar i systemet, sorterade efter datum (senaste först)."
     )
     @GetMapping
     public List<RateUpdateLogDto> getAllUpdateLogs() {
-        return rateUpdateLogService.getAllLogs().stream()
+        // Hämta entiteter via service
+        var logs = rateUpdateLogService.getAllLogs();
+
+        // Mappa Entity -> DTO
+        var dtos = logs.stream()
                 .map(RateUpdateLogMapper::toDto)
                 .toList();
+
+        // Returnera (Jackson gör DTO -> JSON)
+        return dtos;
     }
 
-    /**
-     * Hämtar uppdateringsloggar för en specifik bank baserat på dess ID.
-     * Returnerar 404 om banken inte hittas.
-     */
+    // ============================================================
+    // GET /api/rates/updates/bank/{bankId}  -> loggar per bank
+    // ============================================================
+
     @Operation(
             summary = "Hämta loggar för en bank",
             description = "Returnerar uppdateringsloggar för en specifik bank baserat på dess ID."
     )
     @GetMapping("/bank/{bankId}")
     public ResponseEntity<List<RateUpdateLogDto>> getLogsForBank(@PathVariable Long bankId) {
-        return bankService.getBankById(bankId)
-                .map(bank -> {
-                    var logs = rateUpdateLogService.getLogsForBank(bank);
-                    var dtos = logs.stream()
-                            .map(RateUpdateLogMapper::toDto)
-                            .toList();
-                    return ResponseEntity.ok(dtos);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        // Hämta bank
+        var optionalBank = bankService.getBankById(bankId);
+        if (optionalBank.isEmpty()) {
+            return ResponseEntity.notFound().build(); // 404 om banken saknas
+        }
+
+        var bank = optionalBank.get();
+
+        // Hämta loggar för banken
+        var logs = rateUpdateLogService.getLogsForBank(bank);
+
+        // Mappa till DTO
+        var dtos = logs.stream()
+                .map(RateUpdateLogMapper::toDto)
+                .toList();
+
+        // Returnera 200 OK
+        return ResponseEntity.ok(dtos);
     }
 
-    /**
-     * Hämtar endast den senaste uppdateringen för varje bank.
-     * Används t.ex. på adminpanel eller status-sida för snabb översikt.
-     */
+    // ============================================================
+    // GET /api/rates/updates/latest  -> senaste logg per bank
+    // ============================================================
+
     @Operation(
             summary = "Hämta senaste uppdateringen per bank",
-            description = "Returnerar endast den senaste uppdateringen för varje bank. "
-                    + "Används för att snabbt visa senaste status utan att hämta hela logghistoriken."
+            description = "Returnerar endast den senaste uppdateringen för varje bank."
     )
     @GetMapping("/latest")
     public List<RateUpdateLogDto> getLatestUpdatesPerBank() {
-        return rateUpdateLogService.getLatestLogsPerBank().stream()
+        // Hämta senaste logg per bank
+        var latestLogs = rateUpdateLogService.getLatestLogsPerBank();
+
+        // Mappa till DTO
+        var dtos = latestLogs.stream()
                 .map(RateUpdateLogMapper::toDto)
                 .toList();
+
+        // Returnera lista
+        return dtos;
     }
 }
