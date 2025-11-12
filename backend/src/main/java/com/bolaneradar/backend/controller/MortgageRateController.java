@@ -7,9 +7,9 @@ import com.bolaneradar.backend.entity.Bank;
 import com.bolaneradar.backend.entity.MortgageRate;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
-import com.bolaneradar.backend.service.core.analytics.RateAnalyticsService;
 import com.bolaneradar.backend.service.core.BankService;
 import com.bolaneradar.backend.service.core.MortgageRateService;
+import com.bolaneradar.backend.service.core.analytics.RateAnalyticsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,11 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Controller för hantering av bolåneräntor.
- * Exponerar REST-endpoints för frontend och kommunicerar via DTO:er.
- * All logik hanteras i service-lagret, och mapping sker via mapper-klasser.
- */
 @Tag(name = "Mortgage Rates", description = "Endpoints för att hantera bolåneräntor och trender")
 @RestController
 @RequestMapping("/api/rates")
@@ -42,92 +37,92 @@ public class MortgageRateController {
     }
 
     // =====================================================
-    // ===============     GET ENDPOINTS     ================
+    // ===============          GET           ==============
     // =====================================================
 
-    /**
-     * Hämtar alla bolåneräntor som finns registrerade i databasen.
-     * Returnerar en lista av MortgageRateDto för presentation i frontend.
-     */
     @Operation(summary = "Hämta alla bolåneräntor", description = "Returnerar alla registrerade bolåneräntor i databasen.")
     @GetMapping
     public List<MortgageRateDto> getAllRates() {
+        // Hämta entiteter
         List<MortgageRate> rates = mortgageRateService.getAllRates();
-        return rates.stream()
+
+        // Mappa Entity -> DTO
+        List<MortgageRateDto> dtos = rates.stream()
                 .map(MortgageRateMapper::toDto)
                 .toList();
+
+        // Returnera (Jackson gör DTO -> JSON)
+        return dtos;
     }
 
-    /**
-     * Hämtar alla räntor för en specifik bank baserat på dess ID.
-     * Returnerar en lista av MortgageRateDto eller 404 om banken inte finns.
-     */
     @Operation(summary = "Hämta alla räntor för en bank", description = "Returnerar alla räntor för en viss bank baserat på bankens ID.")
     @GetMapping("/bank/{bankId}")
     public ResponseEntity<List<MortgageRateDto>> getRatesByBank(@PathVariable Long bankId) {
-        return bankService.getBankById(bankId)
-                .map(bank -> ResponseEntity.ok(
-                        mortgageRateService.getRatesByBank(bank).stream()
-                                .map(MortgageRateMapper::toDto)
-                                .toList()
-                ))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        // Hämta bank (Optional)
+        var optionalBank = bankService.getBankById(bankId);
+
+        // Finns bank?
+        if (optionalBank.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Bank bank = optionalBank.get();
+
+        // Hämta räntor för bank
+        List<MortgageRate> rates = mortgageRateService.getRatesByBank(bank);
+
+        // Mappa till DTO
+        List<MortgageRateDto> dtos = rates.stream()
+                .map(MortgageRateMapper::toDto)
+                .toList();
+
+        return ResponseEntity.ok(dtos);
     }
 
-    /**
-     * Hämtar de senaste listräntorna (LISTRATE) för alla banker och bindningstider.
-     * Sorteras alfabetiskt efter bank och därefter efter term.
-     */
     @Operation(summary = "Hämta senaste listräntor", description = "Returnerar de senaste listräntorna per bank och bindningstid.")
     @GetMapping("/latest/listrates")
     public List<MortgageRateDto> getLatestListRates() {
         List<MortgageRate> rates = mortgageRateService.getLatestRatesByType(RateType.LISTRATE);
-        return rates.stream()
+        List<MortgageRateDto> dtos = rates.stream()
                 .map(MortgageRateMapper::toDto)
                 .toList();
+        return dtos;
     }
 
-    /**
-     * Hämtar de senaste snitträntorna (AVERAGERATE) för alla banker och bindningstider.
-     */
     @Operation(summary = "Hämta senaste snitträntor", description = "Returnerar de senaste snitträntorna per bank och bindningstid.")
     @GetMapping("/latest/averagerates")
     public List<MortgageRateDto> getLatestAverageRates() {
         List<MortgageRate> rates = mortgageRateService.getLatestRatesByType(RateType.AVERAGERATE);
-        return rates.stream()
+        List<MortgageRateDto> dtos = rates.stream()
                 .map(MortgageRateMapper::toDto)
                 .toList();
+        return dtos;
     }
 
     // =====================================================
-    // ===============     POST ENDPOINTS     ===============
+    // ===============          POST          ==============
     // =====================================================
 
-    /**
-     * Skapar nya bolåneräntor baserat på inkommande JSON-data.
-     * Mottar en lista av RateRequestDto, konverterar till entiteter och sparar.
-     * Returnerar de sparade räntorna som DTO:er tillbaka till frontend.
-     */
     @Operation(summary = "Skapa nya räntor", description = "Lägger till en eller flera bolåneräntor kopplade till befintliga banker.")
     @PostMapping
     public ResponseEntity<List<MortgageRateDto>> createRates(@RequestBody List<MortgageRateDto> requests) {
-
-        // Hanteras nu helt i MortgageRateService (bank-check + mappning + sparning)
-        List<MortgageRateDto> savedRates = requests.stream()
-                .map(mortgageRateService::createRate)
+        // 1) För varje inkommande DTO: låt service validera bank, mappa och spara
+        List<MortgageRateDto> savedDtos = requests.stream()
+                .map(mortgageRateService::createRate) // service sköter DTO -> Entity, bank-koll, save, Entity -> DTO
                 .toList();
 
-        return ResponseEntity.status(201).body(savedRates);
+        // 2) Returnera 201 Created med sparade DTO:er
+        ResponseEntity<List<MortgageRateDto>> response = ResponseEntity
+                .status(201)
+                .body(savedDtos);
+
+        return response;
     }
 
     // =====================================================
-    // ============     HISTORIK & TRENDER     =============
+    // ============      HISTORIK & TRENDER     ============
     // =====================================================
 
-    /**
-     * Hämtar historiska bolåneräntor för en viss bank.
-     * Möjlighet att filtrera efter term, räntetyp och datumintervall.
-     */
     @Operation(
             summary = "Hämta historiska räntor för en viss bank",
             description = "Returnerar historik per term och räntetyp. Filtrera med rateType (LISTRATE/AVERAGERATE), term (t.ex. FIXED_3Y) samt datumintervall."
@@ -141,26 +136,30 @@ public class MortgageRateController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
             @RequestParam(required = false, defaultValue = "asc") String sort
     ) {
+        // Enkel validering av datumintervall
         if (from != null && to != null && from.isAfter(to)) {
             return ResponseEntity.badRequest().build();
         }
 
-        return bankService.getBankById(bankId)
-                .map(bank -> {
-                    List<MortgageRate> history = rateAnalyticsService.getRateHistoryForBank(
-                            bank, from, to, sort, rateType, term);
-                    List<MortgageRateDto> dtos = history.stream()
-                            .map(MortgageRateMapper::toDto)
-                            .toList();
-                    return ResponseEntity.ok(dtos);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        // Hämta bank
+        var optionalBank = bankService.getBankById(bankId);
+        if (optionalBank.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Bank bank = optionalBank.get();
+
+        // Hämta historik via analytics-service
+        List<MortgageRate> history = rateAnalyticsService.getRateHistoryForBank(
+                bank, from, to, sort, rateType, term);
+
+        // Mappa historik till DTO
+        List<MortgageRateDto> dtos = history.stream()
+                .map(MortgageRateMapper::toDto)
+                .toList();
+
+        return ResponseEntity.ok(dtos);
     }
 
-    /**
-     * Hämtar historiska bolåneräntor för alla banker inom ett visst intervall.
-     * Returnerar en lista av BankHistoryDto för jämförelse mellan banker.
-     */
     @Operation(
             summary = "Hämta historik för alla banker",
             description = "Returnerar historiska räntor för alla banker."
@@ -171,19 +170,23 @@ public class MortgageRateController {
             @RequestParam(required = false) LocalDate to,
             @RequestParam(required = false) String sort) {
 
+        // Hämta banker
         List<Bank> banks = bankService.getAllBanks();
+
+        // Hämta historik grupperad per bank
         var allHistory = rateAnalyticsService.getAllBanksRateHistory(banks, from, to, sort);
 
-        // Mappa till BankHistoryDto
+        // Mappa till BankHistoryDto (namn + datapunkter)
         List<BankHistoryDto> dtos = allHistory.entrySet().stream()
                 .map(entry -> new BankHistoryDto(
-                        entry.getKey(),
-                        null, // t.ex. rateType om du vill lägga till i framtiden
-                        null, // term om du vill utöka med mer metadata
+                        entry.getKey(),           // bankName
+                        null,                     // rateType (kan utökas)
+                        null,                     // term (kan utökas)
                         entry.getValue().stream()
                                 .map(rate -> new MortgageRateHistoryPointDto(
                                         rate.getEffectiveDate().toString(),
-                                        rate.getRatePercent()))
+                                        rate.getRatePercent()
+                                ))
                                 .toList()
                 ))
                 .toList();
@@ -191,15 +194,10 @@ public class MortgageRateController {
         return ResponseEntity.ok(dtos);
     }
 
-
     // =====================================================
-    // ==============     TREND-ANALYSER     ================
+    // ==============        TREND-ANALYS       ============
     // =====================================================
 
-    /**
-     * Beräknar förändringar i bolåneräntor mellan två mättillfällen.
-     * Om from/to saknas beräknas skillnader baserat på de senaste datumen.
-     */
     @Operation(summary = "Beräkna ränteförändringar", description = "Returnerar skillnader i bolåneräntor mellan två mättillfällen.")
     @GetMapping("/trends")
     public List<RateTrendDto> getRateTrends(
@@ -207,17 +205,17 @@ public class MortgageRateController {
             @RequestParam(required = false) LocalDate to,
             @RequestParam(required = false) String rateType
     ) {
-        return rateAnalyticsService.getRateTrends(from, to, rateType)
-                .stream()
+        // Hämta trender (entity-baserade)
+        var trends = rateAnalyticsService.getRateTrends(from, to, rateType);
+
+        // Mappa Entity -> DTO
+        var dtos = trends.stream()
                 .map(RateTrendMapper::toDto)
                 .toList();
+
+        return dtos;
     }
 
-
-    /**
-     * Beräknar alla ränteförändringar inom ett valt tidsintervall.
-     * Visar stegvisa förändringar mellan varje mättillfälle.
-     */
     @Operation(summary = "Beräkna förändringar inom intervall", description = "Returnerar alla ränteförändringar inom ett valt tidsintervall.")
     @GetMapping("/trends/range")
     public List<RateTrendDto> getRateTrendsInRange(
@@ -225,9 +223,10 @@ public class MortgageRateController {
             @RequestParam LocalDate to,
             @RequestParam(required = false) String rateType
     ) {
-        return rateAnalyticsService.getRateTrendsInRange(from, to, rateType)
-                .stream()
+        var trends = rateAnalyticsService.getRateTrendsInRange(from, to, rateType);
+        var dtos = trends.stream()
                 .map(RateTrendMapper::toDto)
                 .toList();
+        return dtos;
     }
 }
