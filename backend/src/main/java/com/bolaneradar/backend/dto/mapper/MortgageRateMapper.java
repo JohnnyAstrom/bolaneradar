@@ -5,8 +5,8 @@ import com.bolaneradar.backend.entity.Bank;
 import com.bolaneradar.backend.entity.MortgageRate;
 
 /**
- * Mapper som konverterar MortgageRate-entiteter till och från DTO-objekt.
- * Används av controller- och service-lagret för att separera datalager från API-lager.
+ * Mapper som konverterar MortgageRate-entiteter till och från MortgageRateDto-objekt.
+ * Används av controller- och service-lagret för att separera datalager från API-lagret.
  */
 public class MortgageRateMapper {
 
