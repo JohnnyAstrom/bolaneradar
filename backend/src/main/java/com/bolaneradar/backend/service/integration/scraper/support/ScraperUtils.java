@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.integration.scraper;
+package com.bolaneradar.backend.service.integration.scraper.support;
 
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import org.jsoup.Jsoup;

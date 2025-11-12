@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.integration.scraper;
+package com.bolaneradar.backend.service.integration.scraper.core;
 
 import com.bolaneradar.backend.entity.Bank;
 import com.bolaneradar.backend.entity.MortgageRate;
@@ -7,6 +7,7 @@ import com.bolaneradar.backend.repository.BankRepository;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import com.bolaneradar.backend.service.integration.EmailService;
 import com.bolaneradar.backend.service.core.RateUpdateLogService;
+import com.bolaneradar.backend.service.integration.scraper.api.BankScraper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -87,10 +88,10 @@ public class ScraperService {
     }
 
     /**
-     * Intern metod som utför den faktiska scraping-logiken.
+     * Metod som utför den faktiska scraping-logiken.
      * Används av scrapeAllBanks() och scrapeSingleBank().
      */
-    ScrapeResult scrapeSingleBankResult(String bankName) {
+    public ScrapeResult scrapeSingleBankResult(String bankName) {
         long startTime = System.currentTimeMillis();
 
         Optional<Bank> optionalBank = bankRepository.findByNameIgnoreCase(bankName);
