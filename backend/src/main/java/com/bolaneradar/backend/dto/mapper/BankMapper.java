@@ -3,24 +3,24 @@ package com.bolaneradar.backend.dto.mapper;
 import com.bolaneradar.backend.dto.BankDto;
 import com.bolaneradar.backend.dto.MortgageRateDto;
 import com.bolaneradar.backend.entity.Bank;
-import com.bolaneradar.backend.entity.MortgageRate;
 import java.util.List;
 
 /**
- * Mapper som konverterar mellan Bank-entiteter och BankDto.
- * Används för att separera datalager (entity) från API-lagret.
+ * Mapper som konverterar mellan Bank-entiteter och BankDto-objekt.
+ * Används för att separera datalager (entities) från API-lagret (DTOs).
  *
- * Inkluderar även inbäddad konvertering av MortgageRate till MortgageRateDto
- * för att kunna returnera banker med tillhörande räntor i samma respons.
+ * BankMapper delegerar mappningen av inbäddade MortgageRate-objekt
+ * till MortgageRateMapper för att följa principen "en klass – ett ansvar".
  */
 public class BankMapper {
 
     /**
      * Konverterar en Bank-entitet till en BankDto.
+     * Inkluderar inbäddade MortgageRateDto-objekt via MortgageRateMapper.
      */
     public static BankDto toDto(Bank bank) {
         List<MortgageRateDto> rates = bank.getMortgageRates().stream()
-                .map(BankMapper::toRateDto)
+                .map(MortgageRateMapper::toDto)
                 .toList();
 
         return new BankDto(
@@ -41,21 +41,5 @@ public class BankMapper {
         bank.setName(dto.name());
         bank.setWebsite(dto.website());
         return bank;
-    }
-
-    /**
-     * Konverterar en MortgageRate till MortgageRateDto (för inbäddad data i BankDto).
-     */
-    private static MortgageRateDto toRateDto(MortgageRate rate) {
-        return new MortgageRateDto(
-                rate.getId(),
-                rate.getBank().getName(),
-                rate.getTerm(),
-                rate.getRateType(),
-                rate.getRatePercent(),
-                rate.getEffectiveDate(),
-                rate.getRateChange(),
-                rate.getLastChangedDate()
-        );
     }
 }
