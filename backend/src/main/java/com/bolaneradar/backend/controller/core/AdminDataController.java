@@ -18,14 +18,14 @@ public class AdminDataController {
     }
 
     @Operation(summary = "Importera exempeldata",
-            description = "Skapar exempeldata i databasen för utvecklingstest.")
+            description = "Skapar exempeldata i databasen för utvecklingstest. Just nu skapas endast banker.")
     @PostMapping("/import-example")
     public ResponseEntity<String> importExampleData() {
         adminDataService.importExampleData();
         return ResponseEntity.status(201).body("Exempeldata importerad framgångsrikt!");
     }
 
-    @Operation(summary = "Rensa hela databasen",
+    @Operation(summary = "Rensa samtliga räntor från databasen",
             description = "Tar bort alla bolåneräntor och loggar (endast för utvecklingsmiljö).")
     @DeleteMapping("/clear")
     public ResponseEntity<String> clearDatabase() {

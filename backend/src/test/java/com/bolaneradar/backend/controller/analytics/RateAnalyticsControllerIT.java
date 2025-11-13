@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.controller;
+package com.bolaneradar.backend.controller.analytics;
 
 import com.bolaneradar.backend.entity.core.Bank;
 import com.bolaneradar.backend.entity.core.MortgageRate;
@@ -6,7 +6,7 @@ import com.bolaneradar.backend.entity.analytics.RateTrend;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.service.core.BankService;
-import com.bolaneradar.backend.service.core.analytics.RateAnalyticsService;
+import com.bolaneradar.backend.service.analytics.RateAnalyticsService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.controller;
+package com.bolaneradar.backend.controller.core;
 
 import com.bolaneradar.backend.entity.core.Bank;
 import com.bolaneradar.backend.entity.core.RateUpdateLog;

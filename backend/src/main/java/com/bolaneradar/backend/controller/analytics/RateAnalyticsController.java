@@ -9,7 +9,7 @@ import com.bolaneradar.backend.entity.analytics.RateTrend;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.service.core.BankService;
-import com.bolaneradar.backend.service.core.analytics.RateAnalyticsService;
+import com.bolaneradar.backend.service.analytics.RateAnalyticsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.format.annotation.DateTimeFormat;
