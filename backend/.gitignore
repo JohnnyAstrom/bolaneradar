@@ -38,5 +38,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-# === VS Code ===
-.vscode/
+# === Project backups (ignore database dumps) ===
+backups/
+*.dump
+*.sql
