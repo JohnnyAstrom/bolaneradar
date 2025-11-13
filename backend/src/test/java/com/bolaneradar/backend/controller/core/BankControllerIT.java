@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.controller;
+package com.bolaneradar.backend.controller.core;
 
 import com.bolaneradar.backend.dto.core.BankDto;
 import com.bolaneradar.backend.entity.core.Bank;
