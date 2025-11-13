@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.core.analytics;
+package com.bolaneradar.backend.service.analytics;
 
 import com.bolaneradar.backend.entity.core.Bank;
 import com.bolaneradar.backend.entity.core.MortgageRate;
