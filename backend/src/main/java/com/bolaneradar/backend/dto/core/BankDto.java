@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.dto;
+package com.bolaneradar.backend.dto.core;
 
 import java.util.List;
 

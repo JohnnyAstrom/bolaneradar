@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.entity;
+package com.bolaneradar.backend.entity.core;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -56,6 +56,11 @@ public class Bank {
         this.name = name;
         this.website = website;
         this.mortgageRates = new ArrayList<>();
+    }
+
+    // Praktisk konstruktor för test och seed-data
+    public Bank(String name) {
+        this.name = name;
     }
 
     // --- Getters & setters ---

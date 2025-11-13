@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.dto;
+package com.bolaneradar.backend.dto.analytics;
 
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;

@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.dto;
+package com.bolaneradar.backend.dto.analytics;
 
 import java.time.LocalDate;
 import java.math.BigDecimal;

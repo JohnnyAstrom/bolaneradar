@@ -1,7 +1,7 @@
 package com.bolaneradar.backend.dto.mapper;
 
-import com.bolaneradar.backend.dto.RateUpdateLogDto;
-import com.bolaneradar.backend.entity.RateUpdateLog;
+import com.bolaneradar.backend.dto.core.RateUpdateLogDto;
+import com.bolaneradar.backend.entity.core.RateUpdateLog;
 
 /**
  * Mapper som konverterar RateUpdateLog-entiteter till RateUpdateLogDto.

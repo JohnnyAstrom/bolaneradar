@@ -1,7 +1,7 @@
 package com.bolaneradar.backend.service.integration.scraper.api;
 
-import com.bolaneradar.backend.entity.Bank;
-import com.bolaneradar.backend.entity.MortgageRate;
+import com.bolaneradar.backend.entity.core.Bank;
+import com.bolaneradar.backend.entity.core.MortgageRate;
 import java.io.IOException;
 import java.util.List;
 

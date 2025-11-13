@@ -1,17 +1,14 @@
 package com.bolaneradar.backend.service.core;
 
-import com.bolaneradar.backend.dto.MortgageRateDto;
+import com.bolaneradar.backend.dto.core.MortgageRateDto;
 import com.bolaneradar.backend.dto.mapper.MortgageRateMapper;
-import com.bolaneradar.backend.entity.Bank;
-import com.bolaneradar.backend.entity.MortgageRate;
-import com.bolaneradar.backend.entity.enums.MortgageTerm;
+import com.bolaneradar.backend.entity.core.Bank;
+import com.bolaneradar.backend.entity.core.MortgageRate;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Service-lager för hantering av bolåneräntor.
