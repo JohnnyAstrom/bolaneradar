@@ -1,6 +1,6 @@
 package com.bolaneradar.backend.dto.mapper;
 
-import com.bolaneradar.backend.dto.RateTrendDto;
+import com.bolaneradar.backend.dto.analytics.RateTrendDto;
 import com.bolaneradar.backend.entity.analytics.RateTrend;
 
 /**

@@ -1,7 +1,7 @@
 package com.bolaneradar.backend.service.core;
 
-import com.bolaneradar.backend.entity.Bank;
-import com.bolaneradar.backend.entity.RateUpdateLog;
+import com.bolaneradar.backend.entity.core.Bank;
+import com.bolaneradar.backend.entity.core.RateUpdateLog;
 import com.bolaneradar.backend.repository.RateUpdateLogRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

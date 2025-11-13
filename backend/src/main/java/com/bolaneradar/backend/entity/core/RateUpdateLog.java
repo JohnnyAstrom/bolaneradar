@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.entity;
+package com.bolaneradar.backend.entity.core;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

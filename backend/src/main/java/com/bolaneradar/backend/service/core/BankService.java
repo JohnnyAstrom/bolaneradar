@@ -1,6 +1,6 @@
 package com.bolaneradar.backend.service.core;
 
-import com.bolaneradar.backend.entity.Bank;
+import com.bolaneradar.backend.entity.core.Bank;
 import com.bolaneradar.backend.repository.BankRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;

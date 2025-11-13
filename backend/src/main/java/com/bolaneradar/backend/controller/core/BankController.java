@@ -1,8 +1,8 @@
-package com.bolaneradar.backend.controller;
+package com.bolaneradar.backend.controller.core;
 
-import com.bolaneradar.backend.dto.BankDto;
+import com.bolaneradar.backend.dto.core.BankDto;
 import com.bolaneradar.backend.dto.mapper.BankMapper;
-import com.bolaneradar.backend.entity.Bank;
+import com.bolaneradar.backend.entity.core.Bank;
 import com.bolaneradar.backend.service.core.BankService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

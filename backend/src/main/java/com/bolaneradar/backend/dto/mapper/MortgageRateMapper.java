@@ -1,8 +1,8 @@
 package com.bolaneradar.backend.dto.mapper;
 
-import com.bolaneradar.backend.dto.MortgageRateDto;
-import com.bolaneradar.backend.entity.Bank;
-import com.bolaneradar.backend.entity.MortgageRate;
+import com.bolaneradar.backend.dto.core.MortgageRateDto;
+import com.bolaneradar.backend.entity.core.Bank;
+import com.bolaneradar.backend.entity.core.MortgageRate;
 
 /**
  * Mapper som konverterar MortgageRate-entiteter till och från MortgageRateDto-objekt.

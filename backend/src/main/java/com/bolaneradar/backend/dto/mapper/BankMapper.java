@@ -1,8 +1,8 @@
 package com.bolaneradar.backend.dto.mapper;
 
-import com.bolaneradar.backend.dto.BankDto;
-import com.bolaneradar.backend.dto.MortgageRateDto;
-import com.bolaneradar.backend.entity.Bank;
+import com.bolaneradar.backend.dto.core.BankDto;
+import com.bolaneradar.backend.dto.core.MortgageRateDto;
+import com.bolaneradar.backend.entity.core.Bank;
 import java.util.List;
 
 /**

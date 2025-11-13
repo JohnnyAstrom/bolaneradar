@@ -1,6 +1,6 @@
 package com.bolaneradar.backend.service.integration.scraper.core;
 
-public record ScrapeResult(
+public record ScraperResult(
         String bankName,
         int importedCount,
         boolean success,

@@ -1,7 +1,7 @@
 package com.bolaneradar.backend.service.core.analytics;
 
-import com.bolaneradar.backend.entity.Bank;
-import com.bolaneradar.backend.entity.MortgageRate;
+import com.bolaneradar.backend.entity.core.Bank;
+import com.bolaneradar.backend.entity.core.MortgageRate;
 import com.bolaneradar.backend.entity.analytics.RateTrend;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;

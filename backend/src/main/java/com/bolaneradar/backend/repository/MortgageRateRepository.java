@@ -1,7 +1,7 @@
 package com.bolaneradar.backend.repository;
 
-import com.bolaneradar.backend.entity.Bank;
-import com.bolaneradar.backend.entity.MortgageRate;
+import com.bolaneradar.backend.entity.core.Bank;
+import com.bolaneradar.backend.entity.core.MortgageRate;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import org.springframework.data.jpa.repository.JpaRepository;

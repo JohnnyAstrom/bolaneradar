@@ -1,7 +1,7 @@
 package com.bolaneradar.backend.service.integration.scraper.core;
 
-import com.bolaneradar.backend.entity.Bank;
-import com.bolaneradar.backend.entity.MortgageRate;
+import com.bolaneradar.backend.entity.core.Bank;
+import com.bolaneradar.backend.entity.core.MortgageRate;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.repository.BankRepository;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
@@ -56,7 +56,7 @@ public class ScraperService {
         List<String> failedBanks = new ArrayList<>();
 
         for (Bank bank : banks) {
-            ScrapeResult result = scrapeSingleBankResult(bank.getName());
+            ScraperResult result = scrapeSingleBankResult(bank.getName());
 
             if (!result.success()) {
                 failedBanks.add(bank.getName());
@@ -80,7 +80,7 @@ public class ScraperService {
      * Vid fel kastas Exception med beskrivande felmeddelande.
      */
     public String scrapeSingleBank(String bankName) throws Exception {
-        ScrapeResult result = scrapeSingleBankResult(bankName);
+        ScraperResult result = scrapeSingleBankResult(bankName);
         if (result.success()) {
             return result.importedCount() + " räntor sparade för " + result.bankName();
         }
@@ -91,14 +91,14 @@ public class ScraperService {
      * Metod som utför den faktiska scraping-logiken.
      * Används av scrapeAllBanks() och scrapeSingleBank().
      */
-    public ScrapeResult scrapeSingleBankResult(String bankName) {
+    public ScraperResult scrapeSingleBankResult(String bankName) {
         long startTime = System.currentTimeMillis();
 
         Optional<Bank> optionalBank = bankRepository.findByNameIgnoreCase(bankName);
         if (optionalBank.isEmpty()) {
             long duration = System.currentTimeMillis() - startTime;
             System.err.println("Ingen bank hittades med namn: " + bankName);
-            return new ScrapeResult(bankName, 0, false, "Ingen bank hittades med namn: " + bankName, duration);
+            return new ScraperResult(bankName, 0, false, "Ingen bank hittades med namn: " + bankName, duration);
         }
 
         Bank bank = optionalBank.get();
@@ -108,7 +108,7 @@ public class ScraperService {
             System.err.println("Ingen scraper hittades för: " + bank.getName());
             rateUpdateLogService.logUpdate(bank, "ScraperService", 0, false,
                     "Ingen scraper hittades för banken", duration);
-            return new ScrapeResult(bank.getName(), 0, false,
+            return new ScraperResult(bank.getName(), 0, false,
                     "Ingen scraper hittades för " + bank.getName(), duration);
         }
 
@@ -181,7 +181,7 @@ public class ScraperService {
         }
 
         long totalDuration = System.currentTimeMillis() - startTime;
-        return new ScrapeResult(bank.getName(), importedCount, success, errorMessage, totalDuration);
+        return new ScraperResult(bank.getName(), importedCount, success, errorMessage, totalDuration);
     }
 
     /**

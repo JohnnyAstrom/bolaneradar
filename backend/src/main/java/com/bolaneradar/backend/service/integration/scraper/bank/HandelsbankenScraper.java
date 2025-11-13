@@ -1,6 +1,7 @@
 package com.bolaneradar.backend.service.integration.scraper.bank;
 
-import com.bolaneradar.backend.entity.*;
+import com.bolaneradar.backend.entity.core.Bank;
+import com.bolaneradar.backend.entity.core.MortgageRate;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.service.integration.scraper.api.BankScraper;

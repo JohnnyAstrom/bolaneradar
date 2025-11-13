@@ -1,6 +1,6 @@
-package com.bolaneradar.backend.controller;
+package com.bolaneradar.backend.controller.core;
 
-import com.bolaneradar.backend.dto.RateUpdateLogDto;
+import com.bolaneradar.backend.dto.core.RateUpdateLogDto;
 import com.bolaneradar.backend.dto.mapper.RateUpdateLogMapper;
 import com.bolaneradar.backend.service.core.BankService;
 import com.bolaneradar.backend.service.core.RateUpdateLogService;

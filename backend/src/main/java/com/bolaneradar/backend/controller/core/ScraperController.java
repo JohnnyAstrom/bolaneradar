@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.controller;
+package com.bolaneradar.backend.controller.core;
 
 import com.bolaneradar.backend.service.integration.scraper.core.ScraperService;
 import io.swagger.v3.oas.annotations.Operation;
