@@ -160,7 +160,8 @@ class RateAnalyticsServiceTest {
         when(mortgageRateRepository.findByEffectiveDate(to))
                 .thenReturn(List.of(latestRate));
 
-        List<RateTrend> trends = rateAnalyticsService.getRateTrends(from, to, "LISTRATE");
+        List<RateTrend> trends = rateAnalyticsService.getRateTrends(from, to, RateType.LISTRATE)
+                ;
 
         assertEquals(1, trends.size());
         RateTrend t = trends.getFirst();
@@ -196,7 +197,8 @@ class RateAnalyticsServiceTest {
         when(mortgageRateRepository.findByBankAndRateTypeAndEffectiveDate(seb, RateType.AVERAGERATE, prevDate))
                 .thenReturn(List.of(prevRate));
 
-        List<RateTrend> trends = rateAnalyticsService.getRateTrends(null, null, "AVERAGERATE");
+        List<RateTrend> trends = rateAnalyticsService.getRateTrends(null, null, RateType.AVERAGERATE)
+                ;
 
         assertEquals(1, trends.size());
         RateTrend t = trends.getFirst();
@@ -233,7 +235,7 @@ class RateAnalyticsServiceTest {
         when(mortgageRateRepository.findByEffectiveDate(latestDate))
                 .thenReturn(List.of(latestListRate, latestAverage));
 
-        List<RateTrend> trends = rateAnalyticsService.getRateTrends(null, null, "LISTRATE");
+        List<RateTrend> trends = rateAnalyticsService.getRateTrends(null, null, RateType.LISTRATE);
 
         assertEquals(1, trends.size());
         RateTrend t = trends.getFirst();
@@ -264,7 +266,7 @@ class RateAnalyticsServiceTest {
         when(mortgageRateRepository.findByEffectiveDateBetween(from, to))
                 .thenReturn(List.of(r2, r1, r3)); // medvetet osorterat
 
-        List<RateTrend> trends = rateAnalyticsService.getRateTrendsInRange(from, to, "LISTRATE");
+        List<RateTrend> trends = rateAnalyticsService.getRateTrendsInRange(from, to, RateType.LISTRATE);
 
         // För samma bank/term/type med tre datapunkter → två trends
         assertEquals(2, trends.size());
