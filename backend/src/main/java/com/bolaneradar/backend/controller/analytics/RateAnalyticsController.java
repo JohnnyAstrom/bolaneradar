@@ -111,15 +111,12 @@ public class RateAnalyticsController {
     )
     @GetMapping("/trends")
     public List<RateTrendDto> getRateTrends(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
-            @RequestParam(required = false) String rateType
+            @RequestParam(required = false) LocalDate from,
+            @RequestParam(required = false) LocalDate to,
+            @RequestParam(required = false) RateType rateType
     ) {
         List<RateTrend> trends = rateAnalyticsService.getRateTrends(from, to, rateType);
-
-        return trends.stream()
-                .map(RateTrendMapper::toDto)
-                .toList();
+        return trends.stream().map(RateTrendMapper::toDto).toList();
     }
 
     // ======================================================
@@ -131,14 +128,12 @@ public class RateAnalyticsController {
     )
     @GetMapping("/trends/range")
     public List<RateTrendDto> getRateTrendsInRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
-            @RequestParam(required = false) String rateType
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to,
+            @RequestParam(required = false) RateType rateType
     ) {
         List<RateTrend> trends = rateAnalyticsService.getRateTrendsInRange(from, to, rateType);
-
-        return trends.stream()
-                .map(RateTrendMapper::toDto)
-                .toList();
+        return trends.stream().map(RateTrendMapper::toDto).toList();
     }
+
 }
