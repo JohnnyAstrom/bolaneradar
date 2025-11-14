@@ -14,14 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Koordinator som hanterar scraping-anrop till olika bank-scrapers.
- * Ansvarar för att hämta banker, köra respektive scraper och spara resultaten i databasen.
- *
- * Används av controller-endpoints:
- *  - GET /api/scrape/all
- *  - GET /api/scrape/{bankName}
- */
 @Service
 public class ScraperService {
 
@@ -45,10 +37,6 @@ public class ScraperService {
         this.emailService = emailService;
     }
 
-    /**
-     * Kör scraping för alla banker med tillgänglig scraper.
-     * Skickar e-postnotifiering om någon bank misslyckas.
-     */
     public void scrapeAllBanks() {
         System.out.println("Startar skrapning av alla banker");
 
@@ -75,10 +63,6 @@ public class ScraperService {
         System.out.println("Skrapning av alla banker slutförd");
     }
 
-    /**
-     * Kör scraping för en specifik bank och returnerar ett textmeddelande.
-     * Vid fel kastas Exception med beskrivande felmeddelande.
-     */
     public String scrapeSingleBank(String bankName) throws Exception {
         ScraperResult result = scrapeSingleBankResult(bankName);
         if (result.success()) {
@@ -87,17 +71,16 @@ public class ScraperService {
         throw new Exception(result.error() != null ? result.error() : "Okänt fel vid scraping av " + bankName);
     }
 
-    /**
-     * Metod som utför den faktiska scraping-logiken.
-     * Används av scrapeAllBanks() och scrapeSingleBank().
-     */
     public ScraperResult scrapeSingleBankResult(String bankName) {
         long startTime = System.currentTimeMillis();
 
         Optional<Bank> optionalBank = bankRepository.findByNameIgnoreCase(bankName);
         if (optionalBank.isEmpty()) {
             long duration = System.currentTimeMillis() - startTime;
+
             System.err.println("Ingen bank hittades med namn: " + bankName);
+
+            // INGEN logUpdate här (double logging) – FIX
             return new ScraperResult(bankName, 0, false, "Ingen bank hittades med namn: " + bankName, duration);
         }
 
@@ -105,9 +88,10 @@ public class ScraperService {
         BankScraper scraper = getScraperForBank(bank);
         if (scraper == null) {
             long duration = System.currentTimeMillis() - startTime;
+
             System.err.println("Ingen scraper hittades för: " + bank.getName());
-            rateUpdateLogService.logUpdate(bank, "ScraperService", 0, false,
-                    "Ingen scraper hittades för banken", duration);
+
+            // INGEN logUpdate här (double logging) – FIX
             return new ScraperResult(bank.getName(), 0, false,
                     "Ingen scraper hittades för " + bank.getName(), duration);
         }
@@ -138,7 +122,6 @@ public class ScraperService {
                 if (!previousRates.isEmpty()) {
                     MortgageRate latest = previousRates.get(0);
 
-                    // Snittränta: hoppa över dubbletter (samma datum och värde)
                     if (newRate.getRateType() == RateType.AVERAGERATE) {
                         boolean sameDate = newRate.getEffectiveDate().equals(latest.getEffectiveDate());
                         boolean sameRate = newRate.getRatePercent().compareTo(latest.getRatePercent()) == 0;
@@ -150,7 +133,6 @@ public class ScraperService {
                         }
                     }
 
-                    // Sätt rateChange och lastChangedDate om datum är nytt och värdet ändrat
                     if (newRate.getEffectiveDate().isAfter(latest.getEffectiveDate())
                             && newRate.getRatePercent().compareTo(latest.getRatePercent()) != 0) {
                         newRate.setRateChange(newRate.getRatePercent().subtract(latest.getRatePercent()));
@@ -167,6 +149,7 @@ public class ScraperService {
 
             importedCount = finalRatesToSave.size();
             success = true;
+
             System.out.println(importedCount + " räntor sparade för " + bank.getName());
 
         } catch (Exception e) {
@@ -175,22 +158,26 @@ public class ScraperService {
 
         } finally {
             long duration = System.currentTimeMillis() - startTime;
-            rateUpdateLogService.logUpdate(bank, "ScraperService", importedCount, success, errorMessage, duration);
+
+            // ENDA logUpdate – FIX
+            rateUpdateLogService.logUpdate(
+                    bank,
+                    "ScraperService",
+                    importedCount,
+                    success,
+                    errorMessage,
+                    duration
+            );
+
             System.out.println("Loggat resultat för " + bank.getName()
                     + " (success=" + success + ", time=" + duration + "ms)");
         }
 
-        long totalDuration = System.currentTimeMillis() - startTime;
-        return new ScraperResult(bank.getName(), importedCount, success, errorMessage, totalDuration);
+        // Returnera bara resultat – ingen ny duration-beräkning (kan skilja sig millisekunder) – FIX
+        return new ScraperResult(bank.getName(), importedCount, success, errorMessage,
+                System.currentTimeMillis() - startTime);
     }
 
-    /**
-     * Hittar rätt scraper baserat på bankens namn.
-     * Matchar t.ex. "Swedbank" mot "SwedbankScraper".
-     * Har även stöd för mockar vars klassnamn inte matchar exakt
-     * (t.ex. "BankScraper$MockitoMock$12345") genom att också
-     * kolla på objektets toString()-namn.
-     */
     public BankScraper getScraperForBank(Bank bank) {
         String bankNameNorm = normalize(bank.getName());
 
@@ -207,9 +194,6 @@ public class ScraperService {
                 .orElse(null);
     }
 
-    /**
-     * Normalisering av namn: tar bort mellanslag, ersätter å/ä/ö och gör gemener.
-     */
     private String normalize(String text) {
         if (text == null) return "";
         return text.toLowerCase()
