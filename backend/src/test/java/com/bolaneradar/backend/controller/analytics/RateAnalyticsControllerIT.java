@@ -7,8 +7,10 @@ import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.service.core.BankService;
 import com.bolaneradar.backend.service.analytics.RateAnalyticsService;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Integrationstester för RateAnalyticsController.
+ * Uppdaterad för refaktorerad controller/service-struktur.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -59,15 +62,24 @@ class RateAnalyticsControllerIT {
     }
 
     // ============================================================
-    // TEST 1: /history/bank/{id} → 404 om bank saknas
+    // TEST 1: /history/bank/{id} → Tom lista när bank saknas
     // ============================================================
     @Test
-    void getRateHistory_returns404_whenBankNotFound() throws Exception {
+    void getRateHistory_returnsEmptyList_whenBankNotFound() throws Exception {
 
-        when(bankService.getBankById(99L)).thenReturn(Optional.empty());
+        // Service returnerar tom lista när bank inte finns
+        when(rateAnalyticsService.getRateHistoryForBank(
+                eq(99L),
+                any(), any(),
+                anyString(),
+                any(), any()
+        )).thenReturn(List.of());
 
-        mockMvc.perform(get("/api/rates/analytics/history/bank/99"))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(
+                        get("/api/rates/analytics/history/bank/99")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
     }
 
     // ============================================================
@@ -86,16 +98,18 @@ class RateAnalyticsControllerIT {
         rate.setTerm(MortgageTerm.FIXED_1Y);
         rate.setEffectiveDate(LocalDate.of(2024, 1, 1));
 
-        when(bankService.getBankById(1L)).thenReturn(Optional.of(bank));
+        // Nya signaturen: service tar bankId, inte Bank
         when(rateAnalyticsService.getRateHistoryForBank(
-                eq(bank),
+                eq(1L),
                 any(), any(),
                 anyString(),
                 any(), any()
         )).thenReturn(List.of(rate));
 
-        mockMvc.perform(get("/api/rates/analytics/history/bank/1")
-                        .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+                        get("/api/rates/analytics/history/bank/1")
+                                .accept(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].bankName").value("Swedbank"))
@@ -129,11 +143,14 @@ class RateAnalyticsControllerIT {
         mockMap.put("SEB", List.of(r1));
         mockMap.put("Nordea", List.of(r2));
 
-        when(bankService.getAllBanks()).thenReturn(List.of(bank1, bank2));
-        when(rateAnalyticsService.getAllBanksRateHistory(any(), any(), any(), anyString()))
-                .thenReturn(mockMap);
+        // OBS: ny metodsignatur → 3 parametrar, inte 4
+        when(rateAnalyticsService.getAllBanksRateHistory(
+                any(), any(), anyString()
+        )).thenReturn(mockMap);
 
-        mockMvc.perform(get("/api/rates/analytics/history/all-banks"))
+        mockMvc.perform(
+                        get("/api/rates/analytics/history/all-banks")
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.SEB[0].ratePercent").value(4.0))
                 .andExpect(jsonPath("$.Nordea[0].ratePercent").value(3.5));
@@ -159,7 +176,9 @@ class RateAnalyticsControllerIT {
                 any(), any(), any()
         )).thenReturn(List.of(t));
 
-        mockMvc.perform(get("/api/rates/analytics/trends"))
+        mockMvc.perform(
+                        get("/api/rates/analytics/trends")
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].bankName").value("Swedbank"))
@@ -187,9 +206,11 @@ class RateAnalyticsControllerIT {
                 any(), any(), any()
         )).thenReturn(List.of(t));
 
-        mockMvc.perform(get("/api/rates/analytics/trends/range")
-                        .param("from", "2024-01-01")
-                        .param("to", "2024-03-01"))
+        mockMvc.perform(
+                        get("/api/rates/analytics/trends/range")
+                                .param("from", "2024-01-01")
+                                .param("to", "2024-03-01")
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].bankName").value("Nordea"))

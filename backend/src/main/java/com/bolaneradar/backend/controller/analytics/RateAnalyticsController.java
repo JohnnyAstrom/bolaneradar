@@ -1,17 +1,18 @@
 package com.bolaneradar.backend.controller.analytics;
 
-import com.bolaneradar.backend.dto.core.MortgageRateDto;
 import com.bolaneradar.backend.dto.analytics.RateTrendDto;
+import com.bolaneradar.backend.dto.core.MortgageRateDto;
 import com.bolaneradar.backend.dto.mapper.MortgageRateMapper;
 import com.bolaneradar.backend.dto.mapper.RateTrendMapper;
-import com.bolaneradar.backend.entity.core.Bank;
 import com.bolaneradar.backend.entity.analytics.RateTrend;
+import com.bolaneradar.backend.entity.core.MortgageRate;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
-import com.bolaneradar.backend.service.core.BankService;
 import com.bolaneradar.backend.service.analytics.RateAnalyticsService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,28 +20,35 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+/**
+ *  RATE ANALYTICS CONTROLLER
+ * <p>
+ *  Detta lager ansvarar enbart för:
+ *   - Ta emot HTTP-anrop
+ *   - Skicka vidare parametrar till service-lagret
+ *   - Konvertera entiteter till DTOs
+ *   - Returnera API-svar
+ * <p>
+ *  All domänlogik ligger i RateAnalyticsService.
+ */
 @Tag(name = "Rate Analytics", description = "Analys, historik och trender för bolåneräntor")
 @RestController
 @RequestMapping("/api/rates/analytics")
 public class RateAnalyticsController {
 
-    private final RateAnalyticsService rateAnalyticsService;
-    private final BankService bankService;
+    private final RateAnalyticsService analyticsService;
 
-    public RateAnalyticsController(RateAnalyticsService rateAnalyticsService,
-                                   BankService bankService) {
-        this.rateAnalyticsService = rateAnalyticsService;
-        this.bankService = bankService;
+    public RateAnalyticsController(RateAnalyticsService analyticsService) {
+        this.analyticsService = analyticsService;
     }
 
     // ======================================================
-    // GET /api/rates/analytics/history/bank/{bankId}
+    // GET /history/bank/{bankId}
     // ======================================================
     @Operation(
             summary = "Historik för en bank",
-            description = "Returnerar historiska bolåneräntor för en specifik bank med valfria filter."
+            description = "Returnerar filtrerad och sorterad historik för en bank."
     )
     @GetMapping("/history/bank/{bankId}")
     public ResponseEntity<List<MortgageRateDto>> getRateHistoryForBank(
@@ -51,30 +59,22 @@ public class RateAnalyticsController {
             @RequestParam(required = false) RateType rateType,
             @RequestParam(required = false) MortgageTerm term
     ) {
-        var optionalBank = bankService.getBankById(bankId);
-        if (optionalBank.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
 
-        Bank bank = optionalBank.get();
+        List<MortgageRate> rates =
+                analyticsService.getRateHistoryForBank(bankId, from, to, sort, rateType, term);
 
-        var rates = rateAnalyticsService.getRateHistoryForBank(
-                bank, from, to, sort, rateType, term
+        // Controller konverterar entiteter → DTO (standard i ditt projekt)
+        return ResponseEntity.ok(
+                rates.stream().map(MortgageRateMapper::toDto).toList()
         );
-
-        var dtos = rates.stream()
-                .map(MortgageRateMapper::toDto)
-                .toList();
-
-        return ResponseEntity.ok(dtos);
     }
 
     // ======================================================
-    // GET /api/rates/analytics/history/all-banks
+    // GET /history/all-banks
     // ======================================================
     @Operation(
             summary = "Historik för alla banker",
-            description = "Returnerar historiska räntor för samtliga banker, grupperat per bank."
+            description = "Returnerar historik per bank i ett Map<BankNamn, List<MortgageRateDto>>."
     )
     @GetMapping("/history/all-banks")
     public ResponseEntity<Map<String, List<MortgageRateDto>>> getAllBanksRateHistory(
@@ -82,32 +82,25 @@ public class RateAnalyticsController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
             @RequestParam(required = false, defaultValue = "asc") String sort
     ) {
-        List<Bank> banks = bankService.getAllBanks();
+        Map<String, List<MortgageRate>> history =
+                analyticsService.getAllBanksRateHistory(from, to, sort);
 
-        var history = rateAnalyticsService.getAllBanksRateHistory(banks, from, to, sort);
-
+        // Mappar varje lista av entiteter till en lista av DTOs
         Map<String, List<MortgageRateDto>> dtoMap = history.entrySet().stream()
-                .collect(Collectors.toMap(
+                .collect(java.util.stream.Collectors.toMap(
                         Map.Entry::getKey,
-                        e -> e.getValue().stream()
-                                .map(MortgageRateMapper::toDto)
-                                .toList()
+                        e -> e.getValue().stream().map(MortgageRateMapper::toDto).toList()
                 ));
 
         return ResponseEntity.ok(dtoMap);
     }
 
     // ======================================================
-    // GET /api/rates/analytics/trends
+    // GET /trends
     // ======================================================
     @Operation(
-            summary = "Trender mellan två mättillfällen eller senaste automatiskt",
-            description = """
-                    Beräknar förändringar i bolåneräntor.
-                    - Om from/to anges: jämför exakt dessa datum.
-                    - Om from/to saknas och rateType=AVERAGERATE: per bank (två senaste datum).
-                    - Annars: globala två senaste datum.
-                    """
+            summary = "Trender mellan två mättillfällen",
+            description = "Returnerar automatiskt beräknade ränteförändringar."
     )
     @GetMapping("/trends")
     public List<RateTrendDto> getRateTrends(
@@ -115,16 +108,16 @@ public class RateAnalyticsController {
             @RequestParam(required = false) LocalDate to,
             @RequestParam(required = false) RateType rateType
     ) {
-        List<RateTrend> trends = rateAnalyticsService.getRateTrends(from, to, rateType);
+        List<RateTrend> trends = analyticsService.getRateTrends(from, to, rateType);
         return trends.stream().map(RateTrendMapper::toDto).toList();
     }
 
     // ======================================================
-    // GET /api/rates/analytics/trends/range
+    // GET /trends/range
     // ======================================================
     @Operation(
-            summary = "Alla trender inom intervall",
-            description = "Beräknar alla förändringar i bolåneräntor inom ett valt datumintervall."
+            summary = "Alla trender inom datumintervall",
+            description = "Analyserar alla förändringar mellan alla datapunkter."
     )
     @GetMapping("/trends/range")
     public List<RateTrendDto> getRateTrendsInRange(
@@ -132,8 +125,7 @@ public class RateAnalyticsController {
             @RequestParam LocalDate to,
             @RequestParam(required = false) RateType rateType
     ) {
-        List<RateTrend> trends = rateAnalyticsService.getRateTrendsInRange(from, to, rateType);
+        List<RateTrend> trends = analyticsService.getRateTrendsInRange(from, to, rateType);
         return trends.stream().map(RateTrendMapper::toDto).toList();
     }
-
 }
