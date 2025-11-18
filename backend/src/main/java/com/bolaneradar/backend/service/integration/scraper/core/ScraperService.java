@@ -5,8 +5,8 @@ import com.bolaneradar.backend.entity.core.MortgageRate;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.repository.BankRepository;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
-import com.bolaneradar.backend.service.integration.EmailService;
 import com.bolaneradar.backend.service.core.RateUpdateLogService;
+import com.bolaneradar.backend.service.integration.EmailService;
 import com.bolaneradar.backend.service.integration.scraper.api.BankScraper;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Hanterar skrapning av räntedata från olika banker.
- *
- * Ansvar:
- *  - Hitta korrekt scraper baserat på bankens namn
- *  - Köra skrapning för en eller flera banker
- *  - Undvika dubbletter (särskilt snitträntor)
- *  - Beräkna rateChange när räntor ändras
- *  - Logga uppdateringar
- *  - Skicka mejl vid fel
- */
 @Service
 public class ScraperService {
 
@@ -48,80 +37,78 @@ public class ScraperService {
         this.emailService = emailService;
     }
 
-    // =============================================================
-    // SKRAPA ALLA BANKER
-    // =============================================================
-    public void scrapeAllBanks() {
-        System.out.println("Startar skrapning av alla banker");
+    // ==========================================================
+    // PUBLIC API (Controller uses these)
+    // ==========================================================
 
-        List<Bank> banks = bankRepository.findAll();
-        List<String> failedBanks = new ArrayList<>();
+    public String scrapeSingleBank(String bankName) throws Exception {
+        ScraperResult result = runScrapeForBank(bankName);
 
-        for (Bank bank : banks) {
-            ScraperResult result = scrapeSingleBankResult(bank.getName());
-            if (!result.success()) failedBanks.add(bank.getName());
+        if (!result.success()) {
+            throw new Exception(result.error());
         }
 
-        if (!failedBanks.isEmpty()) {
+        return result.importedCount() + " räntor sparade för " + result.bankName();
+    }
+
+    public void scrapeAllBanks() {
+        List<String> failed = new ArrayList<>();
+
+        for (Bank bank : bankRepository.findAll()) {
+            ScraperResult r = runScrapeForBank(bank.getName());
+            if (!r.success()) {
+                failed.add(bank.getName());
+            }
+        }
+
+        if (!failed.isEmpty()) {
             emailService.sendErrorNotification(
                     "BolåneRadar – Fel vid scraping",
-                    "Följande banker misslyckades:\n- " + String.join("\n- ", failedBanks)
+                    "Följande banker misslyckades:\n- " + String.join("\n- ", failed)
             );
         }
-
-        System.out.println("Skrapning av alla banker slutförd");
     }
 
-    // =============================================================
-    // SKRAPA ENDA BANK (kastar exception vid fel)
-    // =============================================================
-    public String scrapeSingleBank(String bankName) throws Exception {
-        ScraperResult result = scrapeSingleBankResult(bankName);
+    // ==========================================================
+    // CORE LOGIC – ONLY place that scraping happens
+    // ==========================================================
 
-        if (result.success()) {
-            return result.importedCount() + " räntor sparade för " + result.bankName();
-        }
-
-        throw new Exception(result.error() != null ? result.error() : "Okänt fel vid scraping");
-    }
-
-    // =============================================================
-    // SKRAPA ENDA BANK (returnerar ScraperResult)
-    // =============================================================
-    public ScraperResult scrapeSingleBankResult(String bankName) {
+    public ScraperResult runScrapeForBank(String bankName) {
 
         long start = System.currentTimeMillis();
+        int savedCount = 0;
+        String error = null;
 
-        // 1. Hitta bank
-        Optional<Bank> optionalBank = bankRepository.findByNameIgnoreCase(bankName);
-        if (optionalBank.isEmpty()) {
-            long duration = System.currentTimeMillis() - start;
-            return new ScraperResult(bankName, 0, false, "Bank saknas: " + bankName, duration);
+        // 1. Fetch Bank
+        Optional<Bank> opt = bankRepository.findByNameIgnoreCase(bankName);
+        if (opt.isEmpty()) {
+            long dur = System.currentTimeMillis() - start;
+            return new ScraperResult(bankName, 0, false,
+                    "Ingen bank hittades med namn: " + bankName, dur);
         }
+        Bank bank = opt.get();
 
-        Bank bank = optionalBank.get();
-
-        // 2. Hitta scraper
+        // 2. Find matching scraper
         BankScraper scraper = getScraperForBank(bank);
         if (scraper == null) {
-            long duration = System.currentTimeMillis() - start;
-            return new ScraperResult(bank.getName(), 0, false, "Ingen scraper hittades", duration);
+            long dur = System.currentTimeMillis() - start;
+            rateUpdateLogService.logUpdate(bank, "ScraperService",
+                    0, false, "Ingen scraper hittades", dur);
+            return new ScraperResult(bank.getName(), 0, false,
+                    "Ingen scraper hittades", dur);
         }
 
         List<MortgageRate> finalRates = new ArrayList<>();
-        boolean success = false;
-        String error = null;
 
         try {
-            // 3. Kör scraping
-            List<MortgageRate> scrapedRates = scraper.scrapeRates(bank);
-
-            if (scrapedRates == null || scrapedRates.isEmpty()) {
-                throw new Exception("Inga räntor hittades för " + bank.getName());
+            // 3. Scrape
+            List<MortgageRate> scraped = scraper.scrapeRates(bank);
+            if (scraped == null || scraped.isEmpty()) {
+                throw new Exception("Inga räntor hittades");
             }
 
-            // 4. Jämför med databasen
-            for (MortgageRate newRate : scrapedRates) {
+            // 4. Filter logic (duplicates + rateChange)
+            for (MortgageRate newRate : scraped) {
 
                 List<MortgageRate> previous =
                         mortgageRateRepository.findByBankAndTermAndRateTypeOrderByEffectiveDateDesc(
@@ -130,41 +117,39 @@ public class ScraperService {
                                 newRate.getRateType()
                         );
 
-                if (!previous.isEmpty()) {
+                // AVERAGERATE duplicate skip
+                if (newRate.getRateType() == RateType.AVERAGERATE) {
 
-                    MortgageRate latest = previous.get(0);
+                    boolean duplicate = previous.stream().anyMatch(p ->
+                            p.getEffectiveDate().equals(newRate.getEffectiveDate()) &&
+                                    p.getRatePercent().compareTo(newRate.getRatePercent()) == 0
+                    );
 
-                    // =====================================================
-                    // 4A. FÖRHINDRA DUBLETTER FÖR SNITTRÄNTOR
-                    // =====================================================
-                    if (newRate.getRateType() == RateType.AVERAGERATE) {
-
-                        boolean exists = mortgageRateRepository
-                                .existsByBankAndTermAndRateTypeAndEffectiveDate(
-                                        newRate.getBank(),
-                                        newRate.getTerm(),
-                                        RateType.AVERAGERATE,
-                                        newRate.getEffectiveDate()
-                                );
-
-                        if (exists) {
-                            System.out.println(
-                                    "Hoppar över snittränta som redan finns: "
-                                            + bank.getName()
-                                            + " (" + newRate.getTerm() + ")"
-                                            + " " + newRate.getEffectiveDate()
-                            );
-                            continue;
-                        }
+                    if (duplicate) {
+                        continue;
                     }
 
-                    // 4B. Om datumet är nyare och räntan ändrat → sätt rateChange
-                    if (newRate.getEffectiveDate().isAfter(latest.getEffectiveDate())
-                            && newRate.getRatePercent().compareTo(latest.getRatePercent()) != 0) {
+                    boolean exists = mortgageRateRepository.existsByBankAndTermAndRateTypeAndEffectiveDate(
+                            newRate.getBank(),
+                            newRate.getTerm(),
+                            RateType.AVERAGERATE,
+                            newRate.getEffectiveDate()
+                    );
 
-                        newRate.setRateChange(
-                                newRate.getRatePercent().subtract(latest.getRatePercent())
-                        );
+                    if (exists) {
+                        continue;
+                    }
+                }
+
+                // Rate change logic
+                if (!previous.isEmpty()) {
+                    MortgageRate latest = previous.get(0);
+
+                    boolean isNewer = newRate.getEffectiveDate().isAfter(latest.getEffectiveDate());
+                    boolean changedValue = newRate.getRatePercent().compareTo(latest.getRatePercent()) != 0;
+
+                    if (isNewer && changedValue) {
+                        newRate.setRateChange(newRate.getRatePercent().subtract(latest.getRatePercent()));
                         newRate.setLastChangedDate(newRate.getEffectiveDate());
                     }
                 }
@@ -172,59 +157,60 @@ public class ScraperService {
                 finalRates.add(newRate);
             }
 
-            // 5. Spara nya rader
+            // Save if anything new
             if (!finalRates.isEmpty()) {
                 mortgageRateRepository.saveAll(finalRates);
+                savedCount = finalRates.size();
             }
-
-            success = true;
 
         } catch (Exception e) {
             error = e.getMessage();
         }
 
-        // 6. Logga resultat
         long duration = System.currentTimeMillis() - start;
 
+        // 5. Logging
         rateUpdateLogService.logUpdate(
                 bank,
                 "ScraperService",
-                finalRates.size(),
-                success,
+                savedCount,
+                error == null,
                 error,
                 duration
         );
 
+        // 6. Result return
         return new ScraperResult(
                 bank.getName(),
-                finalRates.size(),
-                success,
+                savedCount,
+                error == null,
                 error,
                 duration
         );
     }
 
-    // =============================================================
-    // Matcha rätt scraper
-    // =============================================================
+    // ==========================================================
+    // SCRAPER MATCHING
+    // ==========================================================
+
     public BankScraper getScraperForBank(Bank bank) {
-        String bankNameNorm = normalize(bank.getName());
+        String norm = normalize(bank.getName());
 
         return scrapers.stream()
                 .filter(s -> {
                     String simple = normalize(s.getClass().getSimpleName());
                     String display = normalize(s.toString());
-                    return simple.contains(bankNameNorm)
-                            || display.contains(bankNameNorm)
-                            || bankNameNorm.contains(simple);
+                    return simple.contains(norm)
+                            || display.contains(norm)
+                            || norm.contains(simple);
                 })
                 .findFirst()
                 .orElse(null);
     }
 
-    private String normalize(String text) {
-        if (text == null) return "";
-        return text.toLowerCase()
+    private String normalize(String t) {
+        if (t == null) return "";
+        return t.toLowerCase()
                 .replaceAll("\\s+", "")
                 .replace("å", "a")
                 .replace("ä", "a")
