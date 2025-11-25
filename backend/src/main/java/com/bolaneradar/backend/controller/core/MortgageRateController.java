@@ -3,6 +3,7 @@ package com.bolaneradar.backend.controller.core;
 import com.bolaneradar.backend.dto.core.MortgageRateDto;
 import com.bolaneradar.backend.dto.mapper.MortgageRateMapper;
 import com.bolaneradar.backend.entity.core.Bank;
+import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.service.core.BankService;
 import com.bolaneradar.backend.service.core.MortgageRateService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,6 +64,23 @@ public class MortgageRateController {
 
         return ResponseEntity.ok(dtos);
     }
+
+    // ======================================================
+    // GET /api/rates/latest?rateType=LISTRATE
+    // ======================================================
+    @Operation(
+            summary = "Hämta de senaste räntorna per bank och bindningstid",
+            description = "Returnerar de senaste räntorna för angiven RateType (LISTRATE eller AVERAGERATE)."
+    )
+    @GetMapping("/latest")
+    public List<MortgageRateDto> getLatestRatesByType(@RequestParam RateType rateType) {
+
+        return mortgageRateService.getLatestRatesByType(rateType)
+                .stream()
+                .map(MortgageRateMapper::toDto)
+                .toList();
+    }
+
 
     // ======================================================
     // POST /api/rates – skapa / uppdatera räntor
