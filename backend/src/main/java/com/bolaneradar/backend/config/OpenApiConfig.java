@@ -35,15 +35,16 @@ public class OpenApiConfig {
                         .description("""
                                 API för hantering av banker, bolåneräntor och trender.
 
-                                **Publika endpoints (GET)** är öppna för alla — exempelvis hämtning av banker och räntedata.
+                                **Publika endpoints (GET)**  
+                                Alla `GET /api/**`–anrop är öppna för alla.  
+                                Exempel: hämta banker, räntor och historik.
 
-                                **Skyddade endpoints** kräver inloggning via Basic Auth:
-                                • Alla `POST`- och `DELETE`-anrop  
-                                • Alla endpoints under `/api/admin/**`  
-                                • Alla endpoints under `/api/scrape/**` (även om de använder `GET`)  
+                                **Skyddade endpoints (Basic Auth krävs)**  
+                                Alla `POST`, `PUT` och `DELETE` mot `/api/**` kräver inloggning.  
+                                Alla endpoints under `/api/admin/**` kräver inloggning.
 
-                                Klicka på **Authorize**-knappen uppe till höger och logga in med dina adminuppgifter
-                                för att kunna använda dessa skyddade endpoints direkt i Swagger UI.
+                                Klicka på **Authorize** längst upp till höger
+                                och logga in med dina adminuppgifter för att använda skyddade endpoints.
                                 """)
                         .contact(new Contact()
                                 .name("Johnny Åström")

@@ -24,12 +24,14 @@ public class ScraperController {
     }
 
     // ============================================================
-    // GET /api/scrape/all  -> startar scraping för alla banker
+    // POST /api/scrape/all  -> startar scraping för alla banker
     // ============================================================
 
-    @Operation(summary = "Kör scraping för alla banker",
-            description = "Startar webbskrapning för samtliga registrerade banker.")
-    @GetMapping("/all")
+    @Operation(
+            summary = "Kör scraping för alla banker",
+            description = "Startar webbskrapning för samtliga registrerade banker."
+    )
+    @PostMapping("/all")
     public ResponseEntity<String> scrapeAllBanks() {
         try {
             scraperService.scrapeAllBanks();
@@ -41,12 +43,14 @@ public class ScraperController {
     }
 
     // ============================================================
-    // GET /api/scrape/{bankName}  -> scraping för en specifik bank (text)
+    // POST /api/scrape/{bankName} -> scraping för specifik bank
     // ============================================================
 
-    @Operation(summary = "Kör scraping för en specifik bank (text)",
-            description = "Startar webbskrapning för en viss bank och returnerar ett textmeddelande.")
-    @GetMapping("/{bankName}")
+    @Operation(
+            summary = "Kör scraping för en specifik bank (text)",
+            description = "Startar webbskrapning för en viss bank och returnerar ett textmeddelande."
+    )
+    @PostMapping("/{bankName}")
     public ResponseEntity<String> scrapeBankText(@PathVariable String bankName) {
         try {
             String resultMessage = scraperService.scrapeSingleBank(bankName);
