@@ -13,7 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -57,7 +57,7 @@ class ScraperControllerIT {
         doNothing().when(scraperService).scrapeAllBanks();
 
         // Act + Assert – vi anropar controllern och kontrollerar svaret
-        mockMvc.perform(get("/api/scrape/all"))
+        mockMvc.perform(post("/api/scrape/all"))
                 .andExpect(status().isOk()) // 200 OK
                 .andExpect(content().string("Scraping för alla banker slutförd"));
     }
@@ -73,7 +73,7 @@ class ScraperControllerIT {
                 .when(scraperService).scrapeAllBanks();
 
         // Act + Assert – vi anropar controllern och förväntar oss felhantering
-        mockMvc.perform(get("/api/scrape/all"))
+        mockMvc.perform(post("/api/scrape/all"))
                 .andExpect(status().isInternalServerError()) // 500 Internal Server Error
                 .andExpect(content().string("Ett fel uppstod vid scraping: Fel vid skrapning"));
     }
@@ -89,7 +89,7 @@ class ScraperControllerIT {
                 .thenReturn("3 räntor sparade för Swedbank");
 
         // Act + Assert – anropa endpointen /api/scrape/Swedbank
-        mockMvc.perform(get("/api/scrape/Swedbank"))
+        mockMvc.perform(post("/api/scrape/Swedbank"))
                 .andExpect(status().isOk()) // 200 OK
                 .andExpect(content().string("3 räntor sparade för Swedbank"));
     }
@@ -105,7 +105,7 @@ class ScraperControllerIT {
                 .thenThrow(new Exception("Timeout vid hämtning"));
 
         // Act + Assert – anropa endpointen /api/scrape/Nordea
-        mockMvc.perform(get("/api/scrape/Nordea"))
+        mockMvc.perform(post("/api/scrape/Nordea"))
                 .andExpect(status().isInternalServerError()) // 500 Internal Server Error
                 .andExpect(content().string("Fel vid scraping av Nordea: Timeout vid hämtning"));
     }
