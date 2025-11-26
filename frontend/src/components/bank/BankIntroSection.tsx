@@ -1,0 +1,79 @@
+import type { FC } from "react";
+import BankLogo from "./BankLogo";
+import { bankDisplayNames } from "../../config/bankDisplayNames";
+
+interface BankIntroSectionProps {
+    bankKey: string;
+    logoUrl: string;
+
+    description?: string;
+    uspItems?: string[];
+
+    primaryCtaLabel?: string;
+    secondaryCtaLabel?: string;
+
+    primaryCtaUrl?: string;
+    secondaryCtaUrl?: string;
+}
+
+const BankIntroSection: FC<BankIntroSectionProps> = ({
+         bankKey,
+         logoUrl,
+
+         description = "Här kommer en kortfattad sammanfattning om banken. Detta ersätts senare av dynamisk text från backend.",
+         uspItems = [
+             "USP placeholder – ersätts med dynamisk bankdata.",
+             "USP placeholder – t.ex. förmåner eller kundvillkor.",
+             "USP placeholder – t.ex. rådgivning eller digitala tjänster."
+         ],
+
+         primaryCtaLabel = "Gå till bankens bolånesida",
+
+         primaryCtaUrl = "#",
+     }) => {
+
+    const displayName = bankDisplayNames[bankKey] ?? bankKey;
+
+    return (
+        <div className="max-w-4xl mx-auto pt-10 pb-12 px-4">
+
+            {/* Logotyp */}
+            <div className="mb-6">
+                <BankLogo src={logoUrl} alt={displayName} bankKey={bankKey} />
+            </div>
+
+            {/* Banknamn */}
+            <h1 className="text-2xl font-semibold text-text-primary mb-3">
+                {displayName}
+            </h1>
+
+            {/* Beskrivning */}
+            <p className="text-text-secondary max-w-2xl leading-relaxed mb-6">
+                {description}
+            </p>
+
+            {/* USP-lista */}
+            <ul className="text-text-primary space-y-3 mb-8">
+                {uspItems.map((item, index) => (
+                    <li key={index}>{item}</li>
+                ))}
+            </ul>
+
+            {/* Knappar */}
+            <div className="flex gap-4 mt-4">
+                <a
+                    href={primaryCtaUrl}
+                    className="
+                        px-6 py-3 bg-primary text-white rounded-lg text-sm font-medium
+                        hover:bg-primary-hover active:bg-primary-active transition
+                    "
+                >
+                    {primaryCtaLabel}
+                </a>
+            </div>
+
+        </div>
+    );
+};
+
+export default BankIntroSection;

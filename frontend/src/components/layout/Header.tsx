@@ -18,9 +18,9 @@ export default function Header() {
             <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
 
                 {/* Logo */}
-                <div className="text-2xl font-bold text-primary">
+                <NavLink to="/" className="text-2xl font-bold text-primary hover:text-primary-hover transition">
                     BolåneRadar
-                </div>
+                </NavLink>
 
                 {/* Navigation Items */}
                 <ul className="flex gap-8 text-text-secondary">

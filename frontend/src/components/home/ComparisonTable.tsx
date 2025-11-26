@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import { NavLink } from "react-router-dom";
+import { bankKeyMap } from "../../config/bankKeyMap";
 
 interface ComparisonTableProps {
     activeTerm?: string; // not used yet
@@ -54,7 +55,7 @@ const ComparisonTable: FC<ComparisonTableProps> = () => {
                         <tr key={i} className="hover:bg-row-hover transition-colors">
                             <td className="px-4 py-3">
                                 <NavLink
-                                    to={`/bank/${row.bank.toLowerCase()}`}
+                                    to={`/bank/${bankKeyMap[row.bank]}`}
                                     className="text-primary hover:underline"
                                 >
                                     {row.bank}
