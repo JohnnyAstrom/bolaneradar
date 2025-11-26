@@ -20,9 +20,9 @@ const longTerms = [
 ];
 
 const TermSelector: FC<TermSelectorProps> = ({
-                                                 activeTerm,
-                                                 onSelectTerm,
-                                             }) => {
+         activeTerm,
+         onSelectTerm,
+     }) => {
     const renderGroup = (
         title: string,
         terms: { label: string; value: string }[]
@@ -32,19 +32,18 @@ const TermSelector: FC<TermSelectorProps> = ({
                 {title}
             </p>
 
-            <div className="flex gap-3 flex-wrap">
+            <div className="flex gap-3 flex-wrap justify-start">
                 {terms.map((t) => (
                     <button
                         key={t.value}
                         onClick={() => onSelectTerm(t.value)}
                         className={`
-              px-4 py-2 rounded-lg border transition-colors
-              ${
-                            activeTerm === t.value
-                                ? "bg-primary text-white border-primary"
-                                : "bg-white text-text-secondary border-border hover:bg-row-hover"
-                        }
-            `}
+                            px-4 py-2 rounded-lg border transition-colors min-w-[80px] text-center
+                            ${activeTerm === t.value
+                                                ? "bg-primary text-white border-primary"
+                                                : "bg-white text-text-secondary border-border hover:bg-row-hover"
+                                            }
+                        `}
                     >
                         {t.label}
                     </button>

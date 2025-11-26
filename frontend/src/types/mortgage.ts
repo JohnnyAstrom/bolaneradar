@@ -1,8 +1,7 @@
-export interface MortgageRate {
-    id: number;
+export interface MortgageRateComparison {
     bankName: string;
-    term: string;
-    rateType: string;
-    ratePercent: number;
-    effectiveDate: string;
+    listRate: number | null;
+    avgRate: number | null;
+    diff: number | null;
+    lastChanged: string | null;
 }
