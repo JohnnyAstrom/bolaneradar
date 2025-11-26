@@ -140,6 +140,25 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
             LocalDate effectiveDate
     );
 
+    // ========================================================================
+    // ==========    SENASTE RÄNTA FÖR BANK + TERM + RATE TYPE    ============
+    // ========================================================================
+
+    /**
+     * Hämtar den senaste (högsta effectiveDate) räntan
+     * för en specifik bank + bindningstid (term) + rateType (LISTRATE/AVERAGERATE).
+     *
+     * Spring Data JPA genererar automatiskt SQL:
+     *   SELECT ... ORDER BY effective_date DESC LIMIT 1
+     *
+     * Om banken inte har någon ränta för kombinationen returneras null.
+     */
+    MortgageRate findFirstByBankIdAndTermAndRateTypeOrderByEffectiveDateDesc(
+            Long bankId,
+            MortgageTerm term,
+            RateType rateType
+    );
+
 
     // ========================================================================
     // =============       SENASTE RÄNTOR PER RATE TYPE        =================
@@ -164,4 +183,35 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
     List<MortgageRate> findLatestRatesByType(
             @Param("rateType") RateType rateType
     );
+
+    // ========================================================================
+// ==========   GEMENSAM SNITTRÄNTA-MÅNAD FÖR ALLA BANKER   ===============
+// ========================================================================
+
+    /**
+     * Hämtar den senaste gemensamma snitträntemånaden (AVERAGERATE) för alla banker.
+     *
+     * Logiken:
+     *   - För varje bank hämtas den senaste snitträntan (MAX(effectiveDate))
+     *   - Eftersom alla banker publicerar snitträntor månadsvis
+     *     väljer vi den MINSTA av dessa datum.
+     *
+     * Resultatet är den månad som alla banker hunnit redovisa.
+     * Används bl.a. för att sätta rubriken "Snittränta (oktober 2025)".
+     *
+     * Returnerar:
+     *   - LocalDate (ex. 2025-10-01) om alla banker har data
+     *   - null om snitträntor saknas
+     */
+    @Query("""
+    SELECT MIN(latest_date) FROM (
+        SELECT MAX(m.effectiveDate) AS latest_date
+        FROM MortgageRate m
+        WHERE m.rateType = 'AVERAGERATE'
+          AND m.term = :term
+        GROUP BY m.bank.id
+    )
+""")
+    LocalDate findCommonEffectiveDateForAverageRates(@Param("term") MortgageTerm term);
+
 }

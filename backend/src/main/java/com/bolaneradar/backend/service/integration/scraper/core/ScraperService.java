@@ -107,7 +107,7 @@ public class ScraperService {
                 throw new Exception("Inga räntor hittades");
             }
 
-            // 4. Filter logic (duplicates + rateChange)
+// 4. Filter logic (duplicates + rateChange + lastChanged)
             for (MortgageRate newRate : scraped) {
 
                 List<MortgageRate> previous =
@@ -117,7 +117,7 @@ public class ScraperService {
                                 newRate.getRateType()
                         );
 
-                // AVERAGERATE duplicate skip
+                // ==== AVERAGERATE – undvik dubletter exakt efter datum ====
                 if (newRate.getRateType() == RateType.AVERAGERATE) {
 
                     boolean duplicate = previous.stream().anyMatch(p ->
@@ -126,36 +126,32 @@ public class ScraperService {
                     );
 
                     if (duplicate) {
-                        continue;
-                    }
-
-                    boolean exists = mortgageRateRepository.existsByBankAndTermAndRateTypeAndEffectiveDate(
-                            newRate.getBank(),
-                            newRate.getTerm(),
-                            RateType.AVERAGERATE,
-                            newRate.getEffectiveDate()
-                    );
-
-                    if (exists) {
-                        continue;
+                        continue; // hoppa över denna
                     }
                 }
 
-                // Rate change logic
+                // ==== LISTRATE – hantera rateChange + lastChanged (ALTERNATIV A) ====
                 if (!previous.isEmpty()) {
+
                     MortgageRate latest = previous.get(0);
 
-                    boolean isNewer = newRate.getEffectiveDate().isAfter(latest.getEffectiveDate());
-                    boolean changedValue = newRate.getRatePercent().compareTo(latest.getRatePercent()) != 0;
+                    boolean isNewerDate = newRate.getEffectiveDate().isAfter(latest.getEffectiveDate());
+                    boolean differentValue = newRate.getRatePercent().compareTo(latest.getRatePercent()) != 0;
 
-                    if (isNewer && changedValue) {
+                    if (isNewerDate && differentValue) {
+                        // Räntan ändras på riktigt
                         newRate.setRateChange(newRate.getRatePercent().subtract(latest.getRatePercent()));
                         newRate.setLastChangedDate(newRate.getEffectiveDate());
+                    } else {
+                        // Räntan är oförändrad → behåll senaste lastChangedDate
+                        newRate.setRateChange(latest.getRateChange());
+                        newRate.setLastChangedDate(latest.getLastChangedDate());
                     }
                 }
 
                 finalRates.add(newRate);
             }
+
 
             // Save if anything new
             if (!finalRates.isEmpty()) {
