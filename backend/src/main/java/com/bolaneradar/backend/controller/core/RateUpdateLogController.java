@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller för att hämta uppdateringsloggar för bolåneräntor.
@@ -101,4 +103,24 @@ public class RateUpdateLogController {
         // Returnera lista
         return dtos;
     }
+
+    // ============================================================
+    // GET /api/rates/updates/latest/global  -> senaste scrape totalt
+    // ============================================================
+
+    @Operation(
+            summary = "Hämta senaste globala ränteuppdateringen",
+            description = "Returnerar det senaste skrapningstillfället över alla banker."
+    )
+    @GetMapping("/latest/global")
+    public ResponseEntity<Map<String, String>> getLatestGlobalUpdate() {
+
+        var latest = rateUpdateLogService.getLatestGlobalUpdate();
+
+        Map<String, String> response = new HashMap<>();
+        response.put("latestScrape", latest != null ? latest.toString() : null);
+
+        return ResponseEntity.ok(response);
+    }
+
 }

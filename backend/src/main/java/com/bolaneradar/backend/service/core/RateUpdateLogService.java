@@ -118,6 +118,18 @@ public class RateUpdateLogService {
                 .toList();
     }
 
+    public LocalDateTime getLatestGlobalUpdate() {
+        var latestPerBank = getLatestLogsPerBank();
+
+        return latestPerBank.stream()
+                .map(RateUpdateLog::getOccurredAt)
+                .max(LocalDateTime::compareTo)
+                .orElse(null);
+    }
+
+
+
+
     // ===========================================================
     // ===================     DELETE LOGS     ===================
     // ===========================================================
