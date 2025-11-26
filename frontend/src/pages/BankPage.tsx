@@ -1,69 +1,78 @@
 import type { FC } from "react";
 import { useParams } from "react-router-dom";
+
 import PageWrapper from "../components/layout/PageWrapper";
 import Section from "../components/layout/Section";
 
-// Map bankName → logo path
+import BankIntroSection from "../components/bank/BankIntroSection";
+import BankCurrentRatesTable from "../components/bank/BankCurrentRatesTable";
+import BankGraphSection from "../components/bank/BankGraphSection";
+
+import { bankDisplayNames } from "../config/bankDisplayNames";
+
+// Map bankKey → logo path
 const logoMap: Record<string, string> = {
     swedbank: "/logos/swedbank.svg",
     seb: "/logos/seb.svg",
     nordea: "/logos/nordea.svg",
     handelsbanken: "/logos/handelsbanken.svg",
-    länsförsäkringarbank: "/logos/lansforsakringar.svg",
+    lansforsakringarbank: "/logos/lansforsakringar.svg",
     sbab: "/logos/sbab.svg",
-    skandiabanken: "/logos/skandiabanken.png",
+    skandiabanken: "/logos/skandiabanken.svg",
     danskebank: "/logos/danskebank.svg",
     icabanken: "/logos/icabanken.svg",
     landshypotekbank: "/logos/landshypotek.svg",
     ikanobank: "/logos/ikanobank.png",
-    ålandsbanken: "/logos/alandsbanken.png",
+    alandsbanken: "/logos/alandsbanken.svg",
 };
 
 const BankPage: FC = () => {
     const { bankName } = useParams();
 
-    const key = bankName ? bankName.toLowerCase().replace(/\s+/g, "") : "";
-    const logoUrl = logoMap[key];
+    if (!bankName) {
+        return (
+            <PageWrapper>
+                <Section>
+                    <p className="text-red-600">Kunde inte hitta banken.</p>
+                </Section>
+            </PageWrapper>
+        );
+    }
 
-    const displayName =
-        bankName ? bankName.charAt(0).toUpperCase() + bankName.slice(1) : "";
+    const bankKey = bankName;
+    const displayName = bankDisplayNames[bankKey] ?? bankKey;
+    const logoUrl = logoMap[bankKey];
 
     return (
         <PageWrapper>
 
+            {/* --- Bank intro sektion (egen sektion, ingen card) --- */}
             <Section>
+                <BankIntroSection
+                    bankKey={bankKey}
+                    logoUrl={logoUrl}
+                    description={`${displayName} är en etablerad svensk bank. Här kommer senare dynamisk fakta.`}
+                    uspItems={[
+                        "Placeholder USP 1",
+                        "Placeholder USP 2",
+                        "Placeholder USP 3",
+                    ]}
+                    primaryCtaLabel={`Gå till ${displayName}s bolånesida`}
+                    secondaryCtaLabel={`Läs mer om ${displayName}`}
+                />
+            </Section>
 
-                {/* Bank Header */}
-                <div className="mb-6 flex items-center gap-4">
+            {/* --- Card med räntor + graf --- */}
+            <Section>
+                <div className="border border-border rounded-lg p-6 bg-white">
 
-                    {/* Logo */}
-                    {logoUrl && (
-                        <img
-                            src={logoUrl}
-                            alt={`${displayName} logotyp`}
-                            className="w-16 h-16 object-contain rounded"
-                        />
-                    )}
+                    <BankCurrentRatesTable />
 
-                    <div>
-                        <h1 className="text-3xl font-bold text-text-primary mb-1">
-                            {displayName}
-                        </h1>
+                    <div className="my-10 border-t border-border" />
 
-                        <p className="text-text-secondary text-sm max-w-2xl">
-                            Här visas information om räntor, utveckling, förändringar och
-                            snitträntor för {displayName}. Denna sida kommer senare inkludera:
-                            historik, trender, grafer och alla bindningstider.
-                        </p>
-                    </div>
+                    <BankGraphSection />
 
                 </div>
-
-                {/* Placeholder content block */}
-                <div className="border border-border rounded-lg p-6 bg-white text-text-secondary">
-                    <p>Innehåll kommer snart: historikdiagram, snitträntor och detaljerad data.</p>
-                </div>
-
             </Section>
 
         </PageWrapper>
