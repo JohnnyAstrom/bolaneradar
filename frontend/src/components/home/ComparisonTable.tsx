@@ -150,11 +150,11 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
             <div className="overflow-x-auto border border-border rounded-lg">
                 <table className="min-w-full bg-white">
 
-                    <thead className="bg-bg-light text-text-secondary">
+                    <thead className="bg-bg-light text-text-primary">
                     <tr>
                         {/* Bank */}
                         <th
-                            className="px-4 py-3 text-left font-medium cursor-pointer select-none"
+                            className="px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("bankName")}
                         >
                             Bank {sortIcon("bankName")}
@@ -162,7 +162,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
 
                         {/* Listränta */}
                         <th
-                            className="px-4 py-3 text-left font-medium cursor-pointer select-none"
+                            className="px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("listRate")}
                         >
                             Listränta {sortIcon("listRate")}
@@ -170,7 +170,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
 
                         {/* Förändring */}
                         <th
-                            className="px-4 py-3 text-left font-medium cursor-pointer select-none"
+                            className="px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("diff")}
                         >
                             Förändring {sortIcon("diff")}
@@ -178,7 +178,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
 
                         {/* Snittränta */}
                         <th
-                            className="px-4 py-3 text-left font-medium cursor-pointer select-none"
+                            className="px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("avgRate")}
                         >
                             Snittränta{" "}
@@ -189,7 +189,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
 
                         {/* Senast ändrad */}
                         <th
-                            className="px-4 py-3 text-left font-medium cursor-pointer select-none"
+                            className="px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("lastChanged")}
                         >
                             Senast ändrad {sortIcon("lastChanged")}

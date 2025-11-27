@@ -185,8 +185,8 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
     );
 
     // ========================================================================
-// ==========   GEMENSAM SNITTRÄNTA-MÅNAD FÖR ALLA BANKER   ===============
-// ========================================================================
+    // ==========   GEMENSAM SNITTRÄNTA-MÅNAD FÖR ALLA BANKER   ===============
+    // ========================================================================
 
     /**
      * Hämtar den senaste gemensamma snitträntemånaden (AVERAGERATE) för alla banker.
@@ -211,7 +211,67 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
           AND m.term = :term
         GROUP BY m.bank.id
     )
-""")
-    LocalDate findCommonEffectiveDateForAverageRates(@Param("term") MortgageTerm term);
+    """)
+        LocalDate findCommonEffectiveDateForAverageRates(@Param("term") MortgageTerm term);
 
+    // ========================================================================
+// ==============     BANKENS SENASTE SNITTRÄNTA-MÅNAD     =================
+// ========================================================================
+
+    /**
+     * Hämtar den senaste snitträntan (AVERAGERATE) för en specifik bank.
+     *
+     * Logik:
+     *  - Varje snittränta har ett effectiveDate (t.ex. 2025-10-01)
+     *  - Vi tar MAX(effectiveDate) för banken
+     *
+     * Resultat:
+     *  - Returnerar t.ex. 2025-10-01 för Swedbank
+     *  - Används av Bank-sidan för att visa "Snittränta (okt 2025)"
+     *
+     * Returnerar:
+     *  - LocalDate (senaste datumet)
+     *  - null om banken inte har några snitträntor alls
+     */
+    @Query("""
+    SELECT MAX(m.effectiveDate)
+    FROM MortgageRate m
+    WHERE m.bank.id = :bankId
+      AND m.rateType = 'AVERAGERATE'
+""")
+    LocalDate findLatestAverageDateForBank(@Param("bankId") Long bankId);
+
+
+// ========================================================================
+// ===========  SNITTRÄNTA FÖR BANK + TERM INOM EN SPECIFIK MÅNAD  =========
+// ========================================================================
+
+    /**
+     * Hämtar snittränta (AVERAGERATE) för en bank och en viss bindningstid,
+     * inom en given månad.
+     *
+     * Logik:
+     *  - monthStart = första dagen i månaden (t.ex. 2025-10-01)
+     *  - monthEnd   = nästa månads första dag (t.ex. 2025-11-01)
+     *
+     * Om banken saknar snittränta för just den månaden:
+     *  - returneras null (exempel: 9 år saknas i oktober 2025)
+     *
+     * Används av Bank-sidan för att visa avgRate per term.
+     */
+    @Query("""
+    SELECT m FROM MortgageRate m
+    WHERE m.bank.id = :bankId
+      AND m.term = :term
+      AND m.rateType = 'AVERAGERATE'
+      AND m.effectiveDate >= :monthStart
+      AND m.effectiveDate < :monthEnd
+    ORDER BY m.effectiveDate DESC
+    """)
+    MortgageRate findAverageRateForBankAndTermAndMonth(
+            @Param("bankId") Long bankId,
+            @Param("term") MortgageTerm term,
+            @Param("monthStart") LocalDate monthStart,
+            @Param("monthEnd") LocalDate monthEnd
+    );
 }

@@ -1,73 +1,131 @@
-import type { FC } from "react";
+/**
+ * BankCurrentRatesTable.tsx
+ *
+ * Visar bindningstider + listränta + förändring + snittränta.
+ * Listränta färgkodas exakt som i ComparisonTable:
+ *
+ *  - diff < 0 → grön badge, pil ner (▼)
+ *  - diff > 0 → röd badge, pil upp (▲)
+ */
 
-const tableHeaders = [
+import type { FC } from "react";
+import type { BankRateRow } from "../../client/bankApi";
+
+interface Props {
+    rows: BankRateRow[];
+    averageMonthFormatted: string | null;
+}
+
+// Dynamisk rubrik för snitträntan
+const makeHeaders = (averageMonthFormatted: string | null) => [
     "Bindningstid",
     "Listränta",
     "Förändring",
-    "Snittränta",
+    averageMonthFormatted
+        ? `Snittränta (${averageMonthFormatted})`
+        : "Snittränta",
     "Senast ändrad",
 ];
 
-const dummyRates = [
-    { term: "3 mån", list: "3.79%", change: "-0.10%", changeClass: "text-positive", avg: "2.72%", date: "2025-01-20" },
-    { term: "1 år", list: "3.34%", change: "+0.10%", changeClass: "text-negative", avg: "2.72%", date: "2025-01-25" },
-    { term: "2 år", list: "3.39%", change: "+0.10%", changeClass: "text-negative", avg: "2.72%", date: "2025-01-30" },
-    { term: "3 år", list: "3.49%", change: "-0.10%", changeClass: "text-positive", avg: "2.72%", date: "2025-01-20" },
-    { term: "4 år", list: "3.64%", change: "-0.10%", changeClass: "text-positive", avg: "2.72%", date: "2025-01-20" },
-    { term: "5 år", list: "3.79%", change: "+0.10%", changeClass: "text-negative", avg: "2.72%", date: "2025-01-20" },
-    { term: "6 år", list: "3.99%", change: "-0.10%", changeClass: "text-positive", avg: "2.72%", date: "2025-01-20" },
-    { term: "7 år", list: "3.99%", change: "-0.10%", changeClass: "text-positive", avg: "2.72%", date: "2025-01-20" },
-    { term: "8 år", list: "3.99%", change: "-0.10%", changeClass: "text-positive", avg: "2.72%", date: "2025-01-20" },
-    { term: "9 år", list: "3.99%", change: "-0.10%", changeClass: "text-positive", avg: "2.72%", date: "2025-01-20" },
-    { term: "10 år", list: "3.99%", change: "-0.10%", changeClass: "text-positive", avg: "2.72%", date: "2025-01-20" },
-];
-
-const BankCurrentRatesTable: FC = () => {
+const BankCurrentRatesTable: FC<Props> = ({ rows, averageMonthFormatted }) => {
     return (
-        <div className="mt-10">
-
-            {/* Titel */}
-            <h2 className="text-xl font-semibold text-text-primary mb-4">
+        <div>
+            <h2 className="text-2xl font-semibold text-text-primary mb-5">
                 Aktuella bolåneräntor
             </h2>
 
-            {/* Tabell */}
             <div className="overflow-x-auto border border-border rounded-lg bg-white">
                 <table className="min-w-full">
 
-                    {/* Header */}
-                    <thead className="bg-bg-light text-text-secondary">
+                    {/* Kolumnrubriker */}
+                    <thead className="bg-bg-light text-text-primary">
                     <tr>
-                        {tableHeaders.map((header) => (
+                        {makeHeaders(averageMonthFormatted).map((h) => (
                             <th
-                                key={header}
-                                className="px-4 py-3 text-left font-medium"
+                                key={h}
+                                className="px-4 py-3 text-left"
                             >
-                                {header}
+                                {h}
                             </th>
                         ))}
                     </tr>
                     </thead>
 
-                    {/* Body */}
+                    {/* Tabellens rader */}
                     <tbody className="text-text-primary">
-                    {dummyRates.map((row, i) => (
-                        <tr
-                            key={i}
-                            className="hover:bg-row-hover transition-colors"
-                        >
-                            <td className="px-4 py-3">{row.term}</td>
-                            <td className="px-4 py-3">{row.list}</td>
-                            <td className={`px-4 py-3 ${row.changeClass}`}>{row.change}</td>
-                            <td className="px-4 py-3">{row.avg}</td>
-                            <td className="px-4 py-3">{row.date}</td>
-                        </tr>
-                    ))}
-                    </tbody>
 
+                    {rows.map((row, index) => {
+                        const diff = row.change;
+
+                        // Badge-färglogik exakt som ComparisonTable
+                        const rateClass =
+                            diff == null
+                                ? "bg-gray-100 text-gray-700"
+                                : diff < 0
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-red-100 text-red-700";
+
+                        return (
+                            <tr
+                                key={index}
+                                className="hover:bg-row-hover transition-colors"
+                            >
+                                {/* Bindningstid */}
+                                <td className="px-4 py-3">{row.term}</td>
+
+                                {/* Listränta – badge med färg & pil */}
+                                <td className="px-4 py-3">
+                                    {row.currentRate !== null ? (
+                                        <span
+                                            className={`
+                                                inline-flex items-center gap-1
+                                                px-2 h-[28px] rounded-xl
+                                                text-sm font-medium ${rateClass}
+                                            `}
+                                        >
+                                            {row.currentRate}%
+                                        </span>
+                                    ) : (
+                                        "–"
+                                    )}
+                                </td>
+
+                                {/* Förändring – badge med pil */}
+                                <td className="px-4 py-3">
+                                    {diff == null ? (
+                                        "–"
+                                    ) : (
+                                        <span
+                                            className={`
+                                                inline-flex items-center gap-1
+                                                px-2 h-[28px] rounded-xl text-sm font-medium
+                                                ${diff < 0
+                                                ? "bg-green-100 text-green-700"
+                                                : "bg-red-100 text-red-700"}
+                                            `}
+                                        >
+                                            {diff < 0 ? "▼" : "▲"}{" "}
+                                            {Math.abs(diff).toFixed(2)}%
+                                        </span>
+                                    )}
+                                </td>
+
+                                {/* Snittränta */}
+                                <td className="px-4 py-3">
+                                    {row.avgRate !== null ? `${row.avgRate}%` : "–"}
+                                </td>
+
+                                {/* Senast ändrad */}
+                                <td className="px-4 py-3">
+                                    {row.lastChanged ?? "–"}
+                                </td>
+                            </tr>
+                        );
+                    })}
+
+                    </tbody>
                 </table>
             </div>
-
         </div>
     );
 };
