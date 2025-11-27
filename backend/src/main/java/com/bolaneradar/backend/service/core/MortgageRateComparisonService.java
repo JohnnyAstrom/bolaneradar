@@ -29,78 +29,76 @@ public class MortgageRateComparisonService {
     }
 
     /**
-     * Returnerar ett objekt som innehåller:
-     *   - averageMonth (YYYY-MM-01)
-     *   - averageMonthFormatted ("okt 2025")
-     *   - rows (lista av bankradsdata)
+     * Huvudfunktion som hämtar och bygger data för räntetabellen.
      */
     public Map<String, Object> getComparisonDataFull(String termCode) {
 
-        MortgageTerm term = mapToTerm(termCode);
+        // 1. Översätt "3m" → MortgageTerm.VARIABLE_3M
+        MortgageTerm term = mapTermCode(termCode);
 
+        // 2. Hämta alla banker
         List<Bank> banks = bankRepository.findAll();
 
+        // 3. Förbered variabler som ska fyllas i loopen
         List<MortgageRateComparisonDto> rows = new ArrayList<>();
+        LocalDate commonMonth = null;
 
-        LocalDate averageMonth = null;
-
+        // ============================================================
+        // 4. Hämta data per bank
+        // ============================================================
         for (Bank bank : banks) {
 
-            // Hämta senaste LIST
-            MortgageRate listRate =
+            // a) Senaste listränta
+            MortgageRate latestListRate =
                     rateRepository.findFirstByBankIdAndTermAndRateTypeOrderByEffectiveDateDesc(
                             bank.getId(), term, RateType.LISTRATE
                     );
 
-            // Hämta senaste AVERAGE
-            MortgageRate avgRate =
+            // b) Senaste snittränta
+            MortgageRate latestAverageRate =
                     rateRepository.findFirstByBankIdAndTermAndRateTypeOrderByEffectiveDateDesc(
                             bank.getId(), term, RateType.AVERAGERATE
                     );
 
-            // Spara vilken månad snitträntan gäller
-            if (avgRate != null && averageMonth == null) {
-                averageMonth = avgRate.getEffectiveDate().withDayOfMonth(1);
+            // c) Sätt gemensam snitträntemånad (för rubriken)
+            if (latestAverageRate != null && commonMonth == null) {
+                commonMonth = latestAverageRate.getEffectiveDate().withDayOfMonth(1);
             }
 
-            // Diff & lastChanged direkt från databasen
-            Double diff = listRate != null && listRate.getRateChange() != null
-                    ? listRate.getRateChange().doubleValue()
-                    : null;
+            // d) Hämta diff och lastChanged
+            Double diff = extractDiff(latestListRate);
+            LocalDate lastChanged = extractLastChanged(latestListRate);
 
-            LocalDate lastChanged = listRate != null
-                    ? listRate.getLastChangedDate()
-                    : null;
+            // e) Bygg radens DTO
+            MortgageRateComparisonDto dto =
+                    MortgageRateComparisonMapper.toDto(
+                            bank.getName(),
+                            latestListRate,
+                            latestAverageRate,
+                            diff,
+                            lastChanged
+                    );
 
-            rows.add(MortgageRateComparisonMapper.toDto(
-                    bank.getName(),
-                    listRate,
-                    avgRate,
-                    diff,
-                    lastChanged
-            ));
+            rows.add(dto);
         }
 
-        // Format: "okt 2025"
-        String formattedMonth = null;
-        if (averageMonth != null) {
-            formattedMonth = averageMonth
-                    .getMonth()
-                    .getDisplayName(TextStyle.SHORT, new Locale("sv"))
-                    + " " + averageMonth.getYear();
-        }
+        // ============================================================
+        // 5. Bygg responsobjektet till frontend
+        // ============================================================
+        Map<String, Object> result = new HashMap<>();
 
-        // Skapa response-objekt till frontend
-        Map<String, Object> response = new HashMap<>();
-        response.put("averageMonth", averageMonth != null ? averageMonth.toString() : null);
-        response.put("averageMonthFormatted", formattedMonth);
-        response.put("rows", rows);
+        result.put("averageMonth", commonMonth);
+        result.put("averageMonthFormatted", formatMonth(commonMonth));
+        result.put("rows", rows);
 
-        return response;
+        return result;
     }
 
+    // ------------------------------------------------------------
+    // Hjälpfunktioner (gör huvudloopen mycket lättare att läsa)
+    // ------------------------------------------------------------
 
-    private MortgageTerm mapToTerm(String code) {
+    private MortgageTerm mapTermCode(String code) {
         return switch (code.toLowerCase()) {
             case "3m" -> MortgageTerm.VARIABLE_3M;
             case "1y" -> MortgageTerm.FIXED_1Y;
@@ -112,5 +110,50 @@ public class MortgageRateComparisonService {
             case "10y" -> MortgageTerm.FIXED_10Y;
             default -> throw new IllegalArgumentException("Unknown mortgage term: " + code);
         };
+    }
+
+    private Double extractDiff(MortgageRate listRate)
+    {
+        if (listRate == null)
+        {
+            return null;
+        }
+
+        if (listRate.getRateChange() == null)
+        {
+            return null;
+        }
+
+        return listRate.getRateChange().doubleValue();
+    }
+
+
+    private LocalDate extractLastChanged(MortgageRate listRate)
+    {
+        if (listRate == null)
+        {
+            return null;
+        }
+
+        if (listRate.getLastChangedDate() == null)
+        {
+            return null;
+        }
+
+        return listRate.getLastChangedDate();
+    }
+
+    private String formatMonth(LocalDate date)
+    {
+        if (date == null)
+        {
+            return null;
+        }
+
+        String monthName = date
+                .getMonth()
+                .getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("sv"));
+
+        return monthName + " " + date.getYear();
     }
 }
