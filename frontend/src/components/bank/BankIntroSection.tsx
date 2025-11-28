@@ -18,37 +18,35 @@ interface BankIntroSectionProps {
 }
 
 const BankIntroSection: FC<BankIntroSectionProps> = ({
-                                                         bankKey,
-                                                         logoUrl,
+         bankKey,
+         logoUrl,
+         description = "Här kommer en kortfattad sammanfattning om banken. Detta ersätts senare av dynamisk text från backend.",
+         uspItems = [
+             "USP placeholder – ersätts med dynamisk bankdata.",
+             "USP placeholder – t.ex. förmåner eller kundvillkor.",
+             "USP placeholder – t.ex. rådgivning eller digitala tjänster."
+         ],
 
-                                                         description = "Här kommer en kortfattad sammanfattning om banken. Detta ersätts senare av dynamisk text från backend.",
-                                                         uspItems = [
-                                                             "USP placeholder – ersätts med dynamisk bankdata.",
-                                                             "USP placeholder – t.ex. förmåner eller kundvillkor.",
-                                                             "USP placeholder – t.ex. rådgivning eller digitala tjänster."
-                                                         ],
+         primaryCtaLabel = "Gå till bankens bolånesida",
+         primaryCtaUrl = "#",
 
-                                                         primaryCtaLabel = "Gå till bankens bolånesida",
-                                                         primaryCtaUrl = "#",
-
-                                                         secondaryCtaLabel,
-                                                         secondaryCtaUrl,
-                                                     }) => {
+         secondaryCtaLabel,
+         secondaryCtaUrl,
+     }) => {
 
     const displayName = bankDisplayNames[bankKey] ?? bankKey;
 
     return (
-        <div className="max-w-4xl mx-auto pt-10 pb-12 px-4">
+        <div className="
+            max-w-4xl mx-auto
+            pt-0 pb-0 px-0     /* mobil */
+            sm:pt-10 sm:pb-12 sm:px-4  /* desktop */
+        ">
 
             {/* Logotyp */}
-            <div className="mb-6">
+            <div>
                 <BankLogo src={logoUrl} alt={displayName} bankKey={bankKey} />
             </div>
-
-            {/* Banknamn */}
-            <h1 className="text-2xl font-semibold text-text-primary mb-3">
-                {displayName}
-            </h1>
 
             {/* Beskrivning */}
             <p className="text-text-secondary max-w-2xl leading-relaxed mb-6">
