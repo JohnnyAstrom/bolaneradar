@@ -16,6 +16,7 @@ import { getBankRates } from "../client/bankApi";
 import type { BankRateResponse } from "../client/bankApi";
 
 import { useBankIntro } from "../hooks/useBankIntro";
+import BankDetailsSection from "../components/bank/BankDetailsSection.tsx";
 
 /**
  * Karta över logotyper per bank.
@@ -135,10 +136,6 @@ const BankPage: FC = () => {
                         logoUrl={logoUrl}
                         description={introData.description}
                         uspItems={introData.uspItems}
-                        primaryCtaLabel={introData.primaryCtaLabel}
-                        primaryCtaUrl={introData.primaryCtaUrl}
-                        secondaryCtaLabel={introData.secondaryCtaLabel}
-                        secondaryCtaUrl={introData.secondaryCtaUrl}
                     />
                 ) : (
                     <p className="text-red-600">
@@ -183,6 +180,11 @@ const BankPage: FC = () => {
                         <BankGraphSection bankName={bankName} />
                     </div>
                 </div>
+            </Section>
+
+            {/* Bankdetails */}
+            <Section>
+                <BankDetailsSection bankKey={urlKey!} />
             </Section>
 
         </PageWrapper>
