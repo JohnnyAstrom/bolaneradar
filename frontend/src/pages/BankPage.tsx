@@ -33,19 +33,14 @@ const logoMap: Record<string, string> = {
 const BankPage: FC = () => {
     const { bankName } = useParams();
 
-    // -----------------------
-    // Hooks måste ligga här ↑
-    // -----------------------
-
     const [data, setData] = useState<BankRateResponse | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // Får vi ingen bankName → vi avbryter senare, men hookarna körs först
     const urlKey = bankName?.toLowerCase() ?? null;
     const realBankName = urlKey ? bankNameMap[urlKey] : null;
 
     useEffect(() => {
-        let isMounted = true; // skydd mot state-uppdatering efter unmount
+        let isMounted = true;
 
         const load = async () => {
             if (!realBankName) {
@@ -62,22 +57,13 @@ const BankPage: FC = () => {
         };
 
         load();
-
-        return () => {
-            isMounted = false;
-        };
+        return () => { isMounted = false; };
     }, [realBankName]);
-
-    // -----------------------
-    // Tidiga returns efter hooks
-    // -----------------------
 
     if (!bankName) {
         return (
             <PageWrapper>
-                <Section>
-                    <p className="text-red-600">Kunde inte hitta banken.</p>
-                </Section>
+                <Section><p className="text-red-600">Kunde inte hitta banken.</p></Section>
             </PageWrapper>
         );
     }
@@ -85,9 +71,7 @@ const BankPage: FC = () => {
     if (loading) {
         return (
             <PageWrapper>
-                <Section>
-                    <p>Laddar...</p>
-                </Section>
+                <Section><p>Laddar...</p></Section>
             </PageWrapper>
         );
     }
@@ -95,47 +79,57 @@ const BankPage: FC = () => {
     if (!data) {
         return (
             <PageWrapper>
-                <Section>
-                    <p className="text-red-600">Kunde inte läsa bankens räntedata.</p>
-                </Section>
+                <Section><p className="text-red-600">Kunde inte läsa bankens räntedata.</p></Section>
             </PageWrapper>
         );
     }
 
-    // Övriga UI-variabler
     const displayName = bankDisplayNames[urlKey!] ?? realBankName ?? urlKey!;
     const logoUrl = logoMap[urlKey!];
 
     return (
         <PageWrapper>
+
+            {/* INTRO */}
             <Section>
                 <BankIntroSection
                     bankKey={urlKey!}
                     logoUrl={logoUrl}
                     description={`${displayName} är en etablerad svensk bank. Här kommer senare dynamisk fakta.`}
-                    uspItems={[
-                        "Placeholder USP 1",
-                        "Placeholder USP 2",
-                        "Placeholder USP 3",
-                    ]}
+                    uspItems={["Placeholder USP 1", "Placeholder USP 2", "Placeholder USP 3"]}
                     primaryCtaLabel={`Gå till ${displayName}s bolånesida`}
                     secondaryCtaLabel={`Läs mer om ${displayName}`}
                 />
             </Section>
 
+            {/* RÄNTOR + GRAF */}
             <Section>
-                <div className="border border-border rounded-lg p-6 bg-white">
 
+                <div
+                    className="
+                    w-full max-w-full mx-auto
+                    p-0 bg-transparent border-none rounded-none
+                    sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
+                    sm:max-w-2xl
+                    md:max-w-3xl
+                    lg:max-w-4xl
+                "
+                >
+
+                {/* Aktuella räntor */}
                     <BankCurrentRatesTable
                         rows={data.rows}
                         averageMonthFormatted={data.monthFormatted}
                     />
 
-                    <div className="my-10 border-t border-border" />
+                    <div className="my-8 border-t border-border" />
 
-                    <BankGraphSection />
-
+                    {/* Graf — nu får den full mobilbredd */}
+                    <div className="w-full">
+                        <BankGraphSection bankName={bankName} />
+                    </div>
                 </div>
+
             </Section>
         </PageWrapper>
     );

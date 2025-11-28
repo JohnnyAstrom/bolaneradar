@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import BankLogo from "./BankLogo";
 import { bankDisplayNames } from "../../config/bankDisplayNames";
+import { Check } from "lucide-react";
 
 interface BankIntroSectionProps {
     bankKey: string;
@@ -17,20 +18,22 @@ interface BankIntroSectionProps {
 }
 
 const BankIntroSection: FC<BankIntroSectionProps> = ({
-         bankKey,
-         logoUrl,
+                                                         bankKey,
+                                                         logoUrl,
 
-         description = "Här kommer en kortfattad sammanfattning om banken. Detta ersätts senare av dynamisk text från backend.",
-         uspItems = [
-             "USP placeholder – ersätts med dynamisk bankdata.",
-             "USP placeholder – t.ex. förmåner eller kundvillkor.",
-             "USP placeholder – t.ex. rådgivning eller digitala tjänster."
-         ],
+                                                         description = "Här kommer en kortfattad sammanfattning om banken. Detta ersätts senare av dynamisk text från backend.",
+                                                         uspItems = [
+                                                             "USP placeholder – ersätts med dynamisk bankdata.",
+                                                             "USP placeholder – t.ex. förmåner eller kundvillkor.",
+                                                             "USP placeholder – t.ex. rådgivning eller digitala tjänster."
+                                                         ],
 
-         primaryCtaLabel = "Gå till bankens bolånesida",
+                                                         primaryCtaLabel = "Gå till bankens bolånesida",
+                                                         primaryCtaUrl = "#",
 
-         primaryCtaUrl = "#",
-     }) => {
+                                                         secondaryCtaLabel,
+                                                         secondaryCtaUrl,
+                                                     }) => {
 
     const displayName = bankDisplayNames[bankKey] ?? bankKey;
 
@@ -53,14 +56,18 @@ const BankIntroSection: FC<BankIntroSectionProps> = ({
             </p>
 
             {/* USP-lista */}
-            <ul className="text-text-primary space-y-3 mb-8">
+            <ul className="space-y-3 mb-8">
                 {uspItems.map((item, index) => (
-                    <li key={index}>{item}</li>
+                    <li key={index} className="flex items-start gap-2 text-text-primary">
+                        <Check size={18} className="text-primary mt-1" />
+                        <span>{item}</span>
+                    </li>
                 ))}
             </ul>
 
             {/* Knappar */}
-            <div className="flex gap-4 mt-4">
+            <div className="flex gap-4 mt-4 flex-wrap">
+                {/* Primär CTA */}
                 <a
                     href={primaryCtaUrl}
                     className="
@@ -70,8 +77,20 @@ const BankIntroSection: FC<BankIntroSectionProps> = ({
                 >
                     {primaryCtaLabel}
                 </a>
-            </div>
 
+                {/* Sekundär CTA – visas bara om den finns */}
+                {secondaryCtaLabel && secondaryCtaUrl && (
+                    <a
+                        href={secondaryCtaUrl}
+                        className="
+                            px-6 py-3 border border-primary text-primary rounded-lg text-sm font-medium
+                            hover:bg-primary/10 active:bg-primary/20 transition
+                        "
+                    >
+                        {secondaryCtaLabel}
+                    </a>
+                )}
+            </div>
         </div>
     );
 };

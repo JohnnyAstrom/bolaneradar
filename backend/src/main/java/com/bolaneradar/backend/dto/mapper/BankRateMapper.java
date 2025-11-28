@@ -1,7 +1,12 @@
 package com.bolaneradar.backend.dto.mapper;
 
+import com.bolaneradar.backend.dto.core.BankRateHistoryDto;
 import com.bolaneradar.backend.dto.core.BankRateRowDto;
 import com.bolaneradar.backend.entity.core.MortgageRate;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class BankRateMapper {
 
@@ -21,5 +26,22 @@ public class BankRateMapper {
                         ? listRate.getLastChangedDate().toString()
                         : null
         );
+    }
+
+    public static List<BankRateHistoryDto> toHistoryDto(List<MortgageRate> rates) {
+
+        return rates.stream()
+                .collect(Collectors.groupingBy(
+                        r -> r.getEffectiveDate().withDayOfMonth(1),
+                        Collectors.averagingDouble(m -> m.getRatePercent().doubleValue())
+                ))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(e -> new BankRateHistoryDto(
+                        e.getKey().toString(),   // "2024-03-01"
+                        e.getValue()
+                ))
+                .toList();
     }
 }

@@ -1,44 +1,262 @@
 import type { FC } from "react";
+import { useEffect, useState } from "react";
 
-const BankGraphSection: FC = () => {
+import {
+    fetchAvailableTerms,
+    fetchHistoricalRates,
+    type HistoricalPoint
+} from "../../client/bankApi";
+
+import { termLabelMap } from "../../config/termLabelMap";
+
+import {
+    ResponsiveContainer,
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    Tooltip,
+    CartesianGrid,
+    Area
+} from "recharts";
+
+interface Props {
+    bankName: string;
+}
+
+const BankGraphSection: FC<Props> = ({ bankName }) => {
+
+    const [terms, setTerms] = useState<string[]>([]);
+    const [selectedTerm, setSelectedTerm] = useState("");
+    const [data, setData] = useState<{ effectiveDate: string; ratePercent: number }[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    /* ---------------------------------------------------------
+     * Hjälpfunktion: formatMonth("2025-03-01") → "Mars 2025"
+     * ---------------------------------------------------------
+     */
+    const formatMonth = (isoDate: string) => {
+        const [year, month] = isoDate.split("-");
+        const date = new Date(Number(year), Number(month) - 1);
+
+        const monthName = date.toLocaleDateString("sv-SE", {
+            month: "short"
+        });
+
+        // Ta bort eventuell punkt (nov., okt. → Nov, Okt)
+        const clean = monthName.replace(".", "");
+
+        return `${clean.charAt(0).toUpperCase() + clean.slice(1)} ${year}`;
+    };
+
+    /* ---------------------------------------
+     * 1) Hämta vilka bindningstider som är tillgängliga
+     * --------------------------------------- */
+    useEffect(() => {
+        async function loadTerms() {
+            try {
+                const list = await fetchAvailableTerms(bankName);
+                setTerms(list);
+            } catch {
+                setTerms([]);
+            }
+        }
+        loadTerms();
+    }, [bankName]);
+
+    /* ---------------------------------------
+     * 2) Hämta historisk snittränta
+     * --------------------------------------- */
+    useEffect(() => {
+        if (!selectedTerm) return;
+
+        let isCancelled = false;
+
+        async function loadHistory() {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const rawPoints: HistoricalPoint[] = await fetchHistoricalRates(
+                    bankName,
+                    selectedTerm
+                );
+
+                if (isCancelled) return;
+
+                const mapped = rawPoints.map((p) => ({
+                    effectiveDate: p.month,
+                    ratePercent: p.avgRate
+                }));
+
+                const sorted = mapped.sort((a, b) =>
+                    a.effectiveDate.localeCompare(b.effectiveDate)
+                );
+
+                setData(sorted);
+            } catch {
+                if (!isCancelled) setError("Kunde inte hämta historik");
+            } finally {
+                if (!isCancelled) setLoading(false);
+            }
+        }
+
+        loadHistory();
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [selectedTerm, bankName]);
+
+    /* ---------------------------------------
+     * 3) Render
+     * --------------------------------------- */
     return (
         <div className="mt-12">
-
-            {/* Titel */}
             <h2 className="text-2xl font-semibold text-text-primary text-center mb-2">
                 Historisk utveckling
             </h2>
 
-            {/* Undertext */}
             <p className="text-center text-text-secondary text-sm mb-6">
-                Visar bankens genomsnittliga boränta de senaste 12 månaderna.<br />
+                Visar bankens genomsnittliga boränta de senaste 12 månaderna.
+                <br />
                 Välj bindningstid i dropdown menyn nedan:
             </p>
 
-            {/* Dropdown */}
             <div className="flex justify-center mb-6">
                 <select
+                    value={selectedTerm}
+                    onChange={(e) => setSelectedTerm(e.target.value)}
                     className="
                         px-4 py-2 border border-border rounded-md bg-white
                         text-text-primary text-sm
                         hover:border-icon-neutral focus:outline-none focus:ring-2 focus:ring-primary-light
                     "
                 >
-                    <option>Välj bindningstid</option>
+                    <option value="">Välj bindningstid</option>
+
+                    {terms.map((t) => (
+                        <option key={t} value={t}>
+                            {termLabelMap[t]}
+                        </option>
+                    ))}
                 </select>
             </div>
 
-            {/* Placeholder-grafcontainer */}
+            {/* Grafcontainer – responsiv höjd & full bredd */}
             <div
-                className="
-                    h-80 border border-border rounded-lg
-                    bg-white flex items-center justify-center
-                    text-text-secondary text-sm
-                "
+                className={`
+                    w-full 
+                    bg-white 
+                    border border-border 
+                    rounded-lg
+                    px-2 sm:px-4 
+                    py-4
+                    text-text-secondary 
+                    text-xs sm:text-sm
+                    h-[400px] sm:h-[450px] md:h-[500px]
+                `}
             >
-                Graf visas här
-            </div>
+                {/* 1) Ingen term vald */}
+                {!selectedTerm && (
+                    <div className="w-full h-full flex items-center justify-center">
+                        <span>Välj bindningstid för att visa graf</span>
+                    </div>
+                )}
 
+                {/* 2) Laddar */}
+                {selectedTerm && loading && (
+                    <div className="w-full h-full flex items-center justify-center">
+                        <span>Laddar...</span>
+                    </div>
+                )}
+
+                {/* 3) Felmeddelande */}
+                {selectedTerm && !loading && error && (
+                    <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-red-600">{error}</span>
+                    </div>
+                )}
+
+                {/* 4) Grafen */}
+                {selectedTerm && !loading && !error && data.length > 0 && (
+                    <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={data}>
+                            <defs>
+                                <linearGradient id="rateGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor="#2563eb" stopOpacity={0.3} />
+                                    <stop offset="100%" stopColor="#2563eb" stopOpacity={0.05} />
+                                </linearGradient>
+                            </defs>
+
+                            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+
+                            <XAxis
+                                dataKey="effectiveDate"
+                                tickFormatter={(d) => formatMonth(d)}
+                                tick={{ fontSize: 10 }}
+                                stroke="#6B7280"
+                                interval="preserveStartEnd" // bättre på små skärmar
+                            />
+
+                            <YAxis
+                                width={window.innerWidth < 640 ? 32 : 50}   // kompaktare på mobil
+                                domain={[1.0, 5.0]}
+                                ticks={[1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]}
+                                tickFormatter={(v) =>
+                                    window.innerWidth < 640
+                                        ? `${v.toFixed(1)}%`     // Mobil: "5.0%"
+                                        : `${v.toFixed(2)} %`    // Desktop: "5.00 %"
+                                }
+                                tick={{ fontSize: 11 }}
+                                stroke="#6B7280"
+                            />
+
+
+                            <Tooltip
+                                formatter={(v: number) => [`${v.toFixed(2)} %`, "Snittränta"]}
+                                labelFormatter={(label: string) =>
+                                    `Datum: ${formatMonth(label)}`
+                                }
+                                contentStyle={{
+                                    borderRadius: "8px",
+                                    background: "white",
+                                    border: "1px solid #E5E7EB",
+                                    fontSize: "12px"
+                                }}
+                            />
+
+                            {/* Fylld area under linjen */}
+                            <Area
+                                type="monotone"
+                                dataKey="ratePercent"
+                                stroke="none"
+                                fill="url(#rateGradient)"
+                                tooltipType="none"
+                            />
+
+                            {/* Själva linjen */}
+                            <Line
+                                type="monotone"
+                                dataKey="ratePercent"
+                                name="Snittränta"
+                                stroke="#2563eb"
+                                strokeWidth={2}
+                                dot={{ r: 3 }}
+                                activeDot={{ r: 5 }}
+                            />
+                        </LineChart>
+                    </ResponsiveContainer>
+                )}
+
+                {/* 5) Term vald men ingen data */}
+                {selectedTerm && !loading && !error && data.length === 0 && (
+                    <div className="w-full h-full flex items-center justify-center">
+                        <span>Ingen historik finns för denna bindningstid.</span>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

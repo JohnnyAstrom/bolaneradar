@@ -1,6 +1,7 @@
 package com.bolaneradar.backend.service.core;
 
 import com.bolaneradar.backend.dto.core.BankRateRowDto;
+import com.bolaneradar.backend.dto.core.BankRateHistoryDto; // <-- lägg till
 import com.bolaneradar.backend.dto.mapper.BankRateMapper;
 import com.bolaneradar.backend.entity.core.Bank;
 import com.bolaneradar.backend.entity.core.MortgageRate;
@@ -21,10 +22,6 @@ public class BankRateService {
     private final BankRepository bankRepository;
     private final MortgageRateRepository rateRepository;
 
-    /**
-     * Sorteringsordning för bindningstider.
-     * Används för att visa räntorna i logisk ordning.
-     */
     private static final List<MortgageTerm> SORT_ORDER = List.of(
             MortgageTerm.VARIABLE_3M,
             MortgageTerm.FIXED_1Y,
@@ -51,53 +48,30 @@ public class BankRateService {
     // =====================   HÄMTA RÄNTOR PER BANK   ========================
     // ========================================================================
 
-    /**
-     * Hämtar alla aktuella räntor (list och avg) för en specifik bank.
-     *
-     * Logik:
-     *  1. Hitta bank (case-insensitive)
-     *  2. Hämta bankens senaste snitträntemånad
-     *  3. För varje bindningstid:
-     *       - hämta senaste listränta
-     *       - hämta snittränta endast om den finns i samma månad
-     *  4. Sortera rader i logisk ordning
-     *
-     * Returnerar:
-     *  - En lista med BankRateRowDto
-     *  - En månad som frontend kan visa som "Snittränta (okt 2025)"
-     */
     public Map<String, Object> getRatesForBank(String bankName) {
 
-        // 1. Hitta bank
         Bank bank = bankRepository.findByNameIgnoreCase(bankName)
                 .orElseThrow(() -> new IllegalArgumentException("Bank not found: " + bankName));
 
-        // 2. Hitta bankens senaste snitträntedatum
         LocalDate latestAvgDate = rateRepository.findLatestAverageDateForBank(bank.getId());
         LocalDate latestMonth = latestAvgDate != null ? latestAvgDate.withDayOfMonth(1) : null;
 
-        // Grupp: term → alla räntor som hör till term
         Map<MortgageTerm, List<MortgageRate>> grouped =
                 bank.getMortgageRates().stream()
                         .collect(Collectors.groupingBy(MortgageRate::getTerm));
 
         List<BankRateRowDto> rows = new ArrayList<>();
 
-        // ============================================================
-        // 3. Bygg rader per bindningstid
-        // ============================================================
         for (var entry : grouped.entrySet()) {
 
             MortgageTerm term = entry.getKey();
             String termLabel = toTermLabel(term);
 
-            // a) Hämta senaste listränta
             MortgageRate latestList =
                     rateRepository.findFirstByBankIdAndTermAndRateTypeOrderByEffectiveDateDesc(
                             bank.getId(), term, RateType.LISTRATE
                     );
 
-            // b) Hämta snittränta för rätt månad (om månad finns)
             MortgageRate latestAvg = null;
 
             if (latestMonth != null) {
@@ -109,20 +83,13 @@ public class BankRateService {
                 );
             }
 
-            // c) Lägg till rad
             rows.add(BankRateMapper.toDto(termLabel, latestList, latestAvg));
         }
 
-        // ============================================================
-        // 4. Sortera raderna i logisk ordning
-        // ============================================================
         rows.sort(Comparator.comparing(
                 row -> SORT_ORDER.indexOf(mapLabelToTerm(row.term()))
         ));
 
-        // ============================================================
-        // 5. Bygg respons
-        // ============================================================
         Map<String, Object> result = new HashMap<>();
         result.put("month", latestMonth);
         result.put("monthFormatted", formatMonth(latestMonth));
@@ -131,13 +98,11 @@ public class BankRateService {
         return result;
     }
 
+
     // ========================================================================
     // =======================   HJÄLPFUNKTIONER   ============================
     // ========================================================================
 
-    /**
-     * Översätter "3 mån", "1 år" etc → enum.
-     */
     private MortgageTerm mapLabelToTerm(String label) {
         return switch (label) {
             case "3 mån" -> MortgageTerm.VARIABLE_3M;
@@ -155,9 +120,6 @@ public class BankRateService {
         };
     }
 
-    /**
-     * Översätter enum → mänskligt läsbar label.
-     */
     private String toTermLabel(MortgageTerm term) {
         return switch (term) {
             case VARIABLE_3M -> "3 mån";
@@ -174,14 +136,88 @@ public class BankRateService {
         };
     }
 
-    /**
-     * Formaterar månad till "okt 2025" (svenska).
-     */
     private String formatMonth(LocalDate date) {
         if (date == null) return null;
 
         return date.getMonth()
                 .getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("sv"))
                 + " " + date.getYear();
+    }
+
+
+    // ========================================================================
+    // =====================   NY FUNKTION: HISTORIK   ========================
+    // ========================================================================
+
+    /**
+     * Returnerar snitträntor per månad för senaste 12 månaderna.
+     */
+    public List<BankRateHistoryDto> getHistoricalAverageRates(String bankName, MortgageTerm term) {
+
+        // Hitta bank
+        Bank bank = bankRepository.findByNameIgnoreCase(bankName)
+                .orElseThrow(() -> new IllegalArgumentException("Bank not found: " + bankName));
+
+        // Hämta all historik för term + AVERAGERATE (sorterad DESC)
+        List<MortgageRate> allRates =
+                rateRepository.findByBankAndTermAndRateTypeOrderByEffectiveDateDesc(
+                        bank, term, RateType.AVERAGERATE
+                );
+
+        LocalDate start = LocalDate.now()
+                .minusMonths(12)
+                .withDayOfMonth(1);
+
+        // Filtrera senaste 12 månaderna
+        List<MortgageRate> last12 =
+                allRates.stream()
+                        .filter(r -> !r.getEffectiveDate().isBefore(start))
+                        .toList();
+
+        // Konvertera till DTO-lista
+        return BankRateMapper.toHistoryDto(last12);
+    }
+
+    // ========================================================================
+// ===========   HISTORIK: TILLGÄNGLIGA BINDNINGSTIDER   ===================
+// ========================================================================
+
+    /**
+     * Returnerar alla bindningstider som har tillräckligt med historisk data
+     * (minst 10 datapunkter under senaste 12 månaderna).
+     */
+    public List<MortgageTerm> getAvailableTerms(String bankName) {
+
+        Bank bank = bankRepository.findByNameIgnoreCase(bankName)
+                .orElseThrow(() -> new IllegalArgumentException("Bank not found: " + bankName));
+
+        List<MortgageTerm> available = new ArrayList<>();
+
+        LocalDate start = LocalDate.now()
+                .minusMonths(12)
+                .withDayOfMonth(1);
+
+        for (MortgageTerm term : MortgageTerm.values()) {
+
+            // Hämta all historisk snittränta för term
+            List<MortgageRate> allRates =
+                    rateRepository.findByBankAndTermAndRateTypeOrderByEffectiveDateDesc(
+                            bank,
+                            term,
+                            RateType.AVERAGERATE
+                    );
+
+            // Räkna datapunkter senaste 12 mån
+            long count = allRates.stream()
+                    .filter(r -> !r.getEffectiveDate().isBefore(start))
+                    .count();
+
+            // Visa om det saknas max 2 månader (dvs minst 10 datapunkter)
+            if (count >= 10) {
+                available.add(term);
+            }
+        }
+
+        return available;
     }
 }
