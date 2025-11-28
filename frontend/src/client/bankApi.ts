@@ -1,53 +1,72 @@
 /**
  * bankApi.ts
  *
- * Denna fil innehåller funktionen som hämtar
- * bankspecifika bolåneräntor från backend.
- *
- * API-endpoint:
- *   GET /api/bank/{bankName}/rates
- *
- * Response-formatet innehåller:
- *   - month:           Den senaste månad som banken har snittränta för (ISO-format)
- *   - monthFormatted:  Samma månad men formaterad för visning, t.ex. "okt 2025"
- *   - rows:            En lista med alla bindningstider och deras räntor
- *
- * Detta API används på banksidan (BankPage) för att fylla tabellen
- * "Aktuella bolåneräntor".
+ * Funktioner för att hämta bankspecifika räntor
+ * och historisk snittränta (för grafer).
  */
 
 import { apiGet } from "./client";
 
-/**
- * En rad i bankens räntetabell.
- * Motsvarar exakt det backend returnerar per bindningstid.
+/* ============================================================
+ *  TYPER FÖR AKTUELLA RÄNTOR (TABELLEN)
+ * ============================================================
  */
+
+/** En rad i bankens räntetabell. */
 export interface BankRateRow {
-    term: string;               // Ex: "3 mån"
-    currentRate: number | null; // Senaste listränta eller null
-    change: number | null;      // Räntans förändring (%) eller null
-    avgRate: number | null;     // Snitträntan för banken den aktuella månaden
-    lastChanged: string | null; // Datum då listräntan ändrades
+    term: string;
+    currentRate: number | null;
+    change: number | null;
+    avgRate: number | null;
+    lastChanged: string | null;
 }
 
-/**
- * Hela svaret från API:t.
- * Innehåller metadata + tabellrader.
- */
+/** Hela svaret från /rates-endpointen. */
 export interface BankRateResponse {
-    month: string | null;          // Ex: "2025-10-01"
-    monthFormatted: string | null; // Ex: "okt 2025" för visning
-    rows: BankRateRow[];           // Alla rader som ska visas i tabellen
+    month: string | null;
+    monthFormatted: string | null;
+    rows: BankRateRow[];
 }
 
-/**
- * Hämtar räntedata för en specifik bank.
- *
- * Exempel:
- *   const data = await getBankRates("Swedbank");
- *
- * Returnerar BankRateResponse som frontend kan använda direkt i tabellen.
- */
+/** Hämtar bankens aktuella räntor (tabellen). */
 export async function getBankRates(bankName: string) {
     return apiGet<BankRateResponse>(`/api/bank/${bankName}/rates`);
+}
+
+/* ============================================================
+ *  TYPER + FUNKTIONER FÖR HISTORISK RÄNTEGRAF
+ * ============================================================
+ */
+
+/**
+ * Backend returnerar:
+ *   {
+ *      "month": "2025-01-01",
+ *      "avgRate": 3.39
+ *   }
+ *
+ * Vi mappar det senare i React till:
+ *   { effectiveDate, ratePercent }
+ */
+export interface HistoricalPoint {
+    month: string;      // ISO-datum från backend
+    avgRate: number;    // Snittränta från backend
+}
+
+/** Hämtar bindningstider med minst 10 datapunkter. */
+export async function fetchAvailableTerms(bankName: string) {
+    return apiGet<string[]>(`/api/bank/${bankName}/history/available-terms`);
+}
+
+/**
+ * Hämtar historisk snittränta för en term.
+ *
+ * Viktigt:
+ *   Backend använder nu:
+ *     /api/bank/{bankName}/history/data?term=TERM
+ */
+export async function fetchHistoricalRates(bankName: string, term: string) {
+    return apiGet<HistoricalPoint[]>(
+        `/api/bank/${bankName}/history/data?term=${term}`
+    );
 }
