@@ -5,11 +5,7 @@
       "Stort kontorsnät i hela landet",
       "Digital ansökan med snabb handläggning",
       "Många kundförmåner genom olika paket"
-    ],
-    "primaryCtaLabel": "Till Swedbanks bolån",
-    "primaryCtaUrl": "https://www.swedbank.se/privat/boende/bolan.html",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/swedbank/details"
+    ]
   },
 
   "seb": {
@@ -18,11 +14,7 @@
       "Personlig rådgivning och långa kundrelationer",
       "Hållbarhetsfokus med grönt bolån",
       "Välutvecklade digitala tjänster"
-    ],
-    "primaryCtaLabel": "Till SEB:s bolån",
-    "primaryCtaUrl": "https://seb.se/privat/boende-och-bolan/bolan",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/seb/details"
+    ]
   },
 
   "nordea": {
@@ -31,11 +23,7 @@
       "Stark digital plattform och snabb ansökan",
       "Flexibla bolånelösningar",
       "Rådgivning både online och på kontor"
-    ],
-    "primaryCtaLabel": "Till Nordeas bolån",
-    "primaryCtaUrl": "https://www.nordea.se/privat/produkter/bolan.html",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/nordea/details"
+    ]
   },
 
   "handelsbanken": {
@@ -44,11 +32,7 @@
       "Lokala kontor fattar egna beslut",
       "Hög kundnöjdhet över lång tid",
       "Stort fokus på sparande och helhetslösningar"
-    ],
-    "primaryCtaLabel": "Till Handelsbankens bolån",
-    "primaryCtaUrl": "https://www.handelsbanken.se/sv/privat/bolan",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/handelsbanken/details"
+    ]
   },
 
   "lansforsakringarbank": {
@@ -57,11 +41,7 @@
       "Lokal förankring via länsbolagen",
       "Förmånliga villkor för helkunder",
       "Fokus på trygghet och försäkringslösningar"
-    ],
-    "primaryCtaLabel": "Till Länsförsäkringars bolån",
-    "primaryCtaUrl": "https://www.lansforsakringar.se/privat/bank/bolan/",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/lansforsakringarbank/details"
+    ]
   },
 
   "sbab": {
@@ -70,11 +50,7 @@
       "Statligt ägd och digitalt fokus",
       "Tydlig och transparent prissättning",
       "Snabb digital ansökan utan krångel"
-    ],
-    "primaryCtaLabel": "Till SBAB:s bolån",
-    "primaryCtaUrl": "https://www.sbab.se/1/privat/boende/bolan.html",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/sbab/details"
+    ]
   },
 
   "skandiabanken": {
@@ -83,11 +59,7 @@
       "Förmåner för sparande- och försäkringskunder",
       "Helt digital bank utan kontor",
       "Konkurrenskraftiga räntor"
-    ],
-    "primaryCtaLabel": "Till Skandiabankens bolån",
-    "primaryCtaUrl": "https://www.skandia.se/lana/bolan/",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/skandiabanken/details"
+    ]
   },
 
   "danskebank": {
@@ -96,11 +68,7 @@
       "Personlig rådgivning och helhetslösningar",
       "Stark nordisk närvaro",
       "Rabatter för akademiker genom samarbetsavtal"
-    ],
-    "primaryCtaLabel": "Till Danske Banks bolån",
-    "primaryCtaUrl": "https://danskebank.se/privat/produkter/bolan",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/danskebank/details"
+    ]
   },
 
   "icabanken": {
@@ -109,11 +77,7 @@
       "Digital ansökan och enkel helhetslösning",
       "Förmåner kopplade till ICA:s kundprogram",
       "Tydliga villkor och snabb handläggning"
-    ],
-    "primaryCtaLabel": "Till ICA Bankens bolån",
-    "primaryCtaUrl": "https://www.icabanken.se/lana/bolan/",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/icabanken/details"
+    ]
   },
 
   "landshypotekbank": {
@@ -122,11 +86,7 @@
       "Medlemsägd bank med lång historik",
       "Stabil prisbild och tydlig räntesättning",
       "Fokus på boende och jordbruksrelaterade lån"
-    ],
-    "primaryCtaLabel": "Till Landshypoteks bolån",
-    "primaryCtaUrl": "https://www.landshypotek.se/privat/bolan/",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/landshypotekbank/details"
+    ]
   },
 
   "ikanobank": {
@@ -135,11 +95,7 @@
       "Enkel digital ansökan",
       "Konkurrenskraftiga bolåneräntor",
       "Förmåner för lojala kunder"
-    ],
-    "primaryCtaLabel": "Till Ikano Bankens bolån",
-    "primaryCtaUrl": "https://ikanobank.se/privat/bolan",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/ikanobank/details"
+    ]
   },
 
   "alandsbanken": {
@@ -148,10 +104,6 @@
       "Mycket hög grad av personlig service",
       "Premiuminriktning med kundfokus",
       "Fokus på hållbara investeringar och gröna alternativ"
-    ],
-    "primaryCtaLabel": "Till Ålandsbankens bolån",
-    "primaryCtaUrl": "https://www.alandsbanken.se/privat/bolan",
-    "secondaryCtaLabel": "Läs mer om banken",
-    "secondaryCtaUrl": "/bank/alandsbanken/details"
+    ]
   }
 }

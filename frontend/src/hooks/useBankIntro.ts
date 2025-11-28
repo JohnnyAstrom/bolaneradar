@@ -2,7 +2,7 @@
  * useBankIntro.ts
  *
  * En liten React-hook som hämtar bankens introduktionsdata
- * (beskrivning, USP och CTA-länkar) via getBankIntro().
+ * beskrivning, och USP via getBankIntro().
  *
  * Syfte:
  *  - Hålla BankPage ren

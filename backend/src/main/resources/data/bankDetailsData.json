@@ -1,0 +1,253 @@
+{
+  "swedbank": {
+    "description": "Swedbank erbjuder bolån med fokus på trygghet, lokal närvaro och bred rådgivning. Banken arbetar långsiktigt med sina kunder och väger in hela din ekonomi, ditt sparande och ditt engagemang i räntesättningen. Passar dig som vill ha en stabil och personlig bankpartner som ser helheten.",
+    "overviewText": "Banken använder individuell räntesättning där din rabatt påverkas av helheten i ditt engagemang och dialogen med rådgivare.",
+    "bestFor": [
+      "dig som vill ha personlig rådgivning och ett långsiktigt kundmöte",
+      "dig som vill samla dina banktjänster för att få bättre villkor",
+      "dig som vill att räntan ska baseras mer på relation och engagemang än belåningsgrad",
+      "dig som vill kunna påverka räntan genom dialog och förhandling med din rådgivare"
+    ],
+    "notFor": [
+      "dig som vill slippa förhandla och föredrar fasta, transparenta villkor",
+      "dig som inte vill eller hinner bevaka tidsbegränsade rabatter",
+      "dig som prioriterar snabb digital hantering utan kontakt med rådgivare",
+      "dig som helst vill ha en ränta som styrs helt av modell och inte påverkas av relationer"
+    ],
+    "primaryCtaLabel": "Swedbanks hemsida",
+    "primaryCtaUrl": "https://www.swedbank.se/privat/boende-och-bolan.html",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/swedbank/details"
+  },
+
+  "seb": {
+    "description": "SEB erbjuder bolån med fokus på långsiktiga kundrelationer och helhetslösningar. Banken väger in hela din ekonomi och ditt engagemang och lägger stor vikt vid rådgivning, sparande och en individuell dialog. Passar dig som vill ha en personlig bankkontakt och en stabil långsiktig partner.",
+    "overviewText": "Banken använder individuell räntesättning där din rabatt påverkas av helheten i ditt engagemang och dialogen med rådgivare.",
+    "bestFor": [
+      "dig som vill ha personlig rådgivning och ett långsiktigt kundmöte",
+      "dig som vill samla dina banktjänster för att få bättre villkor",
+      "dig som vill att räntan ska baseras mer på relation och engagemang än belåningsgrad",
+      "dig som vill kunna påverka räntan genom dialog och förhandling med din rådgivare"
+    ],
+    "notFor": [
+      "dig som vill slippa förhandla och föredrar fasta, transparenta villkor",
+      "dig som inte vill eller hinner bevaka tidsbegränsade rabatter",
+      "dig som prioriterar snabb digital hantering utan kontakt med rådgivare",
+      "dig som helst vill ha en ränta som styrs helt av modell och inte påverkas av relationer"
+    ],
+    "primaryCtaLabel": "SEB:s hemsida",
+    "primaryCtaUrl": "https://seb.se/privat/bolan",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/seb/details"
+  },
+
+  "nordea": {
+    "description": "Nordea erbjuder bolån som kombinerar digital tillgänglighet med personlig rådgivning. Banken gör individuella bedömningar där sparande, ekonomi och långsiktigt engagemang påverkar villkoren. Passar dig som vill ha moderna tjänster men samtidigt stöd och dialog när du behöver det.",
+    "overviewText": "Banken använder individuell räntesättning där din rabatt påverkas av helheten i ditt engagemang och dialogen med rådgivare.",
+    "bestFor": [
+      "dig som vill ha personlig rådgivning och ett långsiktigt kundmöte",
+      "dig som vill samla dina banktjänster för att få bättre villkor",
+      "dig som vill att räntan ska baseras mer på relation och engagemang än belåningsgrad",
+      "dig som vill kunna påverka räntan genom dialog och förhandling med din rådgivare"
+    ],
+    "notFor": [
+      "dig som vill slippa förhandla och föredrar fasta, transparenta villkor",
+      "dig som inte vill eller hinner bevaka tidsbegränsade rabatter",
+      "dig som prioriterar snabb digital hantering utan kontakt med rådgivare",
+      "dig som helst vill ha en ränta som styrs helt av modell och inte påverkas av relationer"
+    ],
+    "primaryCtaLabel": "Nordeas hemsida",
+    "primaryCtaUrl": "https://www.nordea.se/privat/produkter/bolan/",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/nordea/details"
+  },
+
+  "handelsbanken": {
+    "description": "Handelsbanken erbjuder bolån med lokal förankring och personliga beslut via kontoren. Banken bygger långsiktiga kundrelationer och tar hänsyn till helheten i din ekonomi, ditt sparande och ditt engagemang. Passar dig som vill ha nära kontakt och en stabil bank med stark rådgivningstradition.",
+    "overviewText": "Banken använder individuell räntesättning där din rabatt påverkas av helheten i ditt engagemang och dialogen med rådgivare.",
+    "bestFor": [
+      "dig som vill ha personlig rådgivning och ett långsiktigt kundmöte",
+      "dig som vill samla dina banktjänster för att få bättre villkor",
+      "dig som vill att räntan ska baseras mer på relation och engagemang än belåningsgrad",
+      "dig som vill kunna påverka räntan genom dialog och förhandling med din rådgivare"
+    ],
+    "notFor": [
+      "dig som vill slippa förhandla och föredrar fasta, transparenta villkor",
+      "dig som inte vill eller hinner bevaka tidsbegränsade rabatter",
+      "dig som prioriterar snabb digital hantering utan kontakt med rådgivare",
+      "dig som helst vill ha en ränta som styrs helt av modell och inte påverkas av relationer"
+    ],
+    "primaryCtaLabel": "Handelsbankens hemsida",
+    "primaryCtaUrl": "https://www.handelsbanken.se/sv/privat/bolan",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/handelsbanken/details"
+  },
+
+  "lansforsakringarbank": {
+    "description": "Länsförsäkringar erbjuder bolån via sina lokala länsbolag och arbetar nära kunden genom personlig kontakt och helhetslösningar. Räntan baseras på din totala ekonomiska situation och ditt engagemang. Passar dig som vill samla bank, bolån och försäkringar i ett långsiktigt partnerskap.",
+    "overviewText": "Banken använder individuell räntesättning där din rabatt påverkas av helheten i ditt engagemang och dialogen med rådgivare.",
+    "bestFor": [
+      "dig som vill ha personlig rådgivning och ett långsiktigt kundmöte",
+      "dig som vill samla dina banktjänster för att få bättre villkor",
+      "dig som vill att räntan ska baseras mer på relation och engagemang än belåningsgrad",
+      "dig som vill kunna påverka räntan genom dialog och förhandling med din rådgivare"
+    ],
+    "notFor": [
+      "dig som vill slippa förhandla och föredrar fasta, transparenta villkor",
+      "dig som inte vill eller hinner bevaka tidsbegränsade rabatter",
+      "dig som prioriterar snabb digital hantering utan kontakt med rådgivare",
+      "dig som helst vill ha en ränta som styrs helt av modell och inte påverkas av relationer"
+    ],
+    "primaryCtaLabel": "Länsförsäkringars hemsida",
+    "primaryCtaUrl": "https://www.lansforsakringar.se/privat/bank/bolan/",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/lansforsakringar/details"
+  },
+
+  "alandsbanken": {
+    "description": "Ålandsbanken är en premiuminriktad bank där bolån erbjuds som en del av ett större kundengagemang. Banken fokuserar på personlig service, kapitalförvaltning och djupa kundrelationer snarare än lägsta möjliga ränta. Passar dig som vill kombinera sparande, rådgivning och bolån i en helhetslösning.",
+    "overviewText": "Räntan sätts individuellt och baseras på helheten i ditt engagemang, din ekonomi och din relation med banken.",
+    "bestFor": [
+      "dig som har sparande eller placeringar och vill samla kapital och bolån i en premiumbank",
+      "dig som värdesätter personlig bankkontakt och ett långsiktigt samarbete snarare än låg månadskostnad",
+      "dig som vill ha en helhetslösning där rådgivning, förvaltning och bolån kopplas samman",
+      "dig som uppskattar en exklusiv bankupplevelse där relation och engagemang prioriteras"
+    ],
+    "notFor": [
+      "dig som söker ett vanligt bolån utan att vilja flytta sparande eller kapital till banken",
+      "dig som prioriterar lägsta ränta framför rådgivning och helhetslösningar",
+      "dig som vill ha en enkel, helt digital ansökan utan personliga kontakter",
+      "dig som vill ha standardiserade villkor och transparens enligt en modell"
+    ],
+    "primaryCtaLabel": "Ålandsbankens hemsida",
+    "primaryCtaUrl": "https://www.alandsbanken.se/banktjanster/lana-pengar/bolan",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/alandsbanken/details"
+  },
+
+  "sbab": {
+    "description": "SBAB är en statlig bolånebank med fokus på enkelhet, transparens och digitala tjänster. Räntan sätts helt enligt en öppen modell där alla kunder med samma förutsättningar får samma villkor. Passar dig som vill ha en smidig och rättvis bolånelösning utan krav på helkund.",
+    "overviewText": "Räntan baseras helt på bankens öppna modell och påverkas inte av förhandling eller personligt engagemang.",
+    "bestFor": [
+      "dig som vill slippa förhandla och få en tydlig och transparent ränta direkt",
+      "dig som föredrar en snabb och helt digital bolåneprocess utan möten eller rådgivarsamtal",
+      "dig som har låg eller medelhög belåningsgrad och vill belönas tydligt av en modellbaserad räntesättning",
+      "dig som vill ha en bank där priset styrs av tydliga kriterier och inte av förhandling eller helkundskrav"
+    ],
+    "notFor": [
+      "dig som vill ha personlig rådgivning och ett nära kundmöte",
+      "dig som vill kunna påverka räntan genom relation eller helkundsengagemang",
+      "dig som har hög belåningsgrad eller mindre bolån och därför riskerar få en högre räntesats i modellen",
+      "dig som har en mer komplex ekonomi eller behöver flexibilitet vid ovanliga finansieringslösningar"
+    ],
+    "primaryCtaLabel": "SBAB:s hemsida",
+    "primaryCtaUrl": "https://www.sbab.se/privat/bolan",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/sbab/details"
+  },
+
+  "skandiabanken": {
+    "description": "Skandiabanken erbjuder digitala bolån med fokus på tydliga villkor och en modern kundupplevelse. Räntan sätts enligt bankens öppna modell där belåningsgrad och lånebelopp styr priset. Passar dig som vill ha enkel ansökan, smidig hantering och samma villkor som andra med samma förutsättningar.",
+    "overviewText": "Räntan baseras på bankens öppna modell och påverkas inte av förhandling eller helkundsupplägg.",
+    "bestFor": [
+      "dig som vill slippa förhandla och få en tydlig och transparent ränta direkt",
+      "dig som föredrar en snabb och helt digital bolåneprocess utan möten eller rådgivarsamtal",
+      "dig som har låg eller medelhög belåningsgrad och vill belönas tydligt av en modellbaserad räntesättning",
+      "dig som vill ha en bank där priset styrs av tydliga kriterier och inte av förhandling eller helkundskrav"
+    ],
+    "notFor": [
+      "dig som vill ha personlig rådgivning och ett nära kundmöte",
+      "dig som vill kunna påverka räntan genom relation eller helkundsengagemang",
+      "dig som har hög belåningsgrad eller mindre bolån och därför riskerar få en högre räntesats i modellen",
+      "dig som har en mer komplex ekonomi eller behöver flexibilitet vid ovanliga finansieringslösningar"
+    ],
+    "primaryCtaLabel": "Skandiabankens hemsida",
+    "primaryCtaUrl": "https://www.skandia.se/lana/bolan",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/skandiabanken/details"
+  },
+
+  "danskebank": {
+    "description": "Danske Bank erbjuder bolån där räntan sätts enligt en tydlig modell som kompletteras med fasta rabatter, exempelvis för fackförbundsmedlemmar. Banken kombinerar digital hantering med stabila villkor och passar dig som vill ha transparens utan traditionell förhandling.",
+    "overviewText": "Räntan baseras på bankens modell med tilläggsrabatter, inte på individuell förhandling eller helkundskrav.",
+    "bestFor": [
+      "dig som vill slippa förhandla och få en tydlig och transparent ränta direkt",
+      "dig som föredrar en snabb och helt digital bolåneprocess utan möten eller rådgivarsamtal",
+      "dig som har låg eller medelhög belåningsgrad och vill belönas tydligt av en modellbaserad räntesättning",
+      "dig som vill ha en bank där priset styrs av tydliga kriterier och inte av förhandling eller helkundskrav"
+    ],
+    "notFor": [
+      "dig som vill ha personlig rådgivning och ett nära kundmöte",
+      "dig som vill kunna påverka räntan genom relation eller helkundsengagemang",
+      "dig som har hög belåningsgrad eller mindre bolån och därför riskerar få en högre räntesats i modellen",
+      "dig som har en mer komplex ekonomi eller behöver flexibilitet vid ovanliga finansieringslösningar"
+    ],
+    "primaryCtaLabel": "Danske Banks hemsida",
+    "primaryCtaUrl": "https://danskebank.se/privat/produkter/bolan",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/danskebank/details"
+  },
+
+  "icabanken": {
+    "description": "ICA Banken erbjuder bolån med enkel digital hantering och tydlig prissättning. Räntan sätts enligt öppna kriterier där belåningsgrad och lånebelopp styr priset. Passar dig som vill ha en okomplicerad lösning utan krav på helkundsengagemang eller möten med rådgivare.",
+    "overviewText": "Räntan styrs helt av bankens modell och påverkas inte av förhandling eller kundens övriga engagemang.",
+    "bestFor": [
+      "dig som vill slippa förhandla och få en tydlig och transparent ränta direkt",
+      "dig som föredrar en snabb och helt digital bolåneprocess utan möten eller rådgivarsamtal",
+      "dig som har låg eller medelhög belåningsgrad och vill belönas tydligt av en modellbaserad räntesättning",
+      "dig som vill ha en bank där priset styrs av tydliga kriterier och inte av förhandling eller helkundskrav"
+    ],
+    "notFor": [
+      "dig som vill ha personlig rådgivning och ett nära kundmöte",
+      "dig som vill kunna påverka räntan genom relation eller helkundsengagemang",
+      "dig som har hög belåningsgrad eller mindre bolån och därför riskerar få en högre räntesats i modellen",
+      "dig som har en mer komplex ekonomi eller behöver flexibilitet vid ovanliga finansieringslösningar"
+    ],
+    "primaryCtaLabel": "ICA Bankens hemsida",
+    "primaryCtaUrl": "https://www.icabanken.se/lana/bolan",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/icabanken/details"
+  },
+
+  "landshypotekbank": {
+    "description": "Landshypotek erbjuder bolån med fokus på stabilitet, transparens och digital hantering. Räntan sätts enligt bankens öppna modell där belåningsgrad är den viktigaste faktorn. Passar dig som vill ha en smidig och rättvis bolånelösning utan krav på att samla fler tjänster hos banken.",
+    "overviewText": "Räntan baseras helt på bankens öppna modell och påverkas inte av personlig förhandling eller engagemang.",
+    "bestFor": [
+      "dig som vill slippa förhandla och få en tydlig och transparent ränta direkt",
+      "dig som föredrar en snabb och helt digital bolåneprocess utan möten eller rådgivarsamtal",
+      "dig som har låg eller medelhög belåningsgrad och vill belönas tydligt av en modellbaserad räntesättning",
+      "dig som vill ha en bank där priset styrs av tydliga kriterier och inte av förhandling eller helkundskrav"
+    ],
+    "notFor": [
+      "dig som vill ha personlig rådgivning och ett nära kundmöte",
+      "dig som vill kunna påverka räntan genom relation eller helkundsengagemang",
+      "dig som har hög belåningsgrad eller mindre bolån och därför riskerar få en högre räntesats i modellen",
+      "dig som har en mer komplex ekonomi eller behöver flexibilitet vid ovanliga finansieringslösningar"
+    ],
+    "primaryCtaLabel": "Landshypoteks hemsida",
+    "primaryCtaUrl": "https://www.landshypotek.se/lana/bolan/",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/landshypotek/details"
+  },
+
+  "ikanobank": {
+    "description": "Ikano Bank erbjuder digitala bolån med enkel struktur och en transparent modell för räntesättning. Banken fokuserar på schyssta och förutsägbara villkor där belåningsgrad styr priset. Passar dig som vill ha ett rakt och okomplicerat bolån utan krångel eller helkundskrav.",
+    "overviewText": "Räntan sätts enligt bankens öppna modell och påverkas inte av förhandling eller övriga banktjänster.",
+    "bestFor": [
+      "dig som vill slippa förhandla och få en tydlig och transparent ränta direkt",
+      "dig som föredrar en snabb och helt digital bolåneprocess utan möten eller rådgivarsamtal",
+      "dig som har låg eller medelhög belåningsgrad och vill belönas tydligt av en modellbaserad räntesättning",
+      "dig som vill ha en bank där priset styrs av tydliga kriterier och inte av förhandling eller helkundskrav"
+    ],
+    "notFor": [
+      "dig som vill ha personlig rådgivning och ett nära kundmöte",
+      "dig som vill kunna påverka räntan genom relation eller helkundsengagemang",
+      "dig som har hög belåningsgrad eller mindre bolån och därför riskerar få en högre räntesats i modellen",
+      "dig som har en mer komplex ekonomi eller behöver flexibilitet vid ovanliga finansieringslösningar"
+    ],
+    "primaryCtaLabel": "Ikano Bankens hemsida",
+    "primaryCtaUrl": "https://ikanobank.se/bolan",
+    "secondaryCtaLabel": "Läs mer om banken",
+    "secondaryCtaUrl": "/bank/ikanobank/details"
+  }
+}

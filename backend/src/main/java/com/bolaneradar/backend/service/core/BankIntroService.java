@@ -15,7 +15,7 @@ public class BankIntroService {
 
     public BankIntroService() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        var resource = new ClassPathResource("data/bankData.json");
+        var resource = new ClassPathResource("data/bankIntroData.json");
 
         bankData =
                 mapper.readValue(resource.getInputStream(), Map.class);
@@ -31,11 +31,7 @@ public class BankIntroService {
         return new BankIntroDto(
                 bankKey,
                 (String) raw.get("description"),
-                (List<String>) raw.get("uspItems"),
-                (String) raw.get("primaryCtaLabel"),
-                (String) raw.get("primaryCtaUrl"),
-                (String) raw.get("secondaryCtaLabel"),
-                (String) raw.get("secondaryCtaUrl")
+                (List<String>) raw.get("uspItems")
         );
     }
 }

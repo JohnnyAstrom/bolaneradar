@@ -12,7 +12,7 @@
 import { apiGet } from "./client";
 
 /* ============================================================
- *  BANK INTRO – BESKRIVNING + USP (NY DEL)
+ *  BANK INTRO – BESKRIVNING + USP
  * ============================================================
  */
 
@@ -24,11 +24,28 @@ export interface BankIntro {
     bankKey: string;
     description: string;
     uspItems: string[];
-    primaryCtaLabel: string;
-    primaryCtaUrl: string;
+}
+
+/* ============================================================
+ *  BANK DETAILS – PASSAR BÄST FÖR / MINDRE BRA FÖR
+ * ============================================================
+ */
+
+export interface BankDetails {
+    description: string;
+    overviewText: string;
+    bestFor: string[];
+    notFor: string[];
+    primaryCtaLabel?: string;
+    primaryCtaUrl?: string;
     secondaryCtaLabel?: string;
     secondaryCtaUrl?: string;
 }
+
+export async function getBankDetails(bankKey: string) {
+    return apiGet<BankDetails>(`/api/banks/${bankKey}/details`);
+}
+
 
 /** Hämtar bankens introduktionssektion (beskrivning, USP, CTA). */
 export async function getBankIntro(bankKey: string) {

@@ -25,13 +25,7 @@ const BankIntroSection: FC<BankIntroSectionProps> = ({
              "USP placeholder – ersätts med dynamisk bankdata.",
              "USP placeholder – t.ex. förmåner eller kundvillkor.",
              "USP placeholder – t.ex. rådgivning eller digitala tjänster."
-         ],
-
-         primaryCtaLabel = "Gå till bankens bolånesida",
-         primaryCtaUrl = "#",
-
-         secondaryCtaLabel,
-         secondaryCtaUrl,
+         ]
      }) => {
 
     const displayName = bankDisplayNames[bankKey] ?? bankKey;
@@ -40,7 +34,7 @@ const BankIntroSection: FC<BankIntroSectionProps> = ({
         <div className="
             max-w-4xl mx-auto
             pt-0 pb-0 px-0     /* mobil */
-            sm:pt-10 sm:pb-12 sm:px-4  /* desktop */
+            sm:py-4 sm:px-6  /* desktop */
         ">
 
             {/* Logotyp */}
@@ -62,33 +56,6 @@ const BankIntroSection: FC<BankIntroSectionProps> = ({
                     </li>
                 ))}
             </ul>
-
-            {/* Knappar */}
-            <div className="flex gap-4 mt-4 flex-wrap">
-                {/* Primär CTA */}
-                <a
-                    href={primaryCtaUrl}
-                    className="
-                        px-6 py-3 bg-primary text-white rounded-lg text-sm font-medium
-                        hover:bg-primary-hover active:bg-primary-active transition
-                    "
-                >
-                    {primaryCtaLabel}
-                </a>
-
-                {/* Sekundär CTA – visas bara om den finns */}
-                {secondaryCtaLabel && secondaryCtaUrl && (
-                    <a
-                        href={secondaryCtaUrl}
-                        className="
-                            px-6 py-3 border border-primary text-primary rounded-lg text-sm font-medium
-                            hover:bg-primary/10 active:bg-primary/20 transition
-                        "
-                    >
-                        {secondaryCtaLabel}
-                    </a>
-                )}
-            </div>
         </div>
     );
 };

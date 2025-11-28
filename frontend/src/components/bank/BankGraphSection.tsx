@@ -58,6 +58,15 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
             try {
                 const list = await fetchAvailableTerms(bankName);
                 setTerms(list);
+
+                // Förvälj "3M" om den finns
+                if (list.includes("3M")) {
+                    setSelectedTerm("3M");
+                } else if (list.length > 0) {
+                    // fallback: välj första termen om 3M saknas
+                    setSelectedTerm(list[0]);
+                }
+
             } catch {
                 setTerms([]);
             }
@@ -113,18 +122,18 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
      * 3) Render
      * --------------------------------------- */
     return (
-        <div className="mt-12">
-            <h2 className="text-2xl font-semibold text-text-primary text-center mb-2">
+        <div>
+            <h2 className="text-2xl font-semibold text-text-primary mb-2">
                 Historisk utveckling
             </h2>
 
-            <p className="text-center text-text-secondary text-sm mb-6">
+            <p className="text-text-secondary text-sm mb-6">
                 Visar bankens genomsnittliga boränta de senaste 12 månaderna.
                 <br />
                 Välj bindningstid i dropdown menyn nedan:
             </p>
 
-            <div className="flex justify-center mb-6">
+            <div className="flex mb-6">
                 <select
                     value={selectedTerm}
                     onChange={(e) => setSelectedTerm(e.target.value)}
