@@ -23,35 +23,35 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
 
-                // GÖR API:et STATELESS
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // Tillåt Swagger
+                        // Swagger alltid öppet
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
 
-                        // Skydda admin
-                        .requestMatchers("/api/admin/**").authenticated()
+                        // Tillåt preflight-requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Blockera OPTIONS (Swagger-preflight)
-                        .requestMatchers(HttpMethod.OPTIONS, "/api/**").denyAll()
+                        // Admin: alltid autentiserat (GET, POST, PUT, DELETE)
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                        // Skydda ändringar
+                        // Protect all modifying API calls
                         .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
 
-                        // Tillåt GET
+                        // Public GET API
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
 
                         // Allt annat tillåts

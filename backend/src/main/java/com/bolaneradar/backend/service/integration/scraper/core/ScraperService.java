@@ -5,7 +5,7 @@ import com.bolaneradar.backend.entity.core.MortgageRate;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.repository.BankRepository;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
-import com.bolaneradar.backend.service.core.RateUpdateLogService;
+import com.bolaneradar.backend.service.admin.RateUpdateLogService;
 import com.bolaneradar.backend.service.integration.EmailService;
 import com.bolaneradar.backend.service.integration.scraper.api.BankScraper;
 import org.springframework.stereotype.Service;
