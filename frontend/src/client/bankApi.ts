@@ -75,7 +75,7 @@ export interface BankRateResponse {
 
 /** Hämtar bankens aktuella räntor (tabellen). */
 export async function getBankRates(bankName: string) {
-    return apiGet<BankRateResponse>(`/api/bank/${bankName}/rates`);
+    return apiGet<BankRateResponse>(`/api/banks/${bankName}/rates`);
 }
 
 /* ============================================================
@@ -98,12 +98,12 @@ export interface HistoricalPoint {
 
 /** Lista över bindningstider som har minst 10 datapunkter. */
 export async function fetchAvailableTerms(bankName: string) {
-    return apiGet<string[]>(`/api/bank/${bankName}/history/available-terms`);
+    return apiGet<string[]>(`/api/banks/${bankName}/history/available-terms`);
 }
 
 /** Hämtar historiska snitträntor för en viss term. */
 export async function fetchHistoricalRates(bankName: string, term: string) {
     return apiGet<HistoricalPoint[]>(
-        `/api/bank/${bankName}/history/data?term=${term}`
+        `/api/banks/${bankName}/history/data?term=${term}`
     );
 }

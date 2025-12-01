@@ -8,19 +8,18 @@ import Section from "../components/layout/Section";
 import BankIntroSection from "../components/bank/BankIntroSection";
 import BankCurrentRatesTable from "../components/bank/BankCurrentRatesTable";
 import BankGraphSection from "../components/bank/BankGraphSection";
+import BankDetailsSection from "../components/bank/BankDetailsSection";
 
 import { bankDisplayNames } from "../config/bankDisplayNames";
-import { bankNameMap } from "../config/bankNameMap";
 
 import { getBankRates } from "../client/bankApi";
 import type { BankRateResponse } from "../client/bankApi";
 
 import { useBankIntro } from "../hooks/useBankIntro";
-import BankDetailsSection from "../components/bank/BankDetailsSection.tsx";
 
 /**
  * Karta över logotyper per bank.
- * Nyckeln (vänster) måste matcha URL-parametern.
+ * Nyckeln måste matcha URL-parametern.
  */
 const logoMap: Record<string, string> = {
     swedbank: "/logos/swedbank.svg",
@@ -40,30 +39,20 @@ const logoMap: Record<string, string> = {
 const BankPage: FC = () => {
     const { bankName } = useParams();
 
-    /**
-     * URL-parametern (t.ex. "seb")
-     * -> normaliseras till lowercase
-     */
-    const urlKey = bankName?.toLowerCase() ?? null;
-
-    /**
-     * I bankNameMap lagras API-nyckeln som backend förväntar sig.
-     * Exempel:
-     *   "lansforsakringarbank" -> "lansforsakringar"
-     */
-    const realBankName = urlKey ? bankNameMap[urlKey] : null;
+    // Normalisera URL-key
+    const bankKey = bankName?.toLowerCase() ?? null;
 
     /* ============================================================
-     * HÄMTA INTRODATA VIA HOOKEN
+     * HÄMTA INTRODATA
      * ============================================================ */
     const {
         data: introData,
         loading: introLoading,
         error: introError
-    } = useBankIntro(urlKey || "");
+    } = useBankIntro(bankKey || "");
 
     /* ============================================================
-     * HÄMTA RÄNTETABELLEN
+     * HÄMTA RÄNTOR
      * ============================================================ */
     const [rateData, setRateData] = useState<BankRateResponse | null>(null);
     const [ratesLoading, setRatesLoading] = useState(true);
@@ -72,13 +61,13 @@ const BankPage: FC = () => {
         let isMounted = true;
 
         const load = async () => {
-            if (!realBankName) {
+            if (!bankKey) {
                 if (isMounted) setRatesLoading(false);
                 return;
             }
 
             try {
-                const res = await getBankRates(realBankName);
+                const res = await getBankRates(bankKey);
                 if (isMounted) setRateData(res);
             } finally {
                 if (isMounted) setRatesLoading(false);
@@ -87,15 +76,17 @@ const BankPage: FC = () => {
 
         load();
         return () => { isMounted = false; };
-    }, [realBankName]);
+    }, [bankKey]);
 
     /* ============================================================
-     * FELHANTERING OCH LOADING
+     * FELHANTERING
      * ============================================================ */
-    if (!bankName) {
+    if (!bankKey) {
         return (
             <PageWrapper>
-                <Section><p className="text-red-600">Kunde inte hitta banken.</p></Section>
+                <Section>
+                    <p className="text-red-600">Kunde inte hitta banken.</p>
+                </Section>
             </PageWrapper>
         );
     }
@@ -111,16 +102,23 @@ const BankPage: FC = () => {
     if (!rateData) {
         return (
             <PageWrapper>
-                <Section><p className="text-red-600">Kunde inte läsa bankens räntedata.</p></Section>
+                <Section>
+                    <p className="text-red-600">
+                        Kunde inte läsa bankens räntedata.
+                    </p>
+                </Section>
             </PageWrapper>
         );
     }
 
     /* ============================================================
-     * UTRÄKNA VISNINGSNAMN OCH LOGO
+     * VISNINGSNAMN + LOGO
      * ============================================================ */
-    const displayName = bankDisplayNames[urlKey!] ?? realBankName ?? urlKey!;
-    const logoUrl = logoMap[urlKey!] ?? "";
+    const displayName =
+        bankDisplayNames[bankKey] ??
+        bankKey;
+
+    const logoUrl = logoMap[bankKey] ?? "";
 
     /* ============================================================
      * RENDERING
@@ -128,11 +126,11 @@ const BankPage: FC = () => {
     return (
         <PageWrapper>
 
-            {/* INTRO (nu dynamisk via API) */}
+            {/* INTRO */}
             <Section>
                 {introData ? (
                     <BankIntroSection
-                        bankKey={urlKey!}
+                        bankKey={bankKey}
                         logoUrl={logoUrl}
                         description={introData.description}
                         uspItems={introData.uspItems}
@@ -144,47 +142,40 @@ const BankPage: FC = () => {
                 )}
             </Section>
 
-            {/* RÄNTOR + GRAF */}
-
+            {/* RÄNTOR */}
             <Section>
                 <div
                     className="
-                    w-full max-w-full mx-auto
-                    p-0 bg-transparent border-none rounded-none
-                    sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
-                    sm:max-w-2xl
-                    md:max-w-3xl
-                    lg:max-w-4xl
-                "
+                        w-full max-w-full mx-auto
+                        p-0 bg-transparent border-none rounded-none
+                        sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
+                        sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
+                    "
                 >
-                    {/* Aktuella räntor */}
                     <BankCurrentRatesTable
                         rows={rateData.rows}
                         averageMonthFormatted={rateData.monthFormatted}
                     />
                 </div>
             </Section>
+
+            {/* HISTORISK GRAF */}
             <Section>
                 <div
                     className="
-                    w-full max-w-full mx-auto
-                    p-0 bg-transparent border-none rounded-none
-                    sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
-                    sm:max-w-2xl
-                    md:max-w-3xl
-                    lg:max-w-4xl
-                "
+                        w-full max-w-full mx-auto
+                        p-0 bg-transparent border-none rounded-none
+                        sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
+                        sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
+                    "
                 >
-                    {/* Historisk graf */}
-                    <div className="w-full">
-                        <BankGraphSection bankName={bankName} />
-                    </div>
+                    <BankGraphSection bankName={bankKey} />
                 </div>
             </Section>
 
-            {/* Bankdetails */}
+            {/* BANK DETAILS */}
             <Section>
-                <BankDetailsSection bankKey={urlKey!} />
+                <BankDetailsSection bankKey={bankKey} />
             </Section>
 
         </PageWrapper>

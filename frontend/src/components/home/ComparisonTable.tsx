@@ -1,7 +1,14 @@
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { bankKeyMap } from "../../config/bankKeyMap";
+import { bankDisplayNames } from "../../config/bankDisplayNames";
+
+// ============================================================
+//  bankName → urlKey (inverterar displaynames)
+// ============================================================
+const bankNameToKey = Object.fromEntries(
+    Object.entries(bankDisplayNames).map(([key, label]) => [label, key])
+);
 
 interface ComparisonTableProps {
     activeTerm: string;
@@ -29,7 +36,6 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    // Sortering
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortDirection, setSortDirection] = useState<SortDirection | null>(null);
 
@@ -58,18 +64,14 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
     }, [activeTerm]);
 
     // ============================================================
-    // SORTERING – enkel och tydlig
+    // SORTERING
     // ============================================================
-
     function onHeaderClick(column: string) {
-        // Ny kolumn → börja alltid med pil ner (down)
         if (sortColumn !== column) {
             setSortColumn(column);
             setSortDirection("down");
             return;
         }
-
-        // Samma kolumn → växla pil
         setSortDirection(prev => (prev === "down" ? "up" : "down"));
     }
 
@@ -82,7 +84,6 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
             let A: any;
             let B: any;
 
-            // Välj rätt fält beroende på kolumn
             if (sortColumn === "bankName") {
                 A = a.bankName;
                 B = b.bankName;
@@ -100,30 +101,23 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                 B = a.lastChanged ? new Date(a.lastChanged).getTime() : null;
             }
 
-            // Sortera null sist
             if (A == null && B == null) return 0;
             if (A == null) return 1;
             if (B == null) return -1;
 
-            // Kolumnspecifik sortering
             if (sortColumn === "bankName") {
                 const cmp = A.localeCompare(B, "sv");
                 return sortDirection === "down" ? cmp : -cmp;
             }
 
-            // Standard numerisk sortering
-            if (sortDirection === "down") {
-                return A - B;
-            } else {
-                return B - A;
-            }
+            return sortDirection === "down" ? A - B : B - A;
         });
 
         return sorted;
     }
 
     // ============================================================
-    // HJÄLPFUNKTION – ikon för sortering
+    // SORT-IKON
     // ============================================================
     function sortIcon(column: string) {
         if (sortColumn !== column || !sortDirection) {
@@ -137,7 +131,6 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
     // ============================================================
     // RENDERING
     // ============================================================
-
     if (loading) return <p>Hämtar aktuella räntor...</p>;
     if (error) return <p className="text-negative">{error}</p>;
     if (!data) return <p>Ingen data tillgänglig.</p>;
@@ -152,7 +145,6 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
 
                     <thead className="bg-bg-light text-text-primary">
                     <tr>
-                        {/* Bank */}
                         <th
                             className="px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("bankName")}
@@ -160,7 +152,6 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                             Bank {sortIcon("bankName")}
                         </th>
 
-                        {/* Listränta */}
                         <th
                             className="px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("listRate")}
@@ -168,7 +159,6 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                             Listränta {sortIcon("listRate")}
                         </th>
 
-                        {/* Förändring */}
                         <th
                             className="px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("diff")}
@@ -176,18 +166,15 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                             Förändring {sortIcon("diff")}
                         </th>
 
-                        {/* Snittränta */}
                         <th
                             className="px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("avgRate")}
                         >
-                            Snittränta{" "}
-                            {averageMonthFormatted ? `(${averageMonthFormatted})` : ""}
+                            Snittränta {averageMonthFormatted ? `(${averageMonthFormatted})` : ""}
                             {" "}
                             {sortIcon("avgRate")}
                         </th>
 
-                        {/* Senast ändrad */}
                         <th
                             className="px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("lastChanged")}
@@ -202,7 +189,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                         <tr key={row.bankName} className="hover:bg-row-hover">
                             <td className="px-4 py-3">
                                 <NavLink
-                                    to={`/bank/${bankKeyMap[row.bankName]}`}
+                                    to={`/bank/${bankNameToKey[row.bankName]}`}
                                     className="text-primary hover:underline"
                                 >
                                     {row.bankName}
@@ -222,34 +209,32 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                                                 : row.diff < 0
                                                     ? "bg-green-100 text-green-700"
                                                     : "bg-red-100 text-red-700"
-                                            }
+                                        }
                                         `}
                                     >
                                         {row.listRate.toFixed(2)}%
                                     </span>
-                                ) : (
-                                    "–"
-                                )}
+                                ) : "–"}
                             </td>
 
-
                             <td className="px-4 py-3">
-                                {row.diff == null ? (
-                                    "–"
-                                ) : (
+                                {row.diff == null ? "–" : (
                                     <span
                                         className={`
                                             inline-flex items-center justify-center gap-1
                                             h-[28px]
                                             px-2 rounded-xl text-sm font-medium mx-auto
-                                            ${row.diff > 0 ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}
+                                            ${
+                                            row.diff > 0
+                                                ? "bg-red-100 text-red-700"
+                                                : "bg-green-100 text-green-700"
+                                        }
                                         `}
-                                                                >
+                                    >
                                         {row.diff > 0 ? "▲" : "▼"} {Math.abs(row.diff).toFixed(2)}%
                                     </span>
                                 )}
                             </td>
-
 
                             <td className="px-4 py-3">
                                 {row.avgRate != null ? `${row.avgRate.toFixed(2)}%` : "–"}

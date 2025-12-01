@@ -7,7 +7,7 @@ const TableFooter: FC = () => {
     useEffect(() => {
         async function load() {
             try {
-                const res = await fetch("http://localhost:8080/api/rates/updates/latest/global");
+                const res = await fetch("/api/rates/updates/latest/global");
                 const data = await res.json();
 
                 if (data.latestScrape) {
