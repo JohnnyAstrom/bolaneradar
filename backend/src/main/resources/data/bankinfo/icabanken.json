@@ -1,0 +1,49 @@
+{
+  "title": "ICA Banken",
+  "intro": "ICA Banken erbjuder enkla och digitala bolån med helt transparent prissättning. Räntan sätts enligt en öppen modell där belåningsgrad och lånebelopp styr priset. Passar dig som vill ha en smidig, förutsägbar och helt digital lösning utan krav på helkundsengagemang.",
+
+  "deepInsights": [
+    {
+      "heading": "1. Helt modellstyrd ränta — inga förhandlingar",
+      "text": "ICA Banken använder en öppen prislista där belåningsgrad är den viktigaste faktorn för vilken ränta du får. Du behöver inte vara helkund, och du kan inte förhandla priset — samma regler gäller för alla med samma förutsättningar."
+    },
+    {
+      "heading": "2. Fullt digital bolåneupplevelse",
+      "text": "Ansökan, uppläggning och uppföljning är helt digitala. ICA Banken riktar sig till dig som vill slippa rådgivningsmöten, telefonsamtal och traditionell bankkontakt."
+    },
+    {
+      "heading": "3. Enkelt upplägg — och enkelt att förstå",
+      "text": "Inga paket, inga dolda villkor och inga krav på att du flyttar konton eller sparande. Du får samma ränta som alla andra i samma belåningsintervall."
+    },
+    {
+      "heading": "4. Transparens gynnar stark ekonomi",
+      "text": "Har du låg eller medelhög belåningsgrad får du ofta bättre ränta här än hos banker som använder individuell prissättning. Banken belönar objektiva kriterier, inte relationer."
+    },
+    {
+      "heading": "5. Mindre flexibilitet vid mer komplexa affärer",
+      "text": "Vid hög belåningsgrad, om du har ojämn inkomst, ovanliga lånestrukturer eller behöver personlig rådgivning kan ICA Banken vara mindre lämplig. Då passar en relationell bank bättre."
+    }
+  ],
+
+  "faq": [
+    {
+      "question": "Kan jag förhandla om räntan?",
+      "answer": "Nej. ICA Banken använder en öppen och fast modell där belåningsgrad och lånebelopp bestämmer priset. Alla med samma förutsättningar får samma ränta."
+    },
+    {
+      "question": "Behöver jag vara helkund?",
+      "answer": "Nej. Du kan ha bolånet separat och behöver inte flytta konton, sparande eller andra tjänster."
+    },
+    {
+      "question": "Är banken helt digital?",
+      "answer": "Ja, processen är i princip helt digital. Det finns kundservice, men ingen rådgivning kopplad till räntesättning."
+    },
+    {
+      "question": "Vilka kunder passar ICA Banken bäst för?",
+      "answer": "För dig som vill ha en enkel, transparent och förutsägbar lösning — särskilt om du har låg belåningsgrad."
+    }
+  ],
+
+  "ctaLabel": "Besök ICA Bankens hemsida",
+  "ctaUrl": "https://www.icabanken.se/lana/bolan"
+}

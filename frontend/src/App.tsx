@@ -6,6 +6,7 @@ import GuidePage from "./pages/GuidePage.tsx";
 import AboutPage from "./pages/AboutPage.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
 import BankPage from "./pages/BankPage";
+import BankInfoPage from "./pages/BankInfoPage.tsx";
 
 
 export default function App() {
@@ -18,7 +19,8 @@ export default function App() {
                     <Route path="/guide" element={<GuidePage />} />
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/contact" element={<ContactPage />} />
-                    <Route path="/bank/:bankName" element={<BankPage />} />
+                    <Route path="/bank/:bankKey" element={<BankPage />} />
+                    <Route path="/bank/:bankKey/info" element={<BankInfoPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>

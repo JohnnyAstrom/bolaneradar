@@ -1,0 +1,49 @@
+{
+  "title": "Ikano Bank",
+  "intro": "Ikano Bank erbjuder enkla och transparenta bolån med fokus på schyssta villkor och tydlig prissättning. Banken använder en helt modellbaserad räntesättning där belåningsgrad är den viktigaste faktorn, och där alla kunder med samma förutsättningar får samma ränta. Passar dig som vill ha ett rakt och okomplicerat bolån utan förhandling eller helkundskrav.",
+
+  "deepInsights": [
+    {
+      "heading": "1. Tydlig och transparent räntemodell",
+      "text": "Ikano Bank arbetar med en helt öppen modell där räntan styrs av belåningsgrad och några få fasta kriterier. Ingen förhandling, inga rabatter och inga specialvillkor — samma ränta ges till alla kunder med samma förutsättningar."
+    },
+    {
+      "heading": "2. Digital och snabb bolåneprocess",
+      "text": "Hela ansökningsflödet är digitalt. Du får besked snabbt och slipper möten, telefonsamtal och manuella kontakter. Passar särskilt de som värdesätter enkelhet."
+    },
+    {
+      "heading": "3. Ingen personlig rådgivning eller helhetslösningar",
+      "text": "Banken erbjuder inte traditionella rådgivningsmöten eller helkundsupplägg. Fokus är bolån — inget mer. Detta gör banken rak och effektiv, men mindre flexibel."
+    },
+    {
+      "heading": "4. Bäst för dig med låg eller medelhög belåningsgrad",
+      "text": "Precis som andra modellbanker belönar Ikano låg belåningsgrad tydligt. Har du amorterat mycket eller köpt en bostad med hög kontantinsats passar banken särskilt bra."
+    },
+    {
+      "heading": "5. Mindre bra för komplexa fall",
+      "text": "Om du har hög belåningsgrad, ovanlig inkomststruktur eller behov av manuella undantag kan andra banker vara mer flexibla. Ikano håller sig strikt till modellen."
+    }
+  ],
+
+  "faq": [
+    {
+      "question": "Kan jag förhandla räntan?",
+      "answer": "Nej. Banken använder en strikt modell. Räntan påverkas endast av belåningsgrad och andra öppna kriterier, inte av förhandling eller helkund."
+    },
+    {
+      "question": "Krävs engagemang eller helkund?",
+      "answer": "Nej. Ikano ställer inga krav på att du flyttar övriga banktjänster eller blir helkund."
+    },
+    {
+      "question": "Passar banken om jag har hög belåningsgrad?",
+      "answer": "Inte alltid. Vid hög belåningsgrad får modellbanker ofta högre pris än rådgivningsbanker, eftersom modellen belönar låg risk."
+    },
+    {
+      "question": "Får jag personlig rådgivning?",
+      "answer": "Nej. Banken erbjuder ingen individuell rådgivning utan fokuserar på ett effektivt, digitalt upplägg."
+    }
+  ],
+
+  "ctaLabel": "Besök Ikano Bank",
+  "ctaUrl": "https://ikanobank.se/bolan"
+}

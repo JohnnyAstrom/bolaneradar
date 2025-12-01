@@ -37,10 +37,7 @@ const logoMap: Record<string, string> = {
 };
 
 const BankPage: FC = () => {
-    const { bankName } = useParams();
-
-    // Normalisera URL-key
-    const bankKey = bankName?.toLowerCase() ?? null;
+    const { bankKey } = useParams();
 
     /* ============================================================
      * HÄMTA INTRODATA

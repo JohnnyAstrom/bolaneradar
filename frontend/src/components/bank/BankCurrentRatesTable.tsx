@@ -8,7 +8,7 @@
  */
 
 import type { FC } from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import type { BankRateRow } from "../../client/bankApi";
 
 interface Props {
@@ -88,10 +88,9 @@ const BankCurrentRatesTable: FC<Props> = ({ rows, averageMonthFormatted }) => {
                         const isOpen = openIndex === index;
 
                         return (
-                            <>
-
-                                {/* ---- HUVUDRADA ---- */}
-                                <tr key={index} className="hover:bg-row-hover transition-colors">
+                            <React.Fragment key={row.term ?? index}>
+                                {/* ---- HUVUDRAD ---- */}
+                                <tr className="hover:bg-row-hover transition-colors">
 
                                     {/* Bindningstid */}
                                     <td className="px-2 sm:px-4 py-3">{row.term}</td>
@@ -152,8 +151,7 @@ const BankCurrentRatesTable: FC<Props> = ({ rows, averageMonthFormatted }) => {
                                         </td>
                                     </tr>
                                 )}
-
-                            </>
+                            </React.Fragment>
                         );
                     })}
 

@@ -97,13 +97,20 @@ export interface HistoricalPoint {
 }
 
 /** Lista över bindningstider som har minst 10 datapunkter. */
-export async function fetchAvailableTerms(bankName: string) {
-    return apiGet<string[]>(`/api/banks/${bankName}/history/available-terms`);
+export async function fetchAvailableTerms(bankKey: string) {
+    return apiGet<string[]>(`/api/banks/${bankKey}/history/available-terms`);
 }
 
 /** Hämtar historiska snitträntor för en viss term. */
-export async function fetchHistoricalRates(bankName: string, term: string) {
+export async function fetchHistoricalRates(bankKey: string, term: string) {
     return apiGet<HistoricalPoint[]>(
-        `/api/banks/${bankName}/history/data?term=${term}`
+        `/api/banks/${bankKey}/history/data?term=${term}`
     );
+}
+
+/**Hämtar fördjupad information om banken (t.ex. lång text till infosidan) */
+export async function getBankInfo(bankKey: string) {
+    const res = await fetch(`/api/banks/${bankKey}/info`);
+    if (!res.ok) throw new Error("Kunde inte hämta bankinfo");
+    return res.json();
 }
