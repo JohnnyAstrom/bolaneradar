@@ -1,0 +1,49 @@
+{
+  "title": "Ålandsbanken",
+  "intro": "Ålandsbanken är en premiuminriktad bank med fokus på personlig service, private banking och långsiktiga kundrelationer. Bolånen erbjuds som en del av en helhet där sparande, rådgivning och kapitalförvaltning ofta spelar en central roll. Passar dig som vill ha en exklusiv och personlig bankupplevelse snarare än lägsta möjliga ränta.",
+
+  "deepInsights": [
+    {
+      "heading": "1. Bolån är en del av ett större engagemang",
+      "text": "Hos Ålandsbanken är bolån sällan en fristående produkt. Banken ser hela kundens ekonomiska situation – sparande, kapital, inkomster och framtida planer – som underlag för villkoren. Det gör erbjudandet mer personligt, men kräver också ett större engagemang från kunden."
+    },
+    {
+      "heading": "2. Personlig rådgivning står i centrum",
+      "text": "Ålandsbanken är känd för sin rådgivningstradition. Du får ofta en personlig rådgivare och mer tid i möten än hos större banker. Fokus ligger på kvalitet, förtroende och relationer – inte masshantering eller helt digitala processer."
+    },
+    {
+      "heading": "3. Räntan baseras på relation, kapital och helhetslösningar",
+      "text": "Prissättningen styrs av kundens totala engagemang. Kunder med sparande, investeringar eller private banking får ofta de mest förmånliga villkoren. Detta gör banken attraktiv för kapitalstarka hushåll, men mindre lämpad för dig som enbart vill jämföra räntor."
+    },
+    {
+      "heading": "4. Passar bäst för ekonomiskt stabila hushåll med investeringar",
+      "text": "Eftersom banken prioriterar långsiktiga relationer och helhetslösningar passar Ålandsbanken främst dig som har sparande, investeringar eller större ekonomiska planer – och vill samla allt hos en premiumbank."
+    },
+    {
+      "heading": "5. Mindre lämplig om du söker enkel, digital och prisdriven bank",
+      "text": "Ålandsbanken är inte byggd som en lågprisaktör och inte heller som en helautomatisk digital bank. Om du vill ha snabb ansökan, transparent modell och lägsta ränta finns enklare alternativ som SBAB, Skandia och ICA Banken."
+    }
+  ],
+
+  "faq": [
+    {
+      "question": "Behöver jag ha sparande hos banken för att få bolån?",
+      "answer": "I praktiken ja. Banken ser helheten som avgörande och erbjuder oftast bolån till kunder som även vill samla sparande eller kapitalförvaltning."
+    },
+    {
+      "question": "Hur personlig är rådgivningen?",
+      "answer": "Väldigt. Ålandsbanken är känd för sin kundkontakt, och du får vanligtvis en rådgivare som följer dig över tid."
+    },
+    {
+      "question": "Hur digital är bolåneprocessen?",
+      "answer": "Du kan hantera vissa delar digitalt, men större delen av processen sker via rådgivare och personlig dialog."
+    },
+    {
+      "question": "Passar banken om jag främst vill jaga lägsta räntan?",
+      "answer": "Inte riktigt. Banken är inriktad på helhetslösningar och personlig service – inte konkurrens på pris i första hand."
+    }
+  ],
+
+  "ctaLabel": "Besök Ålandsbankens hemsida",
+  "ctaUrl": "https://www.alandsbanken.se/banktjanster/lana-pengar/bolan"
+}

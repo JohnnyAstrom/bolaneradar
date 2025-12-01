@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { Check, X } from "lucide-react";
 import { useBankDetails } from "../../hooks/useBankDetails";
 import { bankDisplayNames } from "../../config/bankDisplayNames";
+import { Link } from "react-router-dom";
 
 interface BankDetailsSectionProps {
     bankKey: string;
@@ -13,16 +14,20 @@ const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
     const displayName = bankDisplayNames[bankKey] ?? bankKey;
 
     if (loading) return <p>Laddar bankinformation…</p>;
-    if (error || !details) return <p className="text-red-600">Kunde inte läsa bankinformationen.</p>;
+    if (error || !details)
+        return <p className="text-red-600">Kunde inte läsa bankinformationen.</p>;
 
     return (
-        <div className="
-            w-full mx-auto
-            bg-white rounded-md
-            p-0 mt-0
-            sm:rounded-lg sm:p-6
-            max-w-2xl sm:max-w-4xl
-        ">
+        <div
+            className="
+                w-full mx-auto
+                bg-white rounded-md
+                p-0 mt-0
+                sm:rounded-lg sm:p-6
+                max-w-2xl sm:max-w-4xl
+            "
+        >
+            {/* Titel */}
             <h2 className="text-xl font-semibold text-text-primary mb-4">
                 Om {displayName}
             </h2>
@@ -32,7 +37,7 @@ const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
                 {details.overviewText}
             </p>
 
-            {/* Best for */}
+            {/* Passar bäst för */}
             <div className="mb-10">
                 <h3 className="text-lg font-semibold text-text-primary mb-4">
                     Passar bäst för
@@ -48,7 +53,7 @@ const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
                 </ul>
             </div>
 
-            {/* Not for */}
+            {/* Mindre bra för */}
             <div className="mb-10">
                 <h3 className="text-lg font-semibold text-text-primary mb-4">
                     Mindre bra för
@@ -64,40 +69,44 @@ const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
                 </ul>
             </div>
 
-            {/* CTA-knappar */}
-            <div className="flex flex-wrap gap-3 sm:gap-5 mt-6">
+            {/* --- CTA Sektion (ny, renare, matchar BankInfoPage) --- */}
+            <div className="pt-6 mt-6 border-t border-border flex flex-wrap gap-3 sm:gap-5">
+
+                {/* Sekundär CTA — Läs mer om banken */}
+                {details.secondaryCtaLabel && (
+                    <Link
+                        to={`/bank/${bankKey}/info`}
+                        className="
+                            inline-flex items-center justify-center
+                            px-5 py-3
+                            border border-primary text-primary rounded-lg text-sm font-medium
+                            whitespace-nowrap
+                            hover:bg-primary/10 active:bg-primary/20
+                            transition
+                            flex-1 sm:flex-none
+                        "
+                    >
+                        {details.secondaryCtaLabel}
+                    </Link>
+                )}
+
+                {/* Primär CTA — besök bankens hemsida */}
                 {details.primaryCtaLabel && details.primaryCtaUrl && (
                     <a
                         href={details.primaryCtaUrl}
+                        target="_blank"
                         className="
-                          inline-flex items-center justify-center
-                          px-5 py-3
-                          max-w-[48%]
-                          bg-primary text-white rounded-lg text-sm font-medium
-                          whitespace-nowrap
-                          hover:bg-primary-hover active:bg-primary-active transition
-                      "
+                            inline-flex items-center justify-center
+                            px-5 py-3
+                            bg-primary text-white rounded-lg text-sm font-medium
+                            whitespace-nowrap
+                            hover:bg-primary-hover active:bg-primary-active
+                            transition
+                            flex-1 sm:flex-none
+                        "
                     >
                         {details.primaryCtaLabel}
                     </a>
-
-                )}
-
-                {details.secondaryCtaLabel && details.secondaryCtaUrl && (
-                    <a
-                        href={details.secondaryCtaUrl}
-                        className="
-                          inline-flex items-center justify-center
-                          px-5 py-3
-                          max-w-[48%]
-                          border border-primary text-primary rounded-lg text-sm font-medium
-                          whitespace-nowrap
-                          hover:bg-primary/10 active:bg-primary/20 transition
-                      "
-                    >
-                        {details.secondaryCtaLabel}
-                    </a>
-
                 )}
             </div>
         </div>

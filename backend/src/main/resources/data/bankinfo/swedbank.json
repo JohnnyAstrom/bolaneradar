@@ -1,0 +1,46 @@
+{
+  "title": "Swedbank",
+  "intro": "Swedbank är en av Sveriges största banker och erbjuder bolån med fokus på personlig rådgivning, helhetssyn och långsiktiga kundrelationer. Banken arbetar relationellt – vilket innebär att din ränta påverkas av hur du använder banken som helhet, inte bara av belåningsgrad eller lånebelopp.",
+  "deepInsights": [
+    {
+      "heading": "1. Så fungerar Swedbanks räntesättning",
+      "text": "Swedbank använder en individuell och relationell modell för att sätta räntan. I stället för en fast och helt transparent matris väger banken in flera faktorer såsom sparande, tjänster, kundhistorik, pension, lönekonto och hur din totala ekonomi ser ut. Rabatten formas i dialog med en rådgivare, vilket ger möjligheten att påverka sina villkor men gör modellen mindre standardiserad än exempelvis SBAB, Skandia och ICA Banken."
+    },
+    {
+      "heading": "2. Personlig rådgivning har stor betydelse",
+      "text": "Rådgivningsmöten är en naturlig del av Swedbanks bolåneprocess. Banken arbetar utifrån ett synsätt där människokontakt och förtroende är centrala för att förstå kundens behov. För dig som uppskattar samtal, löpande dialog och skräddarsydda upplägg kan detta vara en stor fördel. För andra kan det upplevas mer tidskrävande eller onödigt om man föredrar digitala, automatiserade processer."
+    },
+    {
+      "heading": "3. Du kan påverka din ränta aktivt",
+      "text": "Eftersom modellen inte är helt fast i förväg kan du själv påverka villkoren genom att stärka ditt engagemang. Sparande hos banken, förbättrad ekonomi, amorteringar, pension, försäkringar och andra tjänster kan ge bättre förhandlingsläge. Swedbank är därför ofta en bra bank för dig som vill vara aktiv i relationen och som vill kunna påverka sin ränta genom att bygga upp ett större hellekileengagemang."
+    },
+    {
+      "heading": "4. Passar bäst för dig som vill ha en relationell bank",
+      "text": "Swedbank lämpar sig främst för kunder som uppskattar personlig kontakt, vill ha trygghet och värderar ett löpande samarbete med rådgivare. Banken fungerar särskilt bra för dig som planerar att samla flera tjänster, har god ekonomi och ser värde i att banken tar hänsyn till helheten i din ekonomiska situation. Modellen belönar långsiktighet och engagemang snarare än enbart låg belåningsgrad."
+    },
+    {
+      "heading": "5. Mindre lämplig om du föredrar helt automatiserade processer",
+      "text": "Ansökan kan startas digitalt, men den slutliga räntan blir ofta ett resultat av samtal och individuell bedömning. För dig som vill slippa förhandlingar, möten och dialog kan banken upplevas mindre smidig. Om du vill ha full transparens, snabb digital hantering och exakt samma ränta som andra i samma situation är SBAB, Skandiabanken och ICA Banken ofta bättre alternativ."
+    }
+  ],
+  "faq": [
+    {
+      "question": "Behöver jag vara helkund för att få bra ränta?",
+      "answer": "Nej, men rabatten påverkas starkt av ditt totala engagemang. Swedbank premierar kunder som samlar flera tjänster, har sparande hos banken eller visar att de vill bygga en långsiktig relation."
+    },
+    {
+      "question": "Kan jag få en helt digital offert?",
+      "answer": "Du kan påbörja ansökan digitalt, men Swedbank använder ofta rådgivning i processen för att sätta den slutliga räntan. Det innebär att ett samtal eller möte ibland behövs för att slutgiltiga villkor ska kunna ges."
+    },
+    {
+      "question": "Varför skiljer sig räntan mellan olika kunder?",
+      "answer": "Räntan sätts individuellt och påverkas av faktorer som ekonomi, sparande, belåningsgrad, relation, kundhistorik och rådgivningsdialog. Därför kan två personer med liknande bostad få olika räntor."
+    },
+    {
+      "question": "Passar Swedbank om jag vill slippa möten och förhandling?",
+      "answer": "Inte alltid. Banken är som bäst för kunder som uppskattar rådgivning, kontakt och relationer. Om du vill ha en helt digital upplevelse är andra banker i regel smidigare."
+    }
+  ],
+  "ctaLabel": "Besök Swedbanks hemsida",
+  "ctaUrl": "https://www.swedbank.se/privat/boende-och-bolan.html"
+}

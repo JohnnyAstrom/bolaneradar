@@ -34,8 +34,7 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
 
     /* ---------------------------------------------------------
      * Hjälpfunktion: formatMonth("2025-03-01") → "Mars 2025"
-     * ---------------------------------------------------------
-     */
+     * --------------------------------------------------------- */
     const formatMonth = (isoDate: string) => {
         const [year, month] = isoDate.split("-");
         const date = new Date(Number(year), Number(month) - 1);
@@ -44,9 +43,7 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
             month: "short"
         });
 
-        // Ta bort eventuell punkt (nov., okt. → Nov, Okt)
         const clean = monthName.replace(".", "");
-
         return `${clean.charAt(0).toUpperCase() + clean.slice(1)} ${year}`;
     };
 
@@ -59,11 +56,9 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                 const list = await fetchAvailableTerms(bankName);
                 setTerms(list);
 
-                // Förvälj "3M" om den finns
                 if (list.includes("3M")) {
                     setSelectedTerm("3M");
                 } else if (list.length > 0) {
-                    // fallback: välj första termen om 3M saknas
                     setSelectedTerm(list[0]);
                 }
 
@@ -112,10 +107,8 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
         }
 
         loadHistory();
+        return () => { isCancelled = true; };
 
-        return () => {
-            isCancelled = true;
-        };
     }, [selectedTerm, bankName]);
 
     /* ---------------------------------------
@@ -155,17 +148,18 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
 
             {/* Grafcontainer – responsiv höjd & full bredd */}
             <div
-                className={`
-                    w-full 
-                    bg-white 
-                    border border-border 
+                className="
+                    w-full
+                    bg-white
+                    border border-border
                     rounded-lg
-                    px-2 sm:px-4 
+                    px-2 sm:px-4
                     py-4
-                    text-text-secondary 
+                    text-text-secondary
                     text-xs sm:text-sm
                     h-[400px] sm:h-[450px] md:h-[500px]
-                `}
+                    min-h-[300px]
+                "
             >
                 {/* 1) Ingen term vald */}
                 {!selectedTerm && (
@@ -181,85 +175,84 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                     </div>
                 )}
 
-                {/* 3) Felmeddelande */}
+                {/* 3) Fel */}
                 {selectedTerm && !loading && error && (
                     <div className="w-full h-full flex items-center justify-center">
                         <span className="text-red-600">{error}</span>
                     </div>
                 )}
 
-                {/* 4) Grafen */}
+                {/* 4) Graf */}
                 {selectedTerm && !loading && !error && data.length > 0 && (
-                    <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={data}>
-                            <defs>
-                                <linearGradient id="rateGradient" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#2563eb" stopOpacity={0.3} />
-                                    <stop offset="100%" stopColor="#2563eb" stopOpacity={0.05} />
-                                </linearGradient>
-                            </defs>
+                    <div className="w-full h-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={data}>
+                                <defs>
+                                    <linearGradient id="rateGradient" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#2563eb" stopOpacity={0.3} />
+                                        <stop offset="100%" stopColor="#2563eb" stopOpacity={0.05} />
+                                    </linearGradient>
+                                </defs>
 
-                            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
 
-                            <XAxis
-                                dataKey="effectiveDate"
-                                tickFormatter={(d) => formatMonth(d)}
-                                tick={{ fontSize: 10 }}
-                                stroke="#6B7280"
-                                interval="preserveStartEnd" // bättre på små skärmar
-                            />
+                                <XAxis
+                                    dataKey="effectiveDate"
+                                    tickFormatter={(d) => formatMonth(d)}
+                                    tick={{ fontSize: 10 }}
+                                    stroke="#6B7280"
+                                    interval="preserveStartEnd"
+                                />
 
-                            <YAxis
-                                width={window.innerWidth < 640 ? 32 : 50}   // kompaktare på mobil
-                                domain={[1.0, 5.0]}
-                                ticks={[1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]}
-                                tickFormatter={(v) =>
-                                    window.innerWidth < 640
-                                        ? `${v.toFixed(1)}%`     // Mobil: "5.0%"
-                                        : `${v.toFixed(2)} %`    // Desktop: "5.00 %"
-                                }
-                                tick={{ fontSize: 11 }}
-                                stroke="#6B7280"
-                            />
+                                <YAxis
+                                    width={window.innerWidth < 640 ? 32 : 50}
+                                    domain={[1.0, 5.0]}
+                                    ticks={[1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]}
+                                    tickFormatter={(v) =>
+                                        window.innerWidth < 640
+                                            ? `${v.toFixed(1)}%`
+                                            : `${v.toFixed(2)} %`
+                                    }
+                                    tick={{ fontSize: 11 }}
+                                    stroke="#6B7280"
+                                />
 
+                                <Tooltip
+                                    formatter={(v: number) => [`${v.toFixed(2)} %`, "Snittränta"]}
+                                    labelFormatter={(label: string) =>
+                                        `Datum: ${formatMonth(label)}`
+                                    }
+                                    contentStyle={{
+                                        borderRadius: "8px",
+                                        background: "white",
+                                        border: "1px solid #E5E7EB",
+                                        fontSize: "12px"
+                                    }}
+                                />
 
-                            <Tooltip
-                                formatter={(v: number) => [`${v.toFixed(2)} %`, "Snittränta"]}
-                                labelFormatter={(label: string) =>
-                                    `Datum: ${formatMonth(label)}`
-                                }
-                                contentStyle={{
-                                    borderRadius: "8px",
-                                    background: "white",
-                                    border: "1px solid #E5E7EB",
-                                    fontSize: "12px"
-                                }}
-                            />
+                                <Area
+                                    type="monotone"
+                                    dataKey="ratePercent"
+                                    stroke="none"
+                                    fill="url(#rateGradient)"
+                                    tooltipType="none"
+                                />
 
-                            {/* Fylld area under linjen */}
-                            <Area
-                                type="monotone"
-                                dataKey="ratePercent"
-                                stroke="none"
-                                fill="url(#rateGradient)"
-                                tooltipType="none"
-                            />
-
-                            {/* Själva linjen */}
-                            <Line
-                                type="monotone"
-                                dataKey="ratePercent"
-                                name="Snittränta"
-                                stroke="#2563eb"
-                                strokeWidth={2}
-                                dot={{ r: 3 }}
-                                activeDot={{ r: 5 }}
-                            />
-                        </LineChart>
-                    </ResponsiveContainer>
+                                <Line
+                                    type="monotone"
+                                    dataKey="ratePercent"
+                                    name="Snittränta"
+                                    stroke="#2563eb"
+                                    strokeWidth={2}
+                                    dot={{ r: 3 }}
+                                    activeDot={{ r: 5 }}
+                                />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
                 )}
 
-                {/* 5) Term vald men ingen data */}
+                {/* 5) Ingen data */}
                 {selectedTerm && !loading && !error && data.length === 0 && (
                     <div className="w-full h-full flex items-center justify-center">
                         <span>Ingen historik finns för denna bindningstid.</span>

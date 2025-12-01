@@ -1,0 +1,49 @@
+{
+  "title": "Skandiabanken",
+  "intro": "Skandiabanken erbjuder moderna och digitala bolån med tydliga villkor och en öppen prissättningsmodell. Räntan bestäms av belåningsgrad och lånebelopp – inte av förhandling eller helkundskrav. Passar dig som vill ha en smidig och transparent digital upplevelse.",
+
+  "deepInsights": [
+    {
+      "heading": "1. Prissättningen styrs helt av en öppen modell",
+      "text": "Skandiabanken använder en tydlig matris där belåningsgrad och lånets storlek avgör räntan. Ingen individuell prövning eller förhandlingsdialog påverkar priset, vilket skapar förutsägbarhet."
+    },
+    {
+      "heading": "2. Fullt digital bolåneprocess",
+      "text": "Ansökan är byggd för att vara enkel och helt digital. De flesta kunder får offert och kreditbesked utan att behöva boka möte. Detta gör banken extra attraktiv för digitala användare."
+    },
+    {
+      "heading": "3. Lätta att jämföra med SBAB – men med egen stil",
+      "text": "Skandiabanken liknar SBAB när det gäller transparens, men har en mer 'modern bank'-upplevelse kopplad till Skandias övriga koncern. För dig som gillar tydlighet men vill ha något mer \"traditionellt bankigt\" är Skandiabanken ett mellanting."
+    },
+    {
+      "heading": "4. Passar bäst för dig som vill ha enklaste möjliga upplägg",
+      "text": "Du slipper rådgivningsmöten, förhandling och osäkerhet. Banken belönar kunder med låg belåningsgrad och tydliga ekonomiska förutsättningar."
+    },
+    {
+      "heading": "5. Mindre lämplig vid komplexa bolån eller hög belåningsgrad",
+      "text": "Skandiabanken fungerar bäst när din ekonomi är okomplicerad. Vid hög belåningsgrad eller många delägare kan andra banker erbjuda större flexibilitet."
+    }
+  ],
+
+  "faq": [
+    {
+      "question": "Kan jag förhandla min ränta?",
+      "answer": "Nej. Skandiabanken använder en fast modell där belåningsgrad och lånebelopp bestämmer priset. Alla kunder med samma förutsättningar får samma ränta."
+    },
+    {
+      "question": "Hur digital är banken?",
+      "answer": "Mycket digital. Allt från ansökan till upplägg och signering är byggt för att vara smidigt och snabbt utan möten."
+    },
+    {
+      "question": "Passar Skandiabanken om jag vill ha personlig rådgivning?",
+      "answer": "Inte i första hand. Det finns kundservice och stöd, men banken är inte utformad för personliga möten eller relationsbaserad räntesättning."
+    },
+    {
+      "question": "Vad är största skillnaden mot SBAB?",
+      "answer": "Skandiabanken är något mer traditionell som bank genom Skandia-koncernen, medan SBAB är 100 % modellstyrd och statlig. Upplevelsen är snarlik, men kundresan är lite mer 'bankig' hos Skandiabanken."
+    }
+  ],
+
+  "ctaLabel": "Besök Skandiabankens hemsida",
+  "ctaUrl": "https://www.skandia.se/lana/bolan"
+}

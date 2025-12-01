@@ -1,0 +1,49 @@
+{
+  "title": "Landshypotek Bank",
+  "intro": "Landshypotek erbjuder bolån med fokus på transparens, enkelhet och konkurrenskraftiga räntor för dig med låg eller medelhög belåningsgrad. Räntan styrs helt av en öppen modell utan förhandling eller helkundskrav, vilket gör banken till ett populärt digitalt alternativ.",
+
+  "deepInsights": [
+    {
+      "heading": "1. Transparent och modellbaserad ränta",
+      "text": "Landshypotek sätter priset helt enligt en tydlig modell där belåningsgrad är den absolut viktigaste faktorn. Det går inte att förhandla räntan eller påverka den genom att samla tjänster hos banken."
+    },
+    {
+      "heading": "2. Låga räntor vid låg belåningsgrad",
+      "text": "Bankens modell belönar stark ekonomi, vilket gör att kunder med hög amortering eller lågt lån i förhållande till bostadens värde ofta får bland marknadens bättre räntor."
+    },
+    {
+      "heading": "3. En helt digital bolåneprocess",
+      "text": "Ansökan är snabb, tydlig och digital från början till slut. Inga möten, inga rådgivare och inga individuella bedömningar — allt bygger på konkret data och automatiserade processer."
+    },
+    {
+      "heading": "4. Ingen helkundsbank",
+      "text": "Landshypotek erbjuder inte helhetsbankstjänster som lönekonto, kort eller vardagsekonomi. Fokus ligger på bolån — varken mer eller mindre."
+    },
+    {
+      "heading": "5. Mindre flexibla vid komplexa upplägg",
+      "text": "Modellbanker fungerar bäst när din ekonomi är enkel och belåningsgraden är låg. Om du har ojämn inkomst, ovanliga upplägg eller hög belåningsgrad kan andra banker passa bättre."
+    }
+  ],
+
+  "faq": [
+    {
+      "question": "Kan jag förhandla räntan?",
+      "answer": "Nej. Räntan sätts helt enligt bankens öppna modell. Alla kunder med samma belåningsgrad får samma villkor."
+    },
+    {
+      "question": "Krävs helkund?",
+      "answer": "Nej. Landshypotek är inte en klassisk helkundsbank och ställer inga sådana krav."
+    },
+    {
+      "question": "Passar banken om jag har hög belåningsgrad?",
+      "answer": "Inte alltid. Banken är ofta bäst för kunder med låg eller medelhög belåningsgrad eftersom modellen belönar det tydligt."
+    },
+    {
+      "question": "Finns personlig rådgivning?",
+      "answer": "Nej, banken erbjuder inte traditionell bolånerådgivning utan fokuserar på digital hantering."
+    }
+  ],
+
+  "ctaLabel": "Besök Landshypotek",
+  "ctaUrl": "https://www.landshypotek.se/lana/bolan/"
+}

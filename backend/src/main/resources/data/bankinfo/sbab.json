@@ -1,0 +1,49 @@
+{
+  "title": "SBAB",
+  "intro": "SBAB är en statlig bolånebank känd för sin öppna modell, tydliga prissättning och helt digitala kundresa. Banken erbjuder samma ränta till alla med samma förutsättningar och arbetar utan förhandling eller krav på helkund. Passar dig som vill ha enkelhet, transparens och rättvisa villkor.",
+
+  "deepInsights": [
+    {
+      "heading": "1. Räntan sätts helt enligt en öppen modell",
+      "text": "SBAB använder en av marknadens mest transparenta prissättningsmodeller. Belåningsgrad och bindningstid styr räntan – inget annat. Detta ger en rättvis, förutsägbar och helt förhandlingsfri process."
+    },
+    {
+      "heading": "2. Ingen påverkan av sparande eller helkundskrav",
+      "text": "Till skillnad från storbankerna spelar sparande, lön eller försäkringar ingen roll. Oavsett hur mycket du engagerar dig i banken får du samma villkor som andra i samma belåningsintervall."
+    },
+    {
+      "heading": "3. En av marknadens mest digitala bolåneprocesser",
+      "text": "Ansökan sker online och är ofta helt automatisk. Många kunder kan få besked och upplägg utan att prata med någon. Den digitala hanteringen är en av SBAB:s största styrkor."
+    },
+    {
+      "heading": "4. Passar bäst för dig som vill slippa förhandla",
+      "text": "Du får samma ränta som alla andra med samma belåningsgrad. Det gör SBAB attraktiv för dig som vill ha en smidig process, tydliga villkor och slippa ringa rådgivare för att pressa priset."
+    },
+    {
+      "heading": "5. Mindre lämplig för dig med komplex ekonomi",
+      "text": "Modellbanken passar sämre om du har hög belåningsgrad, många ägare, nybyggnation, företagsengagemang eller en mer ovanlig ekonomisk situation som kräver manuell bedömning."
+    }
+  ],
+
+  "faq": [
+    {
+      "question": "Varför är SBAB så transparent?",
+      "answer": "Som statlig bank har SBAB ett uttalat uppdrag: tydliga villkor, rättvisa räntor och en modell som inte går att förhandla. Det ger trygghet och enkelhet för kunderna."
+    },
+    {
+      "question": "Kan jag påverka min ränta?",
+      "answer": "Nej. Räntan styrs strikt av bankens modell. Det gör SBAB rättvist för alla kunder – men också mindre flexibelt."
+    },
+    {
+      "question": "Hur digital är ansökan?",
+      "answer": "Mycket digital. För de flesta sker hela ansökan, upplägg och signering online utan behov av rådgivning."
+    },
+    {
+      "question": "Passar SBAB om jag prioriterar personlig kontakt?",
+      "answer": "Inte lika bra. Du får support när du behöver det, men banken är inte uppbyggd kring rådgivningsmöten eller nära kundrelationer."
+    }
+  ],
+
+  "ctaLabel": "Besök SBAB:s hemsida",
+  "ctaUrl": "https://www.sbab.se/privat/bolan"
+}

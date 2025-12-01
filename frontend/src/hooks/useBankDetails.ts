@@ -1,3 +1,17 @@
+/**
+ * useBankDetails.ts
+ *
+ * Hook som hämtar bankens detaljerade information:
+ *  - description (huvudtext)
+ *  - overviewText (kort översikt)
+ *  - bestFor / notFor-listor
+ *  - CTA-länkar
+ *
+ * Syfte:
+ *  - Hålla BankDetailsPage ren
+ *  - Samla loading/error-hantering på ett ställe
+ */
+
 import { useEffect, useState } from "react";
 import { getBankDetails } from "../client/bankApi";
 
