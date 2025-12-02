@@ -1,6 +1,6 @@
 # BolåneRadar - Backend
 
-En komplett backend byggd med **Spring Boot**, ansvarig för att hämta, lagra, analysera och exponera svenska bolåneräntor. Projektet innehåller scraping, trendanalys, schedulerade jobb, e-postnotifieringar, databasbackup och ett omfattande API.
+En komplett backend byggd med **Spring Boot**, ansvarig för att hämta, lagra och exponera svenska bolåneräntor. Systemet innehåller scraping, historik, schedulerade jobb, uppdateringsloggar, admin-API och publika API-endpoints för frontend.
 
 ---
 
@@ -8,40 +8,44 @@ En komplett backend byggd med **Spring Boot**, ansvarig för att hämta, lagra, 
 
 ### Hantering av banker och räntor  
 - CRUD för banker  
-- CRUD för bolåneräntor  
-- DTO + Mapper-lager för säker exponering till frontend
-
-### Analysfunktioner  
-- Trendanalys mellan två datum  
-- Trender över hela marknaden  
-- Bank-specifik historik  
-- Filtrering på datum, räntetyp och term
+- Skapa / uppdatera bolåneräntor via admin-API
+- Publika endpoints för:
+  - räntehistorik
+  - nuvarande räntor
+  - bankintroduktion
+  - bankdetaljer
+  - jämförelser mellan banker
+  - senaste uppdateringar
+- Tydlig separation mellan admin-lager och publikt API.
 
 ### Scraping av räntor  
 - Flera `BankScraper`-implementationer  
-- ScraperService som kör scraping för alla banker eller en specifik  
-- Dubblettkontroll  
-- RateChange + LastChangedDate-beräkning  
-- Loggning av resultat  
-- Mail-notifiering vid fel
+- ScraperService som kör scraping för alla banker eller en specifik
+- Loggning av resultat via RateUpdateLogService 
+- Felhantering
+- Dubblettkontroll
+- Möjlighet att starta scraping manuellt via admin-API
+- Mejlnotifiering vid fel
 
 ### Loggning & Historik  
-- RateUpdateLog loggar varje scrapinghändelse  
-- API för att visa senaste loggar per bank eller alla loggar
+- RateUpdateLog loggar varje scrapinghändelse 
+- Publika och admin-endpoints för att se loggar
+- Hämta senaste uppdatering per bank
 
 ### Schedulerade jobb  
 - **DatabaseBackupScheduler** - skapar dagliga `.dump` + `.sql`-backup  
 - **ScraperScheduler** - kör scraping varje dag
 
 ### Säkerhet  
-- Basic Auth för POST/DELETE och admin routes  
-- Alla GET-endpoints (förutom scrapers) är publika  
+- Basic Auth för alla admin-routes
+- Alla GET-endpoints är publika
+- POST/PUT/DELETE under /api/** kräver auth  
 - Swagger UI aktiverat med Basic Auth-stöd
 
 ### Tester  
 - Enhetstester (Mockito + JUnit 5)  
 - Integrationstester (MockMvc)  
-- Full täckning av controllers, services och scraperlogik  
+- Full täckning av controllers, adminservices och scraperlogik  
 
 ---
 
@@ -50,26 +54,48 @@ En komplett backend byggd med **Spring Boot**, ansvarig för att hämta, lagra, 
 ```
 backend/
  ├── controller/
- │    ├── analytics/
- │    └── core/
+ │    ├── admin/
+ │    │     ├── banks/
+ │    │     ├── rates/
+ │    │     ├── scraper/
+ │    │     ├── logs/
+ │    │     └── dev/
+ │    └── api/
+ │          ├── banks/
+ │          └── rates/
+ │
  ├── service/
- │    ├── analytics/
- │    ├── core/
- │    └── integration/scraper/
+ │    ├── admin/
+ │    │     ├── AdminDataService
+ │    │     ├── MortgageRateAdminService
+ │    │     └── RateUpdateLogService
+ │    ├── client/
+ │    │     ├── BankDetailsService
+ │    │     ├── BankIntroService
+ │    │     ├── BankRateReadService
+ │    │     ├── BankHistoryService
+ │    │     ├── BankKeyResolverService
+ │    │     ├── LatestRatesService
+ │    │     └── MortgageRateComparisonService
+ │    └── integration/
+ │          └── scraper/core/
+ │
  ├── repository/
  ├── entity/
- │    ├── analytics/
  │    └── core/
+ │
  ├── dto/
- │    ├── analytics/
- │    ├── core/
+ │    ├── admin/
+ │    ├── api/
  │    └── mapper/
+ │          ├── admin/
+ │          └── api/
+ │
  ├── scheduler/
  ├── config/
  ├── exception/
- ├── BolaneradarBackendApplication.java
- ├── application.properties
- └── tests/
+ └── BolaneradarBackendApplication.java
+
 ```
 
 ---
@@ -77,12 +103,24 @@ backend/
 # Arkitektur
 
 ### Lagren är tydligt separerade:
-- **Controller-lagret** tar emot HTTP-anrop  
-- **Service-lagret** innehåller all affärslogik  
-- **Repository-lagret** hanterar SQL och databasinteraktion  
+- **Controller-lagret** tar emot HTTP-anrop och exponerar API:er
+  - Publika controllers under ```/api/banks/**``` och ```/api/rates/**```
+  - Admin controllers under ```/api/admin/**```
+- **Service-lagret** innehåller all affärslogik
+  - Uppdelat i separata domäner:
+    - ``service.admin`` - hantering av adminfunktioner
+    - ``service.client`` - data till frontendens publika vyer
+    - ``service.integration.scraper`` - integrering mot scraperklasser
+- **Repository-lagret** hanterar all databasinteraktion
+  - Enbart ansvarigt för CRUD mot entiteterna
+  - Anropas endast från service-lagret (ingen direkt access från controllers)
 - **DTO/Mapper-lager** skyddar entiteter  
-- **Scheduler-lager** automatiserar dagliga jobb  
+  - Uppdelad i ``dto.admin`` och ``dto.api``
+- **Scheduler-lager** automatiserar jobb
+  - Dagliga backups och scraping jobb
 - **Scraper-lager** hämtar data externt  
+  - Varje bank har egen scraperklass
+  - Orkestreras av ``ScraperService``
 
 ---
 
@@ -110,82 +148,70 @@ backend/
 - success  
 - errorMessage  
 - bank  
-- durationMs  
-
-### RateTrend (intern modell)  
-Representerar hur en specifik ränta har förändrats mellan två mätta datum (t.ex. föregående och senaste värde).
+- durationMs
 
 ---
 
 # API-översikt
 
-## Bank-endpoints
+## Bank-endpoints (publika)
 ```
-GET  /api/banks
-GET  /api/banks/{id}
-POST /api/banks
-DELETE /api/banks/{id}
-```
-
-## Rate-endpoints
-```
-GET  /api/rates
-GET  /api/rates/bank/{id}
-POST /api/rates
+GET /api/banks/intro/{bankKey}
+GET /api/banks/details/{bankKey}
+GET /api/banks/history/{bankKey}
 ```
 
-## Analytics
+## Rate-endpoints (publika)
 ```
-GET /api/rates/analytics/trends
-GET /api/rates/analytics/trends/range?from=DATE&to=DATE
-GET /api/rates/analytics/history/bank/{id}
-GET /api/rates/analytics/history/all-banks
-```
-
-## Loggar
-```
-GET /api/rates/updates
-GET /api/rates/updates/bank/{id}
+GET /api/rates/current/{bankKey}
+GET /api/rates/comparison
 GET /api/rates/updates/latest
 ```
 
-## Scraping (skyddade)
+## Admin - Rates
 ```
-GET /api/scrape/all
-GET /api/scrape/{bankName}
+POST /api/admin/rates
 ```
 
-## Admin (skyddade)
+## Admin - Logs
 ```
-POST   /api/admin/import-example
-DELETE /api/admin/clear
-DELETE /api/admin/delete-rates?bankName=X
+GET /api/admin/rates/updates
+GET /api/admin/rates/updates/latest
+```
+
+## Admin – Scraper
+```
+POST /api/admin/scrape/all
+POST /api/admin/scrape/{bankName}
+```
+
+## Admin – Development (endast DEV-profil)
+```
+POST   /api/admin/dev/import-example
+DELETE /api/admin/dev/clear
+DELETE /api/admin/dev/delete-rates?bankName=X
 ```
 
 ---
 
 # Säkerhet
 
-- Basic Auth aktiverad  
-- GET-anrop är öppna  
-- POST/DELETE kräver `ROLE_ADMIN`  
+- Basic Auth aktiverad
+- GET-anrop är publika
+- POST/PUT/DELETE kräver ``ROLE_ADMIN``
 - Swagger UI stöder Basic Auth direkt
-
-`SecurityConfig` hanterar detta.
+- Stateless sessions
+- Konfigurerat i ``SecurityConfig``
 
 ---
 
 # Scheduler-jobb
 
 ### ScraperScheduler
-Kör scraping 10:00 varje dag.
+Kör scraping automatiskt (om aktiverad).
 
 ### DatabaseBackupScheduler
-Tar backup av PostgreSQL-databasen:
-- `.dump` - binär  
-- `.sql` - läsbar  
-
-Kör 09:50 dagligen.
+Tar dagliga PostgreSQL-backups i både .dump och .sql.
 
 ---
 
@@ -256,20 +282,19 @@ Dubblettkontroll, logging, notifiering och sparning sker automatiskt.
 # Tester
 
 ### Enhetstester
-- All logik testas med Mockito
-- BankService
-- MortgageRateService
-- RateAnalyticsService
-- AdminDataService
-- RateUpdateLogService
-- ScraperService
-- EmailService
+- AdminDataServiceTest
+- MortgageRateAdminServiceTest
+- RateUpdateLogServiceTest
+- ScraperServiceTest
+- EmailServiceTest
+
 
 ### Integrationstester (MockMvc)
-- Alla controllers  
-- Full Basic Auth-testning  
-- Full JSON-verifiering  
-- End-to-end flöden
+- AdminBankControllerIT
+- AdminMortgageRateControllerIT 
+- AdminRateUpdateLogControllerIT
+- AdminScraperControllerIT
+- AdminDevDataControllerIT
 
 ---
 
@@ -332,9 +357,9 @@ http://localhost:8080/swagger-ui.html
 
 # Backup-system
 
-`pg_dump.exe` används för att skapa:
-- Daglig `.dump`
-- Daglig `.sql`
+``DatabaseBackupScheduler`` använder ``pg_dump`` för att spara:
+- `.dump` (binär)
+- `.sql` (text)
 
 Sparas i `/backups`.
 
@@ -342,26 +367,24 @@ Sparas i `/backups`.
 
 # Swagger
 
-Swagger (OpenAPI) är konfigurerat via `OpenApiConfig`.
-
-Stödjer:
-- Full dokumentation av endpoints  
-- Basic Auth direkt i UI  
+Swagger genereras via OpenAPI-config och listar alla endpoints - både publika och admin-endpoints.
+Admin-endpoints kan testas direkt i Swagger UI genom Basic Auth inloggning
 
 ---
 
-# Trendanalys
+# Historik & Visualisering av räntedata
 
-Systemet stödjer tre analyslägen:
+Systemet innehåller stöd för att hämta och visualisera historiska räntevärden per bank.
+Funktionaliteten består av:
 
-### 1. Globala trender  
-Analys av senaste två snapshots.
+- Historiska datapunkter per bank  
+  - Via ``BankHistoryService``, som använder sparade räntor från databasen.
+- Snitträntor och jämförelser
+  - Beräknas på backend och används i frontendens grafer.
+- Uppdateringsloggar
+  - Visar när en bank senast uppdaterades och används för att indikera datans färskhet.
 
-### 2. Per bank (snittränta)  
-Bygger trender per bank med deras egna datum.
-
-### 3. Intervall (range)  
-Trender mellan två specifika datum.
+Analysfunktionaliteten är förenklad jämfört med tidigare versioner och fokuserar nu på att erbjuda stabil historik + visualisering, snarare än avancerade marknadstrender.
 
 ---
 
