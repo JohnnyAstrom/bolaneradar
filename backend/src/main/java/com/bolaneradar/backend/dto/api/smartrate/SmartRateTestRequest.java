@@ -7,17 +7,21 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record SmartRateTestRequest(
-        String bank,
+
+        // Bankinfo
+        Long bankId,
+        String bankName,
+
         boolean hasOffer,
 
         // Flöde A
-        BigDecimal currentRate,
-        MortgageTerm currentRateTerm,
+        BigDecimal userRate,
+        MortgageTerm userCurrentTerm,
         LocalDate rateChangeDate,
         LocalDate bindingEndDate,
-        RatePreference futureRatePreference,
+        RatePreference userPreference,
 
         // Flöde B
-        MortgageTerm offerBindingTerm,
+        MortgageTerm offerTerm,
         BigDecimal offerRate
 ) {}
