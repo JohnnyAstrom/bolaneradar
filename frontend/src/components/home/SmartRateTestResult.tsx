@@ -1,6 +1,15 @@
 import type { FC } from "react";
+import type { SmartRateTestResult } from "../../types/smartRate";
 
-const SmartRateTestResult: FC = () => {
+interface Props {
+    result: SmartRateTestResult | null | undefined;
+}
+
+const SmartRateTestResultView: FC<Props> = ({ result }) => {
+
+    // Guard: om resultat saknas → rendera inget
+    if (!result) return null;
+
     return (
         <div className="flex flex-col gap-8">
 
@@ -10,44 +19,42 @@ const SmartRateTestResult: FC = () => {
                     Din räntestatus
                 </h2>
 
-                <span className="
-          inline-block px-3 py-1 rounded-full
-          bg-negative text-white text-sm font-medium
-        ">
-          Högre än snittet
-        </span>
+                <span
+                    className="
+                        inline-block px-3 py-1 rounded-full
+                        bg-negative text-white text-sm font-medium
+                    "
+                >
+                    {result.status}
+                </span>
             </div>
 
             {/* Huvudtext */}
             <div className="flex flex-col gap-4 text-text-secondary leading-relaxed">
 
                 <p>
-                    Du har idag Swedbank som bank för ditt bolån.
-                    Swedbank använder individuell räntesättning där engagemang, sparande och kundrelation påverkar rabatten.
+                    Du har idag <span className="font-semibold">{result.bank}</span> som bank.
                 </p>
 
                 <p>
-                    Din ränta är <span className="text-negative font-semibold">0.32 procentenheter högre</span> än Swedbanks snittränta.
+                    Din ränta är
+                    <span className="text-negative font-semibold">
+                        {" "}{result.differenceFromBankAverage} procentenheter
+                    </span>
+                    {" "}
+                    högre än bankens snittränta.
                 </p>
 
                 <p>
-                    Jämfört med övriga banker ligger din ränta upp till
-                    <span className="text-negative font-semibold"> 0.35 procentenheter högre</span>.
+                    Jämfört med övriga banker ligger du upp till
+                    <span className="text-negative font-semibold">
+                        {" "}{result.differenceFromBestMarketAverage} procentenheter
+                    </span>
+                    högre.
                 </p>
 
-                <p>
-                    Din nuvarande ränta är baserad på <span className="font-semibold text-text-primary">bankens listränta vid din förra ränteändringsdag</span>.
-                    Den speglar därför inte nödvändigtvis dagens ränteläge.
-                </p>
-
-                <p>
-                    Vid nästa ränteändringsdag får du en ny ränta baserat på bankens aktuella listränta och din personliga rabatt.
-                </p>
-
-                <p>
-                    Om du vet vilken rabatt du har kan du själv räkna ut vad din ungefärliga ränta blir efter nästa ränteändringsdag.
-                    <span className="font-semibold text-text-primary">Ta bankens aktuella listränta och dra bort din personliga rabatt</span> – det ger en bra uppskattning av din kommande ränta.
-                </p>
+                <p>{result.analysisText}</p>
+                <p>{result.additionalContext}</p>
             </div>
 
             {/* Rekommendation */}
@@ -55,9 +62,8 @@ const SmartRateTestResult: FC = () => {
                 <h3 className="text-xl font-bold text-text-primary mb-3">
                     Rekommendation
                 </h3>
-
                 <p className="text-text-secondary leading-relaxed">
-                    Eftersom din ränta ligger högre än både banken och marknaden kan det vara läge att kontakta banken för att se över din rabatt eller jämföra med andra banker.
+                    {result.recommendation}
                 </p>
             </div>
 
@@ -65,4 +71,4 @@ const SmartRateTestResult: FC = () => {
     );
 };
 
-export default SmartRateTestResult;
+export default SmartRateTestResultView;

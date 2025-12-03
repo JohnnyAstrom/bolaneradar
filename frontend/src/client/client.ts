@@ -4,13 +4,22 @@ export const API_URL = "http://localhost:8080";
 
 const client = axios.create({
     baseURL: API_URL,
-    timeout: 10000,          // skyddar mot hängningar
-    withCredentials: false,  // din backend kräver inte cookies
+    timeout: 10000,
+    withCredentials: false,
 });
 
-// Litet helper som mappar .data direkt
+// GET helper
 export async function apiGet<T>(path: string): Promise<T> {
     const response = await client.get<T>(path);
+    return response.data;
+}
+
+// POST helper – helt typad payload, ingen "any"
+export async function apiPost<TResponse, TPayload>(
+    path: string,
+    payload: TPayload
+): Promise<TResponse> {
+    const response = await client.post<TResponse>(path, payload);
     return response.data;
 }
 

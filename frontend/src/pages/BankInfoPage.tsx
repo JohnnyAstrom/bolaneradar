@@ -45,7 +45,7 @@ export default function BankInfoPage() {
     const logoUrl = logoMap[bankKey!] ?? null;
 
     return (
-        <PageWrapper className="pb-20">
+        <PageWrapper>
 
 
             {/* HERO / INTRO */}
