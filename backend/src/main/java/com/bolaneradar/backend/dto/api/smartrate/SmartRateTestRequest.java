@@ -14,10 +14,12 @@ public record SmartRateTestRequest(
 
         boolean hasOffer,
 
+        // Lånebelopp (frivilligt, men rekommenderat)
+        BigDecimal loanAmount,
+
         // Flöde A
         BigDecimal userRate,
         MortgageTerm userCurrentTerm,
-        LocalDate rateChangeDate,
         LocalDate bindingEndDate,
         RatePreference userPreference,
 

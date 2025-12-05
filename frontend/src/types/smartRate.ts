@@ -1,38 +1,60 @@
 /**
- * Payload för Smart Räntetest.
+ * Payload för Smart Räntetest (frontend → backend)
  *
- * Användaren fyller i detta formulär och datan skickas till backend.
+ * Detta är exakt vad backend Version 4 förväntar sig.
  */
 export interface SmartRateTestRequest {
-    bank: string;
+    // Bank
+    bankName: string;
+    bankId: number;
     hasOffer: boolean;
 
-    // Flöde A – ingen offert
-    currentRate?: number;
-    currentRateTerm?: string;
-    rateChangeDate?: string;
-    bindingEndDate?: string;
-    futureRatePreference?: string;
+    // Flöde A (ingen offert)
+    userRate?: number;
+    userCurrentTerm?: string;      // MortgageTerm enum (som string)
+    bindingEndDate?: string;       // YYYY-MM-DD
+    userPreference?: string;       // RatePreference enum (string)
 
-    // Flöde B – har offert
-    offerBindingTerm?: string;
+    // Flöde B (har offert)
+    offerTerm?: string;            // MortgageTerm enum (string)
     offerRate?: number;
-    offerStartDate?: string;
-    offerComparisonTarget?: string;
+
+    // Gemensamt
+    loanAmount?: number;           // Valfritt i backend, men recommended
 }
 
 /**
- * Resultat från Smart Räntetest.
+ * Resultat från Smart Räntetest (backend → frontend)
  *
- * Backend analyserar input och returnerar ett strukturerat resultat.
+ * Detta motsvarar exakt SmartRateTestResult i backend Version 4.
  */
 export interface SmartRateTestResult {
-    status: string;
+    status: string;                     // GREEN / YELLOW / RED / INFO
     bank: string;
     analyzedTerm: string;
-    differenceFromBankAverage: number;
-    differenceFromBestMarketAverage: number;
+
+    differenceFromBankAverage: number | null;
+    differenceFromBestMarketAverage: number | null;
+
     analysisText: string;
     additionalContext: string;
     recommendation: string;
+
+    // Version 3 — sparpotential
+    yearlySaving?: number | null;
+
+    // Version 3 — preferensbaserat råd
+    preferenceAdvice?: string | null;
+
+    // Version 4 — Alternativlista baserat på preferenser
+    alternatives?: {
+        term: string;                     // MortgageTerm enum
+        averageRate: number;              // bankens snitt
+        differenceFromBest: number;       // diff mot bästa marknaden
+        yearlyCostDifference: number | null;
+    }[];
+
+    alternativesIntro?: string;
+
+    isOfferFlow?: boolean;
 }

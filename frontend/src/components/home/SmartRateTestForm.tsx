@@ -1,14 +1,54 @@
 import { useState } from "react";
 import type { FC } from "react";
 import { runSmartRateTest } from "../../client/smartRateApi";
-import type { SmartRateTestResult } from "../../types/smartRate";
+import type { SmartRateTestResult, SmartRateTestRequest } from "../../types/smartRate";
 import SmartRateTestResultView from "./SmartRateTestResult";
 import { mortgageTermOptions } from "../../config/mortgageTerms";
+
+/** ---------------------------------------
+ *  BANK-ID + RIKTIGT NAMN FÖR VISNING
+ * --------------------------------------*/
+const bankIdMap: Record<string, number> = {
+    swedbank: 1,
+    nordea: 2,
+    seb: 3,
+    handelsbanken: 4,
+    sbab: 5,
+    icabanken: 6,
+    lansforsakringarbank: 7,
+    danskebank: 8,
+    skandiabanken: 9,
+    landshypotekbank: 10,
+    alandsbanken: 11,
+    ikanobank: 12,
+    hypoteket: 13,
+    stabelo: 14,
+    annanbank: 999
+};
+
+const bankNameMap: Record<string, string> = {
+    swedbank: "Swedbank",
+    nordea: "Nordea",
+    seb: "SEB",
+    handelsbanken: "Handelsbanken",
+    sbab: "SBAB",
+    icabanken: "ICA Banken",
+    lansforsakringarbank: "Länsförsäkringar Bank",
+    danskebank: "Danske Bank",
+    skandiabanken: "SkandiaBanken",
+    landshypotekbank: "Landshypotek Bank",
+    alandsbanken: "Ålandsbanken",
+    ikanobank: "Ikano Bank",
+    hypoteket: "Hypoteket",
+    stabelo: "Stabelo",
+    annanbank: "Annan bank"
+};
 
 const SmartRateTestForm: FC = () => {
 
     // COMMON
     const [bank, setBank] = useState("");
+    const [loanAmount, setLoanAmount] = useState("");
     const [hasOffer, setHasOffer] = useState<"" | "yes" | "no">("");
     const [result, setResult] = useState<SmartRateTestResult | null>(null);
 
@@ -16,35 +56,42 @@ const SmartRateTestForm: FC = () => {
     const [currentRate, setCurrentRate] = useState("");
     const [currentRateType, setCurrentRateType] = useState("");
 
-    const [rateChangeDate, setRateChangeDate] = useState("");
     const [bindingEndDate, setBindingEndDate] = useState("");
 
     const [futureRatePreference, setFutureRatePreference] = useState("");
 
-    // FLOW B — HAS OFFER (no Q6B anymore)
+    // FLOW B — HAS OFFER
     const [offerBindingPeriod, setOfferBindingPeriod] = useState("");
     const [offerRate, setOfferRate] = useState("");
 
+    /** ----------------------------------------------------
+     *  HANDLE SUBMIT — bygger payload exakt för backend V4
+     * ---------------------------------------------------*/
     async function handleSubmit() {
-        let payload: any;
+        const bankId = bankIdMap[bank];
+        const bankName = bankNameMap[bank];
+
+        if (!bankId || !bankName) {
+            console.error("Ogiltig bank vald");
+            return;
+        }
+
+        const payload: SmartRateTestRequest = {
+            bankId,
+            bankName,
+            hasOffer: hasOffer === "yes",
+            loanAmount: loanAmount ? Number(loanAmount) : undefined
+        };
 
         if (hasOffer === "no") {
-            payload = {
-                bank,
-                hasOffer: false,
-                currentRate: currentRate ? Number(currentRate) : undefined,
-                currentRateType,
-                rateChangeDate: rateChangeDate || undefined,
-                bindingEndDate: bindingEndDate || undefined,
-                futureRatePreference
-            };
-        } else {
-            payload = {
-                bank,
-                hasOffer: true,
-                offerBindingPeriod,
-                offerRate: offerRate ? Number(offerRate) : undefined
-            };
+            payload.userRate = currentRate ? Number(currentRate) : undefined;
+            payload.userCurrentTerm = currentRateType || undefined;
+            payload.bindingEndDate = bindingEndDate || undefined;
+            payload.userPreference = futureRatePreference || undefined;
+
+        } else if (hasOffer === "yes") {
+            payload.offerTerm = offerBindingPeriod || undefined;
+            payload.offerRate = offerRate ? Number(offerRate) : undefined;
         }
 
         const response = await runSmartRateTest(payload);
@@ -57,7 +104,7 @@ const SmartRateTestForm: FC = () => {
                 Smart räntetest
             </h2>
 
-            {/* Q1 */}
+            {/* Q1 — Bank */}
             <label className="font-medium">Vilken bank har du ditt bolån hos?</label>
             <select
                 value={bank}
@@ -65,28 +112,28 @@ const SmartRateTestForm: FC = () => {
                 className="border border-border rounded-lg px-4 py-2 bg-white"
             >
                 <option value="">Välj bank</option>
-                <option value="swedbank">Swedbank</option>
-                <option value="nordea">Nordea</option>
-                <option value="seb">SEB</option>
-                <option value="handelsbanken">Handelsbanken</option>
-                <option value="sbab">SBAB</option>
-                <option value="icabanken">Ica Banken</option>
-                <option value="lansforsakringarbank">Länsförsäkringar Bank</option>
-                <option value="danskebank">Danske Bank</option>
-                <option value="skandiabanken">SkandiaBanken</option>
-                <option value="landshypotekbank">Lankshypotek Bank</option>
-                <option value="alandsbanken">Ålandsbanken</option>
-                <option value="ikanobank">Ikano Bank</option>
-                <option value="hypoteket">Hypoteket</option>
-                <option value="stabelo">Stabelo</option>
-                <option value="annanbank">Annan Bank</option>
+                {Object.keys(bankIdMap).map((key) => (
+                    <option key={key} value={key}>
+                        {bankNameMap[key]}
+                    </option>
+                ))}
             </select>
 
-            {/* Q2 */}
+            {/* Loan amount */}
+            <label className="font-medium">Hur stort är ditt bolån? (frivilligt)</label>
+            <input
+                type="number"
+                placeholder="Ex: 2000000"
+                value={loanAmount}
+                onChange={(e) => setLoanAmount(e.target.value)}
+                className="border border-border rounded-lg px-4 py-2 bg-white"
+            />
+
+            {/* Q2 — Offer? */}
             <label className="font-medium">Har du fått ett ränteerbjudande?</label>
             <select
                 value={hasOffer}
-                onChange={(e) => setHasOffer(e.target.value as any)}
+                onChange={(e) => setHasOffer(e.target.value as "yes" | "no" | "")}
                 className="border border-border rounded-lg px-4 py-2 bg-white"
             >
                 <option value="">Välj...</option>
@@ -94,24 +141,22 @@ const SmartRateTestForm: FC = () => {
                 <option value="no">Nej</option>
             </select>
 
-            {/* FLOW A — INGET ERBJUDANDE */}
+            {/* FLOW A — NO OFFER */}
             {hasOffer === "no" && (
                 <>
-                    {/* Q3 */}
+                    {/* Rate */}
                     <label className="font-medium">Vilken ränta har du idag?</label>
                     <input
                         type="number"
                         step="0.01"
-                        placeholder="Ex: 4.15"
+                        placeholder="Ex: 3.15"
                         value={currentRate}
                         onChange={(e) => setCurrentRate(e.target.value)}
                         className="border border-border rounded-lg px-4 py-2 bg-white"
                     />
 
-                    {/* Q4 */}
-                    <label className="font-medium">
-                        Har du rörlig eller bunden ränta idag?
-                    </label>
+                    {/* Type */}
+                    <label className="font-medium">Har du rörlig eller bunden ränta idag?</label>
                     <select
                         value={currentRateType}
                         onChange={(e) => setCurrentRateType(e.target.value)}
@@ -125,27 +170,11 @@ const SmartRateTestForm: FC = () => {
                         ))}
                     </select>
 
-                    {/* Q5A — rörlig */}
-                    {currentRateType === "VARIABLE_3M" && (
-                        <>
-                            <label className="font-medium">
-                                När sker din nästa ränteändringsdag? (valfri)
-                            </label>
-                            <input
-                                type="date"
-                                value={rateChangeDate}
-                                onChange={(e) => setRateChangeDate(e.target.value)}
-                                className="border border-border rounded-lg px-4 py-2 bg-white"
-                            />
-                        </>
-                    )}
+                    {/* Optional date fields */}
 
-                    {/* Q5B — bunden */}
                     {currentRateType.startsWith("FIXED_") && (
                         <>
-                            <label className="font-medium">
-                                När löper din bindningstid ut? (valfri)
-                            </label>
+                            <label className="font-medium">När löper din bindningstid ut?</label>
                             <input
                                 type="date"
                                 value={bindingEndDate}
@@ -155,34 +184,27 @@ const SmartRateTestForm: FC = () => {
                         </>
                     )}
 
-                    {/* Q6A */}
-                    {currentRateType !== "" && (
-                        <>
-                            <label className="font-medium">
-                                Vilken typ av ränta vill du gå vidare med och jämföra?
-                            </label>
-                            <select
-                                value={futureRatePreference}
-                                onChange={(e) => setFutureRatePreference(e.target.value)}
-                                className="border border-border rounded-lg px-4 py-2 bg-white"
-                            >
-                                <option value="">Välj...</option>
-                                <option value="VARIABLE_3M">Rörlig (3 månader)</option>
-                                <option value="SHORT">Korta bindningstider (1 år - 3 år)</option>
-                                <option value="LONG">Längre bindningstider (4 år - 10 år)</option>
-                            </select>
-                        </>
-                    )}
+                    {/* Preference */}
+                    <label className="font-medium">
+                        Vilken typ av ränta vill du gå vidare med och jämföra?
+                    </label>
+                    <select
+                        value={futureRatePreference}
+                        onChange={(e) => setFutureRatePreference(e.target.value)}
+                        className="border border-border rounded-lg px-4 py-2 bg-white"
+                    >
+                        <option value="">Välj...</option>
+                        <option value="VARIABLE_3M">Rörlig (3 månader)</option>
+                        <option value="SHORT">Korta bindningstider (1–3 år)</option>
+                        <option value="LONG">Längre bindningstider (4–10 år)</option>
+                    </select>
                 </>
             )}
 
-            {/* FLOW B — ERBJUDANDE */}
+            {/* FLOW B — OFFER */}
             {hasOffer === "yes" && (
                 <>
-                    {/* Q3A */}
-                    <label className="font-medium">
-                        Vilken bindningstid gäller erbjudandet?
-                    </label>
+                    <label className="font-medium">Vilken bindningstid gäller erbjudandet?</label>
                     <select
                         value={offerBindingPeriod}
                         onChange={(e) => setOfferBindingPeriod(e.target.value)}
@@ -196,7 +218,6 @@ const SmartRateTestForm: FC = () => {
                         ))}
                     </select>
 
-                    {/* Q3B */}
                     <label className="font-medium">Vilken ränta har du blivit erbjuden?</label>
                     <input
                         type="number"

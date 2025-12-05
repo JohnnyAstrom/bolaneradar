@@ -1,12 +1,19 @@
 package com.bolaneradar.backend.service.smartrate;
 
+import com.bolaneradar.backend.dto.api.smartrate.SmartRateAlternative;
 import com.bolaneradar.backend.dto.api.smartrate.SmartRateTestRequest;
 import com.bolaneradar.backend.dto.api.smartrate.SmartRateTestResult;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
+import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
 import com.bolaneradar.backend.service.smartrate.model.SmartRateAnalysisContext;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
@@ -18,93 +25,487 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     }
 
     // =========================================================================
-    //  PUBLIC ANALYSIS ENTRYPOINT — VERSION 1 (Mock)
+    //  PUBLIC ANALYSIS ENTRYPOINT — VERSION 5
     // =========================================================================
     @Override
     public SmartRateTestResult analyze(SmartRateTestRequest request) {
 
         SmartRateAnalysisContext ctx = buildContext(request);
 
-        // ===============================
-        // MOCK RESULT (Version 1)
-        // ===============================
+        if (ctx.hasOffer()) {
+            return handleOfferFlow(ctx);
+        }
+
+        if (ctx.analyzedTerm() == MortgageTerm.VARIABLE_3M) {
+            return handleVariableFlow(ctx);
+        }
+
+        return handleFixedFlow(ctx);
+    }
+
+    // =========================================================================
+    //  FLOW B — OFFER FLOW
+    // =========================================================================
+    private SmartRateTestResult handleOfferFlow(SmartRateAnalysisContext ctx) {
+
+        BigDecimal rate = ctx.offerRate();
+
+        BigDecimal diffBest = calculateDiff(rate, ctx.marketBestRate());
+        BigDecimal diffBank = calculateDiff(rate, ctx.bankLatestAverage());
+        BigDecimal diffMedian = calculateDiff(rate, ctx.marketMedianRate());
+
+        String status = classify(diffBest);
+
+        BigDecimal yearlyImpact = null;
+
+        // Potentiell besparing visas ENBART i offer-flow OCH om besparingen är positiv
+        BigDecimal impact = calculateYearlyImpact(
+                calculateDiff(rate, ctx.marketBestRate()),
+                ctx.loanAmount()
+        );
+        if (impact != null && impact.compareTo(BigDecimal.ZERO) > 0) {
+            yearlyImpact = impact;
+        }
+
         return new SmartRateTestResult(
-                "MOCK_RESULT",
+                status,
                 ctx.bankName(),
                 ctx.analyzedTerm(),
-                BigDecimal.valueOf(0.32),
-                BigDecimal.valueOf(0.35),
-                "Detta är ett mockat resultat. Riktig analys implementeras i Version 2.",
-                "Ingen faktisk databeräkning gjordes – detta är en placeholder.",
-                "Version 2 kommer innehålla riktiga rekommendationer baserat på marknadsläge och användarens val."
+                diffBank,
+                diffBest,
+                buildAnalysisTextOffer(ctx, rate, diffBest),
+                buildOfferContextText(diffMedian),
+                buildRecommendationForOfferFlow(status, diffBest),
+                null,
+                buildPreferenceAdvice(ctx.userPreference(), ctx.analyzedTerm()),
+                generateAlternatives(ctx),
+                buildOfferAlternativesIntro(),
+                true
         );
     }
 
     // =========================================================================
-    //  BUILD CONTEXT — Version 1 (Komplett och korrekt)
+    //  FLOW A1 — VARIABLE RATE FLOW
+    // =========================================================================
+    private SmartRateTestResult handleVariableFlow(SmartRateAnalysisContext ctx) {
+
+        BigDecimal rate = ctx.userRate();
+
+        BigDecimal diffBest = calculateDiff(rate, ctx.marketBestRate());
+        BigDecimal diffBank = calculateDiff(rate, ctx.bankLatestAverage());
+        BigDecimal diffMedian = calculateDiff(rate, ctx.marketMedianRate());
+
+        String status = classify(diffBest);
+
+        // Ingen potentiell besparing visas i normal analys (endast i offer-flow)
+        BigDecimal yearlyImpact = null;
+
+        return new SmartRateTestResult(
+                status,
+                ctx.bankName(),
+                ctx.analyzedTerm(),
+                diffBank,
+                diffBest,
+                buildAnalysisTextVariable(ctx, rate, diffBest),
+                buildContextText(diffMedian),
+                buildRecommendation(status, diffBest),
+                yearlyImpact,
+                buildPreferenceAdvice(ctx.userPreference(), ctx.analyzedTerm()),
+                generateAlternatives(ctx),
+                null,
+                false
+        );
+    }
+
+    // =========================================================================
+    //  FLOW A2 — FIXED RATE FLOW
+    // =========================================================================
+    private SmartRateTestResult handleFixedFlow(SmartRateAnalysisContext ctx) {
+
+        BigDecimal rate = ctx.userRate();
+        BigDecimal diffBank = calculateDiff(rate, ctx.bankLatestAverage());
+        BigDecimal diffMedian = calculateDiff(rate, ctx.marketMedianRate());
+
+        Integer months = ctx.monthsUntilExpiration();
+
+        String analysisText;
+        String recommendation;
+
+        // Scenario A: Löper ut inom kort (1–3 månader)
+        if (months != null && months >= 1 && months <= 3) {
+            analysisText = buildAnalysisTextFixedShortTerm(rate);
+            recommendation = buildRecommendationFixedShortTerm();
+        }
+
+        // Scenario B: Längre tid kvar (>3 månader)
+        else if (months != null && months > 3) {
+            analysisText = buildAnalysisTextFixedLongTerm(rate);
+            recommendation = buildRecommendationFixedLongTerm();
+        }
+
+        // Scenario C: Mycket snart (0 månader kvar) eller okänt datum
+        else {
+            analysisText = buildAnalysisTextFixedVeryShort(rate);
+            recommendation = buildRecommendationFixedVeryShort();
+        }
+
+        return new SmartRateTestResult(
+                "INFO",
+                ctx.bankName(),
+                ctx.analyzedTerm(),
+                diffBank,
+                null,
+                analysisText,
+                buildContextText(diffMedian),
+                recommendation,
+                null,
+                buildPreferenceAdvice(ctx.userPreference(), ctx.analyzedTerm()),
+                generateAlternatives(ctx),
+                null,
+                false
+        );
+    }
+
+    // =========================================================================
+//  ALTERNATIVE LIST — CUSTOMER-FRIENDLY VERSION
+// =========================================================================
+    private List<SmartRateAlternative> generateAlternatives(SmartRateAnalysisContext ctx) {
+
+        List<MortgageTerm> terms;
+
+        // --------------------------------------------------------------
+        // 1. OFFERT-FLOW → visa alternativ baserat på erbjuden bindningstid
+        // --------------------------------------------------------------
+        if (ctx.hasOffer() && ctx.offerTerm() != null) {
+            terms = List.of(ctx.offerTerm());
+        }
+
+        // --------------------------------------------------------------
+        // 2. NORMALT FLOW → basera på kundens preferens
+        // --------------------------------------------------------------
+        else if (ctx.userPreference() != null) {
+            terms = marketService.getTermsForPreference(ctx.userPreference());
+        }
+
+        // --------------------------------------------------------------
+        // 3. Saknar både preferens och erbjudande → inga alternativ
+        // --------------------------------------------------------------
+        else {
+            return List.of();
+        }
+
+        List<SmartRateAlternative> list = new ArrayList<>();
+
+        BigDecimal userRate = ctx.hasOffer() ? ctx.offerRate() : ctx.userRate();
+
+        for (MortgageTerm t : terms) {
+
+            // Hämta marknadens median-snitt
+            BigDecimal avg = marketService.getMarketMedianRate(t);
+            if (avg == null) continue;
+
+            BigDecimal diff = calculateDiff(avg, userRate);
+            BigDecimal yearlyImpact = calculateYearlyImpact(diff, ctx.loanAmount());
+
+            list.add(new SmartRateAlternative(
+                    t,
+                    avg,
+                    diff,
+                    yearlyImpact
+            ));
+        }
+
+        return list;
+    }
+
+    // =========================================================================
+    //  TEXTBUILDERS GENERAL flow
+    // =========================================================================
+    private String buildAnalysisTextOffer(SmartRateAnalysisContext ctx, BigDecimal rate, BigDecimal diffBest) {
+        return "Vi har analyserat ditt ränteerbjudande på " + rate + "%. "
+                + "Erbjudandet ligger " + formatDiff(diffBest) + " jämfört med den lägsta aktuella snitträntan på marknaden. "
+                + "Det betyder att ditt erbjudande står sig " + (diffBest.compareTo(BigDecimal.ZERO) > 0 ? "sämre" : "bättre")
+                + " än vad många andra kunder får just nu.";
+    }
+
+    private String buildAnalysisTextVariable(SmartRateAnalysisContext ctx, BigDecimal rate, BigDecimal diffBest) {
+        return "Du har en rörlig ränta på " + rate + "%. "
+                + "Rörlig ränta innebär att du kan förhandla eller byta bank när som helst, eftersom du inte är bunden vid någon löptid. "
+                + "Din nuvarande nivå ligger " + formatDiff(diffBest)
+                + " jämfört med den lägsta aktuella snitträntan på marknaden.";
+    }
+
+    private String buildContextText(BigDecimal diffMedian) {
+
+        if (diffMedian == null)
+            return "Jämförelsen baseras på bankernas publicerade snitträntor.";
+
+        return "Jämförelsen baseras på bankernas publicerade snitträntor. "
+                + "Din nivå ligger " + formatDiff(diffMedian)
+                + " jämfört med genomsnittet av dessa.";
+    }
+
+    private String buildRecommendation(String status, BigDecimal diff) {
+
+        if (diff == null) {
+            return "Vi saknar viss marknadsdata och kan därför inte ge en fullständig rekommendation.";
+        }
+
+        // MYCKET bättre ränta (GREAT_GREEN)
+        if (status.equals("GREAT_GREEN")) {
+            return "Din ränta ligger betydligt bättre till än vad många andra kunder betalar idag. "
+                    + "Du har en mycket bra nivå. Fortsätt gärna hålla ett öga på marknaden ibland, men du behöver normalt inte göra något just nu.";
+        }
+
+        // I nivå med marknaden (GREEN)
+        if (status.equals("GREEN")) {
+            return "Din ränta ligger i linje med marknaden. "
+                    + "Det är en bra nivå, men det kan ändå vara klokt att ibland stämma av med banken för att säkerställa att du får deras bästa erbjudande.";
+        }
+
+        // Något högre än marknaden (YELLOW)
+        if (status.equals("YELLOW")) {
+            return "Din ränta ligger något högre än marknadens nivåer. "
+                    + "Det kan vara ett bra tillfälle att kontakta banken och höra om de kan förbättra din ränta eller matcha bättre erbjudanden.";
+        }
+
+        // Tydligt högre än marknaden (ORANGE)
+        if (status.equals("ORANGE")) {
+            return "Din ränta är tydligt högre än vad många andra kunder erbjuds idag. "
+                    + "Det kan löna sig att förhandla, eller att jämföra med andra banker för att se om du kan få en lägre nivå.";
+        }
+
+        // Mycket hög ränta (RED)
+        if (status.equals("RED")) {
+            return "Din ränta ligger betydligt högre än marknadens nivåer. "
+                    + "Du har sannolikt mycket att vinna på att förhandla, eller att jämföra erbjudanden från flera banker för att hitta en bättre nivå.";
+        }
+
+        return "Vi saknar viss marknadsdata och kan därför inte ge en fullständig rekommendation.";
+    }
+
+    private String buildPreferenceAdvice(RatePreference pref, MortgageTerm analyzedTerm) {
+
+        if (pref == null) return "";
+
+        return switch (pref) {
+
+            case VARIABLE_3M ->
+                    "Rörlig ränta passar dig som prioriterar flexibilitet och är okej med att kostnaden kan variera över tid. "
+                            + "Den kan både stiga och sjunka, men ger dig frihet att byta bank eller binda när läget känns rätt.";
+
+            case SHORT ->
+                    "Korta bindningstider (1–3 år) passar dig som vill ha en viss trygghet men ändå behålla flexibilitet på några års sikt. "
+                            + "Ett bra val om du vill säkra kostnaden en period utan att låsa dig för lång tid.";
+
+            case LONG ->
+                    "Längre bindningstider (4–10 år) passar dig som vill ha hög förutsägbarhet och skydda dig mot framtida räntehöjningar. "
+                            + "Tänk på att flexibiliteten minskar och att ränteskillnadsersättning kan tillkomma om du löser lånet i förtid.";
+        };
+    }
+
+    // ============================================================================
+    //  TEXTBUILDERS — FLOW A2: FIXED RATE (BUNDEN RÄNTA)
+    //  Scenarios:
+    //   - VeryShort (<1 month)
+    //   - ShortTerm (1–3 months)
+    //   - LongTerm (>3 months)
+    // ============================================================================
+
+    private String buildAnalysisTextFixedShortTerm(BigDecimal rate) {
+        return "Du har en bunden ränta på " + rate + "%. "
+                + "Din bindningstid löper ut inom kort, vilket innebär att du snart kan välja ny ränta utan kostnad. "
+                + "Det är vanligt att man förhandlar räntan när det är mindre än en månad kvar av bindningstiden, "
+                + "men det kan vara smart att börja förbereda sig redan nu. "
+                + "Här visar vi marknadsläget just nu för att hjälpa dig inför ditt kommande bindningsval "
+                + "och ge en tydlig bild av vilka nivåer som är konkurrenskraftiga idag.";
+    }
+
+    private String buildRecommendationFixedShortTerm() {
+        return "Eftersom din bindningstid snart löper ut är det ett bra läge att börja titta på olika alternativ "
+                + "och fundera på vilken bindningstid som passar dig bäst framöver.";
+    }
+
+    private String buildAnalysisTextFixedLongTerm(BigDecimal rate) {
+        return "Du har en bunden ränta på " + rate + "%. "
+                + "Det är lång tid kvar tills bindningstiden löper ut, vilket innebär att du normalt inte kan "
+                + "omförhandla eller byta ränta kostnadsfritt ännu. "
+                + "Om du vill undersöka möjligheten att byta i förtid kan du be din bank om en uppgift på eventuell "
+                + "ränteskillnadsersättning. "
+                + "Vi visar ändå hur ränteläget ser ut just nu, så att du redan nu får en bild av marknaden inför ditt "
+                + "nästa bindningsval.";
+    }
+
+    private String buildRecommendationFixedLongTerm() {
+        return "Ett bra tillfälle att göra en ny räntekoll är när det är mindre än en månad kvar av bindningstiden. "
+                + "Du kan redan nu undersöka om ränteskillnadsersättningen är låg, men de flesta får bäst möjligheter "
+                + "att förhandla när bindningstiden närmar sig sitt slut.";
+    }
+
+    private String buildAnalysisTextFixedVeryShort(BigDecimal rate) {
+        return "Du har en bunden ränta på " + rate + "%. "
+                + "Din bindningstid löper ut mycket snart, vilket innebär att du nu befinner dig i ett optimalt läge "
+                + "att förhandla om en ny ränta. "
+                + "Här visar vi hur marknaden ser ut just nu för att hjälpa dig inför ditt kommande bindningsval.";
+    }
+
+    private String buildRecommendationFixedVeryShort() {
+        return "När det är mindre än en månad kvar av bindningstiden är det vanligt att påbörja ränteförhandling. "
+                + "Kontakta gärna banken för att höra vilka nivåer de kan erbjuda.";
+    }
+
+    // ============================================================================
+    //  TEXTBUILDERS — OFFER-FLOW RECOMMENDATION ADAPTER
+    // ============================================================================
+
+    /**
+     * Anpassar den generella rekommendationstexten så att den passar erbjudanden.
+     * Grundtexten säger t.ex. "Din ränta är ..." — men i offer-flow bör det vara
+     * "Ditt erbjudande är ...".
+     */
+    private String buildRecommendationForOfferFlow(String status, BigDecimal diff) {
+        String base = buildRecommendation(status, diff);
+
+        return base
+                .replace("Din ränta", "Ditt erbjudande")
+                .replace("din ränta", "ditt erbjudande")
+                .replace("Du har en bra nivå", "Erbjudandet ligger på en bra nivå")
+                .replace("du har", "erbjudandet har");
+    }
+
+    private String buildOfferContextText(BigDecimal diffMedian) {
+
+        if (diffMedian == null) {
+            return "Vi jämför ditt erbjudande med bankernas publicerade snitträntor för att ge en rättvis bild av marknadsläget.";
+        }
+
+        return "Vi jämför ditt erbjudande med bankernas publicerade snitträntor. "
+                + "Ditt erbjudande ligger " + formatDiff(diffMedian) + " jämfört med genomsnittet.";
+    }
+
+    private String buildOfferAlternativesIntro() {
+        return "Här ser du hur ditt erbjudande står sig mot marknadens räntor. "
+                + "Vi jämför med aktuella nivåer för bindningstider som passar dina preferenser, "
+                + "så att du enkelt kan se om det finns mer fördelaktiga alternativ.";
+    }
+
+    // =========================================================================
+    //  HELPERS
+    // =========================================================================
+    private BigDecimal calculateDiff(BigDecimal a, BigDecimal b) {
+        if (a == null || b == null) return null;
+        return a.subtract(b);
+    }
+
+    private BigDecimal calculateYearlyImpact(BigDecimal diff, BigDecimal loanAmount) {
+        if (diff == null || loanAmount == null) return null;
+
+        return loanAmount.multiply(diff)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+    }
+
+    private String classify(BigDecimal diff) {
+
+        if (diff == null) return "UNKNOWN";
+
+        BigDecimal strongBetter = new BigDecimal("-0.30");   // mycket bättre än marknaden
+        BigDecimal slightlyHigher = new BigDecimal("0.30");  // något högre
+        BigDecimal noticeablyHigher = new BigDecimal("0.70"); // markant högre
+
+        // MYCKET bättre än marknaden (t ex –0.40%, –0.60%)
+        if (diff.compareTo(strongBetter) <= 0) {
+            return "GREAT_GREEN";
+        }
+
+        // I nivå eller lite bättre (–0.29% till 0%)
+        if (diff.compareTo(BigDecimal.ZERO) <= 0) {
+            return "GREEN";
+        }
+
+        // Lite högre (0% till +0.30%)
+        if (diff.compareTo(slightlyHigher) <= 0) {
+            return "YELLOW";
+        }
+
+        // Markant högre (+0.30% till +0.70%)
+        if (diff.compareTo(noticeablyHigher) <= 0) {
+            return "ORANGE";
+        }
+
+        // Extremt mycket högre (> +0.70%)
+        return "RED";
+    }
+
+    private String formatDiff(BigDecimal diff) {
+        if (diff == null) return "okänt";
+
+        BigDecimal abs = diff.abs();
+        int cmp = diff.compareTo(BigDecimal.ZERO);
+
+        if (cmp > 0) return abs + "% högre";
+        if (cmp < 0) return abs + "% lägre";
+        return "i nivå med";
+    }
+
+    private Integer calculateMonthsUntilExpiration(LocalDate endDate) {
+        if (endDate == null) return null;
+
+        LocalDate today = LocalDate.now();
+        long days = ChronoUnit.DAYS.between(today, endDate);
+
+        if (days < 0) return 0; // redan passerat
+
+        // definiera "inom 3 månader" som ≤ 90 dagar
+        if (days <= 90) {
+            return (int) (days / 30);
+        }
+
+        // Om det är längre än 90 dagar ska vi *inte* hamna i "inom kort".
+        // Därför returnerar vi en siffra > 3.
+        long months = ChronoUnit.MONTHS.between(today.withDayOfMonth(1), endDate.withDayOfMonth(1));
+
+        // Men om det är 3m + X dagar, ska months vara MINST 4
+        if (months <= 3) {
+            months = 4;
+        }
+
+        return (int) months;
+    }
+
+    // =========================================================================
+    //  CONTEXT BUILDER
     // =========================================================================
     private SmartRateAnalysisContext buildContext(SmartRateTestRequest request) {
 
-        Long bankId = request.bankId();
-        String bankName = request.bankName();
-
-        // Välj term
         MortgageTerm analyzedTerm = request.hasOffer()
                 ? request.offerTerm()
                 : request.userCurrentTerm();
 
-        if (analyzedTerm == null) {
+        if (analyzedTerm == null)
             analyzedTerm = MortgageTerm.VARIABLE_3M;
-        }
 
-        // Marknadsdata
-        BigDecimal bankAvg =
-                marketService.getBankAverageRate(bankId, analyzedTerm);
-
-        BigDecimal marketBest =
-                marketService.getMarketBestRate(analyzedTerm);
-
-        BigDecimal marketMedian =
-                marketService.getMarketMedianRate(analyzedTerm);
-
-        // Historik endast för Flow A + rörlig
-        BigDecimal historicVariableRate = null;
-
-        if (!request.hasOffer()
-                && analyzedTerm == MortgageTerm.VARIABLE_3M
-                && request.rateChangeDate() != null) {
-
-            historicVariableRate =
-                    marketService.getHistoricVariableRate(bankId, request.rateChangeDate());
+        // Beräkning av månader tills bindningstiden löper ut
+        Integer monthsUntilExpiration = null;
+        if (request.bindingEndDate() != null) {
+            monthsUntilExpiration = calculateMonthsUntilExpiration(request.bindingEndDate());
         }
 
         return new SmartRateAnalysisContext(
-
                 request.hasOffer(),
-                bankId,
-                bankName,
-
-                // Flow A
+                request.bankId(),
+                request.bankName(),
                 request.userRate(),
                 request.userCurrentTerm(),
-
-                // Flow B
                 request.offerRate(),
                 request.offerTerm(),
-
-                // Preference
                 request.userPreference(),
-
-                // Market data
-                bankAvg,
-                marketBest,
-                marketMedian,
-
-                // Historik
-                historicVariableRate,
-
-                // Alltid korrekt term
-                analyzedTerm
+                marketService.getBankAverageRate(request.bankId(), analyzedTerm),
+                marketService.getMarketBestRate(analyzedTerm),
+                marketService.getMarketMedianRate(analyzedTerm),
+                null,
+                analyzedTerm,
+                request.loanAmount(),
+                monthsUntilExpiration
         );
     }
 }
