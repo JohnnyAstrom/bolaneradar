@@ -41,7 +41,6 @@ public interface SmartRateMarketDataService {
      * RORLIG -> [VARIABLE_3M]
      * KORT   -> [FIXED_1Y, FIXED_2Y, FIXED_3Y]
      * LANG   -> [FIXED_4Y ... FIXED_10Y]
-     * VET_EJ -> [VARIABLE_3M, FIXED_1Y, FIXED_2Y]
      */
     List<MortgageTerm> getTermsForPreference(RatePreference pref);
 }

@@ -38,5 +38,21 @@ public record SmartRateAnalysisContext(
         BigDecimal historicVariableRate,
 
         // ========== Analyserad term ==========
-        MortgageTerm analyzedTerm
-) {}
+        MortgageTerm analyzedTerm,
+
+        // ========== Lånebelopp ==========
+        BigDecimal loanAmount,
+
+        // ========== Bindningstid kvar ==========
+        Integer monthsUntilExpiration
+) {
+
+    /**
+     * Hjälpmetod:
+     * Returnerar true om analysen gäller en bunden ränta,
+     * dvs allt UTOM rörlig (3 månader).
+     */
+    public boolean isFixedTermAnalysis() {
+        return analyzedTerm != MortgageTerm.VARIABLE_3M;
+    }
+}
