@@ -1,8 +1,6 @@
 package com.bolaneradar.backend.service.smartrate;
 
-import com.bolaneradar.backend.dto.api.smartrate.SmartRateAlternative;
-import com.bolaneradar.backend.dto.api.smartrate.SmartRateTestRequest;
-import com.bolaneradar.backend.dto.api.smartrate.SmartRateTestResult;
+import com.bolaneradar.backend.dto.api.smartrate.*;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
 import com.bolaneradar.backend.service.smartrate.model.SmartRateAnalysisContext;
@@ -13,6 +11,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -44,43 +43,107 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     }
 
     // =========================================================================
-    //  FLOW B — OFFER FLOW
+//  FLOW B — OFFER FLOW (analyserar ALLA kundens erbjudanden)
+// =========================================================================
     // =========================================================================
+//  FLOW B — OFFER FLOW (analyserar ALLA kundens erbjudanden)
+// =========================================================================
     private SmartRateTestResult handleOfferFlow(SmartRateAnalysisContext ctx) {
 
-        BigDecimal rate = ctx.offerRate();
-
-        BigDecimal diffBest = calculateDiff(rate, ctx.marketBestRate());
-        BigDecimal diffBank = calculateDiff(rate, ctx.bankLatestAverage());
-        BigDecimal diffMedian = calculateDiff(rate, ctx.marketMedianRate());
-
-        String status = classify(diffBest);
-
-        BigDecimal yearlyImpact = null;
-
-        // Potentiell besparing visas ENBART i offer-flow OCH om besparingen är positiv
-        BigDecimal impact = calculateYearlyImpact(
-                calculateDiff(rate, ctx.marketBestRate()),
-                ctx.loanAmount()
-        );
-        if (impact != null && impact.compareTo(BigDecimal.ZERO) > 0) {
-            yearlyImpact = impact;
+        // ----------------------------------------------
+        // Fallback — inga erbjudanden angivna
+        // ----------------------------------------------
+        if (ctx.offers() == null || ctx.offers().isEmpty()) {
+            return new SmartRateTestResult(
+                    "UNKNOWN",
+                    ctx.bankName(),
+                    ctx.analyzedTerm(),
+                    null,
+                    null,
+                    "Vi kunde inte läsa in några ränteerbjudanden.",
+                    "",
+                    "",
+                    null,
+                    "",
+                    List.of(),      // alternatives
+                    null,           // alternativesIntro
+                    true,           // isOfferFlow
+                    List.of(),      // offerAnalyses
+                    false           // multipleOffers
+            );
         }
 
+        // ----------------------------------------------
+        // Analysera samtliga erbjudanden
+        // ----------------------------------------------
+        List<SmartRateOfferAnalysisResultDto> analyses = new ArrayList<>();
+
+        for (SmartRateOfferDto offer : ctx.offers()) {
+
+            MortgageTerm term = offer.term();
+            BigDecimal rate = offer.rate();
+
+            BigDecimal bestMarket = marketService.getMarketBestRate(term);
+            BigDecimal medianMarket = marketService.getMarketMedianRate(term);
+            BigDecimal bankAvg = marketService.getBankAverageRate(ctx.bankId(), term);
+
+            BigDecimal diffBest = calculateDiff(rate, bestMarket);
+            BigDecimal diffMedian = calculateDiff(rate, medianMarket);
+            BigDecimal diffBank = calculateDiff(rate, bankAvg);
+            BigDecimal yearlyImpact = calculateYearlyImpact(diffBest, ctx.loanAmount());
+
+            String status = classify(diffBest);
+
+            analyses.add(
+                    new SmartRateOfferAnalysisResultDto(
+                            term,
+                            rate,
+                            diffBest,
+                            diffMedian,
+                            diffBank,
+                            status,
+                            buildAnalysisTextOffer(ctx, rate, diffBest),
+                            buildRecommendationForOfferFlow(status, diffBest),
+                            yearlyImpact
+                    )
+            );
+        }
+
+        boolean multipleOffers = analyses.size() > 1;
+
+        // ----------------------------------------------
+        // Huvudanalysen baseras på det första erbjudandet
+        // ----------------------------------------------
+        SmartRateOfferAnalysisResultDto primary = analyses.get(0);
+
+        String analysisText = buildPrimaryOfferAnalysisText(
+                primary.offeredRate(),
+                primary.diffFromBestMarket()
+        );
+
+        String recommendation = primary.recommendation();
+
+        // ----------------------------------------------
+        // Returnera komplett resultat enligt dina regler
+        // ----------------------------------------------
         return new SmartRateTestResult(
-                status,
-                ctx.bankName(),
-                ctx.analyzedTerm(),
-                diffBank,
-                diffBest,
-                buildAnalysisTextOffer(ctx, rate, diffBest),
-                buildOfferContextText(diffMedian),
-                buildRecommendationForOfferFlow(status, diffBest),
-                null,
-                buildPreferenceAdvice(ctx.userPreference(), ctx.analyzedTerm()),
-                generateAlternatives(ctx),
-                buildOfferAlternativesIntro(),
-                true
+                primary.status(),                // status
+                ctx.bankName(),                  // bank
+                primary.term(),                  // analyzedTerm
+                null,                            // differenceFromBankAverage
+                null,                            // differenceFromBestMarketAverage
+                analysisText,                    // analysisText
+                "",                              // additionalContext
+                recommendation,                  // recommendation
+                null,                            // yearlySaving
+                buildPreferenceAdvice(ctx.userPreference(), primary.term()),
+
+                List.of(),                       // alternatives (ALLTID tomt)
+                null,                            // alternativesIntro (ALLTID null)
+
+                true,                            // isOfferFlow
+                analyses,                        // offerAnalyses
+                multipleOffers                   // multipleOffers
         );
     }
 
@@ -111,9 +174,11 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 buildRecommendation(status, diffBest),
                 yearlyImpact,
                 buildPreferenceAdvice(ctx.userPreference(), ctx.analyzedTerm()),
-                generateAlternatives(ctx),
-                null,
-                false
+                generateAlternatives(ctx), // normalt flöde → visa alternativ
+                null,                     // alternativesIntro → ej relevant
+                false,                    // isOfferFlow → nej
+                List.of(),                // offerAnalyses → tom lista
+                false                     // multipleOffers → ej offer-flow
         );
     }
 
@@ -143,7 +208,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
             recommendation = buildRecommendationFixedLongTerm();
         }
 
-        // Scenario C: Mycket snart (0 månader kvar) eller okänt datum
+        // Scenario C: Mycket snart eller okänt
         else {
             analysisText = buildAnalysisTextFixedVeryShort(rate);
             recommendation = buildRecommendationFixedVeryShort();
@@ -158,26 +223,33 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 analysisText,
                 buildContextText(diffMedian),
                 recommendation,
-                null,
+                null,                                   // yearlySaving
                 buildPreferenceAdvice(ctx.userPreference(), ctx.analyzedTerm()),
-                generateAlternatives(ctx),
-                null,
-                false
+                generateAlternatives(ctx),              // normal flow → visa alternativ
+                null,                                   // alternativesIntro → ej relevant
+                false,                                  // isOfferFlow
+                List.of(),                              // offerAnalyses
+                false                                   // multipleOffers
         );
     }
 
     // =========================================================================
-//  ALTERNATIVE LIST — CUSTOMER-FRIENDLY VERSION
-// =========================================================================
+    //  ALTERNATIVE LIST — CUSTOMER-FRIENDLY VERSION
+    // =========================================================================
     private List<SmartRateAlternative> generateAlternatives(SmartRateAnalysisContext ctx) {
+
+        // Hämta bästa erbjudandet om offer-flow
+        SmartRateOfferDto bestOffer = ctx.hasOffer()
+                ? findBestOffer(ctx.offers())
+                : null;
 
         List<MortgageTerm> terms;
 
         // --------------------------------------------------------------
-        // 1. OFFERT-FLOW → visa alternativ baserat på erbjuden bindningstid
+        // 1. OFFERT-FLOW → visa alternativ baserat på bästa erbjudandet
         // --------------------------------------------------------------
-        if (ctx.hasOffer() && ctx.offerTerm() != null) {
-            terms = List.of(ctx.offerTerm());
+        if (bestOffer != null) {
+            terms = List.of(bestOffer.term());
         }
 
         // --------------------------------------------------------------
@@ -196,7 +268,10 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
 
         List<SmartRateAlternative> list = new ArrayList<>();
 
-        BigDecimal userRate = ctx.hasOffer() ? ctx.offerRate() : ctx.userRate();
+        // User rate = erbjuden ränta eller kundens egna ränta
+        BigDecimal userRate = bestOffer != null
+                ? bestOffer.rate()
+                : ctx.userRate();
 
         for (MortgageTerm t : terms) {
 
@@ -218,15 +293,67 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         return list;
     }
 
-    // =========================================================================
-    //  TEXTBUILDERS GENERAL flow
-    // =========================================================================
+    // ============================================================================
+    //  TEXTBUILDERS — OFFER FLOW (B-FLOW)
+    //  Används ENDAST när kunden har ett eller flera ränteerbjudanden
+    // ============================================================================
+
+    /** Full analys av varje enskilt erbjudande */
     private String buildAnalysisTextOffer(SmartRateAnalysisContext ctx, BigDecimal rate, BigDecimal diffBest) {
         return "Vi har analyserat ditt ränteerbjudande på " + rate + "%. "
                 + "Erbjudandet ligger " + formatDiff(diffBest) + " jämfört med den lägsta aktuella snitträntan på marknaden. "
                 + "Det betyder att ditt erbjudande står sig " + (diffBest.compareTo(BigDecimal.ZERO) > 0 ? "sämre" : "bättre")
                 + " än vad många andra kunder får just nu.";
     }
+
+    /** Huvudanalysen i offer-flow, baserad på det FÖRSTA erbjudandet */
+    private String buildPrimaryOfferAnalysisText(BigDecimal offeredRate, BigDecimal diffBestMarket) {
+
+        String betterOrWorse = (diffBestMarket.compareTo(BigDecimal.ZERO) > 0)
+                ? "sämre"
+                : "bättre";
+
+        return "Vi har analyserat ditt ränteerbjudande på "
+                + formatRate(offeredRate) + "%. "
+                + "Erbjudandet ligger " + formatDiff(diffBestMarket)
+                + " jämfört med den lägsta aktuella snitträntan på marknaden. "
+                + "Det betyder att ditt erbjudande står sig " + betterOrWorse
+                + " än vad många andra kunder får just nu.";
+    }
+
+    /** Anpassad rekommendationstext för erbjudanden */
+    private String buildRecommendationForOfferFlow(String status, BigDecimal diff) {
+        String base = buildRecommendation(status, diff);
+
+        return base
+                .replace("Din ränta", "Ditt erbjudande")
+                .replace("din ränta", "ditt erbjudande")
+                .replace("Du har en bra nivå", "Erbjudandet ligger på en bra nivå")
+                .replace("du har", "erbjudandet har");
+    }
+
+    /** Kontexttext specifikt för erbjudanden */
+    private String buildOfferContextText(BigDecimal diffMedian) {
+
+        if (diffMedian == null) {
+            return "Vi jämför ditt erbjudande med bankernas publicerade snitträntor för att ge en rättvis bild av marknadsläget.";
+        }
+
+        return "Vi jämför ditt erbjudande med bankernas publicerade snitträntor. "
+                + "Ditt erbjudande ligger " + formatDiff(diffMedian) + " jämfört med genomsnittet.";
+    }
+
+    /** Introtext för alternativlistan i offer-flow (används ej just nu men sparas) */
+    private String buildOfferAlternativesIntro() {
+        return "Här ser du hur ditt erbjudande står sig mot marknadens räntor. "
+                + "Vi jämför med aktuella nivåer för bindningstider som passar dina preferenser, "
+                + "så att du enkelt kan se om det finns mer fördelaktiga alternativ.";
+    }
+
+    // ============================================================================
+    //  TEXTBUILDERS — VARIABLE RATE FLOW (A1-FLOW)
+    //  Används när kunden har rörlig ränta och INTE har offer-flow
+    // ============================================================================
 
     private String buildAnalysisTextVariable(SmartRateAnalysisContext ctx, BigDecimal rate, BigDecimal diffBest) {
         return "Du har en rörlig ränta på " + rate + "%. "
@@ -245,37 +372,33 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 + " jämfört med genomsnittet av dessa.";
     }
 
+    /** Generell rekommendation för rörlig + fast ränta när ingen erbjudande finns */
     private String buildRecommendation(String status, BigDecimal diff) {
 
         if (diff == null) {
             return "Vi saknar viss marknadsdata och kan därför inte ge en fullständig rekommendation.";
         }
 
-        // MYCKET bättre ränta (GREAT_GREEN)
         if (status.equals("GREAT_GREEN")) {
             return "Din ränta ligger betydligt bättre till än vad många andra kunder betalar idag. "
                     + "Du har en mycket bra nivå. Fortsätt gärna hålla ett öga på marknaden ibland, men du behöver normalt inte göra något just nu.";
         }
 
-        // I nivå med marknaden (GREEN)
         if (status.equals("GREEN")) {
             return "Din ränta ligger i linje med marknaden. "
                     + "Det är en bra nivå, men det kan ändå vara klokt att ibland stämma av med banken för att säkerställa att du får deras bästa erbjudande.";
         }
 
-        // Något högre än marknaden (YELLOW)
         if (status.equals("YELLOW")) {
             return "Din ränta ligger något högre än marknadens nivåer. "
                     + "Det kan vara ett bra tillfälle att kontakta banken och höra om de kan förbättra din ränta eller matcha bättre erbjudanden.";
         }
 
-        // Tydligt högre än marknaden (ORANGE)
         if (status.equals("ORANGE")) {
             return "Din ränta är tydligt högre än vad många andra kunder erbjuds idag. "
                     + "Det kan löna sig att förhandla, eller att jämföra med andra banker för att se om du kan få en lägre nivå.";
         }
 
-        // Mycket hög ränta (RED)
         if (status.equals("RED")) {
             return "Din ränta ligger betydligt högre än marknadens nivåer. "
                     + "Du har sannolikt mycket att vinna på att förhandla, eller att jämföra erbjudanden från flera banker för att hitta en bättre nivå.";
@@ -284,32 +407,10 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         return "Vi saknar viss marknadsdata och kan därför inte ge en fullständig rekommendation.";
     }
 
-    private String buildPreferenceAdvice(RatePreference pref, MortgageTerm analyzedTerm) {
-
-        if (pref == null) return "";
-
-        return switch (pref) {
-
-            case VARIABLE_3M ->
-                    "Rörlig ränta passar dig som prioriterar flexibilitet och är okej med att kostnaden kan variera över tid. "
-                            + "Den kan både stiga och sjunka, men ger dig frihet att byta bank eller binda när läget känns rätt.";
-
-            case SHORT ->
-                    "Korta bindningstider (1–3 år) passar dig som vill ha en viss trygghet men ändå behålla flexibilitet på några års sikt. "
-                            + "Ett bra val om du vill säkra kostnaden en period utan att låsa dig för lång tid.";
-
-            case LONG ->
-                    "Längre bindningstider (4–10 år) passar dig som vill ha hög förutsägbarhet och skydda dig mot framtida räntehöjningar. "
-                            + "Tänk på att flexibiliteten minskar och att ränteskillnadsersättning kan tillkomma om du löser lånet i förtid.";
-        };
-    }
 
     // ============================================================================
-    //  TEXTBUILDERS — FLOW A2: FIXED RATE (BUNDEN RÄNTA)
-    //  Scenarios:
-    //   - VeryShort (<1 month)
-    //   - ShortTerm (1–3 months)
-    //   - LongTerm (>3 months)
+    //  TEXTBUILDERS — FIXED RATE FLOW (A2-FLOW)
+    //  Används när kunden har bunden ränta och INTE har offer-flow
     // ============================================================================
 
     private String buildAnalysisTextFixedShortTerm(BigDecimal rate) {
@@ -354,40 +455,56 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 + "Kontakta gärna banken för att höra vilka nivåer de kan erbjuda.";
     }
 
+
     // ============================================================================
-    //  TEXTBUILDERS — OFFER-FLOW RECOMMENDATION ADAPTER
+    //  TEXTBUILDERS — PREFERENCE TEXTS
+    //  Används för alla flöden om kund anger preferens
     // ============================================================================
 
-    /**
-     * Anpassar den generella rekommendationstexten så att den passar erbjudanden.
-     * Grundtexten säger t.ex. "Din ränta är ..." — men i offer-flow bör det vara
-     * "Ditt erbjudande är ...".
-     */
-    private String buildRecommendationForOfferFlow(String status, BigDecimal diff) {
-        String base = buildRecommendation(status, diff);
+    private String buildPreferenceAdvice(RatePreference pref, MortgageTerm analyzedTerm) {
 
-        return base
-                .replace("Din ränta", "Ditt erbjudande")
-                .replace("din ränta", "ditt erbjudande")
-                .replace("Du har en bra nivå", "Erbjudandet ligger på en bra nivå")
-                .replace("du har", "erbjudandet har");
+        if (pref == null) return "";
+
+        return switch (pref) {
+
+            case VARIABLE_3M ->
+                    "Rörlig ränta passar dig som prioriterar flexibilitet och är okej med att kostnaden kan variera över tid. "
+                            + "Den kan både stiga och sjunka, men ger dig frihet att byta bank eller binda när läget känns rätt.";
+
+            case SHORT ->
+                    "Korta bindningstider (1–3 år) passar dig som vill ha en viss trygghet men ändå behålla flexibilitet på några års sikt. "
+                            + "Ett bra val om du vill säkra kostnaden en period utan att låsa dig för lång tid.";
+
+            case LONG ->
+                    "Längre bindningstider (4–10 år) passar dig som vill ha hög förutsägbarhet och skydda dig mot framtida räntehöjningar. "
+                            + "Tänk på att flexibiliteten minskar och att ränteskillnadsersättning kan tillkomma om du löser lånet i förtid.";
+        };
     }
 
-    private String buildOfferContextText(BigDecimal diffMedian) {
 
-        if (diffMedian == null) {
-            return "Vi jämför ditt erbjudande med bankernas publicerade snitträntor för att ge en rättvis bild av marknadsläget.";
-        }
+    // ============================================================================
+    //  TEXTBUILDERS — SHARED HELPERS
+    //  Används i flera olika flows
+    // ============================================================================
 
-        return "Vi jämför ditt erbjudande med bankernas publicerade snitträntor. "
-                + "Ditt erbjudande ligger " + formatDiff(diffMedian) + " jämfört med genomsnittet.";
+    /** Förenklad formattering av skillnadstext */
+    private String formatDiff(BigDecimal diff) {
+        if (diff == null) return "okänt";
+
+        BigDecimal abs = diff.abs();
+        int cmp = diff.compareTo(BigDecimal.ZERO);
+
+        if (cmp > 0) return abs + "% högre";
+        if (cmp < 0) return abs + "% lägre";
+        return "i nivå med";
     }
 
-    private String buildOfferAlternativesIntro() {
-        return "Här ser du hur ditt erbjudande står sig mot marknadens räntor. "
-                + "Vi jämför med aktuella nivåer för bindningstider som passar dina preferenser, "
-                + "så att du enkelt kan se om det finns mer fördelaktiga alternativ.";
+    /** Formaterar ränta med exakt två decimaler, används i offer-flow */
+    private String formatRate(BigDecimal rate) {
+        if (rate == null) return "okänd nivå";
+        return rate.setScale(2, RoundingMode.HALF_UP).toPlainString();
     }
+
 
     // =========================================================================
     //  HELPERS
@@ -436,17 +553,6 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         return "RED";
     }
 
-    private String formatDiff(BigDecimal diff) {
-        if (diff == null) return "okänt";
-
-        BigDecimal abs = diff.abs();
-        int cmp = diff.compareTo(BigDecimal.ZERO);
-
-        if (cmp > 0) return abs + "% högre";
-        if (cmp < 0) return abs + "% lägre";
-        return "i nivå med";
-    }
-
     private Integer calculateMonthsUntilExpiration(LocalDate endDate) {
         if (endDate == null) return null;
 
@@ -472,17 +578,30 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         return (int) months;
     }
 
+    private SmartRateOfferDto findBestOffer(List<SmartRateOfferDto> offers) {
+        if (offers == null || offers.isEmpty()) return null;
+
+        return offers.stream()
+                .min(Comparator.comparing(SmartRateOfferDto::rate))
+                .orElse(null);
+    }
+
     // =========================================================================
     //  CONTEXT BUILDER
     // =========================================================================
     private SmartRateAnalysisContext buildContext(SmartRateTestRequest request) {
 
-        MortgageTerm analyzedTerm = request.hasOffer()
-                ? request.offerTerm()
-                : request.userCurrentTerm();
+        MortgageTerm analyzedTerm;
 
-        if (analyzedTerm == null)
-            analyzedTerm = MortgageTerm.VARIABLE_3M;
+        if (request.hasOffer()
+                && request.offers() != null
+                && !request.offers().isEmpty()) {
+            analyzedTerm = request.offers().get(0).term(); // default: första erbjudandet
+        } else {
+            analyzedTerm = request.userCurrentTerm() != null
+                    ? request.userCurrentTerm()
+                    : MortgageTerm.VARIABLE_3M;
+        }
 
         // Beräkning av månader tills bindningstiden löper ut
         Integer monthsUntilExpiration = null;
@@ -496,8 +615,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 request.bankName(),
                 request.userRate(),
                 request.userCurrentTerm(),
-                request.offerRate(),
-                request.offerTerm(),
+                request.offers(),
                 request.userPreference(),
                 marketService.getBankAverageRate(request.bankId(), analyzedTerm),
                 marketService.getMarketBestRate(analyzedTerm),

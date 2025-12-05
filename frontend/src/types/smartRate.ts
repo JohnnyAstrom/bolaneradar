@@ -1,35 +1,55 @@
 /**
  * Payload för Smart Räntetest (frontend → backend)
  *
- * Detta är exakt vad backend Version 4 förväntar sig.
+ * Detta är exakt vad backend Version 5 förväntar sig (multi-offer).
  */
+
+// Ett erbjudande från kunden
+export interface SmartRateOfferDto {
+    term: string;     // MortgageTerm enum (string)
+    rate: number;     // Räntesatsen kunden angett
+}
+
 export interface SmartRateTestRequest {
-    // Bank
+    // Bankinfo
     bankName: string;
     bankId: number;
     hasOffer: boolean;
 
-    // Flöde A (ingen offert)
+    // Flöde A — ingen offert (kundens nuvarande ränta)
     userRate?: number;
-    userCurrentTerm?: string;      // MortgageTerm enum (som string)
-    bindingEndDate?: string;       // YYYY-MM-DD
-    userPreference?: string;       // RatePreference enum (string)
+    userCurrentTerm?: string;     // MortgageTerm som string
+    bindingEndDate?: string;      // YYYY-MM-DD
+    userPreference?: string;      // RatePreference enum
 
-    // Flöde B (har offert)
-    offerTerm?: string;            // MortgageTerm enum (string)
-    offerRate?: number;
+    // Flöde B — multipla erbjudanden
+    offers?: SmartRateOfferDto[];
 
     // Gemensamt
-    loanAmount?: number;           // Valfritt i backend, men recommended
+    loanAmount?: number;
 }
 
 /**
  * Resultat från Smart Räntetest (backend → frontend)
  *
- * Detta motsvarar exakt SmartRateTestResult i backend Version 4.
+ * Motsvarar SmartRateTestResult i backend Version 5 (multi-offer).
  */
+
+// Enskild analys av ett erbjudande
+export interface SmartRateOfferAnalysisResultDto {
+    term: string;
+    offeredRate: number;
+    diffFromBestMarket: number | null;
+    diffFromMedianMarket: number | null;
+    diffFromBankAverage: number | null;
+    status: string;
+    analysisText: string;
+    recommendation: string;
+    yearlyCostDifference: number | null;
+}
+
 export interface SmartRateTestResult {
-    status: string;                     // GREEN / YELLOW / RED / INFO
+    status: string;
     bank: string;
     analyzedTerm: string;
 
@@ -40,21 +60,23 @@ export interface SmartRateTestResult {
     additionalContext: string;
     recommendation: string;
 
-    // Version 3 — sparpotential
     yearlySaving?: number | null;
-
-    // Version 3 — preferensbaserat råd
     preferenceAdvice?: string | null;
 
-    // Version 4 — Alternativlista baserat på preferenser
     alternatives?: {
-        term: string;                     // MortgageTerm enum
-        averageRate: number;              // bankens snitt
-        differenceFromBest: number;       // diff mot bästa marknaden
+        term: string;
+        averageRate: number;
+        differenceFromBest: number;
         yearlyCostDifference: number | null;
     }[];
 
     alternativesIntro?: string;
 
     isOfferFlow?: boolean;
+
+    // Analys av multipla erbjudanden (en rad per bindningstid)
+    offerAnalyses?: SmartRateOfferAnalysisResultDto[];
+
+    // Viktigt för frontend: avgör om vi visar enkel eller multi-offer layout
+    multipleOffers?: boolean;
 }

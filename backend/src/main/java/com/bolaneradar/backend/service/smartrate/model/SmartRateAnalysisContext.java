@@ -1,9 +1,11 @@
 package com.bolaneradar.backend.service.smartrate.model;
 
+import com.bolaneradar.backend.dto.api.smartrate.SmartRateOfferDto;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Intern analysmodell för Smart Räntetestet.
@@ -23,8 +25,7 @@ public record SmartRateAnalysisContext(
         MortgageTerm userCurrentTerm,
 
         // ========== Flöde B ==========
-        BigDecimal offerRate,
-        MortgageTerm offerTerm,
+        List<SmartRateOfferDto> offers,
 
         // ========== Kundens val ==========
         RatePreference userPreference,

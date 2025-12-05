@@ -55,17 +55,33 @@ const SmartRateTestForm: FC = () => {
     // FLOW A — NO OFFER
     const [currentRate, setCurrentRate] = useState("");
     const [currentRateType, setCurrentRateType] = useState("");
-
     const [bindingEndDate, setBindingEndDate] = useState("");
-
     const [futureRatePreference, setFutureRatePreference] = useState("");
 
-    // FLOW B — HAS OFFER
-    const [offerBindingPeriod, setOfferBindingPeriod] = useState("");
-    const [offerRate, setOfferRate] = useState("");
+    // FLOW B — MULTIPLE OFFERS
+    const [offers, setOffers] = useState<{ term: string; rate: string }[]>([
+        { term: "", rate: "" }
+    ]);
+
+    // Add new empty offer row
+    function addOfferRow() {
+        setOffers([...offers, { term: "", rate: "" }]);
+    }
+
+    // Update a specific offer row field
+    function updateOffer(index: number, field: "term" | "rate", value: string) {
+        const updated = [...offers];
+        updated[index][field] = value;
+        setOffers(updated);
+    }
+
+    // Remove a specific offer row
+    function removeOffer(index: number) {
+        setOffers(offers.filter((_, i) => i !== index));
+    }
 
     /** ----------------------------------------------------
-     *  HANDLE SUBMIT — bygger payload exakt för backend V4
+     *  HANDLE SUBMIT — bygger payload exakt för backend V5
      * ---------------------------------------------------*/
     async function handleSubmit() {
         const bankId = bankIdMap[bank];
@@ -84,14 +100,32 @@ const SmartRateTestForm: FC = () => {
         };
 
         if (hasOffer === "no") {
+            // Endast Flow A-fält
             payload.userRate = currentRate ? Number(currentRate) : undefined;
             payload.userCurrentTerm = currentRateType || undefined;
             payload.bindingEndDate = bindingEndDate || undefined;
             payload.userPreference = futureRatePreference || undefined;
 
         } else if (hasOffer === "yes") {
-            payload.offerTerm = offerBindingPeriod || undefined;
-            payload.offerRate = offerRate ? Number(offerRate) : undefined;
+            // Nollställ Flow A-fält
+            payload.userRate = undefined;
+            payload.userCurrentTerm = undefined;
+            payload.bindingEndDate = undefined;
+            payload.userPreference = undefined;
+
+            // Sätt offers
+            payload.offers = offers
+                .filter(o => o.term && o.rate)
+                .map(o => ({
+                    term: o.term,
+                    rate: Number(o.rate)
+                }));
+
+            // Validering: minst 1 erbjudande måste vara ifyllt
+            if (!payload.offers || payload.offers.length === 0) {
+                alert("Fyll i minst ett ränteerbjudande.");
+                return;
+            }
         }
 
         const response = await runSmartRateTest(payload);
@@ -144,7 +178,6 @@ const SmartRateTestForm: FC = () => {
             {/* FLOW A — NO OFFER */}
             {hasOffer === "no" && (
                 <>
-                    {/* Rate */}
                     <label className="font-medium">Vilken ränta har du idag?</label>
                     <input
                         type="number"
@@ -155,7 +188,6 @@ const SmartRateTestForm: FC = () => {
                         className="border border-border rounded-lg px-4 py-2 bg-white"
                     />
 
-                    {/* Type */}
                     <label className="font-medium">Har du rörlig eller bunden ränta idag?</label>
                     <select
                         value={currentRateType}
@@ -170,8 +202,6 @@ const SmartRateTestForm: FC = () => {
                         ))}
                     </select>
 
-                    {/* Optional date fields */}
-
                     {currentRateType.startsWith("FIXED_") && (
                         <>
                             <label className="font-medium">När löper din bindningstid ut?</label>
@@ -184,10 +214,7 @@ const SmartRateTestForm: FC = () => {
                         </>
                     )}
 
-                    {/* Preference */}
-                    <label className="font-medium">
-                        Vilken typ av ränta vill du gå vidare med och jämföra?
-                    </label>
+                    <label className="font-medium">Vilken ränta vill du jämföra mot?</label>
                     <select
                         value={futureRatePreference}
                         onChange={(e) => setFutureRatePreference(e.target.value)}
@@ -201,33 +228,56 @@ const SmartRateTestForm: FC = () => {
                 </>
             )}
 
-            {/* FLOW B — OFFER */}
+            {/* FLOW B — MULTIPLE OFFERS */}
             {hasOffer === "yes" && (
-                <>
-                    <label className="font-medium">Vilken bindningstid gäller erbjudandet?</label>
-                    <select
-                        value={offerBindingPeriod}
-                        onChange={(e) => setOfferBindingPeriod(e.target.value)}
-                        className="border border-border rounded-lg px-4 py-2 bg-white"
-                    >
-                        <option value="">Välj bindningstid</option>
-                        {mortgageTermOptions.map((opt) => (
-                            <option key={opt.value} value={opt.value}>
-                                {opt.label}
-                            </option>
-                        ))}
-                    </select>
+                <div className="flex flex-col gap-4">
+                    {offers.map((offer, index) => (
+                        <div
+                            key={index}
+                            className="p-4 border border-border rounded-lg bg-gray-50 flex flex-col gap-2"
+                        >
+                            <h4 className="font-semibold">Erbjudande {index + 1}</h4>
 
-                    <label className="font-medium">Vilken ränta har du blivit erbjuden?</label>
-                    <input
-                        type="number"
-                        step="0.01"
-                        value={offerRate}
-                        onChange={(e) => setOfferRate(e.target.value)}
-                        className="border border-border rounded-lg px-4 py-2 bg-white"
-                        placeholder="Ex: 4.15"
-                    />
-                </>
+                            <select
+                                value={offer.term}
+                                onChange={(e) => updateOffer(index, "term", e.target.value)}
+                                className="border border-border rounded-lg px-4 py-2 bg-white"
+                            >
+                                <option value="">Välj bindningstid</option>
+                                {mortgageTermOptions.map((opt) => (
+                                    <option key={opt.value} value={opt.value}>
+                                        {opt.label}
+                                    </option>
+                                ))}
+                            </select>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                value={offer.rate}
+                                onChange={(e) => updateOffer(index, "rate", e.target.value)}
+                                className="border border-border rounded-lg px-4 py-2 bg-white"
+                                placeholder="Ränta, t.ex. 3.15"
+                            />
+
+                            {offers.length > 1 && (
+                                <button
+                                    className="text-red-500 text-sm underline"
+                                    onClick={() => removeOffer(index)}
+                                >
+                                    Ta bort erbjudande
+                                </button>
+                            )}
+                        </div>
+                    ))}
+
+                    <button
+                        onClick={addOfferRow}
+                        className="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg"
+                    >
+                        Lägg till fler erbjudanden
+                    </button>
+                </div>
             )}
 
             {/* SUBMIT */}

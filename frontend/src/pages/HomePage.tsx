@@ -5,7 +5,6 @@ import Section from "../components/layout/Section";
 
 import Hero from "../components/home/Hero";
 import SmartRateTestForm from "../components/home/SmartRateTestForm";
-import SmartRateTestResult from "../components/home/SmartRateTestResult";
 
 import RatesHeader from "../components/home/RatesHeader";
 import TermSelector from "../components/home/TermSelector";
@@ -30,10 +29,6 @@ export default function HomePage() {
                 <>
                     <Section>
                         <SmartRateTestForm />
-                    </Section>
-
-                    <Section>
-                        <SmartRateTestResult />
                     </Section>
                 </>
             )}
