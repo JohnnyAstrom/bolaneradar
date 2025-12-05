@@ -42,5 +42,12 @@ public record SmartRateTestResult(
         String alternativesIntro,
 
         // version 5: Avgöra om det är offertflow eller inte
-        boolean isOfferFlow
+        boolean isOfferFlow,
+
+        // Analys av varje erbjuden bindningstid.
+        // Används i offer-flow när kunden har flera ränteförslag.
+        List<SmartRateOfferAnalysisResultDto> offerAnalyses,
+
+        // version 5: Avgöra om det är flera offers
+        boolean multipleOffers
 ) {}
