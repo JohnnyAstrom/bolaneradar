@@ -1,11 +1,11 @@
 import type { FC } from "react";
-import type { SmartRateTestResult } from "../../types/smartRate";
+import type {SmartRateStatus, SmartRateTestResult} from "../../types/smartRate";
 
 interface Props {
     result: SmartRateTestResult | null | undefined;
 }
 
-const statusColors: Record<string, string> = {
+const statusColors: Record<SmartRateStatus, string> = {
     GREAT_GREEN: "bg-green-600",
     GREEN: "bg-green-500",
     YELLOW: "bg-yellow-500",
@@ -15,15 +15,26 @@ const statusColors: Record<string, string> = {
     UNKNOWN: "bg-gray-500"
 };
 
-const statusLabels: Record<string, string> = {
+const statusLabels: Record<SmartRateStatus, string> = {
     GREAT_GREEN: "Ovanligt bra ränta!",
     GREEN: "Bra ränta!",
     YELLOW: "Lite hög ränta!",
     ORANGE: "Hög ränta!",
     RED: "Mycket hög ränta!",
-    INFO: "Viktig information!",
+    INFO: "Informativt läge",
     UNKNOWN: "Okänt läge"
 };
+
+const offerStatusLabels: Record<SmartRateStatus, string> = {
+    GREAT_GREEN: "Mycket bra erbjudande",
+    GREEN: "Bra erbjudande",
+    YELLOW: "Helt okej erbjudande",
+    ORANGE: "Svagt erbjudande",
+    RED: "Dåligt erbjudande",
+    INFO: "Informativt läge",
+    UNKNOWN: "Okänt läge"
+};
+
 
 /** Konsumentvänliga termer */
 function formatTerm(term: string): string {
@@ -63,7 +74,7 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
 
     if (!result) return null;
 
-    const color = statusColors[result.status] || "bg-gray-500";
+    const color = statusColors[result.status as SmartRateStatus] || "bg-gray-500";
 
     // Enkelt: isOfferFlow = "Har du fått ett ränteerbjudande? Ja"
     const isOfferFlow = result.isOfferFlow === true;
@@ -76,7 +87,8 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
             {/* =============================== */}
             <div>
                 <h2 className="text-2xl font-bold text-text-primary mb-2">
-                    {isOfferFlow
+                    {
+                        isOfferFlow
                         ? "Analys av dina ränteerbjudanden"
                         : "Din räntestatus"
                     }
@@ -85,14 +97,18 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
                 <span
                     className={`inline-block px-4 py-1 rounded-full text-white text-sm font-medium ${color}`}
                 >
-                    {statusLabels[result.status] ?? "Okänt läge"}
+                    {
+                        isOfferFlow
+                        ? offerStatusLabels[result.status as SmartRateStatus]
+                        : statusLabels[result.status as SmartRateStatus]
+                    }
                 </span>
             </div>
 
             {/* =============================== */}
             {/*  HUVUDANALYS */}
             {/* =============================== */}
-            <div className="text-text-secondary leading-relaxed space-y-3">
+            <div className="text-text-secondary leading-relaxed space-y-3 whitespace-pre-line">
                 <p>{result.analysisText}</p>
 
                 {result.additionalContext && (
@@ -139,9 +155,9 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
                             <thead className="bg-gray-100 text-gray-700 border-b">
                             <tr>
                                 <th className="py-2 px-3 font-medium">Bindningstid</th>
-                                <th className="py-2 px-3 font-medium">Snittränta</th>
-                                <th className="py-2 px-3 font-medium">Skillnad</th>
-                                <th className="py-2 px-3 font-medium">Årlig effekt</th>
+                                <th className="py-2 px-3 font-medium">Marknadens snittränta:</th>
+                                <th className="py-2 px-3 font-medium">Skillnad mot din nuvarande:</th>
+                                <th className="py-2 px-3 font-medium">Årlig kostnadsskillnad:</th>
                             </tr>
                             </thead>
 
@@ -169,9 +185,9 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
                             <div
                                 key={i}
                                 className={`
-                p-5 rounded-xl border shadow-sm
-                ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}
-            `}
+                                    p-5 rounded-xl border shadow-sm
+                                    ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                                `}
                             >
                                 {/* HEADER */}
                                 <div className="flex justify-between items-center mb-3">
@@ -242,9 +258,13 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
 
                                     <td className="py-2 px-3">
                             <span
-                                className={`px-2 py-1 rounded-lg text-white text-xs font-semibold ${statusColors[oa.status]}`}
+                                className={`px-2 py-1 rounded-lg text-white text-xs font-semibold ${statusColors[oa.status as SmartRateStatus]}`}
                             >
-                                {statusLabels[oa.status]}
+                                {
+                                    isOfferFlow
+                                        ? offerStatusLabels[oa.status as SmartRateStatus]   // använd offer-labels
+                                        : statusLabels[oa.status as SmartRateStatus]        // använd vanliga labels
+                                }
                             </span>
                                     </td>
 
@@ -261,9 +281,9 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
                             <div
                                 key={i}
                                 className={`
-                p-5 rounded-xl border shadow-sm 
-                ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}
-            `}
+                                    p-5 rounded-xl border shadow-sm 
+                                    ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                                `}
                             >
                                 {/* HEADER */}
                                 <div className="flex justify-between items-center mb-3">
@@ -273,12 +293,16 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
 
                                     <span
                                         className={`
-                        px-2.5 py-1 rounded-lg text-white text-xs font-semibold
-                        ${statusColors[oa.status]}
-                    `}
+                                            px-2.5 py-1 rounded-lg text-white text-xs font-semibold
+                                            ${statusColors[oa.status as SmartRateStatus]}
+                                        `}
                                     >
-                    {statusLabels[oa.status]}
-                </span>
+                                        {
+                                            isOfferFlow
+                                                ? offerStatusLabels[oa.status as SmartRateStatus]   // använd offer-labels
+                                                : statusLabels[oa.status as SmartRateStatus]        // använd vanliga labels
+                                        }
+                                    </span>
                                 </div>
 
                                 <div className="h-px bg-gray-200 mb-3"></div>
@@ -306,7 +330,27 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
                 </div>
             )}
 
+            {/* CTA – nästa steg */}
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm leading-relaxed">
+                <p className="mb-2">
+                    Nu när du vet hur din nivå står sig mot marknaden
+                    kan du utforska aktuella snitträntor och jämföra alla banker i detalj.
+                </p>
 
+                <a
+                    href="#rates"
+                    className="inline-flex items-center text-blue-600 font-semibold hover:underline cursor-pointer"
+                >
+                    👉 Klicka här för att gå till snitträntetabellen
+                </a>
+
+
+
+                <p className="mt-3 text-gray-700">
+                    💡 Du kan också klicka på varje bank för att se deras historik,
+                    bindningstider och mer information.
+                </p>
+            </div>
         </div>
     );
 };

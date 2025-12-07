@@ -4,6 +4,15 @@
  * Detta är exakt vad backend Version 5 förväntar sig (multi-offer).
  */
 
+export type SmartRateStatus =
+    | "GREAT_GREEN"
+    | "GREEN"
+    | "YELLOW"
+    | "ORANGE"
+    | "RED"
+    | "INFO"
+    | "UNKNOWN";
+
 // Ett erbjudande från kunden
 export interface SmartRateOfferDto {
     term: string;     // MortgageTerm enum (string)
