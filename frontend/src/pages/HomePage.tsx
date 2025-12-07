@@ -34,7 +34,7 @@ export default function HomePage() {
             )}
 
             {/* Rate table section */}
-            <Section>
+            <Section id="rates">
                 <RatesHeader />
 
                 <TermSelector
