@@ -415,10 +415,10 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
 
     private String buildAnalysisTextFixedShortTerm(BigDecimal rate) {
         return
-                "Eftersom din ränta är bunden går den inte att jämföra direkt med dagens marknadsnivåer."
+                "Eftersom din ränta är bunden går den inte att jämföra direkt med dagens marknadsnivåer. "
                         + "Vi visar därför ett informativt läge för att guida dig inför nästa bindningsval.\n\n"
                         + "Du har en bunden ränta på " + rate + "%. Din bindningstid löper ut inom kort, "
-                        + "vilket innebär att du snart kan välja ny ränta utan kostnad."
+                        + "vilket innebär att du snart kan välja ny ränta utan kostnad. "
                         + "Det är vanligt att man förhandlar räntan när det är mindre än en månad kvar av bindningstiden, "
                         + "men det kan vara smart att börja förbereda sig redan nu.\n\n"
                         + "Här visar vi marknadsläget just nu för att hjälpa dig inför ditt kommande bindningsval och ge en tydlig bild "
@@ -432,10 +432,10 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
 
     private String buildAnalysisTextFixedLongTerm(BigDecimal rate) {
         return
-                "Eftersom din ränta är bunden går den inte att jämföra direkt med dagens marknadsnivåer."
+                "Eftersom din ränta är bunden går den inte att jämföra direkt med dagens marknadsnivåer. "
                         + "Vi visar därför ett informativt läge för att guida dig inför nästa bindningsval.\n\n"
                         + "Du har en bunden ränta på " + rate + "%. Det är lång tid kvar tills bindningstiden löper ut, "
-                        + "vilket innebär att du normalt inte kan omförhandla eller byta ränta kostnadsfritt ännu."
+                        + "vilket innebär att du normalt inte kan omförhandla eller byta ränta kostnadsfritt ännu. "
                         + "Om du vill undersöka möjligheten att byta i förtid kan du be din bank om en uppgift på eventuell "
                         + "ränteskillnadsersättning.\n\n"
                         + "Vi visar ändå hur ränteläget ser ut just nu, så att du redan nu får en bild av marknaden inför ditt nästa bindningsval.";
@@ -450,7 +450,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
 
     private String buildAnalysisTextFixedVeryShort(BigDecimal rate) {
         return
-                "Eftersom din ränta är bunden går den inte att jämföra direkt med dagens marknadsnivåer."
+                "Eftersom din ränta är bunden går den inte att jämföra direkt med dagens marknadsnivåer. "
                         + "Vi visar därför ett informativt läge för att guida dig inför nästa bindningsval.\n\n"
                         + "Du har en bunden ränta på " + rate + "%. Din bindningstid löper ut mycket snart, "
                         + "vilket innebär att du nu befinner dig i ett optimalt läge att förhandla om en ny ränta.\n\n"
