@@ -1,5 +1,6 @@
 package com.bolaneradar.backend.dto.api.smartrate;
 
+import com.bolaneradar.backend.entity.enums.Language;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
 
@@ -23,6 +24,9 @@ public record SmartRateTestRequest(
 
         // Lånebelopp (frivilligt men rekommenderat för besparingsberäkningar)
         BigDecimal loanAmount,
+
+        // Språk
+        Language language,
 
         // --------------------------------------------------------------
         // Flöde A — Kundens nuvarande ränta

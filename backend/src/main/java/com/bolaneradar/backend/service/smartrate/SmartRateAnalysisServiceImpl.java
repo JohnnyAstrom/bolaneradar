@@ -1,6 +1,7 @@
 package com.bolaneradar.backend.service.smartrate;
 
 import com.bolaneradar.backend.dto.api.smartrate.*;
+import com.bolaneradar.backend.entity.enums.Language;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
 import com.bolaneradar.backend.service.smartrate.model.SmartRateAnalysisContext;
@@ -29,6 +30,10 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     @Override
     public SmartRateTestResult analyze(SmartRateTestRequest request) {
 
+        Language lang = request.language() != null
+                ? request.language()
+                : Language.SV;
+
         SmartRateAnalysisContext ctx = buildContext(request);
 
         if (ctx.hasOffer()) {
@@ -43,11 +48,10 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     }
 
     // =========================================================================
-//  FLOW B — OFFER FLOW (analyserar ALLA kundens erbjudanden)
-// =========================================================================
+    //  FLOW B — OFFER FLOW (analyserar ALLA kundens erbjudanden)
     // =========================================================================
-//  FLOW B — OFFER FLOW (analyserar ALLA kundens erbjudanden)
-// =========================================================================
+    // =========================================================================
+
     private SmartRateTestResult handleOfferFlow(SmartRateAnalysisContext ctx) {
 
         // ----------------------------------------------
@@ -102,8 +106,8 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                             diffMedian,
                             diffBank,
                             status,
-                            buildAnalysisTextOffer(ctx, rate, diffBest),
-                            buildRecommendationForOfferFlow(status, diffBest),
+                            buildAnalysisTextOffer(Language.SV, ctx, rate, diffBest),
+                            buildRecommendationForOfferFlow(Language.SV, status, diffBest),
                             yearlyImpact
                     )
             );
@@ -117,6 +121,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         SmartRateOfferAnalysisResultDto primary = analyses.get(0);
 
         String analysisText = buildPrimaryOfferAnalysisText(
+                Language.SV,
                 primary.offeredRate(),
                 primary.diffFromBestMarket()
         );
@@ -136,7 +141,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 "",                              // additionalContext
                 recommendation,                  // recommendation
                 null,                            // yearlySaving
-                buildPreferenceAdvice(ctx.userPreference(), primary.term()),
+                buildPreferenceAdvice(Language.SV, ctx.userPreference(), primary.term()),
 
                 List.of(),                       // alternatives (ALLTID tomt)
                 null,                            // alternativesIntro (ALLTID null)
@@ -169,11 +174,11 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 ctx.analyzedTerm(),
                 diffBank,
                 diffBest,
-                buildAnalysisTextVariable(ctx, rate, diffBest),
-                buildContextText(diffMedian),
-                buildRecommendation(status, diffBest),
+                buildAnalysisTextVariable(Language.SV, ctx, rate, diffBest),
+                buildContextText(Language.SV, diffMedian),
+                buildRecommendation(Language.SV, status, diffBest),
                 yearlyImpact,
-                buildPreferenceAdvice(ctx.userPreference(), ctx.analyzedTerm()),
+                buildPreferenceAdvice(Language.SV, ctx.userPreference(), ctx.analyzedTerm()),
                 generateAlternatives(ctx), // normalt flöde → visa alternativ
                 null,                     // alternativesIntro → ej relevant
                 false,                    // isOfferFlow → nej
@@ -198,20 +203,20 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
 
         // Scenario A: Löper ut inom kort (1–3 månader)
         if (months != null && months >= 1 && months <= 3) {
-            analysisText = buildAnalysisTextFixedShortTerm(rate);
-            recommendation = buildRecommendationFixedShortTerm();
+            analysisText = buildAnalysisTextFixedShortTerm(Language.SV, rate);
+            recommendation = buildRecommendationFixedShortTerm(Language.SV);
         }
 
         // Scenario B: Längre tid kvar (>3 månader)
         else if (months != null && months > 3) {
-            analysisText = buildAnalysisTextFixedLongTerm(rate);
-            recommendation = buildRecommendationFixedLongTerm();
+            analysisText = buildAnalysisTextFixedLongTerm(Language.SV, rate);
+            recommendation = buildRecommendationFixedLongTerm(Language.SV);
         }
 
         // Scenario C: Mycket snart eller okänt
         else {
-            analysisText = buildAnalysisTextFixedVeryShort(rate);
-            recommendation = buildRecommendationFixedVeryShort();
+            analysisText = buildAnalysisTextFixedVeryShort(Language.SV, rate);
+            recommendation = buildRecommendationFixedVeryShort(Language.SV);
         }
 
         return new SmartRateTestResult(
@@ -221,10 +226,10 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 diffBank,
                 null,
                 analysisText,
-                buildContextText(diffMedian),
+                buildContextText(Language.SV, diffMedian),
                 recommendation,
                 null,                                   // yearlySaving
-                buildPreferenceAdvice(ctx.userPreference(), ctx.analyzedTerm()),
+                buildPreferenceAdvice(Language.SV, ctx.userPreference(), ctx.analyzedTerm()),
                 generateAlternatives(ctx),              // normal flow → visa alternativ
                 null,                                   // alternativesIntro → ej relevant
                 false,                                  // isOfferFlow
@@ -299,7 +304,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     // ============================================================================
 
     /** Full analys av varje enskilt erbjudande */
-    private String buildAnalysisTextOffer(SmartRateAnalysisContext ctx, BigDecimal rate, BigDecimal diffBest) {
+    private String buildAnalysisTextOffer(Language lang, SmartRateAnalysisContext ctx, BigDecimal rate, BigDecimal diffBest) {
         return "Vi har analyserat ditt ränteerbjudande på " + rate + "%. "
                 + "Erbjudandet ligger " + formatDiff(diffBest) + " jämfört med den lägsta aktuella snitträntan på marknaden. "
                 + "Det betyder att ditt erbjudande står sig " + (diffBest.compareTo(BigDecimal.ZERO) > 0 ? "sämre" : "bättre")
@@ -307,7 +312,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     }
 
     /** Huvudanalysen i offer-flow, baserad på det FÖRSTA erbjudandet */
-    private String buildPrimaryOfferAnalysisText(BigDecimal offeredRate, BigDecimal diffBestMarket) {
+    private String buildPrimaryOfferAnalysisText(Language lang, BigDecimal offeredRate, BigDecimal diffBestMarket) {
 
         String betterOrWorse = (diffBestMarket.compareTo(BigDecimal.ZERO) > 0)
                 ? "sämre"
@@ -322,8 +327,8 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     }
 
     /** Anpassad rekommendationstext för erbjudanden */
-    private String buildRecommendationForOfferFlow(String status, BigDecimal diff) {
-        String base = buildRecommendation(status, diff);
+    private String buildRecommendationForOfferFlow(Language lang, String status, BigDecimal diff) {
+        String base = buildRecommendation(lang, status, diff);
 
         return base
                 .replace("Din ränta", "Ditt erbjudande")
@@ -333,7 +338,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     }
 
     /** Kontexttext specifikt för erbjudanden */
-    private String buildOfferContextText(BigDecimal diffMedian) {
+    private String buildOfferContextText(Language lang, BigDecimal diffMedian) {
 
         if (diffMedian == null) {
             return "Vi jämför ditt erbjudande med bankernas publicerade snitträntor för att ge en rättvis bild av marknadsläget.";
@@ -344,7 +349,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     }
 
     /** Introtext för alternativlistan i offer-flow (används ej just nu men sparas) */
-    private String buildOfferAlternativesIntro() {
+    private String buildOfferAlternativesIntro(Language lang) {
         return "Här ser du hur ditt erbjudande står sig mot marknadens räntor. "
                 + "Vi jämför med aktuella nivåer för bindningstider som passar dina preferenser, "
                 + "så att du enkelt kan se om det finns mer fördelaktiga alternativ.";
@@ -355,14 +360,14 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     //  Används när kunden har rörlig ränta och INTE har offer-flow
     // ============================================================================
 
-    private String buildAnalysisTextVariable(SmartRateAnalysisContext ctx, BigDecimal rate, BigDecimal diffBest) {
+    private String buildAnalysisTextVariable(Language lang, SmartRateAnalysisContext ctx, BigDecimal rate, BigDecimal diffBest) {
         return "Du har en rörlig ränta på " + rate + "%. "
                 + "Rörlig ränta innebär att du kan förhandla eller byta bank när som helst, eftersom du inte är bunden vid någon löptid. "
                 + "Din nuvarande nivå ligger " + formatDiff(diffBest)
                 + " jämfört med den lägsta aktuella snitträntan på marknaden.";
     }
 
-    private String buildContextText(BigDecimal diffMedian) {
+    private String buildContextText(Language lang, BigDecimal diffMedian) {
 
         if (diffMedian == null)
             return "Jämförelsen baseras på bankernas publicerade snitträntor.";
@@ -373,7 +378,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     }
 
     /** Generell rekommendation för rörlig + fast ränta när ingen erbjudande finns */
-    private String buildRecommendation(String status, BigDecimal diff) {
+    private String buildRecommendation(Language lang, String status, BigDecimal diff) {
 
         if (diff == null) {
             return "Vi saknar viss marknadsdata och kan därför inte ge en fullständig rekommendation.";
@@ -413,7 +418,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     //  Används när kunden har bunden ränta och INTE har offer-flow
     // ============================================================================
 
-    private String buildAnalysisTextFixedShortTerm(BigDecimal rate) {
+    private String buildAnalysisTextFixedShortTerm(Language lang, BigDecimal rate) {
         return
                 "Eftersom din ränta är bunden går den inte att jämföra direkt med dagens marknadsnivåer. "
                         + "Vi visar därför ett informativt läge för att guida dig inför nästa bindningsval.\n\n"
@@ -425,12 +430,12 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                         + "av vilka nivåer som är konkurrenskraftiga idag.";
     }
 
-    private String buildRecommendationFixedShortTerm() {
+    private String buildRecommendationFixedShortTerm(Language lang) {
         return "Eftersom din bindningstid snart löper ut är det ett bra läge att börja titta på olika alternativ "
                 + "och fundera på vilken bindningstid som passar dig bäst framöver.";
     }
 
-    private String buildAnalysisTextFixedLongTerm(BigDecimal rate) {
+    private String buildAnalysisTextFixedLongTerm(Language lang, BigDecimal rate) {
         return
                 "Eftersom din ränta är bunden går den inte att jämföra direkt med dagens marknadsnivåer. "
                         + "Vi visar därför ett informativt läge för att guida dig inför nästa bindningsval.\n\n"
@@ -442,13 +447,13 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     }
 
 
-    private String buildRecommendationFixedLongTerm() {
+    private String buildRecommendationFixedLongTerm(Language lang) {
         return "Ett bra tillfälle att göra en ny räntekoll är när det är mindre än en månad kvar av bindningstiden. "
                 + "Du kan redan nu undersöka om ränteskillnadsersättningen är låg, men de flesta får bäst möjligheter "
                 + "att förhandla när bindningstiden närmar sig sitt slut.";
     }
 
-    private String buildAnalysisTextFixedVeryShort(BigDecimal rate) {
+    private String buildAnalysisTextFixedVeryShort(Language lang, BigDecimal rate) {
         return
                 "Eftersom din ränta är bunden går den inte att jämföra direkt med dagens marknadsnivåer. "
                         + "Vi visar därför ett informativt läge för att guida dig inför nästa bindningsval.\n\n"
@@ -457,7 +462,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                         + "Här visar vi hur marknaden ser ut just nu för att hjälpa dig inför ditt kommande bindningsval.";
     }
 
-    private String buildRecommendationFixedVeryShort() {
+    private String buildRecommendationFixedVeryShort(Language lang) {
         return "När det är mindre än en månad kvar av bindningstiden är det vanligt att påbörja ränteförhandling. "
                 + "Kontakta gärna banken för att höra vilka nivåer de kan erbjuda.";
     }
@@ -468,7 +473,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     //  Används för alla flöden om kund anger preferens
     // ============================================================================
 
-    private String buildPreferenceAdvice(RatePreference pref, MortgageTerm analyzedTerm) {
+    private String buildPreferenceAdvice(Language lang, RatePreference pref, MortgageTerm analyzedTerm) {
 
         if (pref == null) return "";
 
@@ -616,6 +621,10 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
             monthsUntilExpiration = calculateMonthsUntilExpiration(request.bindingEndDate());
         }
 
+        Language lang = request.language() != null
+                ? request.language()
+                : Language.SV;
+
         return new SmartRateAnalysisContext(
                 request.hasOffer(),
                 request.bankId(),
@@ -630,7 +639,8 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 null,
                 analyzedTerm,
                 request.loanAmount(),
-                monthsUntilExpiration
+                monthsUntilExpiration,
+                lang
         );
     }
 }

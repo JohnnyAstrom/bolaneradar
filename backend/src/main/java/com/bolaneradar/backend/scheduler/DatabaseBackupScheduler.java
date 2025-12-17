@@ -35,7 +35,7 @@ public class DatabaseBackupScheduler {
      * Körs 09.50 varje dag (innan ScraperScheduler)
      * Skapar både .dump och .sql backup.
      */
-    @Scheduled(cron = "0 55 09 * * *")
+    @Scheduled(cron = "0 30 9 * * *")
     public void backupDatabase() {
         String dbName = extractDbName(dbUrl);
         String host = extractHost(dbUrl);

@@ -1,6 +1,7 @@
 package com.bolaneradar.backend.service.smartrate.model;
 
 import com.bolaneradar.backend.dto.api.smartrate.SmartRateOfferDto;
+import com.bolaneradar.backend.entity.enums.Language;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
 
@@ -45,7 +46,10 @@ public record SmartRateAnalysisContext(
         BigDecimal loanAmount,
 
         // ========== Bindningstid kvar ==========
-        Integer monthsUntilExpiration
+        Integer monthsUntilExpiration,
+
+        // ========== Språk ==========
+        Language language
 ) {
 
     /**
