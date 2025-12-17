@@ -15,6 +15,230 @@
     }
   },
 
+  "common": {
+    "loading": "Loading..."
+  },
+  "bank": {
+    "errors": {
+      "notFound": "Could not find the bank.",
+      "rateData": "Unable to load the bank’s rate data.",
+      "intro": "Unable to load introduction for {{bank}}."
+    },
+
+    "intro": {
+      "fallbackDescription": "A short summary about the bank will appear here. This will later be replaced by dynamic content from the backend.",
+      "fallbackUsp1": "USP placeholder – replaced later with dynamic bank data.",
+      "fallbackUsp2": "USP placeholder – for example benefits or customer terms.",
+      "fallbackUsp3": "USP placeholder – for example advisory services or digital tools."
+    },
+
+    "rates": {
+      "title": "Current mortgage rates",
+      "headers": {
+        "term": "Fixed term",
+        "listRate": "List rate",
+        "change": "Change",
+        "changeMobile": "Change\n(date → tap)",
+        "avgRate": "Average rate",
+        "avgRateWithMonth": "Average rate ({{month}})",
+        "avgRateWithMonthMobile": "Average rate\n({{month}})",
+        "lastChanged": "Last updated",
+        "lastChangedShort": "Updated"
+      },
+      "lastChangedLabel": "Last updated:"
+    },
+
+    "graph": {
+      "title": "Historical development",
+      "description": "Shows the bank’s average mortgage rate over the past 12 months.",
+      "selectHint": "Select a fixed term from the dropdown below:",
+      "selectPlaceholder": "Select fixed term",
+      "noTerm": "Select a fixed term to display the chart",
+      "error": "Unable to fetch historical data",
+      "noData": "No historical data available for this fixed term.",
+      "avgRate": "Average rate",
+      "date": "Date"
+    },
+
+    "details": {
+      "error": "Unable to load bank information.",
+      "about": "About {{bank}}",
+      "bestFor": "Best suited for",
+      "notFor": "Less suitable for"
+    },
+
+    "info": {
+      "notFound": "Ingen information hittades.",
+      "deepAnalysis": "Fördjupad analys",
+      "faq": "Vanliga frågor",
+      "backToBank": "← Tillbaka till {{bank}}"
+    }
+  },
+
+  "smartRate": {
+    "form": {
+      "title": "Smart rate test",
+
+      "bank": {
+        "label": "Which bank holds your mortgage?",
+        "placeholder": "Select bank"
+      },
+
+      "loanAmount": {
+        "label": "How large is your mortgage? (Optional, but improves accuracy)",
+        "placeholder": "E.g. 2,000,000"
+      },
+
+      "hasOffer": {
+        "label": "Have you received a mortgage rate offer?",
+        "placeholder": "Select...",
+        "yes": "Yes",
+        "no": "No"
+      },
+
+      "currentRate": {
+        "label": "What rate do you currently have?",
+        "placeholder": "E.g. 3.15",
+        "hint": "💡 Do you have multiple loan parts with different rates? Run the test once per loan part."
+      },
+
+      "currentRateType": {
+        "label": "Is your current rate variable or fixed?",
+        "placeholder": "Select rate type"
+      },
+
+      "bindingEndDate": {
+        "label": "When does your fixed-rate period end? (Optional, but improves accuracy)"
+      },
+
+      "futurePreference": {
+        "label": "Which rate do you want to compare against?",
+        "placeholder": "Select...",
+        "variable": "Variable (3 months)",
+        "short": "Short fixed terms (1–3 years)",
+        "long": "Longer fixed terms (4–10 years)"
+      },
+
+      "offer": {
+        "title": "Offer {{index}}",
+        "termPlaceholder": "Select fixed term",
+        "ratePlaceholder": "Rate, e.g. 3.15",
+        "remove": "Remove offer",
+        "add": "Add more offers"
+      },
+
+      "submit": "Submit test",
+
+      "errors": {
+        "bank": "Please select a bank.",
+        "hasOffer": "Please indicate whether you have received an offer.",
+        "currentRate": "Please enter your current rate.",
+        "currentRateType": "Please select whether the rate is variable or fixed.",
+        "futurePreference": "Please select which rate to compare against.",
+        "offers": "Please enter fixed term and rate for at least one offer."
+      }
+    },
+
+    "result": {
+      "statusTitle": "Your mortgage rate status",
+      "offerTitle": "Analysis of your mortgage offers",
+
+      "status": {
+        "GREAT_GREEN": "Exceptionally good rate!",
+        "GREEN": "Good rate!",
+        "YELLOW": "Slightly high rate!",
+        "ORANGE": "High rate!",
+        "RED": "Very high rate!",
+        "INFO": "Informational mode",
+        "UNKNOWN": "Unknown status"
+      },
+
+      "offerStatus": {
+        "GREAT_GREEN": "Very good offer",
+        "GREEN": "Good offer",
+        "YELLOW": "Acceptable offer",
+        "ORANGE": "Weak offer",
+        "RED": "Poor offer",
+        "INFO": "Informational mode",
+        "UNKNOWN": "Unknown status"
+      },
+
+      "preferenceTitle": "Advice based on your preferences",
+      "alternativesTitle": "Rates matching your selected fixed term",
+
+      "table": {
+        "term": "Fixed term",
+        "avgRate": "Market average rate",
+        "diff": "Difference from your current rate",
+        "yearly": "Annual cost difference"
+      },
+
+      "ctaText": "Now that you know how your rate compares to the market, you can explore current average rates and compare all banks in detail.",
+      "ctaLink": "👉 Click here to view the average rate table",
+      "ctaHint": "💡 You can also click on each bank to view their history, fixed terms, and more information.",
+
+      "zeroPerYear": "0 SEK / year",
+      "moreExpensivePerYear": "{{value}} SEK more per year",
+      "cheaperPerYear": "{{value}} SEK less per year",
+
+      "terms": {
+        "VARIABLE_3M": "Variable rate (3 months)",
+        "FIXED_1Y": "1 year fixed",
+        "FIXED_2Y": "2 years fixed",
+        "FIXED_3Y": "3 years fixed",
+        "FIXED_4Y": "4 years fixed",
+        "FIXED_5Y": "5 years fixed",
+        "FIXED_7Y": "7 years fixed",
+        "FIXED_8Y": "8 years fixed",
+        "FIXED_10Y": "10 years fixed"
+      }
+    }
+  },
+
+  "rates": {
+    "header": {
+      "title": "Current mortgage rates",
+      "description": "The table below shows current mortgage rates from Sweden’s largest banks. You can select fixed terms to compare list rates, average rates, and see when each bank last updated its rates. Click on a bank name to view its historical average rate."
+    },
+
+    "termSelector": {
+      "shortTitle": "Short fixed terms (3 months – 3 years)",
+      "longTitle": "Longer fixed terms (4 years – 10 years)",
+
+      "terms": {
+        "3m": "3 mo",
+        "1y": "1 yr",
+        "2y": "2 yrs",
+        "3y": "3 yrs",
+        "4y": "4 yrs",
+        "5y": "5 yrs",
+        "7y": "7 yrs",
+        "10y": "10 yrs"
+      }
+    },
+
+    "comparison": {
+      "loading": "Loading current rates...",
+      "error": "Unable to fetch rate data at the moment.",
+      "noData": "No data available.",
+
+      "columns": {
+        "bank": "Bank",
+        "listRate": "List rate",
+        "change": "Change",
+        "avgRate": "Average rate",
+        "lastChanged": "Last updated"
+      },
+
+      "noRatesTitle": "Banks without rates for selected term"
+    },
+
+    "tableFooter": {
+      "source": "Source: Banks public websites",
+      "lastUpdated": "Last updated by BolåneRadar: {{date}}"
+    }
+  },
+
   "footer": {
     "copyright": "© {{year}} BolåneRadar. All rights reserved."
   },

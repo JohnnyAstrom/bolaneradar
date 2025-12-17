@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
     fetchAvailableTerms,
@@ -25,6 +26,7 @@ interface Props {
 }
 
 const BankGraphSection: FC<Props> = ({ bankName }) => {
+    const { t, i18n } = useTranslation();
 
     const [terms, setTerms] = useState<string[]>([]);
     const [selectedTerm, setSelectedTerm] = useState("");
@@ -39,9 +41,10 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
         const [year, month] = isoDate.split("-");
         const date = new Date(Number(year), Number(month) - 1);
 
-        const monthName = date.toLocaleDateString("sv-SE", {
-            month: "short"
-        });
+        const monthName = date.toLocaleDateString(
+            i18n.language === "en" ? "en-US" : "sv-SE",
+            { month: "short" }
+        );
 
         const clean = monthName.replace(".", "");
         return `${clean.charAt(0).toUpperCase() + clean.slice(1)} ${year}`;
@@ -61,7 +64,6 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                 } else if (list.length > 0) {
                     setSelectedTerm(list[0]);
                 }
-
             } catch {
                 setTerms([]);
             }
@@ -100,7 +102,7 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
 
                 setData(sorted);
             } catch {
-                if (!isCancelled) setError("Kunde inte hämta historik");
+                if (!isCancelled) setError(t("bank.graph.error"));
             } finally {
                 if (!isCancelled) setLoading(false);
             }
@@ -108,8 +110,7 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
 
         loadHistory();
         return () => { isCancelled = true; };
-
-    }, [selectedTerm, bankName]);
+    }, [selectedTerm, bankName, t]);
 
     /* ---------------------------------------
      * 3) Render
@@ -117,13 +118,13 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
     return (
         <div>
             <h2 className="text-2xl font-semibold text-text-primary mb-2">
-                Historisk utveckling
+                {t("bank.graph.title")}
             </h2>
 
             <p className="text-text-secondary text-sm mb-6">
-                Visar bankens genomsnittliga boränta de senaste 12 månaderna.
+                {t("bank.graph.description")}
                 <br />
-                Välj bindningstid i dropdown menyn nedan:
+                {t("bank.graph.selectHint")}
             </p>
 
             <div className="flex mb-6">
@@ -136,17 +137,18 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                         hover:border-icon-neutral focus:outline-none focus:ring-2 focus:ring-primary-light
                     "
                 >
-                    <option value="">Välj bindningstid</option>
+                    <option value="">
+                        {t("bank.graph.selectPlaceholder")}
+                    </option>
 
-                    {terms.map((t) => (
-                        <option key={t} value={t}>
-                            {termLabelMap[t]}
+                    {terms.map((tTerm) => (
+                        <option key={tTerm} value={tTerm}>
+                            {termLabelMap[tTerm]}
                         </option>
                     ))}
                 </select>
             </div>
 
-            {/* Grafcontainer – responsiv höjd & full bredd */}
             <div
                 className="
                     w-full
@@ -161,28 +163,24 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                     min-h-[300px]
                 "
             >
-                {/* 1) Ingen term vald */}
                 {!selectedTerm && (
                     <div className="w-full h-full flex items-center justify-center">
-                        <span>Välj bindningstid för att visa graf</span>
+                        <span>{t("bank.graph.noTerm")}</span>
                     </div>
                 )}
 
-                {/* 2) Laddar */}
                 {selectedTerm && loading && (
                     <div className="w-full h-full flex items-center justify-center">
-                        <span>Laddar...</span>
+                        <span>{t("common.loading")}</span>
                     </div>
                 )}
 
-                {/* 3) Fel */}
                 {selectedTerm && !loading && error && (
                     <div className="w-full h-full flex items-center justify-center">
                         <span className="text-red-600">{error}</span>
                     </div>
                 )}
 
-                {/* 4) Graf */}
                 {selectedTerm && !loading && !error && data.length > 0 && (
                     <div className="w-full h-full">
                         <ResponsiveContainer width="100%" height="100%">
@@ -198,7 +196,7 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
 
                                 <XAxis
                                     dataKey="effectiveDate"
-                                    tickFormatter={(d) => formatMonth(d)}
+                                    tickFormatter={formatMonth}
                                     tick={{ fontSize: 10 }}
                                     stroke="#6B7280"
                                     interval="preserveStartEnd"
@@ -218,9 +216,9 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                                 />
 
                                 <Tooltip
-                                    formatter={(v: number) => [`${v.toFixed(2)} %`, "Snittränta"]}
+                                    formatter={(v: number) => [`${v.toFixed(2)} %`, t("bank.graph.avgRate")]}
                                     labelFormatter={(label: string) =>
-                                        `Datum: ${formatMonth(label)}`
+                                        `${t("bank.graph.date")}: ${formatMonth(label)}`
                                     }
                                     contentStyle={{
                                         borderRadius: "8px",
@@ -241,7 +239,7 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                                 <Line
                                     type="monotone"
                                     dataKey="ratePercent"
-                                    name="Snittränta"
+                                    name={t("bank.graph.avgRate")}
                                     stroke="#2563eb"
                                     strokeWidth={2}
                                     dot={{ r: 3 }}
@@ -252,10 +250,9 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                     </div>
                 )}
 
-                {/* 5) Ingen data */}
                 {selectedTerm && !loading && !error && data.length === 0 && (
                     <div className="w-full h-full flex items-center justify-center">
-                        <span>Ingen historik finns för denna bindningstid.</span>
+                        <span>{t("bank.graph.noData")}</span>
                     </div>
                 )}
             </div>

@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useBankInfo } from "../hooks/useBankInfo";
 
 import PageWrapper from "../components/layout/PageWrapper";
@@ -23,30 +24,36 @@ const logoMap: Record<string, string> = {
 
 export default function BankInfoPage() {
     const { bankKey } = useParams();
+    const { t } = useTranslation();
     const { info, loading, error } = useBankInfo(bankKey);
 
-    if (loading)
-        return (
-            <PageWrapper>
-                <Section><p>Laddar...</p></Section>
-            </PageWrapper>
-        );
-
-    if (error || !info)
+    if (loading) {
         return (
             <PageWrapper>
                 <Section>
-                    <p className="text-red-600">Ingen information hittades.</p>
+                    <p>{t("common.loading")}</p>
                 </Section>
             </PageWrapper>
         );
+    }
+
+    if (error || !info) {
+        return (
+            <PageWrapper>
+                <Section>
+                    <p className="text-red-600">
+                        {t("bank.info.notFound")}
+                    </p>
+                </Section>
+            </PageWrapper>
+        );
+    }
 
     const displayName = bankDisplayNames[bankKey!] ?? bankKey!;
     const logoUrl = logoMap[bankKey!] ?? null;
 
     return (
         <PageWrapper>
-
 
             {/* HERO / INTRO */}
             <Section>
@@ -86,7 +93,7 @@ export default function BankInfoPage() {
                     "
                 >
                     <h2 className="text-xl font-semibold mb-4 text-text-primary">
-                        Fördjupad analys
+                        {t("bank.info.deepAnalysis")}
                     </h2>
 
                     <div className="space-y-4">
@@ -119,7 +126,7 @@ export default function BankInfoPage() {
                     "
                 >
                     <h2 className="text-xl font-semibold mb-4 text-text-primary">
-                        Vanliga frågor
+                        {t("bank.info.faq")}
                     </h2>
 
                     <div className="space-y-4">
@@ -140,7 +147,7 @@ export default function BankInfoPage() {
                 </div>
             </Section>
 
-            {/* CTA + Tillbaka-knappar (samma sektion) */}
+            {/* CTA + Tillbaka */}
             <Section>
                 <div
                     className="
@@ -154,7 +161,6 @@ export default function BankInfoPage() {
                 >
                     <div className="flex flex-col sm:flex-row gap-4 mt-4">
 
-                        {/* Tillbaka-knapp */}
                         <Link
                             to={`/bank/${bankKey}`}
                             className="
@@ -166,13 +172,13 @@ export default function BankInfoPage() {
                                 transition
                             "
                         >
-                            ← Tillbaka till {displayName}
+                            {t("bank.info.backToBank", { bank: displayName })}
                         </Link>
 
-                        {/* CTA-knapp */}
                         <a
                             href={info.ctaUrl}
                             target="_blank"
+                            rel="noopener noreferrer"
                             className="
                                 inline-flex items-center justify-center
                                 px-5 py-3

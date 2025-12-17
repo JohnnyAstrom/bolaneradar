@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { bankDisplayNames } from "../../config/bankDisplayNames";
 
 // ============================================================
@@ -31,6 +32,8 @@ interface ComparisonResponse {
 type SortDirection = "up" | "down";
 
 const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
+    const { t } = useTranslation();
+
     const [data, setData] = useState<ComparisonResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -53,14 +56,14 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                 const json = await res.json();
                 setData(json);
             } catch {
-                setError("Kunde inte hämta räntedata just nu.");
+                setError(t("rates.comparison.error"));
             }
 
             setLoading(false);
         }
 
         fetchData();
-    }, [activeTerm]);
+    }, [activeTerm, t]);
 
     // ============================================================
     // SORTERING
@@ -81,18 +84,11 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
         const sorted = [...rows];
 
         sorted.sort((a, b) => {
-
-            // =====================
-            // BANKNAMN (string)
-            // =====================
             if (sortColumn === "bankName") {
                 const cmp = a.bankName.localeCompare(b.bankName, "sv");
                 return sortDirection === "down" ? cmp : -cmp;
             }
 
-            // =====================
-            // SENAST ÄNDRAD (datum)
-            // =====================
             if (sortColumn === "lastChanged") {
                 const A = a.lastChanged ? new Date(a.lastChanged).getTime() : null;
                 const B = b.lastChanged ? new Date(b.lastChanged).getTime() : null;
@@ -101,14 +97,9 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                 if (A == null) return 1;
                 if (B == null) return -1;
 
-                return sortDirection === "down"
-                    ? B - A   // nyast först
-                    : A - B;
+                return sortDirection === "down" ? B - A : A - B;
             }
 
-            // =====================
-            // NUMERISKA KOLUMNER
-            // =====================
             let A: number | null = null;
             let B: number | null = null;
 
@@ -127,9 +118,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
             if (A == null) return 1;
             if (B == null) return -1;
 
-            return sortDirection === "down"
-                ? A - B
-                : B - A;
+            return sortDirection === "down" ? A - B : B - A;
         });
 
         return sorted;
@@ -150,14 +139,13 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
     // ============================================================
     // RENDERING
     // ============================================================
-    if (loading) return <p>Hämtar aktuella räntor...</p>;
+    if (loading) return <p>{t("rates.comparison.loading")}</p>;
     if (error) return <p className="text-negative">{error}</p>;
-    if (!data) return <p>Ingen data tillgänglig.</p>;
+    if (!data) return <p>{t("rates.comparison.noData")}</p>;
 
     const { averageMonthFormatted, rows } = data;
     const sortedRows = sortRows(rows);
 
-    // 🔽 ENDA NYA LOGIKEN
     const rowsWithRates = sortedRows.filter(r =>
         r.listRate != null || r.avgRate != null || r.lastChanged != null
     );
@@ -169,28 +157,25 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
     return (
         <div className="flex flex-col gap-4">
 
-            {/* ===================== */}
             {/* TABELL: BANKER MED RÄNTOR */}
-            {/* ===================== */}
             <div className="overflow-x-auto border border-border rounded-lg">
                 <table className="min-w-full bg-white">
-
                     <thead className="bg-bg-light text-text-primary">
                     <tr>
                         <th className="px-4 py-3 text-left cursor-pointer select-none" onClick={() => onHeaderClick("bankName")}>
-                            Bank {sortIcon("bankName")}
+                            {t("rates.comparison.columns.bank")} {sortIcon("bankName")}
                         </th>
                         <th className="px-4 py-3 text-left cursor-pointer select-none" onClick={() => onHeaderClick("listRate")}>
-                            Listränta {sortIcon("listRate")}
+                            {t("rates.comparison.columns.listRate")} {sortIcon("listRate")}
                         </th>
                         <th className="px-4 py-3 text-left cursor-pointer select-none" onClick={() => onHeaderClick("diff")}>
-                            Förändring {sortIcon("diff")}
+                            {t("rates.comparison.columns.change")} {sortIcon("diff")}
                         </th>
                         <th className="px-4 py-3 text-left cursor-pointer select-none" onClick={() => onHeaderClick("avgRate")}>
-                            Snittränta {averageMonthFormatted ? `(${averageMonthFormatted})` : ""} {sortIcon("avgRate")}
+                            {t("rates.comparison.columns.avgRate")} {averageMonthFormatted ? `(${averageMonthFormatted})` : ""} {sortIcon("avgRate")}
                         </th>
                         <th className="px-4 py-3 text-left cursor-pointer select-none" onClick={() => onHeaderClick("lastChanged")}>
-                            Senast ändrad {sortIcon("lastChanged")}
+                            {t("rates.comparison.columns.lastChanged")} {sortIcon("lastChanged")}
                         </th>
                     </tr>
                     </thead>
@@ -257,17 +242,14 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                 </table>
             </div>
 
-            {/* ===================== */}
             {/* TABELL: BANKER UTAN RÄNTOR */}
-            {/* ===================== */}
             {rowsWithoutRates.length > 0 && (
                 <div className="overflow-x-auto border border-border rounded-lg">
                     <table className="min-w-full bg-white">
-
                         <thead className="bg-bg-light text-text-primary">
                         <tr>
                             <th className="px-4 py-3 text-left" colSpan={5}>
-                                Banker utan räntor för vald bindningstid
+                                {t("rates.comparison.noRatesTitle")}
                             </th>
                         </tr>
                         </thead>
@@ -287,7 +269,6 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                             </tr>
                         ))}
                         </tbody>
-
                     </table>
                 </div>
             )}

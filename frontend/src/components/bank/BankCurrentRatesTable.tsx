@@ -9,6 +9,7 @@
 
 import type { FC } from "react";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { BankRateRow } from "../../client/bankApi";
 
 interface Props {
@@ -17,22 +18,29 @@ interface Props {
 }
 
 // Rubriker
-const makeHeaders = (averageMonthFormatted: string | null) => [
-    { desktop: "Bindningstid", mobile: "Bindningstid" },
-    { desktop: "Listränta", mobile: "Listränta" },
-    { desktop: "Förändring", mobile: "Förändring\n(datum → tryck)" },
+const makeHeaders = (
+    t: (key: string, options?: any) => string,
+    averageMonthFormatted: string | null
+) => [
+    { desktop: t("bank.rates.headers.term"), mobile: t("bank.rates.headers.term") },
+    { desktop: t("bank.rates.headers.listRate"), mobile: t("bank.rates.headers.listRate") },
+    {
+        desktop: t("bank.rates.headers.change"),
+        mobile: t("bank.rates.headers.changeMobile")
+    },
     {
         desktop: averageMonthFormatted
-            ? `Snittränta (${averageMonthFormatted})`
-            : "Snittränta",
+            ? t("bank.rates.headers.avgRateWithMonth", { month: averageMonthFormatted })
+            : t("bank.rates.headers.avgRate"),
         mobile: averageMonthFormatted
-            ? `Snittränta\n(${averageMonthFormatted})`
-            : "Snittränta",
+            ? t("bank.rates.headers.avgRateWithMonthMobile", { month: averageMonthFormatted })
+            : t("bank.rates.headers.avgRate"),
     },
-    { desktop: "Senast ändrad", mobile: "Ändrad" },
+    { desktop: t("bank.rates.headers.lastChanged"), mobile: t("bank.rates.headers.lastChangedShort") },
 ];
 
 const BankCurrentRatesTable: FC<Props> = ({ rows, averageMonthFormatted }) => {
+    const { t } = useTranslation();
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
     const toggleMobileRow = (i: number) => {
@@ -42,7 +50,7 @@ const BankCurrentRatesTable: FC<Props> = ({ rows, averageMonthFormatted }) => {
     return (
         <div>
             <h2 className="text-2xl font-semibold text-text-primary mb-5">
-                Aktuella bolåneräntor
+                {t("bank.rates.title")}
             </h2>
 
             <div className="overflow-x-auto border border-border rounded-lg bg-white">
@@ -51,7 +59,7 @@ const BankCurrentRatesTable: FC<Props> = ({ rows, averageMonthFormatted }) => {
                     {/* Kolumnrubriker */}
                     <thead className="bg-bg-light text-text-primary">
                     <tr>
-                        {makeHeaders(averageMonthFormatted).map((h, index) => (
+                        {makeHeaders(t, averageMonthFormatted).map((h, index) => (
                             <th
                                 key={index}
                                 className={`
@@ -93,7 +101,9 @@ const BankCurrentRatesTable: FC<Props> = ({ rows, averageMonthFormatted }) => {
                                 <tr className="hover:bg-row-hover transition-colors">
 
                                     {/* Bindningstid */}
-                                    <td className="px-2 sm:px-4 py-3">{row.term}</td>
+                                    <td className="px-2 sm:px-4 py-3">
+                                        {row.term}
+                                    </td>
 
                                     {/* Listränta */}
                                     <td className="px-2 sm:px-4 py-3">
@@ -117,7 +127,8 @@ const BankCurrentRatesTable: FC<Props> = ({ rows, averageMonthFormatted }) => {
                                                     inline-flex items-center gap-1
                                                     px-2 h-[26px] rounded-lg 
                                                     text-xs sm:text-sm font-medium
-                                                    ${diff < 0 ? "bg-green-100 text-green-700"
+                                                    ${diff < 0
+                                                    ? "bg-green-100 text-green-700"
                                                     : "bg-red-100 text-red-700"}
                                                 `}
                                             >
@@ -145,7 +156,7 @@ const BankCurrentRatesTable: FC<Props> = ({ rows, averageMonthFormatted }) => {
                                             className="px-4 py-2 text-xs text-text-secondary"
                                         >
                                             <span className="font-medium text-text-primary">
-                                                Senast ändrad:
+                                                {t("bank.rates.lastChangedLabel")}
                                             </span>{" "}
                                             {row.lastChanged ?? "–"}
                                         </td>

@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { useTranslation } from "react-i18next";
 
 interface TermSelectorProps {
     activeTerm: string;
@@ -6,46 +7,48 @@ interface TermSelectorProps {
 }
 
 const shortTerms = [
-    { label: "3 mån", value: "3m" },
-    { label: "1 år", value: "1y" },
-    { label: "2 år", value: "2y" },
-    { label: "3 år", value: "3y" },
+    { value: "3m" },
+    { value: "1y" },
+    { value: "2y" },
+    { value: "3y" },
 ];
 
 const longTerms = [
-    { label: "4 år", value: "4y" },
-    { label: "5 år", value: "5y" },
-    { label: "7 år", value: "7y" },
-    { label: "10 år", value: "10y" },
+    { value: "4y" },
+    { value: "5y" },
+    { value: "7y" },
+    { value: "10y" },
 ];
 
 const TermSelector: FC<TermSelectorProps> = ({
-         activeTerm,
-         onSelectTerm,
-     }) => {
+                                                 activeTerm,
+                                                 onSelectTerm,
+                                             }) => {
+    const { t } = useTranslation();
+
     const renderGroup = (
-        title: string,
-        terms: { label: string; value: string }[]
+        titleKey: string,
+        terms: { value: string }[]
     ) => (
         <div>
             <p className="text-sm font-semibold text-text-primary mb-2">
-                {title}
+                {t(titleKey)}
             </p>
 
             <div className="flex gap-3 flex-wrap justify-start">
-                {terms.map((t) => (
+                {terms.map((tTerm) => (
                     <button
-                        key={t.value}
-                        onClick={() => onSelectTerm(t.value)}
+                        key={tTerm.value}
+                        onClick={() => onSelectTerm(tTerm.value)}
                         className={`
                             px-4 py-2 rounded-lg border transition-colors min-w-[80px] text-center
-                            ${activeTerm === t.value
-                                                ? "bg-primary text-white border-primary"
-                                                : "bg-white text-text-secondary border-border hover:bg-row-hover"
-                                            }
+                            ${activeTerm === tTerm.value
+                            ? "bg-primary text-white border-primary"
+                            : "bg-white text-text-secondary border-border hover:bg-row-hover"
+                        }
                         `}
                     >
-                        {t.label}
+                        {t(`rates.termSelector.terms.${tTerm.value}`)}
                     </button>
                 ))}
             </div>
@@ -54,8 +57,14 @@ const TermSelector: FC<TermSelectorProps> = ({
 
     return (
         <div className="flex flex-col gap-6 mb-6">
-            {renderGroup("Korta bindningstider (3 mån - 3 år)", shortTerms)}
-            {renderGroup("Längre bindningstider (4 år - 10 år)", longTerms)}
+            {renderGroup(
+                "rates.termSelector.shortTitle",
+                shortTerms
+            )}
+            {renderGroup(
+                "rates.termSelector.longTitle",
+                longTerms
+            )}
         </div>
     );
 };

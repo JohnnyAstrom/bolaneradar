@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import PageWrapper from "../components/layout/PageWrapper";
 import Section from "../components/layout/Section";
@@ -38,6 +39,7 @@ const logoMap: Record<string, string> = {
 
 const BankPage: FC = () => {
     const { bankKey } = useParams();
+    const { t } = useTranslation();
 
     /* ============================================================
      * HÄMTA INTRODATA
@@ -82,7 +84,9 @@ const BankPage: FC = () => {
         return (
             <PageWrapper>
                 <Section>
-                    <p className="text-red-600">Kunde inte hitta banken.</p>
+                    <p className="text-red-600">
+                        {t("bank.errors.notFound")}
+                    </p>
                 </Section>
             </PageWrapper>
         );
@@ -91,7 +95,9 @@ const BankPage: FC = () => {
     if (introLoading || ratesLoading) {
         return (
             <PageWrapper>
-                <Section><p>Laddar...</p></Section>
+                <Section>
+                    <p>{t("common.loading")}</p>
+                </Section>
             </PageWrapper>
         );
     }
@@ -101,7 +107,7 @@ const BankPage: FC = () => {
             <PageWrapper>
                 <Section>
                     <p className="text-red-600">
-                        Kunde inte läsa bankens räntedata.
+                        {t("bank.errors.rateData")}
                     </p>
                 </Section>
             </PageWrapper>
@@ -134,7 +140,7 @@ const BankPage: FC = () => {
                     />
                 ) : (
                     <p className="text-red-600">
-                        {introError ?? `Kunde inte ladda introduktion för ${displayName}.`}
+                        {introError ?? t("bank.errors.intro", { bank: displayName })}
                     </p>
                 )}
             </Section>

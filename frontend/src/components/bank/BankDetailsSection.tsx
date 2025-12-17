@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import { Check, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useBankDetails } from "../../hooks/useBankDetails";
 import { bankDisplayNames } from "../../config/bankDisplayNames";
 import { Link } from "react-router-dom";
@@ -9,13 +10,22 @@ interface BankDetailsSectionProps {
 }
 
 const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
+    const { t } = useTranslation();
     const { details, loading, error } = useBankDetails(bankKey);
 
     const displayName = bankDisplayNames[bankKey] ?? bankKey;
 
-    if (loading) return <p>Laddar bankinformation…</p>;
-    if (error || !details)
-        return <p className="text-red-600">Kunde inte läsa bankinformationen.</p>;
+    if (loading) {
+        return <p>{t("common.loading")}</p>;
+    }
+
+    if (error || !details) {
+        return (
+            <p className="text-red-600">
+                {t("bank.details.error")}
+            </p>
+        );
+    }
 
     return (
         <div
@@ -29,7 +39,7 @@ const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
         >
             {/* Titel */}
             <h2 className="text-xl font-semibold text-text-primary mb-4">
-                Om {displayName}
+                {t("bank.details.about", { bank: displayName })}
             </h2>
 
             {/* Översiktstext */}
@@ -40,7 +50,7 @@ const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
             {/* Passar bäst för */}
             <div className="mb-10">
                 <h3 className="text-lg font-semibold text-text-primary mb-4">
-                    Passar bäst för
+                    {t("bank.details.bestFor")}
                 </h3>
 
                 <ul className="space-y-3">
@@ -56,7 +66,7 @@ const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
             {/* Mindre bra för */}
             <div className="mb-10">
                 <h3 className="text-lg font-semibold text-text-primary mb-4">
-                    Mindre bra för
+                    {t("bank.details.notFor")}
                 </h3>
 
                 <ul className="space-y-3">
@@ -69,7 +79,7 @@ const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
                 </ul>
             </div>
 
-            {/* --- CTA Sektion (ny, renare, matchar BankInfoPage) --- */}
+            {/* CTA Sektion */}
             <div className="pt-6 mt-6 border-t border-border flex flex-wrap gap-3 sm:gap-5">
 
                 {/* Sekundär CTA — Läs mer om banken */}
@@ -95,6 +105,7 @@ const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
                     <a
                         href={details.primaryCtaUrl}
                         target="_blank"
+                        rel="noopener noreferrer"
                         className="
                             inline-flex items-center justify-center
                             px-5 py-3

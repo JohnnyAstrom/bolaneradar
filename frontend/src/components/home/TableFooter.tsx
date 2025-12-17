@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import type { FC } from "react";
+import { useTranslation } from "react-i18next";
 
 const TableFooter: FC = () => {
+    const { t } = useTranslation();
     const [latestScrape, setLatestScrape] = useState<string>("...");
 
     useEffect(() => {
@@ -32,9 +34,11 @@ const TableFooter: FC = () => {
 
     return (
         <div className="mt-4 text-xs text-text-secondary leading-relaxed">
-            <p>Källa: Bankernas publika webbsidor</p>
+            <p>{t("rates.tableFooter.source")}</p>
             <p>
-                Senast uppdaterad av BolåneRadar: {latestScrape}
+                {t("rates.tableFooter.lastUpdated", {
+                    date: latestScrape,
+                })}
             </p>
         </div>
     );

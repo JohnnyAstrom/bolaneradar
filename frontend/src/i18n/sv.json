@@ -15,6 +15,220 @@
     }
   },
 
+  "common": {
+    "loading": "Laddar..."
+  },
+  "bank": {
+    "errors": {
+      "notFound": "Kunde inte hitta banken.",
+      "rateData": "Kunde inte läsa bankens räntedata.",
+      "intro": "Kunde inte ladda introduktion för {{bank}}."
+    },
+
+    "intro": {
+      "fallbackDescription": "Här kommer en kortfattad sammanfattning om banken. Detta ersätts senare av dynamisk text från backend.",
+      "fallbackUsp1": "USP placeholder – ersätts med dynamisk bankdata.",
+      "fallbackUsp2": "USP placeholder – till exempel förmåner eller kundvillkor.",
+      "fallbackUsp3": "USP placeholder – till exempel rådgivning eller digitala tjänster."
+    },
+
+    "rates": {
+      "title": "Aktuella bolåneräntor",
+      "headers": {
+        "term": "Bindningstid",
+        "listRate": "Listränta",
+        "change": "Förändring",
+        "changeMobile": "Förändring\n(datum → tryck)",
+        "avgRate": "Snittränta",
+        "avgRateWithMonth": "Snittränta ({{month}})",
+        "avgRateWithMonthMobile": "Snittränta\n({{month}})",
+        "lastChanged": "Senast ändrad",
+        "lastChangedShort": "Ändrad"
+      },
+      "lastChangedLabel": "Senast ändrad:"
+    },
+
+    "graph": {
+      "title": "Historisk utveckling",
+      "description": "Visar bankens genomsnittliga bolåneränta de senaste 12 månaderna.",
+      "selectHint": "Välj bindningstid i dropdown-menyn nedan:",
+      "selectPlaceholder": "Välj bindningstid",
+      "noTerm": "Välj bindningstid för att visa graf",
+      "error": "Kunde inte hämta historik",
+      "noData": "Ingen historik finns för denna bindningstid.",
+      "avgRate": "Snittränta",
+      "date": "Datum"
+    },
+
+    "details": {
+      "error": "Kunde inte läsa bankinformationen.",
+      "about": "Om {{bank}}",
+      "bestFor": "Passar bäst för",
+      "notFor": "Mindre bra för"
+    },
+
+    "info": {
+      "notFound": "No information found.",
+      "deepAnalysis": "In-depth analysis",
+      "faq": "Frequently asked questions",
+      "backToBank": "← Back to {{bank}}"
+    }
+  },
+
+  "smartRate": {
+    "form": {
+      "title": "Smart räntetest",
+      "bank": {
+        "label": "Vilken bank har du ditt bolån hos?",
+        "placeholder": "Välj bank"
+      },
+      "loanAmount": {
+        "label": "Hur stort är ditt bolån? (Valfritt men bra för mer exakt analys)",
+        "placeholder": "Ex: 2 000 000"
+      },
+      "hasOffer": {
+        "label": "Har du fått ett ränteerbjudande?",
+        "placeholder": "Välj...",
+        "yes": "Ja",
+        "no": "Nej"
+      },
+      "currentRate": {
+        "label": "Vilken ränta har du idag?",
+        "placeholder": "Ex: 3.15",
+        "hint": "💡 Har du flera bolånedelar med olika räntor? Gör testet en gång per lånedel."
+      },
+      "currentRateType": {
+        "label": "Har du rörlig eller bunden ränta idag?",
+        "placeholder": "Välj räntetyp"
+      },
+      "bindingEndDate": {
+        "label": "När löper din bindningstid ut? (Valfritt men förbättrar träffsäkerheten i analysen)"
+      },
+      "futurePreference": {
+        "label": "Vilken ränta vill du jämföra mot?",
+        "placeholder": "Välj...",
+        "variable": "Rörlig (3 månader)",
+        "short": "Korta bindningstider (1–3 år)",
+        "long": "Längre bindningstider (4–10 år)"
+      },
+      "offer": {
+        "title": "Erbjudande {{index}}",
+        "termPlaceholder": "Välj bindningstid",
+        "ratePlaceholder": "Ränta, t.ex. 3.15",
+        "remove": "Ta bort erbjudande",
+        "add": "Lägg till fler erbjudanden"
+      },
+      "submit": "Skicka in testet",
+      "errors": {
+        "bank": "Välj bank.",
+        "hasOffer": "Välj om du har fått ett ränteerbjudande.",
+        "currentRate": "Ange din nuvarande ränta.",
+        "currentRateType": "Välj om räntan är rörlig eller bunden.",
+        "futurePreference": "Välj vilken ränta du vill jämföra mot.",
+        "offers": "Fyll i bindningstid och ränta för minst ett erbjudande."
+      }
+    },
+
+    "result": {
+      "statusTitle": "Din räntestatus",
+      "offerTitle": "Analys av dina ränteerbjudanden",
+
+      "status": {
+        "GREAT_GREEN": "Ovanligt bra ränta!",
+        "GREEN": "Bra ränta!",
+        "YELLOW": "Lite hög ränta!",
+        "ORANGE": "Hög ränta!",
+        "RED": "Mycket hög ränta!",
+        "INFO": "Informativt läge",
+        "UNKNOWN": "Okänt läge"
+      },
+
+      "offerStatus": {
+        "GREAT_GREEN": "Mycket bra erbjudande",
+        "GREEN": "Bra erbjudande",
+        "YELLOW": "Helt okej erbjudande",
+        "ORANGE": "Svagt erbjudande",
+        "RED": "Dåligt erbjudande",
+        "INFO": "Informativt läge",
+        "UNKNOWN": "Okänt läge"
+      },
+
+      "preferenceTitle": "Rådgivning baserat på dina preferenser",
+      "alternativesTitle": "Räntor som passar din valda bindningstid",
+
+      "table": {
+        "term": "Bindningstid",
+        "avgRate": "Marknadens snittränta",
+        "diff": "Skillnad mot din nuvarande",
+        "yearly": "Årlig kostnadsskillnad"
+      },
+
+      "ctaText": "Nu när du vet hur din nivå står sig mot marknaden kan du utforska aktuella snitträntor och jämföra alla banker i detalj.",
+      "ctaLink": "👉 Klicka här för att gå till snitträntetabellen",
+      "ctaHint": "💡 Du kan också klicka på varje bank för att se deras historik, bindningstider och mer information.",
+
+      "zeroPerYear": "0 kr / år",
+      "moreExpensivePerYear": "{{value}} kr dyrare / år",
+      "cheaperPerYear": "{{value}} kr billigare / år",
+
+      "terms": {
+        "VARIABLE_3M": "Rörlig ränta (3 månader)",
+        "FIXED_1Y": "1 års bundet",
+        "FIXED_2Y": "2 års bundet",
+        "FIXED_3Y": "3 års bundet",
+        "FIXED_4Y": "4 års bundet",
+        "FIXED_5Y": "5 års bundet",
+        "FIXED_7Y": "7 års bundet",
+        "FIXED_8Y": "8 års bundet",
+        "FIXED_10Y": "10 års bundet"
+      }
+    }
+  },
+
+  "rates": {
+    "header": {
+      "title": "Aktuella bolåneräntor",
+      "description": "Tabellen nedan visar aktuella bolåneräntor från Sveriges största banker. Du kan välja bindningstider för att jämföra listräntor, snitträntor och se när respektive bank senast ändrade sina räntor. Klickar du på bankernas namn kan du se historik för bankens snittränta."
+    },
+
+    "termSelector": {
+      "shortTitle": "Korta bindningstider (3 mån – 3 år)",
+      "longTitle": "Längre bindningstider (4 år – 10 år)",
+
+      "terms": {
+        "3m": "3 mån",
+        "1y": "1 år",
+        "2y": "2 år",
+        "3y": "3 år",
+        "4y": "4 år",
+        "5y": "5 år",
+        "7y": "7 år",
+        "10y": "10 år"
+      }
+    },
+
+    "comparison": {
+      "loading": "Hämtar aktuella räntor...",
+      "error": "Kunde inte hämta räntedata just nu.",
+      "noData": "Ingen data tillgänglig.",
+
+      "columns": {
+        "bank": "Bank",
+        "listRate": "Listränta",
+        "change": "Förändring",
+        "avgRate": "Snittränta",
+        "lastChanged": "Senast ändrad"
+      },
+
+      "noRatesTitle": "Banker utan räntor för vald bindningstid"
+    },
+
+    "tableFooter": {
+      "source": "Källa: Bankernas publika webbsidor",
+      "lastUpdated": "Senast uppdaterad av BolåneRadar: {{date}}"
+    }
+  },
+
   "footer": {
     "copyright": "© {{year}} BolåneRadar. Alla rättigheter förbehållna."
   },

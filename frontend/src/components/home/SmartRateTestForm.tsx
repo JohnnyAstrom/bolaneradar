@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { runSmartRateTest } from "../../client/smartRateApi";
 import type { SmartRateTestResult, SmartRateTestRequest } from "../../types/smartRate";
 import SmartRateTestResultView from "./SmartRateTestResult";
@@ -45,6 +46,7 @@ const bankNameMap: Record<string, string> = {
 };
 
 const SmartRateTestForm: FC = () => {
+    const { t } = useTranslation();
 
     // COMMON
     const [bank, setBank] = useState("");
@@ -63,27 +65,22 @@ const SmartRateTestForm: FC = () => {
         { term: "", rate: "" }
     ]);
 
-    // Valideringsfel
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    // Add new empty offer row
     function addOfferRow() {
         setOffers([...offers, { term: "", rate: "" }]);
     }
 
-    // Update a specific offer row field
     function updateOffer(index: number, field: "term" | "rate", value: string) {
         const updated = [...offers];
         updated[index][field] = value;
         setOffers(updated);
     }
 
-    // Remove a specific offer row
     function removeOffer(index: number) {
         setOffers(offers.filter((_, i) => i !== index));
     }
 
-    /** Enkel helper för input-klass med ev. fel */
     function inputClass(errorKey?: string) {
         const hasError = errorKey && errors[errorKey];
         return `border rounded-lg px-4 py-2 bg-white ${
@@ -91,9 +88,6 @@ const SmartRateTestForm: FC = () => {
         }`;
     }
 
-    /** ----------------------------------------------------
-     *  HANDLE SUBMIT — bygger payload + validerar
-     * ---------------------------------------------------*/
     async function handleSubmit() {
         const newErrors: Record<string, string> = {};
 
@@ -101,43 +95,38 @@ const SmartRateTestForm: FC = () => {
         const bankName = bankNameMap[bank];
 
         if (!bankId || !bankName) {
-            newErrors.bank = "Välj bank.";
+            newErrors.bank = t("smartRate.form.errors.bank");
         }
 
         if (!hasOffer) {
-            newErrors.hasOffer = "Välj om du har fått ett ränteerbjudande.";
+            newErrors.hasOffer = t("smartRate.form.errors.hasOffer");
         }
 
-        // FLOW A – ingen offert
         if (hasOffer === "no") {
             if (!currentRate) {
-                newErrors.currentRate = "Ange din nuvarande ränta.";
+                newErrors.currentRate = t("smartRate.form.errors.currentRate");
             }
             if (!currentRateType) {
-                newErrors.currentRateType = "Välj om räntan är rörlig eller bunden.";
+                newErrors.currentRateType = t("smartRate.form.errors.currentRateType");
             }
             if (!futureRatePreference) {
-                newErrors.futureRatePreference = "Välj vilken ränta du vill jämföra mot.";
+                newErrors.futureRatePreference = t("smartRate.form.errors.futurePreference");
             }
         }
 
-        // FLOW B – erbjudanden
         if (hasOffer === "yes") {
             const filledOffers = offers.filter(o => o.term && o.rate);
-
             if (filledOffers.length === 0) {
-                newErrors.offers = "Fyll i bindningstid och ränta för minst ett erbjudande.";
+                newErrors.offers = t("smartRate.form.errors.offers");
             }
         }
 
-        // Om det finns fel → visa fel och stoppa
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             setResult(null);
             return;
         }
 
-        // Nollställ fel om allt är okej
         setErrors({});
 
         const payload: SmartRateTestRequest = {
@@ -152,19 +141,10 @@ const SmartRateTestForm: FC = () => {
             payload.userCurrentTerm = currentRateType || undefined;
             payload.bindingEndDate = bindingEndDate || undefined;
             payload.userPreference = futureRatePreference || undefined;
-
-        } else if (hasOffer === "yes") {
-            payload.userRate = undefined;
-            payload.userCurrentTerm = undefined;
-            payload.bindingEndDate = undefined;
-            payload.userPreference = undefined;
-
+        } else {
             payload.offers = offers
                 .filter(o => o.term && o.rate)
-                .map(o => ({
-                    term: o.term,
-                    rate: Number(o.rate)
-                }));
+                .map(o => ({ term: o.term, rate: Number(o.rate) }));
         }
 
         const response = await runSmartRateTest(payload);
@@ -174,203 +154,172 @@ const SmartRateTestForm: FC = () => {
     return (
         <div className="flex flex-col gap-6 w-full">
             <h2 className="text-2xl font-bold text-text-primary text-center mb-2">
-                Smart räntetest
+                {t("smartRate.form.title")}
             </h2>
 
-            {/* Q1 — Bank */}
-            <label className="font-medium">Vilken bank har du ditt bolån hos?</label>
-            <select
-                value={bank}
-                onChange={(e) => setBank(e.target.value)}
-                className={inputClass("bank")}
-            >
-                <option value="">Välj bank</option>
+            {/* Bank */}
+            <label className="font-medium">{t("smartRate.form.bank.label")}</label>
+            <select value={bank} onChange={(e) => setBank(e.target.value)} className={inputClass("bank")}>
+                <option value="">{t("smartRate.form.bank.placeholder")}</option>
                 {Object.keys(bankIdMap).map((key) => (
                     <option key={key} value={key}>
                         {bankNameMap[key]}
                     </option>
                 ))}
             </select>
-            {errors.bank && (
-                <p className="text-red-600 text-sm mt-1">{errors.bank}</p>
-            )}
+            {errors.bank && <p className="text-red-600 text-sm mt-1">{errors.bank}</p>}
 
             {/* Loan amount */}
-            <label className="font-medium">Hur stort är ditt bolån? (Valfritt men bra för mer exakt analys)</label>
+            <label className="font-medium">{t("smartRate.form.loanAmount.label")}</label>
             <input
                 type="number"
-                placeholder="Ex: 2000000"
+                placeholder={t("smartRate.form.loanAmount.placeholder")}
                 value={loanAmount}
                 onChange={(e) => setLoanAmount(e.target.value)}
                 className={inputClass()}
             />
 
-            {/* Q2 — Offer? */}
-            <label className="font-medium">Har du fått ett ränteerbjudande?</label>
+            {/* Offer */}
+            <label className="font-medium">{t("smartRate.form.hasOffer.label")}</label>
             <select
                 value={hasOffer}
                 onChange={(e) => setHasOffer(e.target.value as "yes" | "no" | "")}
                 className={inputClass("hasOffer")}
             >
-                <option value="">Välj...</option>
-                <option value="yes">Ja</option>
-                <option value="no">Nej</option>
+                <option value="">{t("smartRate.form.hasOffer.placeholder")}</option>
+                <option value="yes">{t("smartRate.form.hasOffer.yes")}</option>
+                <option value="no">{t("smartRate.form.hasOffer.no")}</option>
             </select>
-            {errors.hasOffer && (
-                <p className="text-red-600 text-sm mt-1">{errors.hasOffer}</p>
-            )}
+            {errors.hasOffer && <p className="text-red-600 text-sm mt-1">{errors.hasOffer}</p>}
 
-            {/* FLOW A — NO OFFER */}
+            {/* FLOW A */}
             {hasOffer === "no" && (
                 <>
-                    <label className="font-medium">Vilken ränta har du idag?</label>
-
+                    <label className="font-medium">{t("smartRate.form.currentRate.label")}</label>
                     <input
                         type="number"
                         step="0.01"
-                        placeholder="Ex: 3.15"
+                        placeholder={t("smartRate.form.currentRate.placeholder")}
                         value={currentRate}
                         onChange={(e) => setCurrentRate(e.target.value)}
                         className={inputClass("currentRate")}
                     />
-
-                    {/* Hint-text — visas alltid */}
                     <p className="text-gray-500 text-sm">
-                        💡 Har du flera bolånedelar med olika räntor? Gör testet en gång per lånedel.
+                        {t("smartRate.form.currentRate.hint")}
                     </p>
+                    {errors.currentRate && <p className="text-red-600 text-sm mt-1">{errors.currentRate}</p>}
 
-                    {/* Felmeddelande — visas endast vid valideringsfel */}
-                    {errors.currentRate && (
-                        <p className="text-red-600 text-sm mt-1">{errors.currentRate}</p>
-                    )}
-
-
-                    <label className="font-medium">Har du rörlig eller bunden ränta idag?</label>
+                    <label className="font-medium">{t("smartRate.form.currentRateType.label")}</label>
                     <select
                         value={currentRateType}
                         onChange={(e) => setCurrentRateType(e.target.value)}
                         className={inputClass("currentRateType")}
                     >
-                        <option value="">Välj räntetyp</option>
+                        <option value="">{t("smartRate.form.currentRateType.placeholder")}</option>
                         {mortgageTermOptions.map((opt) => (
                             <option key={opt.value} value={opt.value}>
                                 {opt.label}
                             </option>
                         ))}
                     </select>
-                    {errors.currentRateType && (
-                        <p className="text-red-600 text-sm mt-1">{errors.currentRateType}</p>
-                    )}
+                    {errors.currentRateType && <p className="text-red-600 text-sm mt-1">{errors.currentRateType}</p>}
 
                     {currentRateType.startsWith("FIXED_") && (
                         <>
-                            <label className="font-medium">När löper din bindningstid ut? (Valfritt men förbättrar träffsäkerheten i analysen)</label>
+                            <label className="font-medium">{t("smartRate.form.bindingEndDate.label")}</label>
                             <input
                                 type="date"
                                 value={bindingEndDate}
                                 onChange={(e) => setBindingEndDate(e.target.value)}
                                 className={inputClass("bindingEndDate")}
                             />
-                            {errors.bindingEndDate && (
-                                <p className="text-red-600 text-sm mt-1">{errors.bindingEndDate}</p>
-                            )}
                         </>
                     )}
 
-                    <label className="font-medium">Vilken ränta vill du jämföra mot?</label>
+                    <label className="font-medium">{t("smartRate.form.futurePreference.label")}</label>
                     <select
                         value={futureRatePreference}
                         onChange={(e) => setFutureRatePreference(e.target.value)}
                         className={inputClass("futureRatePreference")}
                     >
-                        <option value="">Välj...</option>
-                        <option value="VARIABLE_3M">Rörlig (3 månader)</option>
-                        <option value="SHORT">Korta bindningstider (1–3 år)</option>
-                        <option value="LONG">Längre bindningstider (4–10 år)</option>
+                        <option value="">{t("smartRate.form.futurePreference.placeholder")}</option>
+                        <option value="VARIABLE_3M">{t("smartRate.form.futurePreference.variable")}</option>
+                        <option value="SHORT">{t("smartRate.form.futurePreference.short")}</option>
+                        <option value="LONG">{t("smartRate.form.futurePreference.long")}</option>
                     </select>
-                    {errors.futureRatePreference && (
-                        <p className="text-red-600 text-sm mt-1">
-                            {errors.futureRatePreference}
-                        </p>
-                    )}
+                    {errors.futureRatePreference && <p className="text-red-600 text-sm mt-1">{errors.futureRatePreference}</p>}
                 </>
             )}
 
-            {/* FLOW B — MULTIPLE OFFERS */}
+            {/* FLOW B */}
             {hasOffer === "yes" && (
                 <div className="flex flex-col gap-4">
-                    {errors.offers && (
-                        <p className="text-red-600 text-sm">
-                            {errors.offers}
-                        </p>
-                    )}
+                    {errors.offers && <p className="text-red-600 text-sm">{errors.offers}</p>}
 
-                    {offers.map((offer, index) => {
-                        const highlightRow = !!errors.offers && (!offer.term || !offer.rate);
+                    {offers.map((offer, index) => (
+                        <div
+                            key={index}
+                            className={`p-4 border rounded-lg bg-gray-50 flex flex-col gap-2 ${
+                                errors.offers && (!offer.term || !offer.rate)
+                                    ? "border-red-400"
+                                    : "border-border"
+                            }`}
+                        >
+                            <h4 className="font-semibold">
+                                {t("smartRate.form.offer.title", { index: index + 1 })}
+                            </h4>
 
-                        return (
-                            <div
-                                key={index}
-                                className={`p-4 border rounded-lg bg-gray-50 flex flex-col gap-2 ${
-                                    highlightRow ? "border-red-400" : "border-border"
-                                }`}
+                            <select
+                                value={offer.term}
+                                onChange={(e) => updateOffer(index, "term", e.target.value)}
+                                className={inputClass(errors.offers && !offer.term ? "offers" : undefined)}
                             >
-                                <h4 className="font-semibold">Erbjudande {index + 1}</h4>
+                                <option value="">{t("smartRate.form.offer.termPlaceholder")}</option>
+                                {mortgageTermOptions.map((opt) => (
+                                    <option key={opt.value} value={opt.value}>
+                                        {opt.label}
+                                    </option>
+                                ))}
+                            </select>
 
-                                <select
-                                    value={offer.term}
-                                    onChange={(e) => updateOffer(index, "term", e.target.value)}
-                                    className={inputClass(highlightRow && !offer.term ? "offers" : undefined)}
+                            <input
+                                type="number"
+                                step="0.01"
+                                value={offer.rate}
+                                onChange={(e) => updateOffer(index, "rate", e.target.value)}
+                                className={inputClass(errors.offers && !offer.rate ? "offers" : undefined)}
+                                placeholder={t("smartRate.form.offer.ratePlaceholder")}
+                            />
+
+                            {offers.length > 1 && (
+                                <button
+                                    className="text-red-500 text-sm underline self-start"
+                                    onClick={() => removeOffer(index)}
                                 >
-                                    <option value="">Välj bindningstid</option>
-                                    {mortgageTermOptions.map((opt) => (
-                                        <option key={opt.value} value={opt.value}>
-                                            {opt.label}
-                                        </option>
-                                    ))}
-                                </select>
-
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    value={offer.rate}
-                                    onChange={(e) => updateOffer(index, "rate", e.target.value)}
-                                    className={inputClass(highlightRow && !offer.rate ? "offers" : undefined)}
-                                    placeholder="Ränta, t.ex. 3.15"
-                                />
-
-                                {offers.length > 1 && (
-                                    <button
-                                        className="text-red-500 text-sm underline self-start"
-                                        onClick={() => removeOffer(index)}
-                                    >
-                                        Ta bort erbjudande
-                                    </button>
-                                )}
-                            </div>
-                        );
-                    })}
+                                    {t("smartRate.form.offer.remove")}
+                                </button>
+                            )}
+                        </div>
+                    ))}
 
                     <button
                         onClick={addOfferRow}
                         className="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg"
                     >
-                        Lägg till fler erbjudanden
+                        {t("smartRate.form.offer.add")}
                     </button>
                 </div>
             )}
 
-            {/* SUBMIT */}
             {(hasOffer === "yes" || hasOffer === "no") && (
                 <button
                     onClick={handleSubmit}
                     className="mt-4 bg-primary text-white px-6 py-2 rounded-lg"
                 >
-                    Skicka in testet
+                    {t("smartRate.form.submit")}
                 </button>
             )}
 
-            {/* RESULT */}
             {result && (
                 <div className="mt-8">
                     <SmartRateTestResultView result={result} />
