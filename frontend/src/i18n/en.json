@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "home": "Home",
+    "guide": "Guide",
+    "about": "About us",
+    "menu": "Menu"
+  },
+
+  "home": {
+    "hero": {
+      "title": "Compare mortgage rates – fast & simple",
+      "description": "Get an overview of mortgage rates, explore historical trends and see how your rate compares to the market.",
+      "ctaStart": "Start rate test",
+      "ctaStop": "End rate test"
+    }
+  },
+
+  "footer": {
+    "copyright": "© {{year}} BolåneRadar. All rights reserved."
+  },
+
+  "language": {
+    "sv": "Svenska",
+    "en": "English"
+  }
+}

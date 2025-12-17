@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { useTranslation } from "react-i18next";
 
 interface HeroProps {
     smartTestActive: boolean;
@@ -6,6 +7,8 @@ interface HeroProps {
 }
 
 const Hero: FC<HeroProps> = ({ smartTestActive, onToggleTest }) => {
+    const { t } = useTranslation();
+
     return (
         <section
             className="
@@ -13,7 +16,7 @@ const Hero: FC<HeroProps> = ({ smartTestActive, onToggleTest }) => {
                 rounded-lg
                 p-2
                 mb-8
-                md:p-10     /* större padding på desktop */
+                md:p-10
             "
         >
             {/* Titel */}
@@ -28,7 +31,7 @@ const Hero: FC<HeroProps> = ({ smartTestActive, onToggleTest }) => {
                     md:text-3xl
                 "
             >
-                Jämför bolåneräntor – snabbt & enkelt
+                {t("home.hero.title")}
             </h1>
 
             {/* Beskrivning */}
@@ -41,8 +44,7 @@ const Hero: FC<HeroProps> = ({ smartTestActive, onToggleTest }) => {
                     md:max-w-2xl
                 "
             >
-                Få en överblick över bankernas bolåneräntor, se historiska trender
-                och testa hur din ränta står sig mot snittet.
+                {t("home.hero.description")}
             </p>
 
             {/* Knapp */}
@@ -61,10 +63,11 @@ const Hero: FC<HeroProps> = ({ smartTestActive, onToggleTest }) => {
                     }
                     `}
                 >
-                    {smartTestActive ? "Avsluta räntetest" : "Starta räntetest"}
+                    {smartTestActive
+                        ? t("home.hero.ctaStop")
+                        : t("home.hero.ctaStart")}
                 </button>
             </div>
-
         </section>
     );
 };

@@ -1,14 +1,20 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
     const [open, setOpen] = useState(false);
+    const { t, i18n } = useTranslation();
 
     const linkClass = ({ isActive }: { isActive: boolean }) =>
         isActive
             ? "text-primary underline underline-offset-4"
             : "hover:underline hover:underline-offset-4";
+
+    function toggleLanguage() {
+        i18n.changeLanguage(i18n.language === "sv" ? "en" : "sv");
+    }
 
     return (
         <header className="w-full bg-white border-b border-gray-200 px-4 py-3">
@@ -24,16 +30,24 @@ export default function Header() {
                 </NavLink>
 
                 {/* DESKTOP MENY */}
-                <nav className="hidden md:flex gap-6 text-gray-700">
+                <nav className="hidden md:flex gap-6 text-gray-700 items-center">
                     <NavLink to="/" end className={linkClass}>
-                        Start
+                        {t("nav.home")}
                     </NavLink>
                     <NavLink to="/guide" className={linkClass}>
-                        Guide
+                        {t("nav.guide")}
                     </NavLink>
                     <NavLink to="/om-oss" className={linkClass}>
-                        Om oss
+                        {t("nav.about")}
                     </NavLink>
+
+                    {/* SPRÅK */}
+                    <button
+                        onClick={toggleLanguage}
+                        className="ml-4 text-sm px-3 py-1 rounded border border-gray-300 hover:bg-gray-100"
+                    >
+                        {i18n.language === "sv" ? "EN" : "SV"}
+                    </button>
                 </nav>
 
                 {/* MOBIL KNAPP */}
@@ -62,7 +76,9 @@ export default function Header() {
                 `}
             >
                 <div className="p-4 flex items-center justify-between border-b border-gray-200">
-                    <span className="font-semibold text-lg">Meny</span>
+                    <span className="font-semibold text-lg">
+                        {t("nav.menu")}
+                    </span>
                     <button
                         className="p-2 rounded hover:bg-gray-100"
                         onClick={() => setOpen(false)}
@@ -78,22 +94,30 @@ export default function Header() {
                         onClick={() => setOpen(false)}
                         className={linkClass}
                     >
-                        Start
+                        {t("nav.home")}
                     </NavLink>
                     <NavLink
                         to="/guide"
                         onClick={() => setOpen(false)}
                         className={linkClass}
                     >
-                        Guide
+                        {t("nav.guide")}
                     </NavLink>
                     <NavLink
                         to="/om-oss"
                         onClick={() => setOpen(false)}
                         className={linkClass}
                     >
-                        Om oss
+                        {t("nav.about")}
                     </NavLink>
+
+                    {/* SPRÅK – MOBIL */}
+                    <button
+                        onClick={toggleLanguage}
+                        className="mt-4 self-start text-sm px-3 py-1 rounded border border-gray-300 hover:bg-gray-100"
+                    >
+                        {i18n.language === "sv" ? "English" : "Svenska"}
+                    </button>
                 </nav>
             </aside>
         </header>

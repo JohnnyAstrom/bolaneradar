@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "home": "Start",
+    "guide": "Guide",
+    "about": "Om oss",
+    "menu": "Meny"
+  },
+
+  "home": {
+    "hero": {
+      "title": "Jämför bolåneräntor – snabbt & enkelt",
+      "description": "Få en överblick över bankernas bolåneräntor, se historiska trender och testa hur din ränta står sig mot snittet.",
+      "ctaStart": "Starta räntetest",
+      "ctaStop": "Avsluta räntetest"
+    }
+  },
+
+  "footer": {
+    "copyright": "© {{year}} BolåneRadar. Alla rättigheter förbehållna."
+  },
+
+  "language": {
+    "sv": "Svenska",
+    "en": "English"
+  }
+}
