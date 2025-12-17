@@ -33,3 +33,6 @@ lerna-debug.log*
 # Env files
 .env
 .env.*
+
+# Local dump files
+**/*_dump.txt

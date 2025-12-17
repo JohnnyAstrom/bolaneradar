@@ -42,3 +42,6 @@ build/
 backups/
 *.dump
 *.sql
+
+# Local dump files
+**/*_dump.txt
