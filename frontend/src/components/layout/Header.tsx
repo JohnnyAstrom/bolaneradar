@@ -1,24 +1,39 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react"; // ikonbibliotek, superlätta
+import { NavLink } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
 export default function Header() {
     const [open, setOpen] = useState(false);
+
+    const linkClass = ({ isActive }: { isActive: boolean }) =>
+        isActive
+            ? "text-primary underline underline-offset-4"
+            : "hover:underline hover:underline-offset-4";
 
     return (
         <header className="w-full bg-white border-b border-gray-200 px-4 py-3">
             <div className="max-w-5xl mx-auto flex items-center justify-between">
 
                 {/* LOGO */}
-                <Link to="/" className="text-xl font-bold text-primary flex items-center">
+                <NavLink
+                    to="/"
+                    end
+                    className="text-xl font-bold text-primary flex items-center"
+                >
                     BolåneRadar
-                </Link>
+                </NavLink>
 
                 {/* DESKTOP MENY */}
                 <nav className="hidden md:flex gap-6 text-gray-700">
-                    <Link to="/">Start</Link>
-                    <Link to="/guide">Guide</Link>
-                    <Link to="/om">Om</Link>
+                    <NavLink to="/" end className={linkClass}>
+                        Start
+                    </NavLink>
+                    <NavLink to="/guide" className={linkClass}>
+                        Guide
+                    </NavLink>
+                    <NavLink to="/om-oss" className={linkClass}>
+                        Om oss
+                    </NavLink>
                 </nav>
 
                 {/* MOBIL KNAPP */}
@@ -32,8 +47,9 @@ export default function Header() {
 
             {/* MOBIL MENY OVERLAY */}
             {open && (
-                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
-                     onClick={() => setOpen(false)}
+                <div
+                    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+                    onClick={() => setOpen(false)}
                 />
             )}
 
@@ -56,9 +72,28 @@ export default function Header() {
                 </div>
 
                 <nav className="flex flex-col p-4 gap-4 text-gray-800">
-                    <Link to="/" onClick={() => setOpen(false)}>Start</Link>
-                    <Link to="/guide" onClick={() => setOpen(false)}>Guide</Link>
-                    <Link to="/om" onClick={() => setOpen(false)}>Om</Link>
+                    <NavLink
+                        to="/"
+                        end
+                        onClick={() => setOpen(false)}
+                        className={linkClass}
+                    >
+                        Start
+                    </NavLink>
+                    <NavLink
+                        to="/guide"
+                        onClick={() => setOpen(false)}
+                        className={linkClass}
+                    >
+                        Guide
+                    </NavLink>
+                    <NavLink
+                        to="/om-oss"
+                        onClick={() => setOpen(false)}
+                        className={linkClass}
+                    >
+                        Om oss
+                    </NavLink>
                 </nav>
             </aside>
         </header>

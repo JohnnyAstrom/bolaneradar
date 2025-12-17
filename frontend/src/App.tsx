@@ -17,7 +17,7 @@ export default function App() {
                 <Route element={<Layout />}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/guide" element={<GuidePage />} />
-                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/om-oss" element={<AboutPage />} />
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/bank/:bankKey" element={<BankPage />} />
                     <Route path="/bank/:bankKey/info" element={<BankInfoPage />} />
