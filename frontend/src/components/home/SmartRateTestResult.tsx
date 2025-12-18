@@ -147,11 +147,11 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
                         <table className="w-full text-left text-sm">
                             <thead className="bg-gray-100 text-gray-700 border-b">
                             <tr>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.table.term")}</th>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.table.offeredRate")}</th>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.table.diffBest")}</th>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.table.status")}</th>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.table.yearly")}</th>
+                                <th className="py-2 px-3 font-medium">{t("smartRate.result.offerTable.term")}</th>
+                                <th className="py-2 px-3 font-medium">{t("smartRate.result.offerTable.offeredRate")}</th>
+                                <th className="py-2 px-3 font-medium">{t("smartRate.result.offerTable.diffBest")}</th>
+                                <th className="py-2 px-3 font-medium">{t("smartRate.result.offerTable.status")}</th>
+                                <th className="py-2 px-3 font-medium">{t("smartRate.result.offerTable.yearly")}</th>
                             </tr>
                             </thead>
                             <tbody>

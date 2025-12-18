@@ -173,6 +173,16 @@
         "yearly": "Annual cost difference"
       },
 
+      "offerTableTitle": "Your interest rate offers",
+
+      "offerTable": {
+        "term": "Fixed term",
+        "offeredRate": "Offered rate",
+        "diffBest": "Difference vs best rate",
+        "status": "Assessment",
+        "yearly": "Annual cost difference"
+      },
+
       "ctaText": "Now that you know how your rate compares to the market, you can explore current average rates and compare all banks in detail.",
       "ctaLink": "👉 Click here to view the average rate table",
       "ctaHint": "💡 You can also click on each bank to view their history, fixed terms, and more information.",

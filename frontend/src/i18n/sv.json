@@ -162,6 +162,15 @@
         "diff": "Skillnad mot din nuvarande",
         "yearly": "Årlig kostnadsskillnad"
       },
+      "offerTableTitle": "Dina ränteerbjudanden",
+
+      "offerTable": {
+        "term": "Bindningstid",
+        "offeredRate": "Erbjuden ränta",
+        "diffBest": "Skillnad mot bästa ränta",
+        "status": "Bedömning",
+        "yearly": "Årlig kostnadsskillnad"
+      },
 
       "ctaText": "Nu när du vet hur din nivå står sig mot marknaden kan du utforska aktuella snitträntor och jämföra alla banker i detalj.",
       "ctaLink": "👉 Klicka här för att gå till snitträntetabellen",

@@ -25,6 +25,9 @@ export interface SmartRateTestRequest {
     bankId: number;
     hasOffer: boolean;
 
+    // Språkval till backend
+    language?: "SV" | "EN";
+
     // Flöde A — ingen offert (kundens nuvarande ränta)
     userRate?: number;
     userCurrentTerm?: string;     // MortgageTerm som string

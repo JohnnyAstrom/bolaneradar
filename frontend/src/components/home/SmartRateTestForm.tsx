@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { runSmartRateTest } from "../../client/smartRateApi";
@@ -46,7 +46,10 @@ const bankNameMap: Record<string, string> = {
 };
 
 const SmartRateTestForm: FC = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+
+    // Sparar senaste payload för språkbyte
+    const [lastPayload, setLastPayload] = useState<SmartRateTestRequest | null>(null);
 
     // COMMON
     const [bank, setBank] = useState("");
@@ -66,6 +69,21 @@ const SmartRateTestForm: FC = () => {
     ]);
 
     const [errors, setErrors] = useState<Record<string, string>>({});
+
+    // Kör om testet automatiskt när språk ändras
+    useEffect(() => {
+        if (!lastPayload) return;
+
+        const updatedPayload: SmartRateTestRequest = {
+            ...lastPayload,
+            language: i18n.language === "en" ? "EN" : "SV"
+        };
+
+        runSmartRateTest(updatedPayload).then(setResult);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [i18n.language]);
+
 
     function addOfferRow() {
         setOffers([...offers, { term: "", rate: "" }]);
@@ -133,7 +151,8 @@ const SmartRateTestForm: FC = () => {
             bankId: bankId!,
             bankName: bankName!,
             hasOffer: hasOffer === "yes",
-            loanAmount: loanAmount ? Number(loanAmount) : undefined
+            loanAmount: loanAmount ? Number(loanAmount) : undefined,
+            language: i18n.language === "en" ? "EN" : "SV"
         };
 
         if (hasOffer === "no") {
@@ -146,6 +165,8 @@ const SmartRateTestForm: FC = () => {
                 .filter(o => o.term && o.rate)
                 .map(o => ({ term: o.term, rate: Number(o.rate) }));
         }
+
+        setLastPayload(payload);
 
         const response = await runSmartRateTest(payload);
         setResult(response);
