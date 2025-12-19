@@ -11,49 +11,36 @@
 
 import { useEffect, useState } from "react";
 import {type BankIntro, getBankIntro} from "../client/bankApi";
+import {useTranslation} from "react-i18next";
 
 export function useBankIntro(bankKey: string) {
-    // Här lagras själva datan från API:t.
+    const { i18n } = useTranslation();
+    const language = i18n.language; // 👈 viktigt
+
     const [data, setData] = useState<BankIntro | null>(null);
-
-    // Visar om API-anropet fortfarande laddar.
     const [loading, setLoading] = useState(true);
-
-    // Visar om något gick fel (t.ex. felaktig bankKey).
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Flagga för att undvika state updates efter unmount.
         let isMounted = true;
 
-        // Starta laddning varje gång bankKey ändras
         setLoading(true);
         setError(null);
 
         const load = async () => {
             try {
                 const result = await getBankIntro(bankKey);
-
-                if (isMounted) {
-                    setData(result);
-                }
-
+                if (isMounted) setData(result);
             } catch {
-                if (isMounted) {
-                    setError("Kunde inte hämta bankens introduktion.");
-                }
-
+                if (isMounted) setError("Kunde inte hämta bankens introduktion.");
             } finally {
-                if (isMounted) {
-                    setLoading(false);
-                }
+                if (isMounted) setLoading(false);
             }
         };
 
         load();
         return () => { isMounted = false; };
-    }, [bankKey]);
+    }, [bankKey, language]);
 
-    // Hooken returnerar allt som en komponent kan vilja läsa.
     return { data, loading, error };
 }

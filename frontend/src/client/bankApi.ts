@@ -12,6 +12,10 @@
 import { apiGet } from "./client";
 import i18n from "../i18n";
 
+function getLanguageParam() {
+    return i18n.language === "en" ? "EN" : "SV";
+}
+
 /* ============================================================
  *  BANK INTRO – BESKRIVNING + USP
  * ============================================================
@@ -44,13 +48,22 @@ export interface BankDetails {
 }
 
 export async function getBankDetails(bankKey: string) {
-    return apiGet<BankDetails>(`/api/banks/${bankKey}/details`);
+    const language = getLanguageParam();
+
+    return apiGet<BankDetails>(
+        `/api/banks/${bankKey}/details?language=${language}`
+    );
 }
+
 
 
 /** Hämtar bankens introduktionssektion (beskrivning, USP, CTA). */
 export async function getBankIntro(bankKey: string) {
-    return apiGet<BankIntro>(`/api/banks/${bankKey}/intro`);
+    const language = getLanguageParam();
+
+    return apiGet<BankIntro>(
+        `/api/banks/${bankKey}/intro?language=${language}`
+    );
 }
 
 /* ============================================================
