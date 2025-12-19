@@ -1,49 +1,101 @@
 {
-  "title": "Danske Bank",
-  "intro": "Danske Bank erbjuder bolån som kombinerar transparens med rabattsystem. Räntan sätts utifrån en tydlig modell som kompletteras med fasta rabatter, exempelvis för fackförbundsmedlemmar. Passar dig som vill ha stabil digital hantering, förutsägbara villkor och möjlighet till rabatter utan traditionell förhandling.",
+  "sv": {
+    "title": "Danske Bank",
+    "intro": "Danske Bank erbjuder bolån som kombinerar transparens med rabattsystem. Räntan sätts utifrån en tydlig modell som kompletteras med fasta rabatter, exempelvis för fackförbundsmedlemmar. Passar dig som vill ha stabil digital hantering, förutsägbara villkor och möjlighet till rabatter utan traditionell förhandling.",
 
-  "deepInsights": [
-    {
-      "heading": "1. Prissättning bygger på modell + fasta rabatter",
-      "text": "Danske Bank använder en öppen räntemodell baserad på belåningsgrad. Utöver detta erbjuder banken rabatter för bland annat fackförbund, LO-förbund eller specifika samarbeten. Ingen förhandling sker — rabatterna är strukturerade och förutsägbara."
-    },
-    {
-      "heading": "2. En kombination av digitalt och traditionell bankupplevelse",
-      "text": "Ansökan kan göras digitalt och går ofta snabbt. Banken erbjuder samtidigt rådgivning för de som vill ha det, men priset påverkas inte av rådgivningen."
-    },
-    {
-      "heading": "3. Bra för kunder som vill slippa förhandla men ändå kunna påverka priset via rabatter",
-      "text": "Du slipper dialog om ränta, men kan få fördelar genom medlemskap eller samarbeten. Det gör banken attraktiv för exempelvis många yrkesgrupper."
-    },
-    {
-      "heading": "4. Stabil och trygg bank – särskilt för dig med klar ekonomisk situation",
-      "text": "Danske Bank fungerar bäst när du har tydliga och stabila förutsättningar, vilket passar deras modellstyrda räntesättning."
-    },
-    {
-      "heading": "5. Mindre flexibel för komplexa upplägg",
-      "text": "Vid hög belåningsgrad, många ägare eller ovanliga situationer kan banken bli mindre flexibel. Då passar relationella banker bättre."
-    }
-  ],
+    "deepInsights": [
+      {
+        "heading": "1. Prissättning bygger på modell + fasta rabatter",
+        "text": "Danske Bank använder en öppen räntemodell baserad på belåningsgrad. Utöver detta erbjuder banken rabatter för bland annat fackförbund, LO-förbund eller specifika samarbeten. Ingen förhandling sker — rabatterna är strukturerade och förutsägbara."
+      },
+      {
+        "heading": "2. En kombination av digitalt och traditionell bankupplevelse",
+        "text": "Ansökan kan göras digitalt och går ofta snabbt. Banken erbjuder samtidigt rådgivning för de som vill ha det, men priset påverkas inte av rådgivningen."
+      },
+      {
+        "heading": "3. Bra för kunder som vill slippa förhandla men ändå kunna påverka priset via rabatter",
+        "text": "Du slipper dialog om ränta, men kan få fördelar genom medlemskap eller samarbeten. Det gör banken attraktiv för exempelvis många yrkesgrupper."
+      },
+      {
+        "heading": "4. Stabil och trygg bank – särskilt för dig med klar ekonomisk situation",
+        "text": "Danske Bank fungerar bäst när du har tydliga och stabila förutsättningar, vilket passar deras modellstyrda räntesättning."
+      },
+      {
+        "heading": "5. Mindre flexibel för komplexa upplägg",
+        "text": "Vid hög belåningsgrad, många ägare eller ovanliga situationer kan banken bli mindre flexibel. Då passar relationella banker bättre."
+      }
+    ],
 
-  "faq": [
-    {
-      "question": "Kan jag förhandla min ränta?",
-      "answer": "Nej. Danske Bank använder en modell + rabattsystem. Rabatterna är fasta och förhandlas inte."
-    },
-    {
-      "question": "Hur fungerar fackförbundsrabatten?",
-      "answer": "Om din fackorganisation har avtal med Danske Bank får du en reducerad ränta automatiskt. Ingen förhandling krävs — rabatten är kopplad till medlemskapet."
-    },
-    {
-      "question": "Är Danske Bank helt digital?",
-      "answer": "Både och. Du kan göra ansökan och hantera mycket digitalt, men det finns rådgivning och personlig service om du behöver det."
-    },
-    {
-      "question": "När bör jag välja Danske Bank?",
-      "answer": "Om du vill ha tydlig prissättning, slippa förhandling och har möjlighet att ta del av avtalade rabatter."
-    }
-  ],
+    "faq": [
+      {
+        "question": "Kan jag förhandla min ränta?",
+        "answer": "Nej. Danske Bank använder en modell + rabattsystem. Rabatterna är fasta och förhandlas inte."
+      },
+      {
+        "question": "Hur fungerar fackförbundsrabatten?",
+        "answer": "Om din fackorganisation har avtal med Danske Bank får du en reducerad ränta automatiskt. Ingen förhandling krävs — rabatten är kopplad till medlemskapet."
+      },
+      {
+        "question": "Är Danske Bank helt digital?",
+        "answer": "Både och. Du kan göra ansökan och hantera mycket digitalt, men det finns rådgivning och personlig service om du behöver det."
+      },
+      {
+        "question": "När bör jag välja Danske Bank?",
+        "answer": "Om du vill ha tydlig prissättning, slippa förhandling och har möjlighet att ta del av avtalade rabatter."
+      }
+    ],
 
-  "ctaLabel": "Besök Danske Banks hemsida",
-  "ctaUrl": "https://danskebank.se/privat/produkter/bolan"
+    "ctaLabel": "Besök Danske Banks hemsida",
+    "ctaUrl": "https://danskebank.se/privat/produkter/bolan"
+  },
+
+  "en": {
+    "title": "Danske Bank",
+    "intro": "Danske Bank offers mortgages that combine transparency with structured discount programs. Interest rates are set according to a clear pricing model, complemented by fixed discounts, for example for trade union members. This bank suits customers who want stable digital management, predictable terms, and access to discounts without traditional interest rate negotiations.",
+
+    "deepInsights": [
+      {
+        "heading": "1. Pricing is based on a model plus fixed discounts",
+        "text": "Danske Bank uses an open interest rate model based on loan-to-value ratios. In addition, the bank offers discounts through trade unions, labor organizations, or specific partnerships. There is no negotiation — discounts are structured and predictable."
+      },
+      {
+        "heading": "2. A combination of digital and traditional banking",
+        "text": "Applications can be submitted digitally and are often processed quickly. At the same time, the bank offers advisory services for those who want them, but pricing is not affected by whether advisory support is used."
+      },
+      {
+        "heading": "3. Suitable for customers who want to avoid negotiation but still influence pricing through discounts",
+        "text": "You avoid direct interest rate negotiations, yet can benefit from membership-based or partnership discounts. This makes the bank attractive to many professional groups."
+      },
+      {
+        "heading": "4. A stable and reliable bank – especially for customers with a clear financial situation",
+        "text": "Danske Bank works best when customers have stable and well-defined financial conditions, which aligns well with its model-based pricing structure."
+      },
+      {
+        "heading": "5. Less flexible for complex arrangements",
+        "text": "In cases of high loan-to-value ratios, multiple owners, or unusual circumstances, the bank may be less flexible. In such situations, relationship-focused banks may be more suitable."
+      }
+    ],
+
+    "faq": [
+      {
+        "question": "Can I negotiate my interest rate?",
+        "answer": "No. Danske Bank uses a pricing model combined with fixed discounts. These discounts are not negotiable."
+      },
+      {
+        "question": "How do trade union discounts work?",
+        "answer": "If your trade union has an agreement with Danske Bank, you automatically receive a reduced interest rate. No negotiation is required — the discount is tied to your membership."
+      },
+      {
+        "question": "Is Danske Bank fully digital?",
+        "answer": "Both. You can apply and manage many aspects digitally, but advisory services and personal support are available if needed."
+      },
+      {
+        "question": "When should I choose Danske Bank?",
+        "answer": "If you want clear pricing, prefer to avoid negotiation, and can benefit from established discount agreements."
+      }
+    ],
+
+    "ctaLabel": "Visit Danske Bank’s website",
+    "ctaUrl": "https://danskebank.se/privat/produkter/bolan"
+  }
 }

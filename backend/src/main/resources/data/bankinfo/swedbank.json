@@ -1,46 +1,101 @@
 {
-  "title": "Swedbank",
-  "intro": "Swedbank är en av Sveriges största banker och erbjuder bolån med fokus på personlig rådgivning, helhetssyn och långsiktiga kundrelationer. Banken arbetar relationellt – vilket innebär att din ränta påverkas av hur du använder banken som helhet, inte bara av belåningsgrad eller lånebelopp.",
-  "deepInsights": [
-    {
-      "heading": "1. Så fungerar Swedbanks räntesättning",
-      "text": "Swedbank använder en individuell och relationell modell för att sätta räntan. I stället för en fast och helt transparent matris väger banken in flera faktorer såsom sparande, tjänster, kundhistorik, pension, lönekonto och hur din totala ekonomi ser ut. Rabatten formas i dialog med en rådgivare, vilket ger möjligheten att påverka sina villkor men gör modellen mindre standardiserad än exempelvis SBAB, Skandia och ICA Banken."
-    },
-    {
-      "heading": "2. Personlig rådgivning har stor betydelse",
-      "text": "Rådgivningsmöten är en naturlig del av Swedbanks bolåneprocess. Banken arbetar utifrån ett synsätt där människokontakt och förtroende är centrala för att förstå kundens behov. För dig som uppskattar samtal, löpande dialog och skräddarsydda upplägg kan detta vara en stor fördel. För andra kan det upplevas mer tidskrävande eller onödigt om man föredrar digitala, automatiserade processer."
-    },
-    {
-      "heading": "3. Du kan påverka din ränta aktivt",
-      "text": "Eftersom modellen inte är helt fast i förväg kan du själv påverka villkoren genom att stärka ditt engagemang. Sparande hos banken, förbättrad ekonomi, amorteringar, pension, försäkringar och andra tjänster kan ge bättre förhandlingsläge. Swedbank är därför ofta en bra bank för dig som vill vara aktiv i relationen och som vill kunna påverka sin ränta genom att bygga upp ett större hellekileengagemang."
-    },
-    {
-      "heading": "4. Passar bäst för dig som vill ha en relationell bank",
-      "text": "Swedbank lämpar sig främst för kunder som uppskattar personlig kontakt, vill ha trygghet och värderar ett löpande samarbete med rådgivare. Banken fungerar särskilt bra för dig som planerar att samla flera tjänster, har god ekonomi och ser värde i att banken tar hänsyn till helheten i din ekonomiska situation. Modellen belönar långsiktighet och engagemang snarare än enbart låg belåningsgrad."
-    },
-    {
-      "heading": "5. Mindre lämplig om du föredrar helt automatiserade processer",
-      "text": "Ansökan kan startas digitalt, men den slutliga räntan blir ofta ett resultat av samtal och individuell bedömning. För dig som vill slippa förhandlingar, möten och dialog kan banken upplevas mindre smidig. Om du vill ha full transparens, snabb digital hantering och exakt samma ränta som andra i samma situation är SBAB, Skandiabanken och ICA Banken ofta bättre alternativ."
-    }
-  ],
-  "faq": [
-    {
-      "question": "Behöver jag vara helkund för att få bra ränta?",
-      "answer": "Nej, men rabatten påverkas starkt av ditt totala engagemang. Swedbank premierar kunder som samlar flera tjänster, har sparande hos banken eller visar att de vill bygga en långsiktig relation."
-    },
-    {
-      "question": "Kan jag få en helt digital offert?",
-      "answer": "Du kan påbörja ansökan digitalt, men Swedbank använder ofta rådgivning i processen för att sätta den slutliga räntan. Det innebär att ett samtal eller möte ibland behövs för att slutgiltiga villkor ska kunna ges."
-    },
-    {
-      "question": "Varför skiljer sig räntan mellan olika kunder?",
-      "answer": "Räntan sätts individuellt och påverkas av faktorer som ekonomi, sparande, belåningsgrad, relation, kundhistorik och rådgivningsdialog. Därför kan två personer med liknande bostad få olika räntor."
-    },
-    {
-      "question": "Passar Swedbank om jag vill slippa möten och förhandling?",
-      "answer": "Inte alltid. Banken är som bäst för kunder som uppskattar rådgivning, kontakt och relationer. Om du vill ha en helt digital upplevelse är andra banker i regel smidigare."
-    }
-  ],
-  "ctaLabel": "Besök Swedbanks hemsida",
-  "ctaUrl": "https://www.swedbank.se/privat/boende-och-bolan.html"
+  "sv": {
+    "title": "Swedbank",
+    "intro": "Swedbank är en av Sveriges största banker och erbjuder bolån med fokus på personlig rådgivning, helhetssyn och långsiktiga kundrelationer. Banken arbetar relationellt – vilket innebär att din ränta påverkas av hur du använder banken som helhet, inte bara av belåningsgrad eller lånebelopp.",
+
+    "deepInsights": [
+      {
+        "heading": "1. Så fungerar Swedbanks räntesättning",
+        "text": "Swedbank använder en individuell och relationell modell för att sätta räntan. I stället för en fast och helt transparent matris väger banken in flera faktorer såsom sparande, tjänster, kundhistorik, pension, lönekonto och hur din totala ekonomi ser ut. Rabatten formas i dialog med en rådgivare, vilket ger möjlighet att påverka villkoren men gör modellen mindre standardiserad än hos exempelvis SBAB, Skandiabanken och ICA Banken."
+      },
+      {
+        "heading": "2. Personlig rådgivning har stor betydelse",
+        "text": "Rådgivningsmöten är en naturlig del av Swedbanks bolåneprocess. Banken arbetar utifrån ett synsätt där mänsklig kontakt och förtroende är centrala för att förstå kundens behov. För dig som uppskattar samtal, löpande dialog och skräddarsydda upplägg kan detta vara en stor fördel, medan det kan upplevas mer tidskrävande om du föredrar helt digitala processer."
+      },
+      {
+        "heading": "3. Du kan påverka din ränta aktivt",
+        "text": "Eftersom modellen inte är helt fast kan du påverka villkoren genom att stärka ditt engagemang. Sparande, amorteringar, pension, försäkringar och andra tjänster kan förbättra ditt förhandlingsläge. Swedbank passar därför bra för dig som vill vara aktiv i relationen och bygga ett långsiktigt helhetsengagemang."
+      },
+      {
+        "heading": "4. Passar bäst för dig som vill ha en relationell bank",
+        "text": "Swedbank lämpar sig främst för kunder som värdesätter personlig kontakt, trygghet och löpande samarbete med rådgivare. Banken fungerar särskilt bra för dig som vill samla flera tjänster och som ser värde i att banken tar hänsyn till hela din ekonomiska situation, inte bara bolånet."
+      },
+      {
+        "heading": "5. Mindre lämplig om du föredrar helt automatiserade processer",
+        "text": "Ansökan kan startas digitalt, men den slutliga räntan sätts ofta genom dialog och individuell bedömning. För dig som vill slippa möten och förhandlingar kan detta upplevas som mindre smidigt. Om du prioriterar full transparens och helt digital hantering är banker som SBAB, Skandiabanken och ICA Banken ofta bättre alternativ."
+      }
+    ],
+
+    "faq": [
+      {
+        "question": "Behöver jag vara helkund för att få bra ränta?",
+        "answer": "Nej, men rabatten påverkas starkt av ditt totala engagemang. Swedbank premierar kunder som samlar flera tjänster, har sparande hos banken och bygger en långsiktig relation."
+      },
+      {
+        "question": "Kan jag få en helt digital offert?",
+        "answer": "Du kan påbörja ansökan digitalt, men Swedbank använder ofta rådgivning i processen för att sätta den slutliga räntan. Ett samtal eller möte kan därför behövas."
+      },
+      {
+        "question": "Varför skiljer sig räntan mellan olika kunder?",
+        "answer": "Räntan sätts individuellt och påverkas av faktorer som ekonomi, sparande, belåningsgrad, kundhistorik och dialog med rådgivare. Därför kan två kunder få olika räntor trots liknande förutsättningar."
+      },
+      {
+        "question": "Passar Swedbank om jag vill slippa möten och förhandling?",
+        "answer": "Inte alltid. Banken är bäst för kunder som uppskattar rådgivning och relationer. För en helt digital upplevelse är andra banker oftast smidigare."
+      }
+    ],
+
+    "ctaLabel": "Besök Swedbanks hemsida",
+    "ctaUrl": "https://www.swedbank.se/privat/boende-och-bolan.html"
+  },
+
+  "en": {
+    "title": "Swedbank",
+    "intro": "Swedbank is one of Sweden’s largest banks and offers mortgages with a strong focus on personal advisory services, holistic assessment, and long-term customer relationships. The bank operates with a relationship-based approach, meaning your interest rate is influenced by how you use the bank as a whole — not only by loan-to-value ratio or loan amount.",
+
+    "deepInsights": [
+      {
+        "heading": "1. How Swedbank sets its interest rates",
+        "text": "Swedbank uses an individual, relationship-based pricing model. Instead of a fixed and fully transparent matrix, the bank considers factors such as savings, banking services, customer history, pension arrangements, salary accounts, and overall financial situation. Discounts are shaped through dialogue with an advisor, allowing customers to influence their terms, but making the model less standardized than banks such as SBAB, Skandiabanken, or ICA Banken."
+      },
+      {
+        "heading": "2. Personal advisory services play a significant role",
+        "text": "Advisory meetings are a natural part of Swedbank’s mortgage process. The bank emphasizes human interaction and trust to understand customer needs. For customers who value ongoing dialogue and tailored solutions, this can be a major advantage, while others may find it more time-consuming compared to fully digital processes."
+      },
+      {
+        "heading": "3. You can actively influence your interest rate",
+        "text": "Because the pricing model is not fully fixed, customers can influence their loan terms by strengthening their overall engagement. Savings, amortization, pension products, insurance, and additional services can improve negotiation position. Swedbank is therefore well suited for customers who want to actively build a long-term banking relationship."
+      },
+      {
+        "heading": "4. Best suited for customers seeking a relationship-based bank",
+        "text": "Swedbank is primarily suitable for customers who value personal contact, stability, and ongoing collaboration with advisors. The bank works particularly well for customers who want to consolidate multiple services and appreciate a bank that considers their full financial situation, not just the mortgage."
+      },
+      {
+        "heading": "5. Less suitable if you prefer fully automated processes",
+        "text": "Although applications can be initiated digitally, final interest rates are often determined through dialogue and individual assessment. If you want to avoid meetings, negotiations, and advisory contact, this approach may feel less convenient. For full transparency and fully digital handling, banks such as SBAB, Skandiabanken, and ICA Banken are often better alternatives."
+      }
+    ],
+
+    "faq": [
+      {
+        "question": "Do I need to be a full-service banking customer to get a good interest rate?",
+        "answer": "No, but discounts are strongly influenced by overall engagement. Swedbank rewards customers who consolidate services, maintain savings, and build long-term relationships."
+      },
+      {
+        "question": "Can I receive a fully digital offer?",
+        "answer": "You can start the application digitally, but Swedbank often involves advisory discussions to determine final interest rates. A call or meeting may therefore be required."
+      },
+      {
+        "question": "Why do interest rates differ between customers?",
+        "answer": "Interest rates are set individually and influenced by factors such as financial situation, savings, loan-to-value ratio, customer history, and advisory dialogue. As a result, two customers with similar properties may receive different rates."
+      },
+      {
+        "question": "Is Swedbank suitable if I want to avoid meetings and negotiation?",
+        "answer": "Not always. The bank works best for customers who appreciate advisory services and relationship-based banking. For a fully digital experience, other banks are generally more convenient."
+      }
+    ],
+
+    "ctaLabel": "Visit Swedbank’s website",
+    "ctaUrl": "https://www.swedbank.se/privat/boende-och-bolan.html"
+  }
 }

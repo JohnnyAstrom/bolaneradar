@@ -1,49 +1,101 @@
 {
-  "title": "Nordea",
-  "intro": "Nordea kombinerar personlig rådgivning med moderna digitala tjänster och erbjuder bolån baserat på en individuell helhetsbedömning. Banken väger in ekonomi, sparande, engagemang och långsiktighet – och passar särskilt bra för dig som vill ha både flexibilitet och stöd i bolåneprocessen.",
+  "sv": {
+    "title": "Nordea",
+    "intro": "Nordea kombinerar personlig rådgivning med moderna digitala tjänster och erbjuder bolån baserat på en individuell helhetsbedömning. Banken väger in ekonomi, sparande, engagemang och långsiktighet – och passar särskilt bra för dig som vill ha både flexibilitet och stöd i bolåneprocessen.",
 
-  "deepInsights": [
-    {
-      "heading": "1. Räntan sätts individuellt och väger in hela din ekonomi",
-      "text": "Nordea använder en individuell modell för bolåneräntor där faktorer som belåningsgrad, lånebelopp, sparande, pensionslösningar och bankens totala relation med kunden spelar roll. Det innebär att villkoren varierar mellan kunder och att räntan inte följer en helt transparent modell. Engagemang – såsom lönekonto, försäkringar eller sparande – kan påverka rabatten positivt."
-    },
-    {
-      "heading": "2. En balans mellan digital enkelhet och personlig rådgivning",
-      "text": "Nordea erbjuder en av branschens mest utvecklade digitala ansökningsprocesser, men samtidigt är personlig kontakt ofta en del av bolåneresan. Kunden kan välja att sköta mycket själv i appen, men banken uppmuntrar även rådgivningsmöten för att diskutera ekonomi, boende och långsiktiga planer. Detta gör Nordea särskilt bra för dig som vill ha flexibilitet och möjlighet till stöd när det behövs."
-    },
-    {
-      "heading": "3. Du kan påverka din ränta genom engagemang och ekonomisk utveckling",
-      "text": "Eftersom Nordea gör en helhetsbedömning kan du stärka dina villkor genom att förbättra din ekonomi eller samla fler tjänster i banken. Sparande, pensionsplanering, kapitalförvaltning och lönekonto är exempel på faktorer som kan stärka relationen och därmed höja rabattmöjligheterna över tid."
-    },
-    {
-      "heading": "4. Passar bäst för kunder som vill ha både digital smidighet och rådgivningsstöd",
-      "text": "Nordea är ett starkt alternativ för dig som vill sköta mycket digitalt men som samtidigt uppskattar möjligheten att prata med rådgivare vid större beslut. Banken är särskilt bra för hushåll som vill kombinera bolån med sparande, pension och ekonomisk planering – och som ser värde i att ha allt samlat på ett och samma ställe."
-    },
-    {
-      "heading": "5. Mindre lämplig för dig som vill ha helt förutsägbara villkor",
-      "text": "Eftersom räntan sätts individuellt är Nordea inte alltid rätt val om du vill slippa dialog, få en helt fast modellränta eller om du vill hantera allt själv utan mänsklig kontakt. Om du prioriterar full transparens och identiska villkor för alla kan banker som SBAB, Landshypotek och Skandiabanken vara enklare och mer förutsägbara alternativ."
-    }
-  ],
+    "deepInsights": [
+      {
+        "heading": "1. Räntan sätts individuellt och väger in hela din ekonomi",
+        "text": "Nordea använder en individuell modell för bolåneräntor där faktorer som belåningsgrad, lånebelopp, sparande, pensionslösningar och bankens totala relation med kunden spelar roll. Det innebär att villkoren varierar mellan kunder och att räntan inte följer en helt transparent modell. Engagemang – såsom lönekonto, försäkringar eller sparande – kan påverka rabatten positivt."
+      },
+      {
+        "heading": "2. En balans mellan digital enkelhet och personlig rådgivning",
+        "text": "Nordea erbjuder en av branschens mest utvecklade digitala ansökningsprocesser, men samtidigt är personlig kontakt ofta en del av bolåneresan. Kunden kan välja att sköta mycket själv i appen, men banken uppmuntrar även rådgivningsmöten för att diskutera ekonomi, boende och långsiktiga planer. Detta gör Nordea särskilt bra för dig som vill ha flexibilitet och möjlighet till stöd när det behövs."
+      },
+      {
+        "heading": "3. Du kan påverka din ränta genom engagemang och ekonomisk utveckling",
+        "text": "Eftersom Nordea gör en helhetsbedömning kan du stärka dina villkor genom att förbättra din ekonomi eller samla fler tjänster i banken. Sparande, pensionsplanering, kapitalförvaltning och lönekonto är exempel på faktorer som kan stärka relationen och därmed höja rabattmöjligheterna över tid."
+      },
+      {
+        "heading": "4. Passar bäst för kunder som vill ha både digital smidighet och rådgivningsstöd",
+        "text": "Nordea är ett starkt alternativ för dig som vill sköta mycket digitalt men som samtidigt uppskattar möjligheten att prata med rådgivare vid större beslut. Banken är särskilt bra för hushåll som vill kombinera bolån med sparande, pension och ekonomisk planering – och som ser värde i att ha allt samlat på ett och samma ställe."
+      },
+      {
+        "heading": "5. Mindre lämplig för dig som vill ha helt förutsägbara villkor",
+        "text": "Eftersom räntan sätts individuellt är Nordea inte alltid rätt val om du vill slippa dialog, få en helt fast modellränta eller om du vill hantera allt själv utan mänsklig kontakt. Om du prioriterar full transparens och identiska villkor för alla kan banker som SBAB, Landshypotek och Skandiabanken vara enklare och mer förutsägbara alternativ."
+      }
+    ],
 
-  "faq": [
-    {
-      "question": "Hur sätter Nordea sin bolåneränta?",
-      "answer": "Räntan baseras på en individuell helhetsbedömning där belåningsgrad, ekonomi, sparande och engagemang påverkar. Banken använder ingen helt fast matris och två kunder kan därför få olika räntor."
-    },
-    {
-      "question": "Kan jag ansöka digitalt?",
-      "answer": "Ja. Nordea har en modern digital process där du kan ansöka via appen eller webben. Samtidigt kan rådgivning tillkomma innan slutliga villkor sätts, beroende på din situation."
-    },
-    {
-      "question": "Måste jag vara helkund?",
-      "answer": "Nej, men ett större engagemang – såsom sparande, lönekonto eller pension – kan bidra till bättre lånevillkor eftersom banken värderar helhetsrelationer."
-    },
-    {
-      "question": "Är Nordea rätt val om jag vill slippa samtal och rådgivning?",
-      "answer": "Inte nödvändigtvis. Banken fungerar bäst när kunden vill kombinera digital enkelhet med mänsklig rådgivning. För helt automatiserade upplägg kan mer digitala banker vara enklare."
-    }
-  ],
+    "faq": [
+      {
+        "question": "Hur sätter Nordea sin bolåneränta?",
+        "answer": "Räntan baseras på en individuell helhetsbedömning där belåningsgrad, ekonomi, sparande och engagemang påverkar. Banken använder ingen helt fast matris och två kunder kan därför få olika räntor."
+      },
+      {
+        "question": "Kan jag ansöka digitalt?",
+        "answer": "Ja. Nordea har en modern digital process där du kan ansöka via appen eller webben. Samtidigt kan rådgivning tillkomma innan slutliga villkor sätts, beroende på din situation."
+      },
+      {
+        "question": "Måste jag vara helkund?",
+        "answer": "Nej, men ett större engagemang – såsom sparande, lönekonto eller pension – kan bidra till bättre lånevillkor eftersom banken värderar helhetsrelationer."
+      },
+      {
+        "question": "Är Nordea rätt val om jag vill slippa samtal och rådgivning?",
+        "answer": "Inte nödvändigtvis. Banken fungerar bäst när kunden vill kombinera digital enkelhet med mänsklig rådgivning. För helt automatiserade upplägg kan mer digitala banker vara enklare."
+      }
+    ],
 
-  "ctaLabel": "Besök Nordeas hemsida",
-  "ctaUrl": "https://www.nordea.se/privat/produkter/bolan/"
+    "ctaLabel": "Besök Nordeas hemsida",
+    "ctaUrl": "https://www.nordea.se/privat/produkter/bolan/"
+  },
+
+  "en": {
+    "title": "Nordea",
+    "intro": "Nordea combines personal advisory services with modern digital tools and offers mortgages based on an individual holistic assessment. The bank considers financial situation, savings, customer engagement, and long-term planning, making it particularly suitable for customers who want both flexibility and support throughout the mortgage process.",
+
+    "deepInsights": [
+      {
+        "heading": "1. Interest rates are set individually based on your overall financial profile",
+        "text": "Nordea uses an individual pricing approach for mortgages where factors such as loan-to-value ratio, loan amount, savings, pension solutions, and the overall banking relationship are taken into account. This means terms can vary between customers, and interest rates do not follow a fully transparent matrix. Customer engagement — such as salary accounts, insurance, or savings — can positively influence discounts."
+      },
+      {
+        "heading": "2. A balance between digital convenience and personal advisory support",
+        "text": "Nordea offers one of the industry’s most advanced digital application processes, while personal contact often remains part of the mortgage journey. Customers can manage much of the process independently through the app, but advisory meetings are encouraged to discuss finances, housing, and long-term plans. This makes Nordea particularly suitable for those who want flexibility and access to support when needed."
+      },
+      {
+        "heading": "3. You can influence your interest rate through engagement and financial development",
+        "text": "Because Nordea conducts a holistic assessment, customers can improve their loan terms by strengthening their financial situation or consolidating more services with the bank. Savings, pension planning, wealth management, and salary accounts are examples of factors that can strengthen the relationship and increase discount opportunities over time."
+      },
+      {
+        "heading": "4. Best suited for customers who want both digital efficiency and advisory support",
+        "text": "Nordea is a strong choice for customers who want to handle much of their banking digitally while still valuing the option to consult advisors for major decisions. The bank is particularly suitable for households looking to combine mortgages with savings, pensions, and broader financial planning in one place."
+      },
+      {
+        "heading": "5. Less suitable if you want fully predictable terms",
+        "text": "Because interest rates are set individually, Nordea may not be the best choice if you want to avoid dialogue, rely on a fixed pricing model, or manage everything without human interaction. If full transparency and identical terms for all customers are priorities, banks such as SBAB, Landshypotek, or Skandiabanken may offer simpler and more predictable alternatives."
+      }
+    ],
+
+    "faq": [
+      {
+        "question": "How does Nordea set mortgage interest rates?",
+        "answer": "Interest rates are based on an individual holistic assessment where loan-to-value ratio, financial situation, savings, and customer engagement all play a role. The bank does not use a fixed pricing matrix, so two customers may receive different rates."
+      },
+      {
+        "question": "Can I apply digitally?",
+        "answer": "Yes. Nordea offers a modern digital application process through its app and website. Depending on your situation, advisory discussions may still be part of the process before final terms are determined."
+      },
+      {
+        "question": "Do I need to be a full-service banking customer?",
+        "answer": "No, but broader engagement — such as savings, salary accounts, or pension products — can contribute to better loan terms, as the bank values holistic customer relationships."
+      },
+      {
+        "question": "Is Nordea suitable if I want to avoid calls and advisory meetings?",
+        "answer": "Not necessarily. Nordea works best for customers who want to combine digital convenience with human advisory support. For fully automated setups, more purely digital banks may be simpler."
+      }
+    ],
+
+    "ctaLabel": "Visit Nordea’s website",
+    "ctaUrl": "https://www.nordea.se/privat/produkter/bolan/"
+  }
 }

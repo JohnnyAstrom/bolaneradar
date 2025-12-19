@@ -1,49 +1,101 @@
 {
-  "title": "Länsförsäkringar Bank",
-  "intro": "Länsförsäkringar erbjuder bolån genom sina regionala länsbolag. Banken arbetar nära kunden och kombinerar bolån, banktjänster och försäkringar i en samlad helhetslösning. Räntan sätts individuellt utifrån engagemang, ekonomi och kundrelation – och passar dig som vill samla mycket på ett ställe och få personlig service.",
+  "sv": {
+    "title": "Länsförsäkringar Bank",
+    "intro": "Länsförsäkringar erbjuder bolån genom sina regionala länsbolag. Banken arbetar nära kunden och kombinerar bolån, banktjänster och försäkringar i en samlad helhetslösning. Räntan sätts individuellt utifrån engagemang, ekonomi och kundrelation – och passar dig som vill samla mycket på ett ställe och få personlig service.",
 
-  "deepInsights": [
-    {
-      "heading": "1. Räntan sätts av ditt lokala länsbolag",
-      "text": "Till skillnad från rikstäckande banker hanteras mycket av besluten hos ditt regionala länsbolag. Det betyder att villkoren kan variera beroende på var du bor och vilken relation du har byggt upp lokalt. Modellen gör banken mer personlig – men också mindre standardiserad."
-    },
-    {
-      "heading": "2. Helhetsengagemang ger bättre villkor",
-      "text": "Länsförsäkringar arbetar med en tydlig helhetsmodell: ju mer du samlar, desto bättre villkor kan du få. Framför allt försäkringar (hem, bil, personförsäkringar) väger tungt eftersom banken och försäkringsdelen hänger ihop i samma organisation."
-    },
-    {
-      "heading": "3. Personlig rådgivning är en central del av processen",
-      "text": "Även om du kan ansöka digitalt bygger bolåneprocessen ofta på dialog med rådgivare. Banken fokuserar på långsiktiga kundrelationer där du får hjälp med både bolån och försäkringar som en integrerad helhet."
-    },
-    {
-      "heading": "4. Passar dig som vill samla bolån, bank och försäkring",
-      "text": "Eftersom helhetsengagemang premieras är Länsförsäkringar särskilt starka för hushåll som vill konsolidera sin ekonomi. Den som har flera försäkringar och konton i banken kan ofta få mycket konkurrenskraftiga villkor."
-    },
-    {
-      "heading": "5. Mindre lämplig om du söker standardiserad och helt digital hantering",
-      "text": "Länsförsäkringar är inte ett renodlat digitalt alternativ. Om du söker transparent prissättning utan dialog, eller vill undvika rådgivning helt, är banker som SBAB, Skandiabanken eller ICA Banken ofta enklare."
-    }
-  ],
+    "deepInsights": [
+      {
+        "heading": "1. Räntan sätts av ditt lokala länsbolag",
+        "text": "Till skillnad från rikstäckande banker hanteras mycket av besluten hos ditt regionala länsbolag. Det betyder att villkoren kan variera beroende på var du bor och vilken relation du har byggt upp lokalt. Modellen gör banken mer personlig – men också mindre standardiserad."
+      },
+      {
+        "heading": "2. Helhetsengagemang ger bättre villkor",
+        "text": "Länsförsäkringar arbetar med en tydlig helhetsmodell: ju mer du samlar, desto bättre villkor kan du få. Framför allt försäkringar (hem, bil, personförsäkringar) väger tungt eftersom banken och försäkringsdelen hänger ihop i samma organisation."
+      },
+      {
+        "heading": "3. Personlig rådgivning är en central del av processen",
+        "text": "Även om du kan ansöka digitalt bygger bolåneprocessen ofta på dialog med rådgivare. Banken fokuserar på långsiktiga kundrelationer där du får hjälp med både bolån och försäkringar som en integrerad helhet."
+      },
+      {
+        "heading": "4. Passar dig som vill samla bolån, bank och försäkring",
+        "text": "Eftersom helhetsengagemang premieras är Länsförsäkringar särskilt starka för hushåll som vill konsolidera sin ekonomi. Den som har flera försäkringar och konton i banken kan ofta få mycket konkurrenskraftiga villkor."
+      },
+      {
+        "heading": "5. Mindre lämplig om du söker standardiserad och helt digital hantering",
+        "text": "Länsförsäkringar är inte ett renodlat digitalt alternativ. Om du söker transparent prissättning utan dialog, eller vill undvika rådgivning helt, är banker som SBAB, Skandiabanken eller ICA Banken ofta enklare."
+      }
+    ],
 
-  "faq": [
-    {
-      "question": "Varför skiljer sig räntan mellan olika län?",
-      "answer": "Varje länsbolag bestämmer mycket själv, vilket innebär att räntor och rabatter kan variera regionalt. Detta är en del av bankens lokala modell."
-    },
-    {
-      "question": "Hur mycket påverkar försäkringar min ränta?",
-      "answer": "Ganska mycket. Länsförsäkringar arbetar integrerat mellan bank och försäkring, och kunder som samlar sina försäkringar får ofta bättre bolånevillkor."
-    },
-    {
-      "question": "Kan jag sköta allt digitalt?",
-      "answer": "Du kan starta digitalt, men processen involverar vanligtvis rådgivning för att fastställa slutliga villkor."
-    },
-    {
-      "question": "Passar banken om jag vill ha en helt automatisk ansökan utan kontakt?",
-      "answer": "Inte riktigt. Banken är bäst för kunder som uppskattar personlig kontakt och värdet av en helhetslösning – inte för dig som vill undvika rådgivning."
-    }
-  ],
+    "faq": [
+      {
+        "question": "Varför skiljer sig räntan mellan olika län?",
+        "answer": "Varje länsbolag bestämmer mycket själv, vilket innebär att räntor och rabatter kan variera regionalt. Detta är en del av bankens lokala modell."
+      },
+      {
+        "question": "Hur mycket påverkar försäkringar min ränta?",
+        "answer": "Ganska mycket. Länsförsäkringar arbetar integrerat mellan bank och försäkring, och kunder som samlar sina försäkringar får ofta bättre bolånevillkor."
+      },
+      {
+        "question": "Kan jag sköta allt digitalt?",
+        "answer": "Du kan starta digitalt, men processen involverar vanligtvis rådgivning för att fastställa slutliga villkor."
+      },
+      {
+        "question": "Passar banken om jag vill ha en helt automatisk ansökan utan kontakt?",
+        "answer": "Inte riktigt. Banken är bäst för kunder som uppskattar personlig kontakt och värdet av en helhetslösning – inte för dig som vill undvika rådgivning."
+      }
+    ],
 
-  "ctaLabel": "Besök Länsförsäkringars hemsida",
-  "ctaUrl": "https://www.lansforsakringar.se/privat/bank/bolan/"
+    "ctaLabel": "Besök Länsförsäkringars hemsida",
+    "ctaUrl": "https://www.lansforsakringar.se/privat/bank/bolan/"
+  },
+
+  "en": {
+    "title": "Länsförsäkringar Bank",
+    "intro": "Länsförsäkringar offers mortgages through its regional insurance company branches. The bank works closely with customers and combines mortgages, banking services, and insurance into a comprehensive financial solution. Interest rates are set individually based on customer engagement, financial situation, and relationship — making it well suited for customers who want to consolidate services and receive personal advisory support.",
+
+    "deepInsights": [
+      {
+        "heading": "1. Interest rates are set by your local regional branch",
+        "text": "Unlike nationwide banks, many decisions are handled by the regional branch you belong to. This means that loan terms can vary depending on where you live and the relationship you have built locally. The model makes the bank more personal, but also less standardized."
+      },
+      {
+        "heading": "2. Broader engagement leads to better terms",
+        "text": "Länsförsäkringar operates with a clear holistic model: the more services you consolidate, the better terms you may receive. Insurance products (such as home, car, and personal insurance) are particularly influential, as banking and insurance are integrated within the same organization."
+      },
+      {
+        "heading": "3. Personal advisory services are central to the process",
+        "text": "Although applications can be initiated digitally, the mortgage process often involves direct dialogue with an advisor. The bank focuses on long-term customer relationships, offering integrated support for both mortgages and insurance."
+      },
+      {
+        "heading": "4. Best suited for customers who want to consolidate banking and insurance",
+        "text": "Because broader engagement is rewarded, Länsförsäkringar is particularly strong for households looking to consolidate their finances. Customers with multiple insurance policies and banking services often receive very competitive mortgage terms."
+      },
+      {
+        "heading": "5. Less suitable for fully standardized and digital handling",
+        "text": "Länsförsäkringar is not a purely digital alternative. If you are looking for transparent pricing without dialogue or want to avoid advisory services altogether, banks such as SBAB, Skandiabanken, or ICA Banken may be simpler options."
+      }
+    ],
+
+    "faq": [
+      {
+        "question": "Why do interest rates differ between regions?",
+        "answer": "Each regional branch has significant autonomy, meaning interest rates and discounts can vary geographically. This is part of the bank’s local operating model."
+      },
+      {
+        "question": "How much do insurance products affect my interest rate?",
+        "answer": "Quite significantly. Länsförsäkringar operates with integrated banking and insurance services, and customers who consolidate their insurance policies often receive better mortgage terms."
+      },
+      {
+        "question": "Can I manage everything digitally?",
+        "answer": "You can start digitally, but the process typically involves advisory discussions to determine final terms."
+      },
+      {
+        "question": "Is this bank suitable if I want a fully automated, contact-free application?",
+        "answer": "Not really. The bank works best for customers who value personal contact and the benefits of a comprehensive financial solution rather than fully automated handling."
+      }
+    ],
+
+    "ctaLabel": "Visit Länsförsäkringar’s website",
+    "ctaUrl": "https://www.lansforsakringar.se/privat/bank/bolan/"
+  }
 }

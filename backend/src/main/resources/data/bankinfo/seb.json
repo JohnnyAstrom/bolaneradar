@@ -1,49 +1,101 @@
 {
-  "title": "SEB",
-  "intro": "SEB är en av Sveriges största banker och arbetar med en rådgivningsdriven bolånemodell där räntan sätts efter en helhetsbedömning av kunden. Banken fokuserar på långsiktiga relationer, sparande, kapitalrådgivning och stabila kundlösningar – vilket gör SEB särskilt stark för dig som vill ha ett mer personligt och långsiktigt partnerskap.",
+  "sv": {
+    "title": "SEB",
+    "intro": "SEB är en av Sveriges största banker och arbetar med en rådgivningsdriven bolånemodell där räntan sätts efter en helhetsbedömning av kunden. Banken fokuserar på långsiktiga relationer, sparande, kapitalrådgivning och stabila kundlösningar – vilket gör SEB särskilt stark för dig som vill ha ett mer personligt och långsiktigt partnerskap.",
 
-  "deepInsights": [
-    {
-      "heading": "1. SEB:s räntesättning baseras på helhet och långsiktighet",
-      "text": "SEB använder en individuell modell för att sätta bolåneräntor där faktorer som ekonomi, sparande, belåningsgrad, engagemang och relation påverkar utfallet. Banken arbetar inte med en helt transparent matris, utan lägger stor vikt vid att förstå kundens totala ekonomiska situation. Detta gör räntan påverkbar – men också mindre standardiserad jämfört med exempelvis SBAB eller Skandia."
-    },
-    {
-      "heading": "2. Rådgivning och kunddialog spelar en central roll",
-      "text": "SEB har en tydligt rådgivningsorienterad bolånemodell där kundmöten, dialog och längre relationer är viktiga. Banken är känd för sin kompetens inom sparande och finansiell planering, vilket innebär att bolånet ofta ses som en del av ett större ekonomiskt sammanhang. För dig som uppskattar en kunnig rådgivare och löpande samtal är SEB ett starkt alternativ."
-    },
-    {
-      "heading": "3. Du kan påverka din ränta genom ditt ekonomiska engagemang",
-      "text": "Eftersom SEB tar hänsyn till hela din ekonomi har du också möjlighet att förbättra dina villkor över tid. Ett växande sparande, bättre kassaflöde, tjänster som kopplas på eller ett mer långsiktigt samarbete kan stärka ditt förhandlingsläge. Banken premierar oftast stabilitet och finansiell styrka snarare än snabba digitala processer."
-    },
-    {
-      "heading": "4. Passar bäst för dig som värdesätter kompetent rådgivning",
-      "text": "SEB är idealisk för kunder som vill ha en bank som hjälper till med helheten – inte bara bolånet. Kunder som uppskattar private banking-tjänster, kapitalrådgivning, strukturerad sparplanering och återkommande kontakter passar särskilt bra här. Banken fungerar utmärkt för dig som vill bygga upp en relation och se bolånet som en del av en större ekonomisk strategi."
-    },
-    {
-      "heading": "5. Mindre lämplig om du söker maximal transparens och digital enkelhet",
-      "text": "Även om SEB erbjuder digitala funktioner är processen fortfarande betydligt mer dialogdriven än hos de digitala aktörerna. Om du vill slippa möten, få en helt förutsägbar ränta utan kontakt och hantera allt själv i mobilen är banker som SBAB, Skandiabanken, Landshypotek och ICA Banken ofta smidigare alternativ."
-    }
-  ],
+    "deepInsights": [
+      {
+        "heading": "1. SEB:s räntesättning baseras på helhet och långsiktighet",
+        "text": "SEB använder en individuell modell för att sätta bolåneräntor där faktorer som ekonomi, sparande, belåningsgrad, engagemang och relation påverkar utfallet. Banken arbetar inte med en helt transparent matris, utan lägger stor vikt vid att förstå kundens totala ekonomiska situation. Detta gör räntan påverkbar – men också mindre standardiserad jämfört med exempelvis SBAB eller Skandia."
+      },
+      {
+        "heading": "2. Rådgivning och kunddialog spelar en central roll",
+        "text": "SEB har en tydligt rådgivningsorienterad bolånemodell där kundmöten, dialog och längre relationer är viktiga. Banken är känd för sin kompetens inom sparande och finansiell planering, vilket innebär att bolånet ofta ses som en del av ett större ekonomiskt sammanhang. För dig som uppskattar en kunnig rådgivare och löpande samtal är SEB ett starkt alternativ."
+      },
+      {
+        "heading": "3. Du kan påverka din ränta genom ditt ekonomiska engagemang",
+        "text": "Eftersom SEB tar hänsyn till hela din ekonomi har du också möjlighet att förbättra dina villkor över tid. Ett växande sparande, bättre kassaflöde, tjänster som kopplas på eller ett mer långsiktigt samarbete kan stärka ditt förhandlingsläge. Banken premierar oftast stabilitet och finansiell styrka snarare än snabba digitala processer."
+      },
+      {
+        "heading": "4. Passar bäst för dig som värdesätter kompetent rådgivning",
+        "text": "SEB är idealisk för kunder som vill ha en bank som hjälper till med helheten – inte bara bolånet. Kunder som uppskattar private banking-tjänster, kapitalrådgivning, strukturerad sparplanering och återkommande kontakter passar särskilt bra här. Banken fungerar utmärkt för dig som vill bygga upp en relation och se bolånet som en del av en större ekonomisk strategi."
+      },
+      {
+        "heading": "5. Mindre lämplig om du söker maximal transparens och digital enkelhet",
+        "text": "Även om SEB erbjuder digitala funktioner är processen fortfarande betydligt mer dialogdriven än hos de digitala aktörerna. Om du vill slippa möten, få en helt förutsägbar ränta utan kontakt och hantera allt själv i mobilen är banker som SBAB, Skandiabanken, Landshypotek och ICA Banken ofta smidigare alternativ."
+      }
+    ],
 
-  "faq": [
-    {
-      "question": "Hur sätter SEB sin bolåneränta?",
-      "answer": "SEB använder en individuell modell där faktorer som ekonomi, sparande, engagemang och relation påverkar räntan. Banken har ingen helt öppen matris utan baserar sina erbjudanden på en helhetsbedömning."
-    },
-    {
-      "question": "Kan jag få en offert helt digitalt?",
-      "answer": "Du kan göra en första ansökan digitalt, men i många fall behövs dialog med rådgivare innan slutgiltiga villkor sätts. Banken ser mötet som ett viktigt steg i processen."
-    },
-    {
-      "question": "Behöver jag vara helkund för att få bra villkor?",
-      "answer": "Nej, men ett större engagemang påverkar ofta rabatten positivt. SEB premierar kunder som samlar sparande, tjänster och långsiktiga finansiella planer."
-    },
-    {
-      "question": "Passar SEB om jag vill slippa förhandling?",
-      "answer": "Inte alltid. Eftersom banken arbetar med rådgivning och relationer är processen mindre automatiserad än hos helt digitala aktörer."
-    }
-  ],
+    "faq": [
+      {
+        "question": "Hur sätter SEB sin bolåneränta?",
+        "answer": "SEB använder en individuell modell där faktorer som ekonomi, sparande, engagemang och relation påverkar räntan. Banken har ingen helt öppen matris utan baserar sina erbjudanden på en helhetsbedömning."
+      },
+      {
+        "question": "Kan jag få en offert helt digitalt?",
+        "answer": "Du kan göra en första ansökan digitalt, men i många fall behövs dialog med rådgivare innan slutgiltiga villkor sätts. Banken ser mötet som ett viktigt steg i processen."
+      },
+      {
+        "question": "Behöver jag vara helkund för att få bra villkor?",
+        "answer": "Nej, men ett större engagemang påverkar ofta rabatten positivt. SEB premierar kunder som samlar sparande, tjänster och långsiktiga finansiella planer."
+      },
+      {
+        "question": "Passar SEB om jag vill slippa förhandling?",
+        "answer": "Inte alltid. Eftersom banken arbetar med rådgivning och relationer är processen mindre automatiserad än hos helt digitala aktörer."
+      }
+    ],
 
-  "ctaLabel": "Besök SEB:s hemsida",
-  "ctaUrl": "https://seb.se/privat/bolan"
+    "ctaLabel": "Besök SEB:s hemsida",
+    "ctaUrl": "https://seb.se/privat/bolan"
+  },
+
+  "en": {
+    "title": "SEB",
+    "intro": "SEB is one of Sweden’s largest banks and operates a relationship-driven mortgage model where interest rates are set based on a holistic assessment of the customer. The bank focuses on long-term relationships, savings, investment advisory services, and stable financial solutions, making SEB particularly strong for customers seeking a more personal and long-term banking partnership.",
+
+    "deepInsights": [
+      {
+        "heading": "1. SEB’s interest rate pricing is based on holistic, long-term assessment",
+        "text": "SEB uses an individual pricing model for mortgages where factors such as financial situation, savings, loan-to-value ratio, customer engagement, and relationship history influence the outcome. The bank does not rely on a fully transparent pricing matrix, but instead places strong emphasis on understanding the customer’s overall financial picture. This makes interest rates negotiable, but also less standardized compared to banks such as SBAB or Skandia."
+      },
+      {
+        "heading": "2. Advisory services and customer dialogue are central",
+        "text": "SEB operates a clearly advisory-oriented mortgage model where meetings, dialogue, and long-term relationships play a key role. The bank is well known for its expertise in savings and financial planning, meaning that mortgages are often treated as part of a broader financial context. For customers who value knowledgeable advisors and ongoing discussions, SEB is a strong option."
+      },
+      {
+        "heading": "3. You can influence your interest rate through financial engagement",
+        "text": "Because SEB considers the customer’s entire financial situation, loan terms can be improved over time. Growing savings, stronger cash flow, additional services, or a long-term relationship can strengthen your negotiating position. The bank typically rewards stability and financial strength rather than fast, fully digital processes."
+      },
+      {
+        "heading": "4. Best suited for customers who value qualified advisory support",
+        "text": "SEB is ideal for customers who want a bank that supports the full financial picture — not just the mortgage. Customers who appreciate private banking services, investment advisory, structured savings planning, and recurring contact with advisors are particularly well suited. The bank works very well for those who see their mortgage as part of a broader financial strategy."
+      },
+      {
+        "heading": "5. Less suitable if you seek maximum transparency and digital simplicity",
+        "text": "Although SEB offers digital functionality, the process remains significantly more dialogue-driven than with fully digital banks. If you want to avoid meetings, receive a fully predictable interest rate without contact, and manage everything independently via mobile apps, banks such as SBAB, Skandiabanken, Landshypotek, or ICA Banken may be more convenient alternatives."
+      }
+    ],
+
+    "faq": [
+      {
+        "question": "How does SEB set its mortgage interest rates?",
+        "answer": "SEB uses an individual pricing model where factors such as financial situation, savings, customer engagement, and relationship influence the interest rate. The bank does not use a fully open pricing matrix, but bases its offers on a holistic assessment."
+      },
+      {
+        "question": "Can I receive an offer fully digitally?",
+        "answer": "You can submit an initial application digitally, but in many cases dialogue with an advisor is required before final terms are set. The bank considers personal meetings an important part of the process."
+      },
+      {
+        "question": "Do I need to be a full-service banking customer to get good terms?",
+        "answer": "No, but broader engagement often has a positive impact on interest rate discounts. SEB rewards customers who consolidate savings, services, and long-term financial planning."
+      },
+      {
+        "question": "Is SEB suitable if I want to avoid negotiation?",
+        "answer": "Not always. Because the bank operates with advisory services and relationship-based pricing, the process is less automated than at fully digital banks."
+      }
+    ],
+
+    "ctaLabel": "Visit SEB’s website",
+    "ctaUrl": "https://seb.se/privat/bolan"
+  }
 }

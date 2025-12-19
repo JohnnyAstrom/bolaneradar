@@ -1,13 +1,17 @@
 package com.bolaneradar.backend.controller.api.banks;
 
 import com.bolaneradar.backend.dto.api.BankInfoDto;
+import com.bolaneradar.backend.entity.enums.Language;
 import com.bolaneradar.backend.service.client.BankInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Public / Bank Info", description = "Fördjupad information om varje bank (informationssidor).")
+@Tag(
+        name = "Public / Bank Info",
+        description = "Fördjupad information om varje bank (informationssidor)."
+)
 @RestController
 @RequestMapping("/api/banks")
 @CrossOrigin
@@ -26,20 +30,23 @@ public class BankInfoController {
                     Datat kommer från filbaserad JSON (en fil per bank).
 
                     Innehåller:
-                    - Titel
-                    - Sammanfattning
-                    - Viktiga punkter (keyPoints)
+                    - Introduktion
+                    - Fördjupade sektioner
                     - FAQ
-                    - CTA-länk
+                    - CTA
                     """
     )
     @GetMapping("/{bankKey}/info")
-    public ResponseEntity<?> getBankInfo(@PathVariable String bankKey) {
+    public ResponseEntity<?> getBankInfo(
+            @PathVariable String bankKey,
+            @RequestParam(defaultValue = "SV") Language language
+    ) {
 
-        BankInfoDto dto = bankInfoService.getBankInfo(bankKey);
+        BankInfoDto.Content content =
+                bankInfoService.getBankInfo(bankKey, language);
 
-        return (dto == null)
+        return (content == null)
                 ? ResponseEntity.notFound().build()
-                : ResponseEntity.ok(dto);
+                : ResponseEntity.ok(content);
     }
 }

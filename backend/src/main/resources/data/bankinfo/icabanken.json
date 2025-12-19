@@ -1,49 +1,101 @@
 {
-  "title": "ICA Banken",
-  "intro": "ICA Banken erbjuder enkla och digitala bolån med helt transparent prissättning. Räntan sätts enligt en öppen modell där belåningsgrad och lånebelopp styr priset. Passar dig som vill ha en smidig, förutsägbar och helt digital lösning utan krav på helkundsengagemang.",
+  "sv": {
+    "title": "ICA Banken",
+    "intro": "ICA Banken erbjuder enkla och digitala bolån med helt transparent prissättning. Räntan sätts enligt en öppen modell där belåningsgrad och lånebelopp styr priset. Passar dig som vill ha en smidig, förutsägbar och helt digital lösning utan krav på helkundsengagemang.",
 
-  "deepInsights": [
-    {
-      "heading": "1. Helt modellstyrd ränta — inga förhandlingar",
-      "text": "ICA Banken använder en öppen prislista där belåningsgrad är den viktigaste faktorn för vilken ränta du får. Du behöver inte vara helkund, och du kan inte förhandla priset — samma regler gäller för alla med samma förutsättningar."
-    },
-    {
-      "heading": "2. Fullt digital bolåneupplevelse",
-      "text": "Ansökan, uppläggning och uppföljning är helt digitala. ICA Banken riktar sig till dig som vill slippa rådgivningsmöten, telefonsamtal och traditionell bankkontakt."
-    },
-    {
-      "heading": "3. Enkelt upplägg — och enkelt att förstå",
-      "text": "Inga paket, inga dolda villkor och inga krav på att du flyttar konton eller sparande. Du får samma ränta som alla andra i samma belåningsintervall."
-    },
-    {
-      "heading": "4. Transparens gynnar stark ekonomi",
-      "text": "Har du låg eller medelhög belåningsgrad får du ofta bättre ränta här än hos banker som använder individuell prissättning. Banken belönar objektiva kriterier, inte relationer."
-    },
-    {
-      "heading": "5. Mindre flexibilitet vid mer komplexa affärer",
-      "text": "Vid hög belåningsgrad, om du har ojämn inkomst, ovanliga lånestrukturer eller behöver personlig rådgivning kan ICA Banken vara mindre lämplig. Då passar en relationell bank bättre."
-    }
-  ],
+    "deepInsights": [
+      {
+        "heading": "1. Helt modellstyrd ränta — inga förhandlingar",
+        "text": "ICA Banken använder en öppen prislista där belåningsgrad är den viktigaste faktorn för vilken ränta du får. Du behöver inte vara helkund, och du kan inte förhandla priset — samma regler gäller för alla med samma förutsättningar."
+      },
+      {
+        "heading": "2. Fullt digital bolåneupplevelse",
+        "text": "Ansökan, uppläggning och uppföljning är helt digitala. ICA Banken riktar sig till dig som vill slippa rådgivningsmöten, telefonsamtal och traditionell bankkontakt."
+      },
+      {
+        "heading": "3. Enkelt upplägg — och enkelt att förstå",
+        "text": "Inga paket, inga dolda villkor och inga krav på att du flyttar konton eller sparande. Du får samma ränta som alla andra i samma belåningsintervall."
+      },
+      {
+        "heading": "4. Transparens gynnar stark ekonomi",
+        "text": "Har du låg eller medelhög belåningsgrad får du ofta bättre ränta här än hos banker som använder individuell prissättning. Banken belönar objektiva kriterier, inte relationer."
+      },
+      {
+        "heading": "5. Mindre flexibilitet vid mer komplexa affärer",
+        "text": "Vid hög belåningsgrad, om du har ojämn inkomst, ovanliga lånestrukturer eller behöver personlig rådgivning kan ICA Banken vara mindre lämplig. Då passar en relationell bank bättre."
+      }
+    ],
 
-  "faq": [
-    {
-      "question": "Kan jag förhandla om räntan?",
-      "answer": "Nej. ICA Banken använder en öppen och fast modell där belåningsgrad och lånebelopp bestämmer priset. Alla med samma förutsättningar får samma ränta."
-    },
-    {
-      "question": "Behöver jag vara helkund?",
-      "answer": "Nej. Du kan ha bolånet separat och behöver inte flytta konton, sparande eller andra tjänster."
-    },
-    {
-      "question": "Är banken helt digital?",
-      "answer": "Ja, processen är i princip helt digital. Det finns kundservice, men ingen rådgivning kopplad till räntesättning."
-    },
-    {
-      "question": "Vilka kunder passar ICA Banken bäst för?",
-      "answer": "För dig som vill ha en enkel, transparent och förutsägbar lösning — särskilt om du har låg belåningsgrad."
-    }
-  ],
+    "faq": [
+      {
+        "question": "Kan jag förhandla om räntan?",
+        "answer": "Nej. ICA Banken använder en öppen och fast modell där belåningsgrad och lånebelopp bestämmer priset. Alla med samma förutsättningar får samma ränta."
+      },
+      {
+        "question": "Behöver jag vara helkund?",
+        "answer": "Nej. Du kan ha bolånet separat och behöver inte flytta konton, sparande eller andra tjänster."
+      },
+      {
+        "question": "Är banken helt digital?",
+        "answer": "Ja, processen är i princip helt digital. Det finns kundservice, men ingen rådgivning kopplad till räntesättning."
+      },
+      {
+        "question": "Vilka kunder passar ICA Banken bäst för?",
+        "answer": "För dig som vill ha en enkel, transparent och förutsägbar lösning — särskilt om du har låg belåningsgrad."
+      }
+    ],
 
-  "ctaLabel": "Besök ICA Bankens hemsida",
-  "ctaUrl": "https://www.icabanken.se/lana/bolan"
+    "ctaLabel": "Besök ICA Bankens hemsida",
+    "ctaUrl": "https://www.icabanken.se/lana/bolan"
+  },
+
+  "en": {
+    "title": "ICA Banken",
+    "intro": "ICA Banken offers simple, fully digital mortgages with completely transparent pricing. Interest rates are set according to an open model where loan-to-value ratio and loan amount determine the price. This bank is well suited for customers who want a smooth, predictable, and entirely digital solution without requirements to become a full-service banking customer.",
+
+    "deepInsights": [
+      {
+        "heading": "1. Fully model-driven interest rates — no negotiation",
+        "text": "ICA Banken uses an open pricing list where the loan-to-value ratio is the primary factor determining your interest rate. You do not need to be a full-service customer, and interest rates are not negotiable — the same rules apply to everyone with the same conditions."
+      },
+      {
+        "heading": "2. A fully digital mortgage experience",
+        "text": "Application, setup, and ongoing management are handled entirely digitally. ICA Banken is designed for customers who want to avoid advisory meetings, phone calls, and traditional bank interactions."
+      },
+      {
+        "heading": "3. Simple structure — easy to understand",
+        "text": "No bundled packages, no hidden conditions, and no requirements to move accounts or savings. You receive the same interest rate as anyone else within the same loan-to-value bracket."
+      },
+      {
+        "heading": "4. Transparency benefits financially strong customers",
+        "text": "If you have a low or moderate loan-to-value ratio, you may often receive better interest rates here than at banks using individual pricing. The bank rewards objective criteria rather than customer relationships."
+      },
+      {
+        "heading": "5. Less flexible for more complex financial situations",
+        "text": "In cases of high loan-to-value ratios, irregular income, complex loan structures, or when personal advisory services are needed, ICA Banken may be less suitable. In such cases, a relationship-focused bank may be a better option."
+      }
+    ],
+
+    "faq": [
+      {
+        "question": "Can I negotiate my interest rate?",
+        "answer": "No. ICA Banken uses a fixed and transparent model where loan-to-value ratio and loan amount determine pricing. Everyone with the same conditions receives the same interest rate."
+      },
+      {
+        "question": "Do I need to be a full-service customer?",
+        "answer": "No. You can keep the mortgage separate and are not required to move accounts, savings, or other banking services."
+      },
+      {
+        "question": "Is the bank fully digital?",
+        "answer": "Yes, the process is essentially fully digital. Customer support is available, but interest rate decisions are not based on advisory services."
+      },
+      {
+        "question": "Which customers is ICA Banken best suited for?",
+        "answer": "Customers who want a simple, transparent, and predictable solution — especially those with a low loan-to-value ratio."
+      }
+    ],
+
+    "ctaLabel": "Visit ICA Banken’s website",
+    "ctaUrl": "https://www.icabanken.se/lana/bolan"
+  }
 }

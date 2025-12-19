@@ -1,49 +1,101 @@
 {
-  "title": "Ikano Bank",
-  "intro": "Ikano Bank erbjuder enkla och transparenta bolån med fokus på schyssta villkor och tydlig prissättning. Banken använder en helt modellbaserad räntesättning där belåningsgrad är den viktigaste faktorn, och där alla kunder med samma förutsättningar får samma ränta. Passar dig som vill ha ett rakt och okomplicerat bolån utan förhandling eller helkundskrav.",
+  "sv": {
+    "title": "Ikano Bank",
+    "intro": "Ikano Bank erbjuder enkla och transparenta bolån med fokus på schyssta villkor och tydlig prissättning. Banken använder en helt modellbaserad räntesättning där belåningsgrad är den viktigaste faktorn, och där alla kunder med samma förutsättningar får samma ränta. Passar dig som vill ha ett rakt och okomplicerat bolån utan förhandling eller helkundskrav.",
 
-  "deepInsights": [
-    {
-      "heading": "1. Tydlig och transparent räntemodell",
-      "text": "Ikano Bank arbetar med en helt öppen modell där räntan styrs av belåningsgrad och några få fasta kriterier. Ingen förhandling, inga rabatter och inga specialvillkor — samma ränta ges till alla kunder med samma förutsättningar."
-    },
-    {
-      "heading": "2. Digital och snabb bolåneprocess",
-      "text": "Hela ansökningsflödet är digitalt. Du får besked snabbt och slipper möten, telefonsamtal och manuella kontakter. Passar särskilt de som värdesätter enkelhet."
-    },
-    {
-      "heading": "3. Ingen personlig rådgivning eller helhetslösningar",
-      "text": "Banken erbjuder inte traditionella rådgivningsmöten eller helkundsupplägg. Fokus är bolån — inget mer. Detta gör banken rak och effektiv, men mindre flexibel."
-    },
-    {
-      "heading": "4. Bäst för dig med låg eller medelhög belåningsgrad",
-      "text": "Precis som andra modellbanker belönar Ikano låg belåningsgrad tydligt. Har du amorterat mycket eller köpt en bostad med hög kontantinsats passar banken särskilt bra."
-    },
-    {
-      "heading": "5. Mindre bra för komplexa fall",
-      "text": "Om du har hög belåningsgrad, ovanlig inkomststruktur eller behov av manuella undantag kan andra banker vara mer flexibla. Ikano håller sig strikt till modellen."
-    }
-  ],
+    "deepInsights": [
+      {
+        "heading": "1. Tydlig och transparent räntemodell",
+        "text": "Ikano Bank arbetar med en helt öppen modell där räntan styrs av belåningsgrad och några få fasta kriterier. Ingen förhandling, inga rabatter och inga specialvillkor — samma ränta ges till alla kunder med samma förutsättningar."
+      },
+      {
+        "heading": "2. Digital och snabb bolåneprocess",
+        "text": "Hela ansökningsflödet är digitalt. Du får besked snabbt och slipper möten, telefonsamtal och manuella kontakter. Passar särskilt de som värdesätter enkelhet."
+      },
+      {
+        "heading": "3. Ingen personlig rådgivning eller helhetslösningar",
+        "text": "Banken erbjuder inte traditionella rådgivningsmöten eller helkundsupplägg. Fokus är bolån — inget mer. Detta gör banken rak och effektiv, men mindre flexibel."
+      },
+      {
+        "heading": "4. Bäst för dig med låg eller medelhög belåningsgrad",
+        "text": "Precis som andra modellbanker belönar Ikano låg belåningsgrad tydligt. Har du amorterat mycket eller köpt en bostad med hög kontantinsats passar banken särskilt bra."
+      },
+      {
+        "heading": "5. Mindre bra för komplexa fall",
+        "text": "Om du har hög belåningsgrad, ovanlig inkomststruktur eller behov av manuella undantag kan andra banker vara mer flexibla. Ikano håller sig strikt till modellen."
+      }
+    ],
 
-  "faq": [
-    {
-      "question": "Kan jag förhandla räntan?",
-      "answer": "Nej. Banken använder en strikt modell. Räntan påverkas endast av belåningsgrad och andra öppna kriterier, inte av förhandling eller helkund."
-    },
-    {
-      "question": "Krävs engagemang eller helkund?",
-      "answer": "Nej. Ikano ställer inga krav på att du flyttar övriga banktjänster eller blir helkund."
-    },
-    {
-      "question": "Passar banken om jag har hög belåningsgrad?",
-      "answer": "Inte alltid. Vid hög belåningsgrad får modellbanker ofta högre pris än rådgivningsbanker, eftersom modellen belönar låg risk."
-    },
-    {
-      "question": "Får jag personlig rådgivning?",
-      "answer": "Nej. Banken erbjuder ingen individuell rådgivning utan fokuserar på ett effektivt, digitalt upplägg."
-    }
-  ],
+    "faq": [
+      {
+        "question": "Kan jag förhandla räntan?",
+        "answer": "Nej. Banken använder en strikt modell. Räntan påverkas endast av belåningsgrad och andra öppna kriterier, inte av förhandling eller helkund."
+      },
+      {
+        "question": "Krävs engagemang eller helkund?",
+        "answer": "Nej. Ikano ställer inga krav på att du flyttar övriga banktjänster eller blir helkund."
+      },
+      {
+        "question": "Passar banken om jag har hög belåningsgrad?",
+        "answer": "Inte alltid. Vid hög belåningsgrad får modellbanker ofta högre pris än rådgivningsbanker, eftersom modellen belönar låg risk."
+      },
+      {
+        "question": "Får jag personlig rådgivning?",
+        "answer": "Nej. Banken erbjuder ingen individuell rådgivning utan fokuserar på ett effektivt, digitalt upplägg."
+      }
+    ],
 
-  "ctaLabel": "Besök Ikano Bank",
-  "ctaUrl": "https://ikanobank.se/bolan"
+    "ctaLabel": "Besök Ikano Bank",
+    "ctaUrl": "https://ikanobank.se/bolan"
+  },
+
+  "en": {
+    "title": "Ikano Bank",
+    "intro": "Ikano Bank offers simple and transparent mortgages with a strong focus on fair terms and clear pricing. The bank uses a fully model-based interest rate structure where loan-to-value ratio is the primary factor, and all customers with the same conditions receive the same interest rate. This bank is well suited for customers who want a straightforward, uncomplicated mortgage without negotiation or full-service banking requirements.",
+
+    "deepInsights": [
+      {
+        "heading": "1. Clear and transparent interest rate model",
+        "text": "Ikano Bank operates with a fully open model where interest rates are determined by loan-to-value ratio and a small number of fixed criteria. There is no negotiation, no discounts, and no special conditions — the same rate applies to all customers with identical circumstances."
+      },
+      {
+        "heading": "2. Digital and fast mortgage process",
+        "text": "The entire application process is digital. Decisions are made quickly, allowing customers to avoid meetings, phone calls, and manual interactions. This setup is particularly suitable for those who value simplicity."
+      },
+      {
+        "heading": "3. No personal advisory services or bundled solutions",
+        "text": "The bank does not offer traditional advisory meetings or full-service banking arrangements. The focus is solely on mortgages — nothing more. This makes the bank efficient and straightforward, but less flexible."
+      },
+      {
+        "heading": "4. Best suited for customers with low to moderate loan-to-value ratios",
+        "text": "Like other model-based banks, Ikano Bank clearly rewards lower loan-to-value ratios. If you have amortized a significant portion of your loan or purchased a property with a high down payment, the bank can be a particularly good fit."
+      },
+      {
+        "heading": "5. Less suitable for complex cases",
+        "text": "If you have a high loan-to-value ratio, an unusual income structure, or require manual exceptions, other banks may be more flexible. Ikano Bank adheres strictly to its pricing model."
+      }
+    ],
+
+    "faq": [
+      {
+        "question": "Can I negotiate the interest rate?",
+        "answer": "No. Ikano Bank uses a strict pricing model. Interest rates are influenced only by loan-to-value ratio and other transparent criteria, not by negotiation or broader banking engagement."
+      },
+      {
+        "question": "Is broader engagement or full-service banking required?",
+        "answer": "No. Ikano Bank does not require you to move other banking services or become a full-service customer."
+      },
+      {
+        "question": "Is this bank suitable if I have a high loan-to-value ratio?",
+        "answer": "Not always. With high loan-to-value ratios, model-based banks often have higher pricing than advisory-focused banks, as the model strongly rewards lower risk."
+      },
+      {
+        "question": "Will I receive personal financial advice?",
+        "answer": "No. The bank does not provide individual advisory services and focuses on an efficient, digital mortgage process."
+      }
+    ],
+
+    "ctaLabel": "Visit Ikano Bank",
+    "ctaUrl": "https://ikanobank.se/bolan"
+  }
 }

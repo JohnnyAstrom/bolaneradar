@@ -1,49 +1,101 @@
 {
-  "title": "Landshypotek Bank",
-  "intro": "Landshypotek erbjuder bolån med fokus på transparens, enkelhet och konkurrenskraftiga räntor för dig med låg eller medelhög belåningsgrad. Räntan styrs helt av en öppen modell utan förhandling eller helkundskrav, vilket gör banken till ett populärt digitalt alternativ.",
+  "sv": {
+    "title": "Landshypotek Bank",
+    "intro": "Landshypotek erbjuder bolån med fokus på transparens, enkelhet och konkurrenskraftiga räntor för dig med låg eller medelhög belåningsgrad. Räntan styrs helt av en öppen modell utan förhandling eller helkundskrav, vilket gör banken till ett populärt digitalt alternativ.",
 
-  "deepInsights": [
-    {
-      "heading": "1. Transparent och modellbaserad ränta",
-      "text": "Landshypotek sätter priset helt enligt en tydlig modell där belåningsgrad är den absolut viktigaste faktorn. Det går inte att förhandla räntan eller påverka den genom att samla tjänster hos banken."
-    },
-    {
-      "heading": "2. Låga räntor vid låg belåningsgrad",
-      "text": "Bankens modell belönar stark ekonomi, vilket gör att kunder med hög amortering eller lågt lån i förhållande till bostadens värde ofta får bland marknadens bättre räntor."
-    },
-    {
-      "heading": "3. En helt digital bolåneprocess",
-      "text": "Ansökan är snabb, tydlig och digital från början till slut. Inga möten, inga rådgivare och inga individuella bedömningar — allt bygger på konkret data och automatiserade processer."
-    },
-    {
-      "heading": "4. Ingen helkundsbank",
-      "text": "Landshypotek erbjuder inte helhetsbankstjänster som lönekonto, kort eller vardagsekonomi. Fokus ligger på bolån — varken mer eller mindre."
-    },
-    {
-      "heading": "5. Mindre flexibla vid komplexa upplägg",
-      "text": "Modellbanker fungerar bäst när din ekonomi är enkel och belåningsgraden är låg. Om du har ojämn inkomst, ovanliga upplägg eller hög belåningsgrad kan andra banker passa bättre."
-    }
-  ],
+    "deepInsights": [
+      {
+        "heading": "1. Transparent och modellbaserad ränta",
+        "text": "Landshypotek sätter priset helt enligt en tydlig modell där belåningsgrad är den absolut viktigaste faktorn. Det går inte att förhandla räntan eller påverka den genom att samla tjänster hos banken."
+      },
+      {
+        "heading": "2. Låga räntor vid låg belåningsgrad",
+        "text": "Bankens modell belönar stark ekonomi, vilket gör att kunder med hög amortering eller lågt lån i förhållande till bostadens värde ofta får bland marknadens bättre räntor."
+      },
+      {
+        "heading": "3. En helt digital bolåneprocess",
+        "text": "Ansökan är snabb, tydlig och digital från början till slut. Inga möten, inga rådgivare och inga individuella bedömningar — allt bygger på konkret data och automatiserade processer."
+      },
+      {
+        "heading": "4. Ingen helkundsbank",
+        "text": "Landshypotek erbjuder inte helhetsbankstjänster som lönekonto, kort eller vardagsekonomi. Fokus ligger på bolån — varken mer eller mindre."
+      },
+      {
+        "heading": "5. Mindre flexibla vid komplexa upplägg",
+        "text": "Modellbanker fungerar bäst när din ekonomi är enkel och belåningsgraden är låg. Om du har ojämn inkomst, ovanliga upplägg eller hög belåningsgrad kan andra banker passa bättre."
+      }
+    ],
 
-  "faq": [
-    {
-      "question": "Kan jag förhandla räntan?",
-      "answer": "Nej. Räntan sätts helt enligt bankens öppna modell. Alla kunder med samma belåningsgrad får samma villkor."
-    },
-    {
-      "question": "Krävs helkund?",
-      "answer": "Nej. Landshypotek är inte en klassisk helkundsbank och ställer inga sådana krav."
-    },
-    {
-      "question": "Passar banken om jag har hög belåningsgrad?",
-      "answer": "Inte alltid. Banken är ofta bäst för kunder med låg eller medelhög belåningsgrad eftersom modellen belönar det tydligt."
-    },
-    {
-      "question": "Finns personlig rådgivning?",
-      "answer": "Nej, banken erbjuder inte traditionell bolånerådgivning utan fokuserar på digital hantering."
-    }
-  ],
+    "faq": [
+      {
+        "question": "Kan jag förhandla räntan?",
+        "answer": "Nej. Räntan sätts helt enligt bankens öppna modell. Alla kunder med samma belåningsgrad får samma villkor."
+      },
+      {
+        "question": "Krävs helkund?",
+        "answer": "Nej. Landshypotek är inte en klassisk helkundsbank och ställer inga sådana krav."
+      },
+      {
+        "question": "Passar banken om jag har hög belåningsgrad?",
+        "answer": "Inte alltid. Banken är ofta bäst för kunder med låg eller medelhög belåningsgrad eftersom modellen belönar det tydligt."
+      },
+      {
+        "question": "Finns personlig rådgivning?",
+        "answer": "Nej, banken erbjuder inte traditionell bolånerådgivning utan fokuserar på digital hantering."
+      }
+    ],
 
-  "ctaLabel": "Besök Landshypotek",
-  "ctaUrl": "https://www.landshypotek.se/lana/bolan/"
+    "ctaLabel": "Besök Landshypotek",
+    "ctaUrl": "https://www.landshypotek.se/lana/bolan/"
+  },
+
+  "en": {
+    "title": "Landshypotek Bank",
+    "intro": "Landshypotek offers mortgages focused on transparency, simplicity, and competitive interest rates for customers with low to moderate loan-to-value ratios. Interest rates are determined entirely by an open pricing model without negotiation or full-service banking requirements, making the bank a popular digital alternative.",
+
+    "deepInsights": [
+      {
+        "heading": "1. Transparent and model-based interest rates",
+        "text": "Landshypotek sets pricing strictly according to a clear model where loan-to-value ratio is the most important factor. Interest rates cannot be negotiated or influenced by consolidating other banking services."
+      },
+      {
+        "heading": "2. Low interest rates for low loan-to-value ratios",
+        "text": "The bank’s model rewards strong financial positions, meaning customers with high amortization levels or low loans relative to property value often receive some of the most competitive rates on the market."
+      },
+      {
+        "heading": "3. A fully digital mortgage process",
+        "text": "The application process is fast, clear, and fully digital from start to finish. There are no meetings, no advisors, and no individual assessments — everything is based on concrete data and automated processes."
+      },
+      {
+        "heading": "4. Not a full-service bank",
+        "text": "Landshypotek does not offer comprehensive banking services such as salary accounts, cards, or everyday banking. The focus is solely on mortgages — nothing more, nothing less."
+      },
+      {
+        "heading": "5. Less flexible for complex arrangements",
+        "text": "Model-based banks work best when financial situations are straightforward and loan-to-value ratios are low. If you have irregular income, complex arrangements, or high loan-to-value ratios, other banks may be a better fit."
+      }
+    ],
+
+    "faq": [
+      {
+        "question": "Can I negotiate the interest rate?",
+        "answer": "No. Interest rates are set entirely according to the bank’s open pricing model. All customers with the same loan-to-value ratio receive the same terms."
+      },
+      {
+        "question": "Is full-service banking required?",
+        "answer": "No. Landshypotek is not a traditional full-service bank and does not impose such requirements."
+      },
+      {
+        "question": "Is this bank suitable if I have a high loan-to-value ratio?",
+        "answer": "Not always. The bank is generally best suited for customers with low to moderate loan-to-value ratios, as the model clearly rewards lower risk."
+      },
+      {
+        "question": "Is personal advisory service available?",
+        "answer": "No. The bank does not offer traditional mortgage advisory services and focuses on digital handling."
+      }
+    ],
+
+    "ctaLabel": "Visit Landshypotek",
+    "ctaUrl": "https://www.landshypotek.se/lana/bolan/"
+  }
 }

@@ -1,49 +1,101 @@
 {
-  "title": "Handelsbanken",
-  "intro": "Handelsbanken är känd för sin starka lokala närvaro och personliga rådgivning. Bolån hanteras genom kontoren där beslut ofta fattas nära kunden. Banken lägger stor vikt vid långsiktighet, stabilitet och relationer – och passar dig som vill ha en bank som verkligen lär känna din ekonomi.",
+  "sv": {
+    "title": "Handelsbanken",
+    "intro": "Handelsbanken är känd för sin starka lokala närvaro och personliga rådgivning. Bolån hanteras genom kontoren där beslut ofta fattas nära kunden. Banken lägger stor vikt vid långsiktighet, stabilitet och relationer – och passar dig som vill ha en bank som verkligen lär känna din ekonomi.",
 
-  "deepInsights": [
-    {
-      "heading": "1. Räntan bestäms lokalt och individuellt",
-      "text": "Handelsbanken arbetar mer lokalt än de flesta andra banker. Många beslut om bolånevillkor tas på kontoret, inte centralt. Det betyder att din relation med din lokala rådgivare och din långsiktiga ekonomi ofta väger tungt. Räntan sätts därför individuellt och varierar mellan kunder och kontor."
-    },
-    {
-      "heading": "2. Personlig kontakt är central i processen",
-      "text": "Handelsbanken bygger sin verksamhet på starka kundrelationer. För bolån innebär det ofta ett eller flera rådgivningsmöten, även om du kan starta ansökan digitalt. Banken passar därför extra bra för dig som uppskattar personliga samtal och vill ha en kontaktperson som följer din ekonomi över tid."
-    },
-    {
-      "heading": "3. Du kan påverka din ränta genom engagemang och relation",
-      "text": "Rabatten påverkas av hur väl din ekonomi utvecklas och hur stort engagemang du har i banken. Sparande, lönekonto och långsiktigt samarbete kan förbättra villkoren. Eftersom beslut fattas lokalt kan en god relation till rådgivare ha större betydelse här än i många andra banker."
-    },
-    {
-      "heading": "4. Passar bäst för kunder som vill ha långsiktig stabilitet",
-      "text": "Handelsbanken lämpar sig särskilt väl för hushåll som värdesätter trygghet, kontinuitet och långsiktiga relationer. Banken är också ett starkt val för dig som vill ha kvalificerad rådgivning kring både bolån, sparande och hela privatekonomin – och som ser fördelar med att samla flera tjänster."
-    },
-    {
-      "heading": "5. Mindre lämplig om du söker helt digital hantering",
-      "text": "Även om banken erbjuder digitala lösningar, spelar det personliga mötet fortfarande en stor roll. Om du vill slippa samtal, undvika rådgivning eller söker en helt automatiserad ansökan kan mer digitala banker som SBAB, ICA Banken eller Skandiabanken passa bättre."
-    }
-  ],
+    "deepInsights": [
+      {
+        "heading": "1. Räntan bestäms lokalt och individuellt",
+        "text": "Handelsbanken arbetar mer lokalt än de flesta andra banker. Många beslut om bolånevillkor tas på kontoret, inte centralt. Det betyder att din relation med din lokala rådgivare och din långsiktiga ekonomi ofta väger tungt. Räntan sätts därför individuellt och varierar mellan kunder och kontor."
+      },
+      {
+        "heading": "2. Personlig kontakt är central i processen",
+        "text": "Handelsbanken bygger sin verksamhet på starka kundrelationer. För bolån innebär det ofta ett eller flera rådgivningsmöten, även om du kan starta ansökan digitalt. Banken passar därför extra bra för dig som uppskattar personliga samtal och vill ha en kontaktperson som följer din ekonomi över tid."
+      },
+      {
+        "heading": "3. Du kan påverka din ränta genom engagemang och relation",
+        "text": "Rabatten påverkas av hur väl din ekonomi utvecklas och hur stort engagemang du har i banken. Sparande, lönekonto och långsiktigt samarbete kan förbättra villkoren. Eftersom beslut fattas lokalt kan en god relation till rådgivare ha större betydelse här än i många andra banker."
+      },
+      {
+        "heading": "4. Passar bäst för kunder som vill ha långsiktig stabilitet",
+        "text": "Handelsbanken lämpar sig särskilt väl för hushåll som värdesätter trygghet, kontinuitet och långsiktiga relationer. Banken är också ett starkt val för dig som vill ha kvalificerad rådgivning kring både bolån, sparande och hela privatekonomin – och som ser fördelar med att samla flera tjänster."
+      },
+      {
+        "heading": "5. Mindre lämplig om du söker helt digital hantering",
+        "text": "Även om banken erbjuder digitala lösningar, spelar det personliga mötet fortfarande en stor roll. Om du vill slippa samtal, undvika rådgivning eller söker en helt automatiserad ansökan kan mer digitala banker som SBAB, ICA Banken eller Skandiabanken passa bättre."
+      }
+    ],
 
-  "faq": [
-    {
-      "question": "Hur sätts räntan hos Handelsbanken?",
-      "answer": "Räntan sätts individuellt och ofta lokalt på ditt kontor. Helhetsengagemang, relation och ekonomi väger tungt, och två kunder kan få olika villkor även med liknande förutsättningar."
-    },
-    {
-      "question": "Kan jag ansöka digitalt?",
-      "answer": "Ja, du kan starta ansökan digitalt, men den personliga kontakten är fortfarande en central del av processen innan slutliga villkor bestäms."
-    },
-    {
-      "question": "Måste jag bli helkund?",
-      "answer": "Nej, men engagemang – såsom sparande eller lönekonto – påverkar ofta räntan, eftersom banken bygger sin modell på långsiktiga relationer."
-    },
-    {
-      "question": "Passar Handelsbanken om jag vill slippa rådgivning?",
-      "answer": "Inte riktigt. Banken fungerar bäst för dig som uppskattar personlig kontakt och rådgivning, inte för dig som vill hantera allt digitalt utan samtal."
-    }
-  ],
+    "faq": [
+      {
+        "question": "Hur sätts räntan hos Handelsbanken?",
+        "answer": "Räntan sätts individuellt och ofta lokalt på ditt kontor. Helhetsengagemang, relation och ekonomi väger tungt, och två kunder kan få olika villkor även med liknande förutsättningar."
+      },
+      {
+        "question": "Kan jag ansöka digitalt?",
+        "answer": "Ja, du kan starta ansökan digitalt, men den personliga kontakten är fortfarande en central del av processen innan slutliga villkor bestäms."
+      },
+      {
+        "question": "Måste jag bli helkund?",
+        "answer": "Nej, men engagemang – såsom sparande eller lönekonto – påverkar ofta räntan, eftersom banken bygger sin modell på långsiktiga relationer."
+      },
+      {
+        "question": "Passar Handelsbanken om jag vill slippa rådgivning?",
+        "answer": "Inte riktigt. Banken fungerar bäst för dig som uppskattar personlig kontakt och rådgivning, inte för dig som vill hantera allt digitalt utan samtal."
+      }
+    ],
 
-  "ctaLabel": "Besök Handelsbankens hemsida",
-  "ctaUrl": "https://www.handelsbanken.se/sv/privat/bolan"
+    "ctaLabel": "Besök Handelsbankens hemsida",
+    "ctaUrl": "https://www.handelsbanken.se/sv/privat/bolan"
+  },
+
+  "en": {
+    "title": "Handelsbanken",
+    "intro": "Handelsbanken is known for its strong local presence and highly personal advisory approach. Mortgages are managed through local branches, where decisions are often made close to the customer. The bank places great emphasis on long-term stability, trust, and relationships, making it well suited for customers who want a bank that truly understands their financial situation.",
+
+    "deepInsights": [
+      {
+        "heading": "1. Interest rates are determined locally and individually",
+        "text": "Handelsbanken operates more locally than most other banks. Many mortgage decisions are made at the branch level rather than centrally. This means that your relationship with your local advisor and your long-term financial situation often carry significant weight. As a result, interest rates are set individually and may vary between customers and branches."
+      },
+      {
+        "heading": "2. Personal contact is central to the process",
+        "text": "Handelsbanken builds its business on strong customer relationships. For mortgages, this typically involves one or more advisory meetings, even if the application process begins digitally. The bank is therefore particularly suitable for customers who value personal conversations and a dedicated contact who follows their financial journey over time."
+      },
+      {
+        "heading": "3. You can influence your interest rate through engagement and relationships",
+        "text": "Discounts are influenced by how your financial situation develops and how extensive your engagement with the bank is. Savings, salary accounts, and long-term cooperation can improve loan terms. Since decisions are made locally, a strong relationship with your advisor can have greater impact here than at many other banks."
+      },
+      {
+        "heading": "4. Best suited for customers seeking long-term stability",
+        "text": "Handelsbanken is particularly well suited for households that value security, continuity, and long-term relationships. The bank is also a strong choice for customers seeking qualified advice on mortgages, savings, and overall personal finances, and who see advantages in consolidating multiple services with one bank."
+      },
+      {
+        "heading": "5. Less suitable if you want fully digital handling",
+        "text": "Although the bank offers digital solutions, personal meetings still play a significant role. If you want to avoid conversations, skip advisory meetings, or prefer a fully automated application process, more digital-focused banks such as SBAB, ICA Banken, or Skandiabanken may be a better fit."
+      }
+    ],
+
+    "faq": [
+      {
+        "question": "How are interest rates set at Handelsbanken?",
+        "answer": "Interest rates are set individually and often locally at your branch. Overall engagement, relationship, and financial situation are key factors, meaning two customers with similar profiles may receive different terms."
+      },
+      {
+        "question": "Can I apply digitally?",
+        "answer": "Yes, you can start the application digitally, but personal contact remains a central part of the process before final terms are determined."
+      },
+      {
+        "question": "Do I need to become a full-service customer?",
+        "answer": "No, but engagement such as savings or having your salary account with the bank often affects the interest rate, as Handelsbanken’s model is built around long-term relationships."
+      },
+      {
+        "question": "Is Handelsbanken suitable if I want to avoid advisory meetings?",
+        "answer": "Not really. The bank works best for customers who appreciate personal contact and advisory services rather than fully digital, conversation-free handling."
+      }
+    ],
+
+    "ctaLabel": "Visit Handelsbanken’s website",
+    "ctaUrl": "https://www.handelsbanken.se/sv/privat/bolan"
+  }
 }

@@ -1,13 +1,16 @@
 package com.bolaneradar.backend.service.client;
 
 import com.bolaneradar.backend.dto.api.BankInfoDto;
+import com.bolaneradar.backend.dto.api.BankInfoDto.Content;
+import com.bolaneradar.backend.entity.enums.Language;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class BankInfoService {
@@ -16,7 +19,6 @@ public class BankInfoService {
 
     public BankInfoService(ObjectMapper objectMapper) throws IOException {
 
-        // Alla filer i mappen /data/bankinfo
         String[] banks = {
                 "swedbank", "seb", "nordea", "handelsbanken",
                 "lansforsakringarbank", "alandsbanken", "sbab", "skandiabanken",
@@ -37,7 +39,16 @@ public class BankInfoService {
         }
     }
 
-    public BankInfoDto getBankInfo(String bankKey) {
-        return bankInfoMap.get(bankKey.toLowerCase());
+    public Content getBankInfo(String bankKey, Language language) {
+        BankInfoDto dto = bankInfoMap.get(bankKey.toLowerCase());
+
+        if (dto == null) {
+            return null;
+        }
+
+        return switch (language) {
+            case EN -> dto.en;
+            case SV -> dto.sv;
+        };
     }
 }
