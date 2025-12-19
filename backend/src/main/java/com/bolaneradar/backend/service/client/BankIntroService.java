@@ -11,27 +11,34 @@ import java.util.Map;
 @Service
 public class BankIntroService {
 
-    private Map<String, Map<String, Object>> bankData;
+    private final Map<String, Map<String, Map<String, Object>>> bankData;
 
     public BankIntroService() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         var resource = new ClassPathResource("data/bankIntroData.json");
 
-        bankData =
-                mapper.readValue(resource.getInputStream(), Map.class);
+        bankData = mapper.readValue(resource.getInputStream(), Map.class);
     }
 
-    public BankIntroDto getBankIntro(String bankKey) {
-        var raw = bankData.get(bankKey.toLowerCase());
+    public BankIntroDto getBankIntro(String bankKey, String language) {
+        var bankNode = bankData.get(bankKey.toLowerCase());
 
-        if (raw == null) {
+        if (bankNode == null) {
+            return null;
+        }
+
+        String langKey = language.equalsIgnoreCase("EN") ? "en" : "sv";
+
+        var langNode = bankNode.getOrDefault(langKey, bankNode.get("sv"));
+
+        if (langNode == null) {
             return null;
         }
 
         return new BankIntroDto(
                 bankKey,
-                (String) raw.get("description"),
-                (List<String>) raw.get("uspItems")
+                (String) langNode.get("description"),
+                (List<String>) langNode.get("uspItems")
         );
     }
 }

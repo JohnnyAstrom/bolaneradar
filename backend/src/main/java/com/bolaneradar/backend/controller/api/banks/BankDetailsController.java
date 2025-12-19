@@ -3,6 +3,8 @@ package com.bolaneradar.backend.controller.api.banks;
 import com.bolaneradar.backend.dto.api.BankDetailsDto;
 import com.bolaneradar.backend.service.client.BankDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +23,21 @@ public class BankDetailsController {
 
     @Operation(summary = "Hämta detaljerad bankinformation")
     @GetMapping("/{bankKey}/details")
-    public ResponseEntity<?> getBankDetails(@PathVariable String bankKey) {
+    public ResponseEntity<?> getBankDetails(
+            @PathVariable String bankKey,
 
-        BankDetailsDto dto = bankDetailsService.getDetailsForBank(bankKey);
+            @Parameter(
+                    description = "Språk för textinnehåll"
+            )
+            @Schema(
+                    example = "SV",
+                    allowableValues = { "SV", "EN" }
+            )
+            @RequestParam(defaultValue = "SV") String language
+    ) {
+
+        BankDetailsDto dto =
+                bankDetailsService.getDetailsForBank(bankKey, language);
 
         return (dto == null)
                 ? ResponseEntity.notFound().build()

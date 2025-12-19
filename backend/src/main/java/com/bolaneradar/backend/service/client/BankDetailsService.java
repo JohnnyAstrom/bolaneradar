@@ -11,7 +11,7 @@ public class BankDetailsService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public BankDetailsDto getDetailsForBank(String bankKey) {
+    public BankDetailsDto getDetailsForBank(String bankKey, String language) {
         try {
             var resource = new ClassPathResource("data/bankDetailsData.json");
             JsonNode root = objectMapper.readTree(resource.getInputStream());
@@ -22,7 +22,17 @@ public class BankDetailsService {
 
             JsonNode bankNode = root.get(bankKey);
 
-            return objectMapper.treeToValue(bankNode, BankDetailsDto.class);
+            String langKey = language.equalsIgnoreCase("EN") ? "en" : "sv";
+
+            JsonNode langNode = bankNode.has(langKey)
+                    ? bankNode.get(langKey)
+                    : bankNode.get("sv");
+
+            if (langNode == null) {
+                return null;
+            }
+
+            return objectMapper.treeToValue(langNode, BankDetailsDto.class);
 
         } catch (Exception e) {
             throw new RuntimeException("Could not read bankDetailsData.json", e);
