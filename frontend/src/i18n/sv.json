@@ -68,10 +68,10 @@
     },
 
     "info": {
-      "notFound": "No information found.",
-      "deepAnalysis": "In-depth analysis",
-      "faq": "Frequently asked questions",
-      "backToBank": "← Back to {{bank}}"
+      "notFound": "Ingen information hittades.",
+      "deepAnalysis": "Fördjupad analys",
+      "faq": "Vanliga frågor",
+      "backToBank": "← Tillbaka till {{bank}}"
     }
   },
 

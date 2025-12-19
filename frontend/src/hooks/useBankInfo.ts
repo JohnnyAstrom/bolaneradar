@@ -2,19 +2,10 @@
  * useBankInfo.ts
  *
  * Hook som hämtar den fördjupade informationssidan för en bank.
- * Innehåller:
- *  - title (bankens huvudrubrik)
- *  - intro (kortare introduktionstext)
- *  - deepInsights (sektioner med heading + text)
- *  - faq (vanliga frågor)
- *  - CTA (länk + label)
- *
- * Syfte:
- *  - Förse BankInfoPage med färdig data
- *  - Hantera loading/error på ett ställe
  */
 
 import { useEffect, useState, startTransition } from "react";
+import { useTranslation } from "react-i18next";
 import { getBankInfo } from "../client/bankApi";
 
 export interface BankInfo {
@@ -26,6 +17,8 @@ export interface BankInfo {
 }
 
 export function useBankInfo(bankKey: string | undefined) {
+    const { i18n } = useTranslation();
+
     const [info, setInfo] = useState<BankInfo | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -50,7 +43,7 @@ export function useBankInfo(bankKey: string | undefined) {
                 setLoading(false);
             });
 
-    }, [bankKey]);
+    }, [bankKey, i18n.language]);
 
     return { info, loading, error };
 }

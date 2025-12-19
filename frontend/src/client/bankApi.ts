@@ -10,6 +10,7 @@
  */
 
 import { apiGet } from "./client";
+import i18n from "../i18n";
 
 /* ============================================================
  *  BANK INTRO – BESKRIVNING + USP
@@ -108,9 +109,17 @@ export async function fetchHistoricalRates(bankKey: string, term: string) {
     );
 }
 
-/**Hämtar fördjupad information om banken (t.ex. lång text till infosidan) */
+/** Hämtar fördjupad information om banken (t.ex. lång text till infosidan) */
 export async function getBankInfo(bankKey: string) {
-    const res = await fetch(`/api/banks/${bankKey}/info`);
-    if (!res.ok) throw new Error("Kunde inte hämta bankinfo");
+    const language = i18n.language === "en" ? "EN" : "SV";
+
+    const res = await fetch(
+        `/api/banks/${bankKey}/info?language=${language}`
+    );
+
+    if (!res.ok) {
+        throw new Error("Kunde inte hämta bankinfo");
+    }
+
     return res.json();
 }
