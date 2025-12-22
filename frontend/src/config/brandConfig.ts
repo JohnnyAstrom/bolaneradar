@@ -13,47 +13,47 @@ export const brandConfig: Record<string, BrandConfig> = {
     seb: {
         padding: 0,
         background: "white",
-        maxHeight: 56,
+        maxHeight: 48,
     },
     nordea: {
         padding: 4,
         background: "white",
-        maxHeight: 56,
+        maxHeight: 42,
     },
     handelsbanken: {
         padding: 4,
         background: "white",
-        maxHeight: 56,
+        maxHeight: 40,
     },
     lansforsakringarbank: {
         padding: 6,
         background: "white",
-        maxHeight: 56,
+        maxHeight: 90,
     },
     sbab: {
         padding: 4,
         background: "white",
-        maxHeight: 56,
+        maxHeight: 42,
     },
     skandiabanken: {
         padding: 8,
         background: "white",
-        maxHeight: 56,
+        maxHeight: 38,
     },
     danskebank: {
         padding: 6,
         background: "white",
-        maxHeight: 56,
+        maxHeight: 32,
     },
     icabanken: {
         padding: 6,
         background: "white",
-        maxHeight: 56,
+        maxHeight: 36,
     },
     landshypotekbank: {
         padding: 4,
         background: "white",
-        maxHeight: 56,
+        maxHeight: 85,
     },
     ikanobank: {
         padding: 8,
@@ -63,6 +63,6 @@ export const brandConfig: Record<string, BrandConfig> = {
     alandsbanken: {
         padding: 4,
         background: "white",
-        maxHeight: 56,
+        maxHeight: 32,
     },
 };
