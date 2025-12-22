@@ -64,7 +64,7 @@ public class BankRateReadService {
         for (var entry : grouped.entrySet()) {
 
             MortgageTerm term = entry.getKey();
-            String termLabel = toTermLabel(term);
+            String termCode = term.name();
 
             MortgageRate latestList =
                     rateRepository.findFirstByBankIdAndTermAndRateTypeOrderByEffectiveDateDesc(
@@ -78,12 +78,12 @@ public class BankRateReadService {
                 );
             }
 
-            rows.add(BankRateMapper.toDto(termLabel, latestList, latestAvg));
+            rows.add(BankRateMapper.toDto(termCode, latestList, latestAvg));
         }
 
         // Sortera efter logisk ordning
         rows.sort(Comparator.comparing(
-                row -> SORT_ORDER.indexOf(mapLabelToTerm(row.term()))
+                row -> SORT_ORDER.indexOf(MortgageTerm.valueOf(row.term()))
         ));
 
         // Bygg return-objekt
@@ -93,39 +93,6 @@ public class BankRateReadService {
         result.put("rows", rows);
 
         return result;
-    }
-
-    private MortgageTerm mapLabelToTerm(String label) {
-        return switch (label) {
-            case "3 mån" -> MortgageTerm.VARIABLE_3M;
-            case "1 år" -> MortgageTerm.FIXED_1Y;
-            case "2 år" -> MortgageTerm.FIXED_2Y;
-            case "3 år" -> MortgageTerm.FIXED_3Y;
-            case "4 år" -> MortgageTerm.FIXED_4Y;
-            case "5 år" -> MortgageTerm.FIXED_5Y;
-            case "6 år" -> MortgageTerm.FIXED_6Y;
-            case "7 år" -> MortgageTerm.FIXED_7Y;
-            case "8 år" -> MortgageTerm.FIXED_8Y;
-            case "9 år" -> MortgageTerm.FIXED_9Y;
-            case "10 år" -> MortgageTerm.FIXED_10Y;
-            default -> throw new IllegalArgumentException("Unknown term label: " + label);
-        };
-    }
-
-    private String toTermLabel(MortgageTerm term) {
-        return switch (term) {
-            case VARIABLE_3M -> "3 mån";
-            case FIXED_1Y -> "1 år";
-            case FIXED_2Y -> "2 år";
-            case FIXED_3Y -> "3 år";
-            case FIXED_4Y -> "4 år";
-            case FIXED_5Y -> "5 år";
-            case FIXED_6Y -> "6 år";
-            case FIXED_7Y -> "7 år";
-            case FIXED_8Y -> "8 år";
-            case FIXED_9Y -> "9 år";
-            case FIXED_10Y -> "10 år";
-        };
     }
 
     private String formatMonth(LocalDate date) {

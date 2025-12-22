@@ -38,12 +38,11 @@
         "term": "Fixed term",
         "listRate": "List rate",
         "change": "Change",
-        "changeMobile": "Change\n(date → tap)",
         "avgRate": "Average rate",
-        "avgRateWithMonth": "Average rate ({{month}})",
-        "avgRateWithMonthMobile": "Average rate\n({{month}})",
         "lastChanged": "Last updated",
-        "lastChangedShort": "Updated"
+        "lastChangedShort": "Updated",
+        "avgRateWithMonth": "Average rate ({{month}})",
+        "avgRateWithMonthMobile": "Average rate\n({{month}})"
       },
       "lastChangedLabel": "Last updated:"
     },
@@ -200,6 +199,7 @@
         "FIXED_5Y": "5 years fixed",
         "FIXED_7Y": "7 years fixed",
         "FIXED_8Y": "8 years fixed",
+        "FIXED_9Y": "9 years fixed",
         "FIXED_10Y": "10 years fixed"
       }
     }
@@ -218,6 +218,20 @@
       "FIXED_8Y": "8 years fixed",
       "FIXED_9Y": "9 years fixed",
       "FIXED_10Y": "10 years fixed"
+    },
+
+    "termShort": {
+      "VARIABLE_3M": "3 mo",
+      "FIXED_1Y": "1 year",
+      "FIXED_2Y": "2 year",
+      "FIXED_3Y": "3 year",
+      "FIXED_4Y": "4 year",
+      "FIXED_5Y": "5 year",
+      "FIXED_6Y": "6 year",
+      "FIXED_7Y": "7 year",
+      "FIXED_8Y": "8 year",
+      "FIXED_9Y": "9 year",
+      "FIXED_10Y": "10 year"
     }
   },
 
