@@ -8,8 +8,6 @@ import {
     type HistoricalPoint
 } from "../../client/bankApi";
 
-import { termLabelMap } from "../../config/termLabelMap";
-
 import {
     ResponsiveContainer,
     LineChart,
@@ -143,7 +141,7 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
 
                     {terms.map((tTerm) => (
                         <option key={tTerm} value={tTerm}>
-                            {termLabelMap[tTerm]}
+                            {t(`mortgage.term.${tTerm}`)}
                         </option>
                     ))}
                 </select>

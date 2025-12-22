@@ -205,6 +205,22 @@
     }
   },
 
+  "mortgage": {
+    "term": {
+      "VARIABLE_3M": "Variable (3 months)",
+      "FIXED_1Y": "1 year fixed",
+      "FIXED_2Y": "2 years fixed",
+      "FIXED_3Y": "3 years fixed",
+      "FIXED_4Y": "4 years fixed",
+      "FIXED_5Y": "5 years fixed",
+      "FIXED_6Y": "6 years fixed",
+      "FIXED_7Y": "7 years fixed",
+      "FIXED_8Y": "8 years fixed",
+      "FIXED_9Y": "9 years fixed",
+      "FIXED_10Y": "10 years fixed"
+    }
+  },
+
   "rates": {
     "header": {
       "title": "Current mortgage rates",

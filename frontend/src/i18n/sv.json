@@ -194,6 +194,22 @@
     }
   },
 
+  "mortgage": {
+    "term": {
+      "VARIABLE_3M": "Rörlig (3 månader)",
+      "FIXED_1Y": "1 år bunden",
+      "FIXED_2Y": "2 år bunden",
+      "FIXED_3Y": "3 år bunden",
+      "FIXED_4Y": "4 år bunden",
+      "FIXED_5Y": "5 år bunden",
+      "FIXED_6Y": "6 år bunden",
+      "FIXED_7Y": "7 år bunden",
+      "FIXED_8Y": "8 år bunden",
+      "FIXED_9Y": "9 år bunden",
+      "FIXED_10Y": "10 år bunden"
+    }
+  },
+
   "rates": {
     "header": {
       "title": "Aktuella bolåneräntor",

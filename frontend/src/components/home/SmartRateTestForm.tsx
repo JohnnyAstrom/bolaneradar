@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { runSmartRateTest } from "../../client/smartRateApi";
 import type { SmartRateTestResult, SmartRateTestRequest } from "../../types/smartRate";
 import SmartRateTestResultView from "./SmartRateTestResult";
-import { mortgageTermOptions } from "../../config/mortgageTerms";
+import { mortgageTerms } from "../../config/mortgageTerms";
 
 /** ---------------------------------------
  *  BANK-ID + RIKTIGT NAMN FÖR VISNING
@@ -237,9 +237,9 @@ const SmartRateTestForm: FC = () => {
                         className={inputClass("currentRateType")}
                     >
                         <option value="">{t("smartRate.form.currentRateType.placeholder")}</option>
-                        {mortgageTermOptions.map((opt) => (
-                            <option key={opt.value} value={opt.value}>
-                                {opt.label}
+                        {mortgageTerms.map((term) => (
+                            <option key={term} value={term}>
+                                {t(`mortgage.term.${term}`)}
                             </option>
                         ))}
                     </select>
@@ -296,9 +296,9 @@ const SmartRateTestForm: FC = () => {
                                 className={inputClass(errors.offers && !offer.term ? "offers" : undefined)}
                             >
                                 <option value="">{t("smartRate.form.offer.termPlaceholder")}</option>
-                                {mortgageTermOptions.map((opt) => (
-                                    <option key={opt.value} value={opt.value}>
-                                        {opt.label}
+                                {mortgageTerms.map((term) => (
+                                    <option key={term} value={term}>
+                                        {t(`mortgage.term.${term}`)}
                                     </option>
                                 ))}
                             </select>
