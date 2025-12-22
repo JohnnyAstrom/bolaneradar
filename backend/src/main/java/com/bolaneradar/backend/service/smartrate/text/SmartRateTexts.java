@@ -1,9 +1,12 @@
 package com.bolaneradar.backend.service.smartrate.text;
 
 import com.bolaneradar.backend.entity.enums.Language;
+import com.bolaneradar.backend.entity.enums.smartrate.RateComparison;
 import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
+import com.bolaneradar.backend.entity.enums.smartrate.SmartRateStatus;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class SmartRateTexts {
 
@@ -21,7 +24,10 @@ public class SmartRateTexts {
     // VARIABLE RATE
     // =========================
 
-    public String variableAnalysis(BigDecimal rate, String diffText) {
+    public String variableAnalysis(BigDecimal rate, BigDecimal diff, RateComparison comparison)
+    {
+        String diffText = diffLabel(diff, comparison);
+
         return switch (lang) {
 
             case SV ->
@@ -42,7 +48,10 @@ public class SmartRateTexts {
     // VARIABLE RATE – CONTEXT
     // =========================
 
-    public String variableContext(String diffText) {
+    public String variableContext(BigDecimal diff, RateComparison comparison) {
+
+        String diffText = diffLabel(diff, comparison);
+
         return switch (lang) {
 
             case SV ->
@@ -62,32 +71,32 @@ public class SmartRateTexts {
     // RECOMMENDATION
     // =========================
 
-    public String recommendation(String status) {
+    public String recommendation(SmartRateStatus status) {
         return switch (lang) {
 
             case SV -> switch (status) {
 
-                case "GREAT_GREEN" ->
+                case GREAT_GREEN ->
                         "Din ränta ligger betydligt bättre till än vad många andra kunder betalar idag. "
                                 + "Du har en mycket bra nivå. Fortsätt gärna hålla ett öga på marknaden ibland, "
                                 + "men du behöver normalt inte göra något just nu.";
 
-                case "GREEN" ->
+                case GREEN ->
                         "Din ränta ligger i linje med marknaden. "
                                 + "Det är en bra nivå, men det kan ändå vara klokt att ibland stämma av med banken "
                                 + "för att säkerställa att du får deras bästa erbjudande.";
 
-                case "YELLOW" ->
+                case YELLOW ->
                         "Din ränta ligger något högre än marknadens nivåer. "
                                 + "Det kan vara ett bra tillfälle att kontakta banken och höra om de kan förbättra din ränta "
                                 + "eller matcha bättre erbjudanden.";
 
-                case "ORANGE" ->
+                case ORANGE ->
                         "Din ränta är tydligt högre än vad många andra kunder erbjuds idag. "
                                 + "Det kan löna sig att förhandla, eller att jämföra med andra banker för att se "
                                 + "om du kan få en lägre nivå.";
 
-                case "RED" ->
+                case RED ->
                         "Din ränta ligger betydligt högre än marknadens nivåer. "
                                 + "Du har sannolikt mycket att vinna på att förhandla, eller att jämföra erbjudanden "
                                 + "från flera banker för att hitta en bättre nivå.";
@@ -98,26 +107,26 @@ public class SmartRateTexts {
 
             case EN -> switch (status) {
 
-                case "GREAT_GREEN" ->
+                case GREAT_GREEN ->
                         "Your interest rate is significantly better than what many other customers are paying today. "
                                 + "You have a very strong rate. It is usually not necessary to take any action right now, "
                                 + "but it can still be wise to keep an eye on the market from time to time.";
 
-                case "GREEN" ->
+                case GREEN ->
                         "Your interest rate is in line with the market. "
                                 + "It is a good level, but it may still be worth occasionally checking with your bank "
                                 + "to ensure you are receiving their best available offer.";
 
-                case "YELLOW" ->
+                case YELLOW ->
                         "Your interest rate is slightly higher than current market levels. "
                                 + "This could be a good opportunity to contact your bank and ask if they can improve your rate "
                                 + "or match better offers.";
 
-                case "ORANGE" ->
+                case ORANGE ->
                         "Your interest rate is clearly higher than what many other customers are offered today. "
                                 + "It may be worthwhile to negotiate or compare with other banks to see if you can secure a lower rate.";
 
-                case "RED" ->
+                case RED ->
                         "Your interest rate is significantly higher than current market levels. "
                                 + "You likely have a lot to gain by negotiating or comparing offers from multiple banks "
                                 + "to find a better rate.";
@@ -129,8 +138,8 @@ public class SmartRateTexts {
     }
 
     // =========================
-// FIXED RATE – ANALYSIS
-// =========================
+    // FIXED RATE – ANALYSIS
+    // =========================
 
     public String fixedAnalysisShortTerm(BigDecimal rate) {
         return switch (lang) {
@@ -234,10 +243,14 @@ public class SmartRateTexts {
     }
 
     // =========================
-// OFFER FLOW
-// =========================
+    // OFFER FLOW
+    // =========================
 
-    public String offerAnalysis(BigDecimal rate, String diffText, boolean worseThanMarket) {
+    public String offerAnalysis(BigDecimal rate, BigDecimal diff, RateComparison comparison) {
+
+        String diffText = diffLabel(diff, comparison);
+        boolean worseThanMarket = comparison == RateComparison.HIGHER;
+
         return switch (lang) {
             case SV -> "Vi har analyserat ditt ränteerbjudande på " + rate + "%. "
                     + "Erbjudandet ligger " + diffText
@@ -252,46 +265,6 @@ public class SmartRateTexts {
                     + "This means your offer compares "
                     + (worseThanMarket ? "worse" : "better")
                     + " than what many other customers receive today.";
-        };
-    }
-
-    public String offerPrimaryAnalysis(BigDecimal rate, String diffText, boolean worseThanMarket) {
-        return switch (lang) {
-            case SV -> "Vi har analyserat ditt ränteerbjudande på " + rate + "%. "
-                    + "Erbjudandet ligger " + diffText
-                    + " jämfört med den lägsta aktuella snitträntan på marknaden. "
-                    + "Det betyder att ditt erbjudande står sig "
-                    + (worseThanMarket ? "sämre" : "bättre")
-                    + " än vad många andra kunder får just nu.";
-
-            case EN -> "We have analysed your interest rate offer of " + rate + "%. "
-                    + "The offer is " + diffText
-                    + " compared to the lowest average rate currently on the market. "
-                    + "This means your offer compares "
-                    + (worseThanMarket ? "worse" : "better")
-                    + " than what many other customers receive today.";
-        };
-    }
-
-    public String offerContext(String diffText) {
-        return switch (lang) {
-            case SV -> "Vi jämför ditt erbjudande med bankernas publicerade snitträntor. "
-                    + "Ditt erbjudande ligger " + diffText + " jämfört med genomsnittet.";
-
-            case EN -> "We compare your offer with the banks’ published average rates. "
-                    + "Your offer is " + diffText + " compared to the market average.";
-        };
-    }
-
-    public String offerAlternativesIntro() {
-        return switch (lang) {
-            case SV -> "Här ser du hur ditt erbjudande står sig mot marknadens räntor. "
-                    + "Vi jämför med aktuella nivåer för bindningstider som passar dina preferenser, "
-                    + "så att du enkelt kan se om det finns mer fördelaktiga alternativ.";
-
-            case EN -> "Here you can see how your offer compares to market interest rates. "
-                    + "We compare it with current levels for fixed terms that match your preferences, "
-                    + "making it easy to see whether more favourable alternatives exist.";
         };
     }
 
@@ -337,12 +310,34 @@ public class SmartRateTexts {
         };
     }
 
+    // =========================
+    // DIFF LABEL HELPER
+    // =========================
+    // Converts a numeric rate difference and its direction into
+    // a localized, human-readable description (SV / EN).
+    // All language-specific wording for rate comparisons is centralized here.
 
+    private String diffLabel(BigDecimal diff, RateComparison comparison) {
 
+        if (diff == null || comparison == RateComparison.UNKNOWN) {
+            return lang == Language.SV ? "okänt" : "unknown";
+        }
 
+        String value = diff.setScale(2, RoundingMode.HALF_UP) + "%";
 
-
-
-
-
+        return switch (lang) {
+            case SV -> switch (comparison) {
+                case HIGHER -> value + " högre";
+                case LOWER -> value + " lägre";
+                case EQUAL -> "i nivå med";
+                default -> "okänt";
+            };
+            case EN -> switch (comparison) {
+                case HIGHER -> value + " higher";
+                case LOWER -> value + " lower";
+                case EQUAL -> "on par with";
+                default -> "unknown";
+            };
+        };
+    }
 }

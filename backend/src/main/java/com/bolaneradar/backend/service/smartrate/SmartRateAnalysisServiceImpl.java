@@ -3,6 +3,8 @@ package com.bolaneradar.backend.service.smartrate;
 import com.bolaneradar.backend.dto.api.smartrate.*;
 import com.bolaneradar.backend.entity.enums.Language;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
+import com.bolaneradar.backend.entity.enums.smartrate.RateComparison;
+import com.bolaneradar.backend.entity.enums.smartrate.SmartRateStatus;
 import com.bolaneradar.backend.service.smartrate.model.SmartRateAnalysisContext;
 import com.bolaneradar.backend.service.smartrate.text.SmartRateTexts;
 import org.springframework.stereotype.Service;
@@ -52,12 +54,12 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
 
         if (ctx.offers() == null || ctx.offers().isEmpty()) {
             return new SmartRateTestResult(
-                    "UNKNOWN",
+                    SmartRateStatus.UNKNOWN.name(),
                     ctx.bankName(),
                     ctx.analyzedTerm(),
                     null,
                     null,
-                    texts.offerAnalysis(null, "", false),
+                    texts.offerAnalysis(null, null, RateComparison.UNKNOWN),
                     "",
                     "",
                     null,
@@ -86,7 +88,8 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
             BigDecimal diffBank = calculateDiff(rate, bankAvg);
             BigDecimal yearlyImpact = calculateYearlyImpact(diffBest, ctx.loanAmount());
 
-            String status = classify(diffBest);
+            SmartRateStatus status = classify(diffBest);
+            RateComparison bestCmp = classifyDiff(diffBest);
 
             analyses.add(
                     new SmartRateOfferAnalysisResultDto(
@@ -95,11 +98,11 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                             diffBest,
                             diffMedian,
                             diffBank,
-                            status,
+                            status.name(),
                             texts.offerAnalysis(
                                     rate,
-                                    formatDiff(diffBest),
-                                    diffBest.compareTo(BigDecimal.ZERO) > 0
+                                    absDiff(diffBest),
+                                    bestCmp
                             ),
                             texts.recommendation(status),
                             yearlyImpact
@@ -110,16 +113,19 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         SmartRateOfferAnalysisResultDto primary = analyses.get(0);
         boolean multipleOffers = analyses.size() > 1;
 
+        RateComparison primaryCmp =
+                classifyDiff(primary.diffFromBestMarket());
+
         return new SmartRateTestResult(
                 primary.status(),
                 ctx.bankName(),
                 primary.term(),
                 null,
                 null,
-                texts.offerPrimaryAnalysis(
+                texts.offerAnalysis(
                         primary.offeredRate(),
-                        formatDiff(primary.diffFromBestMarket()),
-                        primary.diffFromBestMarket().compareTo(BigDecimal.ZERO) > 0
+                        absDiff(primary.diffFromBestMarket()),
+                        primaryCmp
                 ),
                 "",
                 primary.recommendation(),
@@ -144,18 +150,28 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         BigDecimal diffBank = calculateDiff(rate, ctx.bankLatestAverage());
         BigDecimal diffMedian = calculateDiff(rate, ctx.marketMedianRate());
 
-        String status = classify(diffBest);
+        SmartRateStatus status = classify(diffBest);
+
+        RateComparison bestCmp = classifyDiff(diffBest);
+        RateComparison medianCmp = classifyDiff(diffMedian);
 
         SmartRateTexts texts = SmartRateTexts.of(ctx.language());
 
         return new SmartRateTestResult(
-                status,
+                status.name(),
                 ctx.bankName(),
                 ctx.analyzedTerm(),
                 diffBank,
                 diffBest,
-                texts.variableAnalysis(rate, formatDiff(diffBest)),
-                texts.variableContext(formatDiff(diffMedian)),
+                texts.variableAnalysis(
+                        rate,
+                        absDiff(diffBest),
+                        bestCmp
+                ),
+                texts.variableContext(
+                        absDiff(diffMedian),
+                        medianCmp
+                ),
                 texts.recommendation(status),
                 null,
                 texts.preferenceAdvice(ctx.userPreference()),
@@ -176,6 +192,8 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         BigDecimal diffBank = calculateDiff(rate, ctx.bankLatestAverage());
         BigDecimal diffMedian = calculateDiff(rate, ctx.marketMedianRate());
 
+        RateComparison medianCmp = classifyDiff(diffMedian);
+
         Integer months = ctx.monthsUntilExpiration();
         SmartRateTexts texts = SmartRateTexts.of(ctx.language());
 
@@ -194,13 +212,16 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         }
 
         return new SmartRateTestResult(
-                "INFO",
+                SmartRateStatus.INFO.name(),
                 ctx.bankName(),
                 ctx.analyzedTerm(),
                 diffBank,
                 null,
                 analysisText,
-                texts.variableContext(formatDiff(diffMedian)),
+                texts.variableContext(
+                        absDiff(diffMedian),
+                        medianCmp
+                ),
                 recommendation,
                 null,
                 texts.preferenceAdvice(ctx.userPreference()),
@@ -211,6 +232,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 false
         );
     }
+
 
     // =========================================================================
     // ALTERNATIVES
@@ -271,17 +293,33 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
     }
 
-    private String classify(BigDecimal diff) {
+    private SmartRateStatus classify(BigDecimal diff) {
 
-        if (diff == null) return "UNKNOWN";
+        if (diff == null) return SmartRateStatus.UNKNOWN;
 
-        if (diff.compareTo(new BigDecimal("-0.30")) <= 0) return "GREAT_GREEN";
-        if (diff.compareTo(BigDecimal.ZERO) <= 0) return "GREEN";
-        if (diff.compareTo(new BigDecimal("0.30")) <= 0) return "YELLOW";
-        if (diff.compareTo(new BigDecimal("0.70")) <= 0) return "ORANGE";
+        if (diff.compareTo(new BigDecimal("-0.30")) <= 0) return SmartRateStatus.GREAT_GREEN;
+        if (diff.compareTo(BigDecimal.ZERO) <= 0) return SmartRateStatus.GREEN;
+        if (diff.compareTo(new BigDecimal("0.30")) <= 0) return SmartRateStatus.YELLOW;
+        if (diff.compareTo(new BigDecimal("0.70")) <= 0) return SmartRateStatus.ORANGE;
 
-        return "RED";
+        return SmartRateStatus.RED;
     }
+
+    private RateComparison classifyDiff(BigDecimal diff) {
+        if (diff == null) return RateComparison.UNKNOWN;
+
+        int cmp = diff.compareTo(BigDecimal.ZERO);
+        if (cmp > 0) return RateComparison.HIGHER;
+        if (cmp < 0) return RateComparison.LOWER;
+        return RateComparison.EQUAL;
+    }
+
+    private BigDecimal absDiff(BigDecimal diff) {
+        return diff == null
+                ? null
+                : diff.abs().setScale(2, RoundingMode.HALF_UP);
+    }
+
 
     private SmartRateOfferDto findBestOffer(List<SmartRateOfferDto> offers) {
         if (offers == null || offers.isEmpty()) return null;
@@ -289,17 +327,6 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         return offers.stream()
                 .min(Comparator.comparing(SmartRateOfferDto::rate))
                 .orElse(null);
-    }
-
-    private String formatDiff(BigDecimal diff) {
-        if (diff == null) return "okänt";
-
-        BigDecimal abs = diff.abs().setScale(2, RoundingMode.HALF_UP);
-        int cmp = diff.compareTo(BigDecimal.ZERO);
-
-        if (cmp > 0) return abs + "% högre";
-        if (cmp < 0) return abs + "% lägre";
-        return "i nivå med";
     }
 
     // =========================================================================
