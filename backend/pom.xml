@@ -11,7 +11,7 @@
     <groupId>com.bolaneradar</groupId>
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <name>bolaneradar-backend</name>
     <description>bolaneradar-backend</description>
     <url/>
@@ -21,9 +21,6 @@
     <developers>
         <developer/>
     </developers>
-    <modules>
-        <module>Dockerfile</module>
-    </modules>
     <scm>
         <connection/>
         <developerConnection/>
