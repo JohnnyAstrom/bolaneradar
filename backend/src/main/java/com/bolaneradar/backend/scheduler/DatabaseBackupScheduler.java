@@ -3,6 +3,7 @@ package com.bolaneradar.backend.scheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import java.time.LocalDate;
  * Skapar automatiskt både binär (.dump) och läsbar (.sql) säkerhetskopia
  * av PostgreSQL-databasen varje natt innan nya räntor hämtas.
  */
+@ConditionalOnProperty(name = "app.scheduling.enabled", havingValue = "true")
 @Component
 public class DatabaseBackupScheduler {
 
