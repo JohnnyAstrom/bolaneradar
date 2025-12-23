@@ -1,6 +1,7 @@
 package com.bolaneradar.backend.service.integration;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,10 @@ import org.springframework.stereotype.Service;
  * Handles email notifications when scraping errors occur.
  */
 @Service
+@ConditionalOnProperty(
+        name = "app.email.enabled",
+        havingValue = "true"
+)
 public class EmailService {
 
     private final JavaMailSender mailSender;
