@@ -26,6 +26,7 @@ public class ScraperUtils {
 
     /** Standardiserad Jsoup-hämtning med user-agent och timeout */
     public static Document fetchDocument(String url) throws IOException {
+        System.out.println("FETCH DEBUG URL = [" + url + "]");
         return Jsoup.connect(url)
                 .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
                 .referrer("https://www.google.com")
