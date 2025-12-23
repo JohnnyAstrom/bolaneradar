@@ -21,14 +21,14 @@ public class ScraperService {
     private final MortgageRateRepository mortgageRateRepository;
     private final List<BankScraper> scrapers;
     private final RateUpdateLogService rateUpdateLogService;
-    private final EmailService emailService;
+    private final Optional<EmailService> emailService;
 
     public ScraperService(
             BankRepository bankRepository,
             MortgageRateRepository mortgageRateRepository,
             List<BankScraper> scrapers,
             RateUpdateLogService rateUpdateLogService,
-            EmailService emailService
+            Optional<EmailService> emailService
     ) {
         this.bankRepository = bankRepository;
         this.mortgageRateRepository = mortgageRateRepository;
@@ -62,9 +62,11 @@ public class ScraperService {
         }
 
         if (!failed.isEmpty()) {
-            emailService.sendErrorNotification(
-                    "BolåneRadar – Fel vid scraping",
-                    "Följande banker misslyckades:\n- " + String.join("\n- ", failed)
+            emailService.ifPresent(mail ->
+                    mail.sendErrorNotification(
+                            "BolåneRadar – Fel vid scraping",
+                            "Följande banker misslyckades:\n- " + String.join("\n- ", failed)
+                    )
             );
         }
     }
