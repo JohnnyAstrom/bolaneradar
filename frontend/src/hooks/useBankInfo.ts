@@ -7,14 +7,7 @@
 import { useEffect, useState, startTransition } from "react";
 import { useTranslation } from "react-i18next";
 import { getBankInfo } from "../client/bankApi";
-
-export interface BankInfo {
-    intro: string;
-    deepInsights: { heading: string; text: string }[];
-    faq: { question: string; answer: string }[];
-    ctaLabel: string;
-    ctaUrl: string;
-}
+import type { BankInfo } from "../client/bankApi";
 
 export function useBankInfo(bankKey: string | undefined) {
     const { i18n } = useTranslation();

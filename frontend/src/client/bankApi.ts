@@ -122,11 +122,25 @@ export async function fetchHistoricalRates(bankKey: string, term: string) {
     );
 }
 
+/* ============================================================
+ *  BANK INFO – FÖRDJUPAD INFOSIDA
+ * ============================================================
+ */
+
+export interface BankInfo {
+    intro: string;
+    deepInsights: { heading: string; text: string }[];
+    faq: { question: string; answer: string }[];
+    ctaLabel: string;
+    ctaUrl: string;
+}
+
+
 /** Hämtar fördjupad information om banken (t.ex. lång text till infosidan) */
 export async function getBankInfo(bankKey: string) {
     const language = i18n.language === "en" ? "EN" : "SV";
 
-    return apiGet(
+    return apiGet<BankInfo>(
         `/api/banks/${bankKey}/info?language=${language}`
     );
 }
