@@ -56,6 +56,7 @@ const SmartRateTestForm: FC = () => {
     const [loanAmount, setLoanAmount] = useState("");
     const [hasOffer, setHasOffer] = useState<"" | "yes" | "no">("");
     const [result, setResult] = useState<SmartRateTestResult | null>(null);
+    const [loading, setLoading] = useState(false);
 
     // FLOW A — NO OFFER
     const [currentRate, setCurrentRate] = useState("");
@@ -168,8 +169,16 @@ const SmartRateTestForm: FC = () => {
 
         setLastPayload(payload);
 
-        const response = await runSmartRateTest(payload);
-        setResult(response);
+        setLoading(true);
+
+        try {
+            const response = await runSmartRateTest(payload);
+            setResult(response);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -332,15 +341,35 @@ const SmartRateTestForm: FC = () => {
                 </div>
             )}
 
+            {/* Submit-knapp */}
             {(hasOffer === "yes" || hasOffer === "no") && (
                 <button
                     onClick={handleSubmit}
-                    className="mt-4 bg-primary text-white px-6 py-2 rounded-lg"
+                    disabled={loading}
+                    className={`mt-4 bg-primary text-white px-6 py-2 rounded-lg ${
+                        loading ? "opacity-60 cursor-not-allowed" : ""
+                    }`}
                 >
-                    {t("smartRate.form.submit")}
+                    {loading
+                        ? t("smartRate.form.loading", "Analyserar din ränta…")
+                        : t("smartRate.form.submit")}
                 </button>
             )}
 
+            {/* Loader + förklarande text */}
+            {loading && (
+                <div className="mt-6 text-center">
+                    <div className="animate-spin mx-auto mb-3 h-6 w-6 border-2 border-primary border-t-transparent rounded-full" />
+                    <p className="text-sm text-text-secondary">
+                        {t(
+                            "smartRate.form.loadingHint",
+                            "Analyserar din ränta – detta kan ta upp till 20 sekunder"
+                        )}
+                    </p>
+                </div>
+            )}
+
+            {/* Resultat */}
             {result && (
                 <div className="mt-8">
                     <SmartRateTestResultView result={result} />

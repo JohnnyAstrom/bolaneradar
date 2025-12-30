@@ -1,19 +1,27 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 
 import HomePage from "./pages/HomePage";
-import GuidePage from "./pages/GuidePage.tsx";
-import AboutPage from "./pages/AboutPage.tsx";
-import ContactPage from "./pages/ContactPage.tsx";
+import GuidePage from "./pages/GuidePage";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 import BankPage from "./pages/BankPage";
-import BankInfoPage from "./pages/BankInfoPage.tsx";
-
+import BankInfoPage from "./pages/BankInfoPage";
 
 export default function App() {
+
+    useEffect(() => {
+        // Warmup: väck backend direkt
+        fetch(`${import.meta.env.VITE_API_URL}/api/health`)
+            .catch(() => {
+                // Ignorera – detta är bara warmup
+            });
+    }, []);
+
     return (
         <BrowserRouter>
             <Routes>
-                {/* Alla routes som ska ha Header + Footer ligger här */}
                 <Route element={<Layout />}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/guide" element={<GuidePage />} />
