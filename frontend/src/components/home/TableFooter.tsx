@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { apiGet } from "../../client/client";
 
 const TableFooter: FC = () => {
     const { t } = useTranslation();
@@ -9,8 +10,9 @@ const TableFooter: FC = () => {
     useEffect(() => {
         async function load() {
             try {
-                const res = await fetch("/api/rates/updates/latest/global");
-                const data = await res.json();
+                const data = await apiGet<{ latestScrape?: string }>(
+                    "/api/rates/updates/latest/global"
+                );
 
                 if (data.latestScrape) {
                     // Formatera till svensk tid
