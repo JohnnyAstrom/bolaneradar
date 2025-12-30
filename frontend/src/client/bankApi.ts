@@ -126,13 +126,7 @@ export async function fetchHistoricalRates(bankKey: string, term: string) {
 export async function getBankInfo(bankKey: string) {
     const language = i18n.language === "en" ? "EN" : "SV";
 
-    const res = await fetch(
+    return apiGet(
         `/api/banks/${bankKey}/info?language=${language}`
     );
-
-    if (!res.ok) {
-        throw new Error("Kunde inte hämta bankinfo");
-    }
-
-    return res.json();
 }
