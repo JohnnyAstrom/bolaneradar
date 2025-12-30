@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { bankDisplayNames } from "../../config/bankDisplayNames";
+import { apiGet } from "../../client/client";
 
 // ============================================================
 // bankName → urlKey (inverterar displaynames)
@@ -57,10 +58,9 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
             setError("");
 
             try {
-                const res = await fetch(`/api/rates/comparison?term=${activeTerm}`);
-                if (!res.ok) throw new Error("Serverfel");
-
-                const json = await res.json();
+                const json = await apiGet<ComparisonResponse>(
+                    `/api/rates/comparison?term=${activeTerm}`
+                );
                 setData(json);
             } catch {
                 setError(t("rates.comparison.error"));
