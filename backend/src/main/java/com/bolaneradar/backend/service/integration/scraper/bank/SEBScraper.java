@@ -31,6 +31,11 @@ public class SEBScraper implements BankScraper {
     private static final String BASE_URL = "https://seb.se/privat/bolan/bolanerantor";
 
     @Override
+    public String getBankName() {
+        return "SEB";
+    }
+
+    @Override
     public List<MortgageRate> scrapeRates(Bank bank) {
         List<MortgageRate> rates = new ArrayList<>();
 

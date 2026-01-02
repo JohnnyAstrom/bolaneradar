@@ -28,6 +28,11 @@ public class AlandsbankenScraper implements BankScraper {
     private static final String URL = "https://www.alandsbanken.se/banktjanster/lana-pengar/bolan";
 
     @Override
+    public String getBankName() {
+        return "Ålandsbanken";
+    }
+
+    @Override
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
         System.out.println("Startar skrapning för Alandsbanken...");
         List<MortgageRate> rates = new ArrayList<>();

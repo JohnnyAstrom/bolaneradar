@@ -28,6 +28,11 @@ public class SwedbankScraper implements BankScraper {
     private static final String URL = "https://www.swedbank.se/privat/boende-och-bolan/bolanerantor.html";
 
     @Override
+    public String getBankName() {
+        return "Swedbank";
+    }
+
+    @Override
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
         List<MortgageRate> rates = new ArrayList<>();
 

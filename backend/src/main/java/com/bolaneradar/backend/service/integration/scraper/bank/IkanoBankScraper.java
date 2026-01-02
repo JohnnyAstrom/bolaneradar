@@ -28,6 +28,11 @@ public class IkanoBankScraper implements BankScraper {
     private static final String SNITT_URL = "https://ikanobank.se/bolan/bolanerantor";
 
     @Override
+    public String getBankName() {
+        return "Ikano Bank";
+    }
+
+    @Override
     public List<MortgageRate> scrapeRates(Bank bank) {
         System.out.println("Startar skrapning för Ikano Bank ...");
         List<MortgageRate> rates = new ArrayList<>();

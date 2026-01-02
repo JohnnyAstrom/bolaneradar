@@ -33,6 +33,11 @@ public class SkandiabankenScraper implements BankScraper {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
+    public String getBankName() {
+        return "Skandiabanken";
+    }
+
+    @Override
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
         List<MortgageRate> rates = new ArrayList<>();
 

@@ -31,6 +31,11 @@ public class DanskeBankScraper implements BankScraper {
             "https://danskebank.se/privat/produkter/bolan/relaterat/aktuella-bolanerantor";
 
     @Override
+    public String getBankName() {
+        return "Danske Bank";
+    }
+
+    @Override
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
         List<MortgageRate> rates = new ArrayList<>();
 

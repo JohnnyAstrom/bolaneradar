@@ -32,6 +32,11 @@ public class IcaBankenScraper implements BankScraper {
     private static final String URL = "https://www.icabanken.se/lana/bolan/bolanerantor/";
 
     @Override
+    public String getBankName() {
+        return "ICA Banken";
+    }
+
+    @Override
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
         List<MortgageRate> rates = new ArrayList<>();
 

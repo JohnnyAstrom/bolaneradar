@@ -25,6 +25,11 @@ public class LandshypotekBankScraper implements BankScraper {
             "https://www.landshypotek.se/lana/bolanerantor/";
 
     @Override
+    public String getBankName() {
+        return "Landshypotek Bank";
+    }
+
+    @Override
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
         List<MortgageRate> rates = new ArrayList<>();
 

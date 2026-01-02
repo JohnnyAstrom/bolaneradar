@@ -29,6 +29,11 @@ public class NordeaScraper implements BankScraper {
     private static final String URL = "https://www.nordea.se/privat/produkter/bolan/bolanerantor.html";
 
     @Override
+    public String getBankName() {
+        return "Nordea";
+    }
+
+    @Override
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
         List<MortgageRate> rates = new ArrayList<>();
 

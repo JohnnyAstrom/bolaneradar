@@ -29,6 +29,11 @@ public class LansforsakringarBankScraper implements BankScraper {
             "https://www.lansforsakringar.se/norrbotten/privat/bank/bolan/bolaneranta/";
 
     @Override
+    public String getBankName() {
+        return "Länsförsäkringar Bank";
+    }
+
+    @Override
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
         List<MortgageRate> rates = new ArrayList<>();
         Document doc = ScraperUtils.fetchDocument(URL);

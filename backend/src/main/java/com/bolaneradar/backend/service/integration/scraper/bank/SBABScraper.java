@@ -39,6 +39,11 @@ public class SBABScraper implements BankScraper {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
+    public String getBankName() {
+        return "SBAB";
+    }
+
+    @Override
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
         List<MortgageRate> rates = new ArrayList<>();
         rates.addAll(fetchListRates(bank));
