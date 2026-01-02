@@ -173,11 +173,23 @@ public interface BankScraper {
 - persistens av nya räntor
 - loggning och e-postnotifiering vid fel
 
-## Manuell skrapning ICA banken iom CI blockering
+## Manuell skrapning av ICA Banken (CI-blockering)
+ICA Bankens webbplats blockerar ibland skrapning från CI-miljöer (GitHub Actions / Render). Vid dessa tillfällen kan ICA Bankens räntor uppdateras manuellt från en lokal dator.
+
+### Instruktioner:
+
+Kör från backend-mappen:
+
 ```
 mvn clean package
+$env:SPRING_PROFILES_ACTIVE="prod"
 java -jar target/backend-0.0.1-SNAPSHOT.jar --mode=scrape-ica
 ```
+
+Detta:
+- kör skrapningen lokalt
+- använder produktionsdatabasen (Render)
+- uppdaterar endast ICA Banken
 
 # API-översikt
 
