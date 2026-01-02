@@ -29,15 +29,15 @@ public class IkanoBankScraper implements BankScraper {
 
     @Override
     public List<MortgageRate> scrapeRates(Bank bank) {
-        System.out.println("🏦 Startar skrapning för Ikano Bank ...");
+        System.out.println("Startar skrapning för Ikano Bank ...");
         List<MortgageRate> rates = new ArrayList<>();
 
         try {
-            // === 1️⃣ Listräntor via JSON-API ===
+            // === Listräntor via JSON-API (timeout-säkrad) ===
+            var response = ScraperUtils.fetchJson(API_URL);
+
             @SuppressWarnings("unchecked")
-            var dataList = (List<Map<String, Object>>) Objects.requireNonNull(new RestTemplate()
-                            .getForObject(API_URL, Map.class))
-                    .get("dataList");
+            var dataList = (List<Map<String, Object>>) response.get("dataList");
 
             var grouped = dataList.stream()
                     .collect(Collectors.toMap(
@@ -56,13 +56,13 @@ public class IkanoBankScraper implements BankScraper {
                 System.out.printf("→ LISTRATE %s %.2f%%%n", term, rate);
             });
 
-            // === 2️⃣ Snitträntor via HTML ===
+            // === Snitträntor via HTML ===
             Document doc = Jsoup.connect(SNITT_URL)
                     .userAgent("Mozilla/5.0").timeout(10000).get();
 
             Elements rows = doc.select("table:last-of-type tbody tr");
             if (rows.isEmpty()) {
-                System.out.println("⚠️ Hittade ingen snitträntetabell.");
+                System.out.println("Hittade ingen snitträntetabell.");
             } else {
                 // 🟢 Ta sista raden (senaste månad)
                 Element lastRow = rows.last();

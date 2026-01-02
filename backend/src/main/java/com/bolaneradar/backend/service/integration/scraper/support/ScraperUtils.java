@@ -3,6 +3,8 @@ package com.bolaneradar.backend.service.integration.scraper.support;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -32,6 +34,20 @@ public class ScraperUtils {
                 .referrer("https://www.google.com")
                 .timeout(10_000)
                 .get();
+    }
+
+    /** Standardiserad JSON-hämtning med timeout för externa API:er */
+    public static Map<String, Object> fetchJson(String url) {
+        try {
+            SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+            factory.setConnectTimeout(10_000);
+            factory.setReadTimeout(10_000);
+
+            RestTemplate restTemplate = new RestTemplate(factory);
+            return restTemplate.getForObject(url, Map.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Misslyckades hämta JSON från " + url, e);
+        }
     }
 
     /** Försöker tolka text som "3 mån", "1 år" etc. till motsvarande term */
