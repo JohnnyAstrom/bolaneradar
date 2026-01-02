@@ -2,9 +2,12 @@ import axios from "axios";
 
 export const API_URL = import.meta.env.VITE_API_URL;
 
+// Axios-klient för alla API-anrop
+// Timeouten är satt relativt högt eftersom vissa analyser (SmartRate)
+// kan ta tid, särskilt vid cold starts på Render.
 const client = axios.create({
     baseURL: API_URL,
-    timeout: 30000, // 30 sek
+    timeout: 30000, // 30 sekunder – matchar backendens långsammaste scenarion
     withCredentials: false,
 });
 
