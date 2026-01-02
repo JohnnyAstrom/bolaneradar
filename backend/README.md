@@ -173,6 +173,12 @@ public interface BankScraper {
 - persistens av nya räntor
 - loggning och e-postnotifiering vid fel
 
+## Manuell skrapning ICA banken iom CI blockering
+```
+mvn clean package
+java -jar target/backend-0.0.1-SNAPSHOT.jar --mode=scrape-ica
+```
+
 # API-översikt
 
 ### Banker
