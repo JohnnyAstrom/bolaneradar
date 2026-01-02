@@ -25,9 +25,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // IMPORTANT: Enable CORS first so it is applied correctly
-                .cors(Customizer.withDefaults())
-
                 // Disable CSRF for API usage
                 .csrf(csrf -> csrf.disable())
 
@@ -56,13 +53,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // ----------------------------
-                        // 3) PUBLIC SmartRate API
+                        // 3) PUBLIC SmartRate API (new)
                         //    POST /api/smartrate/**
                         // ----------------------------
                         .requestMatchers(HttpMethod.POST, "/api/smartrate/**").permitAll()
 
                         // ----------------------------
                         // 4) ADMIN API
+                        //    Everything under /api/admin requires login
                         // ----------------------------
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
@@ -82,7 +80,10 @@ public class SecurityConfig {
                         // 7) Everything else is allowed
                         // ----------------------------
                         .anyRequest().permitAll()
-                );
+                )
+
+                // Enable CORS so WebConfig applies
+                .cors(Customizer.withDefaults());
 
         return http.build();
     }
