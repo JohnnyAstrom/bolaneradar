@@ -51,24 +51,34 @@ public class ScraperService {
         return result.importedCount() + " räntor sparade för " + result.bankName();
     }
 
-    public void scrapeAllBanks() {
-        List<String> failed = new ArrayList<>();
+    public ScrapeBatchResult scrapeAllBanks() {
+        int success = 0;
+        int failure = 0;
+
+        List<String> failedBanks = new ArrayList<>();
 
         for (Bank bank : bankRepository.findAll()) {
             ScraperResult r = runScrapeForBank(bank.getName());
-            if (!r.success()) {
-                failed.add(bank.getName());
+
+            if (r.success()) {
+                success++;
+            } else {
+                failure++;
+                failedBanks.add(bank.getName());
             }
         }
 
-        if (!failed.isEmpty()) {
+        if (!failedBanks.isEmpty()) {
             emailService.ifPresent(mail ->
                     mail.sendErrorNotification(
                             "BolåneRadar – Fel vid scraping",
-                            "Följande banker misslyckades:\n- " + String.join("\n- ", failed)
+                            "Följande banker misslyckades:\n- " +
+                                    String.join("\n- ", failedBanks)
                     )
             );
         }
+
+        return new ScrapeBatchResult(success, failure);
     }
 
     // ==========================================================
