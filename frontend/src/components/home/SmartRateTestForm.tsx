@@ -69,7 +69,11 @@ const SmartRateTestForm: FC = () => {
         { term: "", rate: "" }
     ]);
 
+    // Sparar valideringsfel per fält (nyckel = fältnamn, värde = felmeddelande)
     const [errors, setErrors] = useState<Record<string, string>>({});
+
+    // Visar vänligt felmeddelande om analysen misslyckas
+    const [submitError, setSubmitError] = useState<string | null>(null);
 
     // Kör om testet automatiskt när språk ändras
     useEffect(() => {
@@ -109,6 +113,7 @@ const SmartRateTestForm: FC = () => {
 
     async function handleSubmit() {
         const newErrors: Record<string, string> = {};
+        setSubmitError(null);
 
         const bankId = bankIdMap[bank];
         const bankName = bankNameMap[bank];
@@ -175,7 +180,15 @@ const SmartRateTestForm: FC = () => {
             const response = await runSmartRateTest(payload);
             setResult(response);
         } catch (e) {
-            console.error(e);
+            // Render kan vara långsam eller tillfälligt otillgänglig
+            // Visa ett lugnt och begripligt felmeddelande istället för att bara logga
+            setSubmitError(
+                t(
+                    "smartRate.form.errorTimeout",
+                    "Analysen tog längre tid än väntat. Försök igen om en stund."
+                )
+            );
+            console.error("SmartRate request failed", e);
         } finally {
             setLoading(false);
         }
@@ -366,6 +379,13 @@ const SmartRateTestForm: FC = () => {
                             "Analyserar din ränta – detta kan ta upp till 20 sekunder"
                         )}
                     </p>
+                </div>
+            )}
+
+            {/* Felmeddelande om analysen misslyckas eller tar för lång tid */}
+            {submitError && (
+                <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700">
+                    {submitError}
                 </div>
             )}
 
