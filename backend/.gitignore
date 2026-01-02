@@ -7,6 +7,7 @@ target/
 
 # === Spring Boot configuration (sensitive) ===
 src/main/resources/application.properties
+src/main/resources/application-local.properties
 src/main/resources/application.yml
 src/main/resources/application.yaml
 
