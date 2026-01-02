@@ -57,7 +57,19 @@ public class ScraperService {
 
         List<String> failedBanks = new ArrayList<>();
 
-        for (Bank bank : bankRepository.findAll()) {
+        // 1. Hämta banker och sortera så att SEB körs sist
+        List<Bank> banks = new ArrayList<>(bankRepository.findAll());
+
+        banks.sort((a, b) -> {
+            boolean aIsSeb = isSeb(a);
+            boolean bIsSeb = isSeb(b);
+
+            // false < true → SEB hamnar sist
+            return Boolean.compare(aIsSeb, bIsSeb);
+        });
+
+        // 2. Kör scraping i vald ordning
+        for (Bank bank : banks) {
             ScraperResult r = runScrapeForBank(bank.getName());
 
             if (r.success()) {
@@ -68,6 +80,7 @@ public class ScraperService {
             }
         }
 
+        // 3. Mail vid fel
         if (!failedBanks.isEmpty()) {
             emailService.ifPresent(mail ->
                     mail.sendErrorNotification(
@@ -79,6 +92,11 @@ public class ScraperService {
         }
 
         return new ScrapeBatchResult(success, failure);
+    }
+
+    private boolean isSeb(Bank bank) {
+        return bank.getName() != null &&
+                bank.getName().toLowerCase().contains("seb");
     }
 
     // ==========================================================
