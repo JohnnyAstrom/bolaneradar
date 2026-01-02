@@ -6,6 +6,7 @@ import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.service.integration.scraper.api.BankScraper;
 import com.bolaneradar.backend.service.integration.scraper.support.ScraperUtils;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -35,7 +36,12 @@ public class IcaBankenScraper implements BankScraper {
         List<MortgageRate> rates = new ArrayList<>();
 
         // Hämta dokument via gemensam metod
-        Document doc = ScraperUtils.fetchDocument(URL);
+        Document doc = Jsoup.connect(URL)
+                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                .referrer("https://www.google.com")
+                .header("Accept-Language", "sv-SE,sv;q=0.9")
+                .timeout(15_000)
+                .get();
 
         // === Listräntor ===
         Element listTable = doc.selectFirst("table");
