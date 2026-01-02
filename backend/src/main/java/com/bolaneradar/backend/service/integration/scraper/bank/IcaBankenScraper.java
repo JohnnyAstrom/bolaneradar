@@ -38,15 +38,23 @@ public class IcaBankenScraper implements BankScraper {
 
     @Override
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
+        System.out.println("Startar ICA Banken scraper (CI-safe log)");
+        System.out.println("Försöker hämta: " + URL);
+
         List<MortgageRate> rates = new ArrayList<>();
 
-        // Hämta dokument via gemensam metod
-        Document doc = Jsoup.connect(URL)
-                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
-                .referrer("https://www.google.com")
-                .header("Accept-Language", "sv-SE,sv;q=0.9")
-                .timeout(15_000)
-                .get();
+        Document doc;
+        try {
+            doc = Jsoup.connect(URL)
+                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                    .referrer("https://www.google.com")
+                    .header("Accept-Language", "sv-SE,sv;q=0.9")
+                    .timeout(15_000)
+                    .get();
+        } catch (Exception e) {
+            System.err.println("ICA: Kunde inte hämta sida i CI: " + e.getMessage());
+            return List.of(); // viktigt: tom lista men kontrollerat
+        }
 
         // === Listräntor ===
         Element listTable = doc.selectFirst("table");

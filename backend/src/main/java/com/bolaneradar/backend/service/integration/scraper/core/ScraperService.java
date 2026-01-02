@@ -134,7 +134,7 @@ public class ScraperService {
             // 3. Scrape
             List<MortgageRate> scraped = scraper.scrapeRates(bank);
             if (scraped == null || scraped.isEmpty()) {
-                throw new Exception("Inga räntor hittades");
+                error = "Scraper returnerade 0 räntor";
             }
 
 // 4. Filter logic (duplicates + rateChange + lastChanged)
