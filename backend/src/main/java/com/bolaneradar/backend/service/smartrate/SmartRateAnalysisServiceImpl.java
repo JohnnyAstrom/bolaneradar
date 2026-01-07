@@ -8,6 +8,8 @@ import com.bolaneradar.backend.entity.enums.smartrate.SmartRateStatus;
 import com.bolaneradar.backend.service.smartrate.model.SmartRateAnalysisContext;
 import com.bolaneradar.backend.service.smartrate.text.SmartRateTexts;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,6 +21,9 @@ import java.util.List;
 
 @Service
 public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(SmartRateAnalysisServiceImpl.class);
 
     private final SmartRateMarketDataService marketService;
 
@@ -32,17 +37,43 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     @Override
     public SmartRateTestResult analyze(SmartRateTestRequest request) {
 
+        long t0 = System.currentTimeMillis();
+
+        long tCtx0 = System.currentTimeMillis();
         SmartRateAnalysisContext ctx = buildContext(request);
+        long tCtx1 = System.currentTimeMillis();
+
+        SmartRateTestResult result;
 
         if (ctx.hasOffer()) {
-            return handleOfferFlow(ctx);
+            long tFlow0 = System.currentTimeMillis();
+            result = handleOfferFlow(ctx);
+            long tFlow1 = System.currentTimeMillis();
+
+            log.info("[SmartRate] offerFlow ms={}", (tFlow1 - tFlow0));
+        } else if (ctx.analyzedTerm() == MortgageTerm.VARIABLE_3M) {
+            long tFlow0 = System.currentTimeMillis();
+            result = handleVariableFlow(ctx);
+            long tFlow1 = System.currentTimeMillis();
+
+            log.info("[SmartRate] variableFlow ms={}", (tFlow1 - tFlow0));
+        } else {
+            long tFlow0 = System.currentTimeMillis();
+            result = handleFixedFlow(ctx);
+            long tFlow1 = System.currentTimeMillis();
+
+            log.info("[SmartRate] fixedFlow ms={}", (tFlow1 - tFlow0));
         }
 
-        if (ctx.analyzedTerm() == MortgageTerm.VARIABLE_3M) {
-            return handleVariableFlow(ctx);
-        }
+        long t1 = System.currentTimeMillis();
 
-        return handleFixedFlow(ctx);
+        log.info(
+                "[SmartRate] buildContext ms={}, total ms={}",
+                (tCtx1 - tCtx0),
+                (t1 - t0)
+        );
+
+        return result;
     }
 
     // =========================================================================
