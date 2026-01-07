@@ -1,7 +1,7 @@
-import type { FC } from "react";
-import { useTranslation } from "react-i18next";
-import type { TFunction } from "i18next";
-import type { SmartRateStatus, SmartRateTestResult } from "../../types/smartRate";
+import type {FC} from "react";
+import {useTranslation} from "react-i18next";
+import type {TFunction} from "i18next";
+import type {SmartRateStatus, SmartRateTestResult} from "../../types/smartRate";
 
 interface Props {
     result: SmartRateTestResult | null | undefined;
@@ -37,68 +37,70 @@ function formatYearlyEffect(value: number | null, t: TFunction): string {
 
     const abs = Math.abs(rounded).toLocaleString("sv-SE");
     return rounded > 0
-        ? t("smartRate.result.moreExpensivePerYear", { value: abs })
-        : t("smartRate.result.cheaperPerYear", { value: abs });
+        ? t("smartRate.result.moreExpensivePerYear", {value: abs})
+        : t("smartRate.result.cheaperPerYear", {value: abs});
 }
 
-const SmartRateTestResultView: FC<Props> = ({ result }) => {
-    const { t } = useTranslation();
-
+const SmartRateTestResultView: FC<Props> = ({result}) => {
+    const {t} = useTranslation();
     if (!result) return null;
 
     const isOfferFlow = result.isOfferFlow === true;
     const color = statusColors[result.status as SmartRateStatus] || "bg-gray-500";
 
-    // ✅ Type-safe defaults
     const alternatives = result.alternatives ?? [];
     const offerAnalyses = result.offerAnalyses ?? [];
 
     return (
-        <div className="flex flex-col gap-8 p-4 border border-border rounded-lg bg-white">
+        <div className="flex flex-col gap-6">
 
-            {/* STATUS & RUBRIK */}
-            <div>
-                <h2 className="text-2xl font-bold text-text-primary mb-2">
-                    {isOfferFlow
-                        ? t("smartRate.result.offerTitle")
-                        : t("smartRate.result.statusTitle")}
-                </h2>
+            {/* ================= STATUS + ANALYS ================= */}
+            <section className="p-4 rounded-lg bg-white border border-border space-y-4">
 
-                <span
-                    className={`inline-block px-4 py-1 rounded-full text-white text-sm font-medium ${color}`}
-                >
-                    {isOfferFlow
-                        ? t(`smartRate.result.offerStatus.${result.status}`)
-                        : t(`smartRate.result.status.${result.status}`)}
-                </span>
-            </div>
+                <div>
+                    <h2 className="text-2xl font-bold text-text-primary mb-2">
+                        {isOfferFlow
+                            ? t("smartRate.result.offerTitle")
+                            : t("smartRate.result.statusTitle")}
+                    </h2>
 
-            {/* HUVUDANALYS */}
-            <div className="text-text-secondary leading-relaxed space-y-3 whitespace-pre-line">
-                <p>{result.analysisText}</p>
+                    <span
+                        className={`inline-block px-4 py-1 rounded-full text-white text-sm font-medium ${color}`}
+                    >
+            {isOfferFlow
+                ? t(`smartRate.result.offerStatus.${result.status}`)
+                : t(`smartRate.result.status.${result.status}`)}
+        </span>
+                </div>
 
-                {result.additionalContext && <p>{result.additionalContext}</p>}
+                <div className="text-sm text-text-secondary leading-relaxed space-y-3 whitespace-pre-line">
+                    <p>{result.analysisText}</p>
 
-                {result.recommendation && (
-                    <p className="font-semibold text-primary mt-3">
-                        {result.recommendation}
-                    </p>
-                )}
-            </div>
+                    {result.additionalContext && <p>{result.additionalContext}</p>}
 
-            {/* PREFERENSRÅD */}
+                    {result.recommendation && (
+                        <p className="font-semibold text-primary">
+                            {result.recommendation}
+                        </p>
+                    )}
+                </div>
+
+            </section>
+
+
+            {/* ================= PREFERENS ================= */}
             {result.preferenceAdvice && (
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <section className="p-4 rounded-lg bg-blue-50 border border-blue-200">
                     <h3 className="font-semibold mb-1">
                         {t("smartRate.result.preferenceTitle")}
                     </h3>
                     <p>{result.preferenceAdvice}</p>
-                </div>
+                </section>
             )}
 
-            {/* ALTERNATIVLISTA – EJ OFFER */}
+            {/* ================= ALTERNATIV ================= */}
             {!isOfferFlow && alternatives.length > 0 && (
-                <div>
+                <section className="p-4 rounded-lg bg-white border border-border">
                     <h3 className="font-semibold mb-4 text-lg">
                         {t("smartRate.result.alternativesTitle")}
                     </h3>
@@ -109,14 +111,15 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
                         </p>
                     )}
 
+                    {/* Desktop table */}
                     <div className="hidden md:block overflow-hidden rounded-lg border border-gray-200">
                         <table className="w-full text-left text-sm">
                             <thead className="bg-gray-100 text-gray-700 border-b">
                             <tr>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.table.term")}</th>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.table.avgRate")}</th>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.table.diff")}</th>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.table.yearly")}</th>
+                                <th className="py-2 px-3">{t("smartRate.result.table.term")}</th>
+                                <th className="py-2 px-3">{t("smartRate.result.table.avgRate")}</th>
+                                <th className="py-2 px-3">{t("smartRate.result.table.diff")}</th>
+                                <th className="py-2 px-3">{t("smartRate.result.table.yearly")}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -133,25 +136,50 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
                             </tbody>
                         </table>
                     </div>
-                </div>
+
+                    {/* Mobile cards */}
+                    <div className="md:hidden space-y-3">
+                        {alternatives.map((alt, i) => (
+                            <div key={i} className="border border-gray-200 rounded-lg p-3">
+                                <div className="font-semibold mb-1">
+                                    {formatTerm(alt.term, t)}
+                                </div>
+                                <div className="text-sm space-y-1">
+                                    <div>
+                                        {t("smartRate.result.table.avgRate")}:{" "}
+                                        <strong>{formatPercent(alt.averageRate)}</strong>
+                                    </div>
+                                    <div>
+                                        {t("smartRate.result.table.diff")}:{" "}
+                                        {formatPercent(alt.differenceFromBest)}
+                                    </div>
+                                    <div>
+                                        {formatYearlyEffect(alt.yearlyCostDifference, t)}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
             )}
 
-            {/* OFFERANALYS */}
+            {/* ================= OFFER ================= */}
             {isOfferFlow && offerAnalyses.length > 0 && (
-                <div>
+                <section className="p-4 rounded-lg bg-white border border-border">
                     <h3 className="font-semibold mb-4 text-lg">
                         {t("smartRate.result.offerTableTitle")}
                     </h3>
 
+                    {/* Desktop table */}
                     <div className="hidden md:block overflow-hidden rounded-lg border border-gray-200">
                         <table className="w-full text-left text-sm">
                             <thead className="bg-gray-100 text-gray-700 border-b">
                             <tr>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.offerTable.term")}</th>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.offerTable.offeredRate")}</th>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.offerTable.diffBest")}</th>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.offerTable.status")}</th>
-                                <th className="py-2 px-3 font-medium">{t("smartRate.result.offerTable.yearly")}</th>
+                                <th className="py-2 px-3">{t("smartRate.result.offerTable.term")}</th>
+                                <th className="py-2 px-3">{t("smartRate.result.offerTable.offeredRate")}</th>
+                                <th className="py-2 px-3">{t("smartRate.result.offerTable.diffBest")}</th>
+                                <th className="py-2 px-3">{t("smartRate.result.offerTable.status")}</th>
+                                <th className="py-2 px-3">{t("smartRate.result.offerTable.yearly")}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -162,7 +190,7 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
                                     <td className="py-2 px-3">{formatPercent(oa.diffFromBestMarket)}</td>
                                     <td className="py-2 px-3">
                                             <span
-                                                className={`px-2 py-1 rounded-lg text-white text-xs font-semibold ${statusColors[oa.status as SmartRateStatus]}`}
+                                                className={`px-2 py-1 rounded-lg text-white text-sm font-semibold ${statusColors[oa.status as SmartRateStatus]}`}
                                             >
                                                 {t(`smartRate.result.offerStatus.${oa.status}`)}
                                             </span>
@@ -175,22 +203,53 @@ const SmartRateTestResultView: FC<Props> = ({ result }) => {
                             </tbody>
                         </table>
                     </div>
-                </div>
+
+                    {/* Mobile cards */}
+                    <div className="md:hidden space-y-3">
+                        {offerAnalyses.map((oa, i) => (
+                            <div key={i} className="border border-gray-200 rounded-lg p-3">
+                                <div className="font-semibold mb-1">
+                                    {formatTerm(oa.term, t)}
+                                </div>
+                                <div className="text-sm space-y-1">
+                                    <div>
+                                        {t("smartRate.result.offerTable.offeredRate")}:{" "}
+                                        <strong>{formatPercent(oa.offeredRate)}</strong>
+                                    </div>
+                                    <div>
+                                        {t("smartRate.result.offerTable.diffBest")}:{" "}
+                                        {formatPercent(oa.diffFromBestMarket)}
+                                    </div>
+                                    <div>
+                                        {formatYearlyEffect(oa.yearlyCostDifference, t)}
+                                    </div>
+                                </div>
+                                <div className="mt-2">
+                                    <span
+                                        className={`inline-block px-2 py-1 rounded-lg text-white text-sm font-semibold ${statusColors[oa.status as SmartRateStatus]}`}
+                                    >
+                                        {t(`smartRate.result.offerStatus.${oa.status}`)}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
             )}
 
-            {/* CTA */}
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm leading-relaxed">
+            {/* ================= CTA ================= */}
+            <section className="p-4 rounded-lg bg-blue-50 border border-blue-200 text-sm">
                 <p className="mb-2">{t("smartRate.result.ctaText")}</p>
                 <a
                     href="#rates"
-                    className="inline-flex items-center text-blue-600 font-semibold hover:underline cursor-pointer"
+                    className="inline-flex items-center text-blue-600 font-semibold hover:underline"
                 >
                     {t("smartRate.result.ctaLink")}
                 </a>
                 <p className="mt-3 text-gray-700">
                     {t("smartRate.result.ctaHint")}
                 </p>
-            </div>
+            </section>
         </div>
     );
 };

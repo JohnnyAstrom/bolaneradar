@@ -7,7 +7,7 @@ export const API_URL = import.meta.env.VITE_API_URL;
 // kan ta tid, särskilt vid cold starts på Render.
 const client = axios.create({
     baseURL: API_URL,
-    timeout: 60000, // 30 sekunder – matchar backendens långsammaste scenarion
+    timeout: 20000, // 20 sekunder – matchar backendens långsammaste scenarion
     withCredentials: false,
 });
 

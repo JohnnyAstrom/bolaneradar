@@ -170,7 +170,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                     <thead className="bg-bg-light text-text-primary">
                     <tr>
                         <th
-                            className="pl-2 pr-0 sm:px-4 py-2 sm:py-3 text-left whitespace-nowrap text-sm sm:text-sm"
+                            className="pl-2 pr-0 sm:px-4 py-2 sm:py-3 text-left whitespace-nowrap cursor-pointer text-sm sm:text-sm"
                             onClick={() => onHeaderClick("bankName")}
                         >
                             {t("rates.comparison.columns.bank")} {sortIcon("bankName")}

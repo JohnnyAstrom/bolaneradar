@@ -12,8 +12,8 @@
  *  - Samla loading/error-hantering på ett ställe
  */
 
-import { useEffect, useState } from "react";
-import { getBankDetails } from "../client/bankApi";
+import {useEffect, useState} from "react";
+import {getBankDetails} from "../client/bankApi";
 import {useTranslation} from "react-i18next";
 
 export interface BankDetailsData {
@@ -28,7 +28,7 @@ export interface BankDetailsData {
 }
 
 export function useBankDetails(bankKey: string) {
-    const { i18n } = useTranslation();
+    const {i18n} = useTranslation();
     const language = i18n.language;
 
     const [details, setDetails] = useState<BankDetailsData | null>(null);
@@ -52,8 +52,10 @@ export function useBankDetails(bankKey: string) {
         };
 
         load();
-        return () => { isMounted = false; };
+        return () => {
+            isMounted = false;
+        };
     }, [bankKey, language]);
 
-    return { details, loading, error };
+    return {details, loading, error};
 }
