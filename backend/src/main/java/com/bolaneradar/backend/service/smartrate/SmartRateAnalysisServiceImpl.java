@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
@@ -48,17 +47,25 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
 
         SmartRateTestResult result;
 
-        // ===== STEG 3: skapa snapshot EN gång =====
-        Set<MortgageTerm> terms;
+        // ===== STEG 3: bygg ALLA termer som behövs =====
+        Set<MortgageTerm> terms = new java.util.HashSet<>();
 
+        // alltid med aktuell term
+        terms.add(ctx.analyzedTerm());
+
+        // offer-termer (om finns)
         if (ctx.hasOffer()) {
-            terms = ctx.offers().stream()
+            ctx.offers().stream()
                     .map(SmartRateOfferDto::term)
-                    .collect(Collectors.toSet());
-        } else {
-            terms = Set.of(ctx.analyzedTerm());
+                    .forEach(terms::add);
         }
 
+        // preferens-termer (för alternativ-tabellen)
+        if (ctx.userPreference() != null) {
+            terms.addAll(marketService.getTermsForPreference(ctx.userPreference()));
+        }
+
+        // ===== snapshot byggs EN gång =====
         MarketSnapshot snapshot =
                 marketService.getMarketSnapshot(ctx.bankId(), terms);
 
@@ -69,12 +76,14 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
             long tFlow1 = System.currentTimeMillis();
 
             log.info("[SmartRate] offerFlow ms={}", (tFlow1 - tFlow0));
+
         } else if (ctx.analyzedTerm() == MortgageTerm.VARIABLE_3M) {
             long tFlow0 = System.currentTimeMillis();
             result = handleVariableFlow(ctx, snapshot);
             long tFlow1 = System.currentTimeMillis();
 
             log.info("[SmartRate] variableFlow ms={}", (tFlow1 - tFlow0));
+
         } else {
             long tFlow0 = System.currentTimeMillis();
             result = handleFixedFlow(ctx, snapshot);
