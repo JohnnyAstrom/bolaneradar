@@ -5,6 +5,7 @@ import com.bolaneradar.backend.entity.enums.Language;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.smartrate.RateComparison;
 import com.bolaneradar.backend.entity.enums.smartrate.SmartRateStatus;
+import com.bolaneradar.backend.service.smartrate.model.MarketSnapshot;
 import com.bolaneradar.backend.service.smartrate.model.SmartRateAnalysisContext;
 import com.bolaneradar.backend.service.smartrate.text.SmartRateTexts;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
@@ -45,21 +48,36 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
 
         SmartRateTestResult result;
 
+        // ===== STEG 3: skapa snapshot EN gång =====
+        Set<MortgageTerm> terms;
+
+        if (ctx.hasOffer()) {
+            terms = ctx.offers().stream()
+                    .map(SmartRateOfferDto::term)
+                    .collect(Collectors.toSet());
+        } else {
+            terms = Set.of(ctx.analyzedTerm());
+        }
+
+        MarketSnapshot snapshot =
+                marketService.getMarketSnapshot(ctx.bankId(), terms);
+
+        // ===== Kör rätt flow =====
         if (ctx.hasOffer()) {
             long tFlow0 = System.currentTimeMillis();
-            result = handleOfferFlow(ctx);
+            result = handleOfferFlow(ctx, snapshot);
             long tFlow1 = System.currentTimeMillis();
 
             log.info("[SmartRate] offerFlow ms={}", (tFlow1 - tFlow0));
         } else if (ctx.analyzedTerm() == MortgageTerm.VARIABLE_3M) {
             long tFlow0 = System.currentTimeMillis();
-            result = handleVariableFlow(ctx);
+            result = handleVariableFlow(ctx, snapshot);
             long tFlow1 = System.currentTimeMillis();
 
             log.info("[SmartRate] variableFlow ms={}", (tFlow1 - tFlow0));
         } else {
             long tFlow0 = System.currentTimeMillis();
-            result = handleFixedFlow(ctx);
+            result = handleFixedFlow(ctx, snapshot);
             long tFlow1 = System.currentTimeMillis();
 
             log.info("[SmartRate] fixedFlow ms={}", (tFlow1 - tFlow0));
@@ -79,7 +97,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     // =========================================================================
     // FLOW B — OFFER FLOW
     // =========================================================================
-    private SmartRateTestResult handleOfferFlow(SmartRateAnalysisContext ctx) {
+    private SmartRateTestResult handleOfferFlow(SmartRateAnalysisContext ctx, MarketSnapshot snapshot) {
 
         SmartRateTexts texts = SmartRateTexts.of(ctx.language());
 
@@ -110,9 +128,9 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
             MortgageTerm term = offer.term();
             BigDecimal rate = offer.rate();
 
-            BigDecimal bestMarket = marketService.getMarketBestRate(term);
-            BigDecimal medianMarket = marketService.getMarketMedianRate(term);
-            BigDecimal bankAvg = marketService.getBankAverageRate(ctx.bankId(), term);
+            BigDecimal bestMarket = snapshot.bestByTerm().get(term);
+            BigDecimal medianMarket = snapshot.medianByTerm().get(term);
+            BigDecimal bankAvg = snapshot.bankAvgByTerm().get(term);
 
             BigDecimal diffBest = calculateDiff(rate, bestMarket);
             BigDecimal diffMedian = calculateDiff(rate, medianMarket);
@@ -173,13 +191,21 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
     // =========================================================================
     // FLOW A1 — VARIABLE RATE
     // =========================================================================
-    private SmartRateTestResult handleVariableFlow(SmartRateAnalysisContext ctx) {
+    private SmartRateTestResult handleVariableFlow(
+            SmartRateAnalysisContext ctx,
+            MarketSnapshot snapshot
+    ) {
 
+        MortgageTerm term = ctx.analyzedTerm();
         BigDecimal rate = ctx.userRate();
 
-        BigDecimal diffBest = calculateDiff(rate, ctx.marketBestRate());
-        BigDecimal diffBank = calculateDiff(rate, ctx.bankLatestAverage());
-        BigDecimal diffMedian = calculateDiff(rate, ctx.marketMedianRate());
+        BigDecimal best = snapshot.bestByTerm().get(term);
+        BigDecimal median = snapshot.medianByTerm().get(term);
+        BigDecimal bankAvg = snapshot.bankAvgByTerm().get(term);
+
+        BigDecimal diffBest = calculateDiff(rate, best);
+        BigDecimal diffBank = calculateDiff(rate, bankAvg);
+        BigDecimal diffMedian = calculateDiff(rate, median);
 
         SmartRateStatus status = classify(diffBest);
 
@@ -191,7 +217,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         return new SmartRateTestResult(
                 status.name(),
                 ctx.bankName(),
-                ctx.analyzedTerm(),
+                term,
                 diffBank,
                 diffBest,
                 texts.variableAnalysis(
@@ -206,7 +232,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 texts.recommendation(status),
                 null,
                 texts.preferenceAdvice(ctx.userPreference()),
-                generateAlternatives(ctx),
+                generateAlternatives(ctx, snapshot),
                 null,
                 false,
                 List.of(),
@@ -214,14 +240,23 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         );
     }
 
+
     // =========================================================================
     // FLOW A2 — FIXED RATE
     // =========================================================================
-    private SmartRateTestResult handleFixedFlow(SmartRateAnalysisContext ctx) {
+    private SmartRateTestResult handleFixedFlow(
+            SmartRateAnalysisContext ctx,
+            MarketSnapshot snapshot
+    ) {
 
+        MortgageTerm term = ctx.analyzedTerm();
         BigDecimal rate = ctx.userRate();
-        BigDecimal diffBank = calculateDiff(rate, ctx.bankLatestAverage());
-        BigDecimal diffMedian = calculateDiff(rate, ctx.marketMedianRate());
+
+        BigDecimal median = snapshot.medianByTerm().get(term);
+        BigDecimal bankAvg = snapshot.bankAvgByTerm().get(term);
+
+        BigDecimal diffBank = calculateDiff(rate, bankAvg);
+        BigDecimal diffMedian = calculateDiff(rate, median);
 
         RateComparison medianCmp = classifyDiff(diffMedian);
 
@@ -245,7 +280,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         return new SmartRateTestResult(
                 SmartRateStatus.INFO.name(),
                 ctx.bankName(),
-                ctx.analyzedTerm(),
+                term,
                 diffBank,
                 null,
                 analysisText,
@@ -256,7 +291,7 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 recommendation,
                 null,
                 texts.preferenceAdvice(ctx.userPreference()),
-                generateAlternatives(ctx),
+                generateAlternatives(ctx, snapshot),
                 null,
                 false,
                 List.of(),
@@ -264,11 +299,10 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
         );
     }
 
-
     // =========================================================================
     // ALTERNATIVES
     // =========================================================================
-    private List<SmartRateAlternative> generateAlternatives(SmartRateAnalysisContext ctx) {
+    private List<SmartRateAlternative> generateAlternatives(SmartRateAnalysisContext ctx, MarketSnapshot snapshot) {
 
         SmartRateOfferDto bestOffer = ctx.hasOffer()
                 ? findBestOffer(ctx.offers())
@@ -290,16 +324,16 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 ? bestOffer.rate()
                 : ctx.userRate();
 
-        for (MortgageTerm t : terms) {
+        for (MortgageTerm term : terms) {
 
-            BigDecimal avg = marketService.getMarketMedianRate(t);
+            BigDecimal avg = snapshot.medianByTerm().get(term);
             if (avg == null) continue;
 
             BigDecimal diff = calculateDiff(avg, userRate);
             BigDecimal yearlyImpact = calculateYearlyImpact(diff, ctx.loanAmount());
 
             list.add(new SmartRateAlternative(
-                    t,
+                    term,
                     avg,
                     diff,
                     yearlyImpact

@@ -5,13 +5,18 @@ import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
+import com.bolaneradar.backend.service.smartrate.model.MarketSnapshot;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SmartRateMarketDataServiceImpl implements SmartRateMarketDataService {
@@ -70,10 +75,9 @@ public class SmartRateMarketDataServiceImpl implements SmartRateMarketDataServic
         int size = values.size();
         int mid = size / 2;
 
-        // Median (odd/even)
         return (size % 2 == 1)
                 ? values.get(mid)
-                : values.get(mid - 1).add(values.get(mid)).divide(BigDecimal.valueOf(2));
+                : values.get(mid - 1).add(values.get(mid)).divide(BigDecimal.valueOf(2), 2, RoundingMode.HALF_UP);
     }
 
     // =========================================================================
@@ -98,7 +102,7 @@ public class SmartRateMarketDataServiceImpl implements SmartRateMarketDataServic
     }
 
     // =========================================================================
-    // 5. Terms för preferens (UPPDATERAD MED NYA ENUM-VÄRDEN)
+    // 5. Terms för preferens
     // =========================================================================
     @Override
     public List<MortgageTerm> getTermsForPreference(RatePreference pref) {
@@ -123,5 +127,90 @@ public class SmartRateMarketDataServiceImpl implements SmartRateMarketDataServic
                             MortgageTerm.FIXED_10Y
                     );
         };
+    }
+
+    // =========================================================================
+    // 6. SNAPSHOT – ENDA NYA DELEN
+    // =========================================================================
+    @Override
+    public MarketSnapshot getMarketSnapshot(
+            Long bankId,
+            Set<MortgageTerm> terms
+    ) {
+
+        // ===== EN DB-QUERY =====
+        List<MortgageRate> latest =
+                repo.findLatestRatesByType(RateType.AVERAGERATE);
+
+        // =========================================================================
+        // Bankens snitträntor per term
+        // =========================================================================
+        var bankAvgByTerm = latest.stream()
+                .filter(r -> r.getBank() != null)
+                .filter(r -> r.getBank().getId().equals(bankId))
+                .filter(r -> terms.contains(r.getTerm()))
+                .collect(Collectors.toMap(
+                        MortgageRate::getTerm,
+                        MortgageRate::getRatePercent,
+                        (a, b) -> a
+                ));
+
+        // =========================================================================
+        // Marknadens bästa ränta per term
+        // =========================================================================
+        var bestByTerm = latest.stream()
+                .filter(r -> terms.contains(r.getTerm()))
+                .collect(Collectors.groupingBy(
+                        MortgageRate::getTerm,
+                        Collectors.mapping(
+                                MortgageRate::getRatePercent,
+                                Collectors.minBy(Comparator.naturalOrder())
+                        )
+                ))
+                .entrySet().stream()
+                .filter(e -> e.getValue().isPresent())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> e.getValue().get()
+                ));
+
+        // =========================================================================
+        // Marknadens medianränta per term
+        // =========================================================================
+        var medianByTerm = latest.stream()
+                .filter(r -> terms.contains(r.getTerm()))
+                .collect(Collectors.groupingBy(
+                        MortgageRate::getTerm,
+                        Collectors.mapping(
+                                MortgageRate::getRatePercent,
+                                Collectors.toList()
+                        )
+                ))
+                .entrySet().stream()
+                // filtrera bort tomma listor
+                .filter(e -> !e.getValue().isEmpty())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> {
+                            List<BigDecimal> values = e.getValue().stream()
+                                    .sorted()
+                                    .toList();
+
+                            int size = values.size();
+                            int mid = size / 2;
+
+                            return (size % 2 == 1)
+                                    ? values.get(mid)
+                                    : values.get(mid - 1)
+                                    .add(values.get(mid))
+                                    .divide(BigDecimal.valueOf(2), 2, RoundingMode.HALF_UP);
+                        }
+                ));
+
+        return new MarketSnapshot(
+                Map.copyOf(bestByTerm),
+                Map.copyOf(medianByTerm),
+                Map.copyOf(bankAvgByTerm)
+        );
     }
 }

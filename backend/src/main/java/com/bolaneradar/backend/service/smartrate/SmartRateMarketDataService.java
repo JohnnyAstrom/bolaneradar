@@ -1,12 +1,13 @@
 package com.bolaneradar.backend.service.smartrate;
 
-import com.bolaneradar.backend.entity.core.Bank;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
+import com.bolaneradar.backend.service.smartrate.model.MarketSnapshot;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public interface SmartRateMarketDataService {
 
@@ -18,29 +19,34 @@ public interface SmartRateMarketDataService {
 
     /**
      * Hämtar bästa snitträntan på marknaden för en term.
-     * T.ex. den lägsta AVERAGERATE bland alla banker.
      */
     BigDecimal getMarketBestRate(MortgageTerm term);
 
     /**
      * Hämtar marknadens median snittränta för en term.
-     * Alternativt mean om median blir overkill i början.
      */
     BigDecimal getMarketMedianRate(MortgageTerm term);
 
     /**
      * Hämtar bankens rörliga snittränta (VARIABLE_3M)
-     * för den månad då kundens ränta sattes (Q5A).
+     * för den månad då kundens ränta sattes.
      */
     BigDecimal getHistoricVariableRate(Long bankId, LocalDate date);
 
     /**
      * Returnerar vilka bindningstider (MortgageTerm)
-     * som motsvarar användarens framtida räntpreferens (Q6A).
-     *
-     * RORLIG -> [VARIABLE_3M]
-     * KORT   -> [FIXED_1Y, FIXED_2Y, FIXED_3Y]
-     * LANG   -> [FIXED_4Y ... FIXED_10Y]
+     * som motsvarar användarens framtida räntepreferens.
      */
     List<MortgageTerm> getTermsForPreference(RatePreference pref);
+
+    /**
+     * Hämtar all marknadsdata som behövs för SmartRate-analys
+     * i ett enda anrop, för givna bindningstider.
+     *
+     * Används för att undvika upprepade DB-anrop per offer.
+     */
+    MarketSnapshot getMarketSnapshot(
+            Long bankId,
+            Set<MortgageTerm> terms
+    );
 }
