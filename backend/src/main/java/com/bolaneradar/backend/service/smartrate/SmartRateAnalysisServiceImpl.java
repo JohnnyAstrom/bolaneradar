@@ -384,6 +384,16 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 ? request.language()
                 : Language.SV;
 
+        BigDecimal bankAvg = null;
+        BigDecimal marketBest = null;
+        BigDecimal marketMedian = null;
+
+        if (!request.hasOffer()) {
+            bankAvg = marketService.getBankAverageRate(request.bankId(), analyzedTerm);
+            marketBest = marketService.getMarketBestRate(analyzedTerm);
+            marketMedian = marketService.getMarketMedianRate(analyzedTerm);
+        }
+
         return new SmartRateAnalysisContext(
                 request.hasOffer(),
                 request.bankId(),
@@ -392,9 +402,9 @@ public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
                 request.userCurrentTerm(),
                 request.offers(),
                 request.userPreference(),
-                marketService.getBankAverageRate(request.bankId(), analyzedTerm),
-                marketService.getMarketBestRate(analyzedTerm),
-                marketService.getMarketMedianRate(analyzedTerm),
+                bankAvg,
+                marketBest,
+                marketMedian,
                 null,
                 analyzedTerm,
                 request.loanAmount(),
