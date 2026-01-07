@@ -2,6 +2,7 @@ package com.bolaneradar.backend.repository;
 
 import com.bolaneradar.backend.entity.core.Bank;
 import com.bolaneradar.backend.entity.core.MortgageRate;
+import com.bolaneradar.backend.repository.projection.MarketRateSnapshotRow;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
 
@@ -15,16 +16,16 @@ import java.util.List;
 
 /**
  * ================================================================
- *  MORTGAGERATEREPOSITORY
+ * MORTGAGERATEREPOSITORY
  * ================================================================
- *  Detta lager hanterar:
- *    - Alla direkta databasoperationer för MortgageRate
- *    - Både automatiska Spring Data-frågor
- *    - samt anpassade @Query-frågor för mer komplexa behov
+ * Detta lager hanterar:
+ * - Alla direkta databasoperationer för MortgageRate
+ * - Både automatiska Spring Data-frågor
+ * - samt anpassade @Query-frågor för mer komplexa behov
  * <p></p>
- *  Repository-lagret ska:
- *    - Aldrig innehålla affärslogik
- *    - Endast tillhandahålla rådata till service-lagret
+ * Repository-lagret ska:
+ * - Aldrig innehålla affärslogik
+ * - Endast tillhandahålla rådata till service-lagret
  * ================================================================
  */
 @Repository
@@ -67,10 +68,10 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
      * Sorteras senaste först.
      */
     @Query("""
-        SELECT DISTINCT m.effectiveDate
-        FROM MortgageRate m
-        ORDER BY m.effectiveDate DESC
-        """)
+            SELECT DISTINCT m.effectiveDate
+            FROM MortgageRate m
+            ORDER BY m.effectiveDate DESC
+            """)
     List<LocalDate> findDistinctEffectiveDatesDesc();
 
 
@@ -103,12 +104,12 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
      * Används av trendflödet (AVERAGERATE per bank).
      */
     @Query("""
-        SELECT DISTINCT m.effectiveDate
-        FROM MortgageRate m
-        WHERE m.bank = :bank
-          AND m.rateType = :rateType
-        ORDER BY m.effectiveDate DESC
-        """)
+            SELECT DISTINCT m.effectiveDate
+            FROM MortgageRate m
+            WHERE m.bank = :bank
+              AND m.rateType = :rateType
+            ORDER BY m.effectiveDate DESC
+            """)
     List<LocalDate> findDistinctEffectiveDatesByBankAndRateTypeDesc(
             @Param("bank") Bank bank,
             @Param("rateType") RateType rateType
@@ -147,10 +148,10 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
     /**
      * Hämtar den senaste (högsta effectiveDate) räntan
      * för en specifik bank + bindningstid (term) + rateType (LISTRATE/AVERAGERATE).
-     *
+     * <p>
      * Spring Data JPA genererar automatiskt SQL:
-     *   SELECT ... ORDER BY effective_date DESC LIMIT 1
-     *
+     * SELECT ... ORDER BY effective_date DESC LIMIT 1
+     * <p>
      * Om banken inte har någon ränta för kombinationen returneras null.
      */
     MortgageRate findFirstByBankIdAndTermAndRateTypeOrderByEffectiveDateDesc(
@@ -169,17 +170,17 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
      * Använder en subquery för att hämta MAX(effectiveDate).
      */
     @Query("""
-        SELECT m
-        FROM MortgageRate m
-        WHERE m.rateType = :rateType
-          AND m.effectiveDate = (
-              SELECT MAX(m2.effectiveDate)
-              FROM MortgageRate m2
-              WHERE m2.bank = m.bank
-                AND m2.term = m.term
-                AND m2.rateType = :rateType
-          )
-        """)
+            SELECT m
+            FROM MortgageRate m
+            WHERE m.rateType = :rateType
+              AND m.effectiveDate = (
+                  SELECT MAX(m2.effectiveDate)
+                  FROM MortgageRate m2
+                  WHERE m2.bank = m.bank
+                    AND m2.term = m.term
+                    AND m2.rateType = :rateType
+              )
+            """)
     List<MortgageRate> findLatestRatesByType(
             @Param("rateType") RateType rateType
     );
@@ -190,29 +191,29 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
 
     /**
      * Hämtar den senaste gemensamma snitträntemånaden (AVERAGERATE) för alla banker.
-     *
+     * <p>
      * Logiken:
-     *   - För varje bank hämtas den senaste snitträntan (MAX(effectiveDate))
-     *   - Eftersom alla banker publicerar snitträntor månadsvis
-     *     väljer vi den MINSTA av dessa datum.
-     *
+     * - För varje bank hämtas den senaste snitträntan (MAX(effectiveDate))
+     * - Eftersom alla banker publicerar snitträntor månadsvis
+     * väljer vi den MINSTA av dessa datum.
+     * <p>
      * Resultatet är den månad som alla banker hunnit redovisa.
      * Används bl.a. för att sätta rubriken "Snittränta (oktober 2025)".
-     *
+     * <p>
      * Returnerar:
-     *   - LocalDate (ex. 2025-10-01) om alla banker har data
-     *   - null om snitträntor saknas
+     * - LocalDate (ex. 2025-10-01) om alla banker har data
+     * - null om snitträntor saknas
      */
     @Query("""
-    SELECT MIN(latest_date) FROM (
-        SELECT MAX(m.effectiveDate) AS latest_date
-        FROM MortgageRate m
-        WHERE m.rateType = 'AVERAGERATE'
-          AND m.term = :term
-        GROUP BY m.bank.id
-    )
-    """)
-        LocalDate findCommonEffectiveDateForAverageRates(@Param("term") MortgageTerm term);
+            SELECT MIN(latest_date) FROM (
+                SELECT MAX(m.effectiveDate) AS latest_date
+                FROM MortgageRate m
+                WHERE m.rateType = 'AVERAGERATE'
+                  AND m.term = :term
+                GROUP BY m.bank.id
+            )
+            """)
+    LocalDate findCommonEffectiveDateForAverageRates(@Param("term") MortgageTerm term);
 
     // ========================================================================
 // ==============     BANKENS SENASTE SNITTRÄNTA-MÅNAD     =================
@@ -220,25 +221,25 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
 
     /**
      * Hämtar den senaste snitträntan (AVERAGERATE) för en specifik bank.
-     *
+     * <p>
      * Logik:
-     *  - Varje snittränta har ett effectiveDate (t.ex. 2025-10-01)
-     *  - Vi tar MAX(effectiveDate) för banken
-     *
+     * - Varje snittränta har ett effectiveDate (t.ex. 2025-10-01)
+     * - Vi tar MAX(effectiveDate) för banken
+     * <p>
      * Resultat:
-     *  - Returnerar t.ex. 2025-10-01 för Swedbank
-     *  - Används av Bank-sidan för att visa "Snittränta (okt 2025)"
-     *
+     * - Returnerar t.ex. 2025-10-01 för Swedbank
+     * - Används av Bank-sidan för att visa "Snittränta (okt 2025)"
+     * <p>
      * Returnerar:
-     *  - LocalDate (senaste datumet)
-     *  - null om banken inte har några snitträntor alls
+     * - LocalDate (senaste datumet)
+     * - null om banken inte har några snitträntor alls
      */
     @Query("""
-    SELECT MAX(m.effectiveDate)
-    FROM MortgageRate m
-    WHERE m.bank.id = :bankId
-      AND m.rateType = 'AVERAGERATE'
-""")
+                SELECT MAX(m.effectiveDate)
+                FROM MortgageRate m
+                WHERE m.bank.id = :bankId
+                  AND m.rateType = 'AVERAGERATE'
+            """)
     LocalDate findLatestAverageDateForBank(@Param("bankId") Long bankId);
 
 
@@ -249,29 +250,69 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
     /**
      * Hämtar snittränta (AVERAGERATE) för en bank och en viss bindningstid,
      * inom en given månad.
-     *
+     * <p>
      * Logik:
-     *  - monthStart = första dagen i månaden (t.ex. 2025-10-01)
-     *  - monthEnd   = nästa månads första dag (t.ex. 2025-11-01)
-     *
+     * - monthStart = första dagen i månaden (t.ex. 2025-10-01)
+     * - monthEnd   = nästa månads första dag (t.ex. 2025-11-01)
+     * <p>
      * Om banken saknar snittränta för just den månaden:
-     *  - returneras null (exempel: 9 år saknas i oktober 2025)
-     *
+     * - returneras null (exempel: 9 år saknas i oktober 2025)
+     * <p>
      * Används av Bank-sidan för att visa avgRate per term.
      */
     @Query("""
-    SELECT m FROM MortgageRate m
-    WHERE m.bank.id = :bankId
-      AND m.term = :term
-      AND m.rateType = 'AVERAGERATE'
-      AND m.effectiveDate >= :monthStart
-      AND m.effectiveDate < :monthEnd
-    ORDER BY m.effectiveDate DESC
-    """)
+            SELECT m FROM MortgageRate m
+            WHERE m.bank.id = :bankId
+              AND m.term = :term
+              AND m.rateType = 'AVERAGERATE'
+              AND m.effectiveDate >= :monthStart
+              AND m.effectiveDate < :monthEnd
+            ORDER BY m.effectiveDate DESC
+            """)
     MortgageRate findAverageRateForBankAndTermAndMonth(
             @Param("bankId") Long bankId,
             @Param("term") MortgageTerm term,
             @Param("monthStart") LocalDate monthStart,
             @Param("monthEnd") LocalDate monthEnd
+    );
+
+    // ========================================================================
+    // ==========   MARKET SNAPSHOT – PRESTANDAKRITISK PROJECTION  ============
+    // ========================================================================
+
+    /**
+     * Hämtar ett kompakt snapshot av senaste snitträntor (AVERAGERATE)
+     * för givna bindningstider.
+     * <p>
+     * Används av SmartRate för att:
+     * - bygga MarketSnapshot i ett enda DB-anrop
+     * - undvika upprepade queries per term och bank
+     * <p>
+     * Returnerar endast de fält som behövs för analys
+     * via en projection (MarketRateSnapshotRow).
+     * <p>
+     * OBS:
+     * - Ingen affärslogik här
+     * - Ingen aggregering – sker i service-lagret
+     */
+    @Query("""
+            SELECT
+                m.term          AS term,
+                m.bank.id       AS bankId,
+                m.ratePercent   AS ratePercent
+            FROM MortgageRate m
+            WHERE m.rateType = :rateType
+              AND m.term IN :terms
+              AND m.effectiveDate = (
+                  SELECT MAX(m2.effectiveDate)
+                  FROM MortgageRate m2
+                  WHERE m2.bank = m.bank
+                    AND m2.term = m.term
+                    AND m2.rateType = :rateType
+              )
+            """)
+    List<MarketRateSnapshotRow> findMarketSnapshotRows(
+            @Param("rateType") RateType rateType,
+            @Param("terms") List<MortgageTerm> terms
     );
 }
