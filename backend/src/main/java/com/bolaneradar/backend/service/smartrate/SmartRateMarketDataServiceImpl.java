@@ -1,5 +1,6 @@
 package com.bolaneradar.backend.service.smartrate;
 
+import com.bolaneradar.backend.entity.core.MortgageRate;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
@@ -32,15 +33,14 @@ public class SmartRateMarketDataServiceImpl implements SmartRateMarketDataServic
     // =========================================================================
     @Override
     public BigDecimal getBankAverageRate(Long bankId, MortgageTerm term) {
-        return repo.findFirstByBankIdAndTermAndRateTypeOrderByEffectiveDateDesc(
-                bankId,
-                term,
-                RateType.AVERAGERATE
-        ) != null
-                ? repo.findFirstByBankIdAndTermAndRateTypeOrderByEffectiveDateDesc(
-                bankId, term, RateType.AVERAGERATE
-        ).getRatePercent()
-                : null;
+        MortgageRate rate =
+                repo.findFirstByBankIdAndTermAndRateTypeOrderByEffectiveDateDesc(
+                        bankId,
+                        term,
+                        RateType.AVERAGERATE
+                );
+
+        return rate != null ? rate.getRatePercent() : null;
     }
 
     // =========================================================================
@@ -50,7 +50,7 @@ public class SmartRateMarketDataServiceImpl implements SmartRateMarketDataServic
     public BigDecimal getMarketBestRate(MortgageTerm term) {
         return repo.findLatestRatesByType(RateType.AVERAGERATE).stream()
                 .filter(r -> r.getTerm() == term)
-                .map(r -> r.getRatePercent())
+                .map(MortgageRate::getRatePercent)
                 .min(Comparator.naturalOrder())
                 .orElse(null);
     }
@@ -64,7 +64,7 @@ public class SmartRateMarketDataServiceImpl implements SmartRateMarketDataServic
         List<BigDecimal> values = repo.findLatestRatesByType(RateType.AVERAGERATE)
                 .stream()
                 .filter(r -> r.getTerm() == term)
-                .map(r -> r.getRatePercent())
+                .map(MortgageRate::getRatePercent)
                 .sorted()
                 .toList();
 
@@ -88,19 +88,17 @@ public class SmartRateMarketDataServiceImpl implements SmartRateMarketDataServic
 
         YearMonth ym = YearMonth.from(date);
 
-        return repo.findAverageRateForBankAndTermAndMonth(
-                bankId,
-                MortgageTerm.VARIABLE_3M,
-                ym.atDay(1),
-                ym.plusMonths(1).atDay(1)
-        ) != null
-                ? repo.findAverageRateForBankAndTermAndMonth(
-                bankId,
-                MortgageTerm.VARIABLE_3M,
-                ym.atDay(1),
-                ym.plusMonths(1).atDay(1)
-        ).getRatePercent()
-                : null;
+        List<MortgageRate> rates =
+                repo.findAverageRatesForBankAndTermAndMonth(
+                        bankId,
+                        MortgageTerm.VARIABLE_3M,
+                        ym.atDay(1),
+                        ym.plusMonths(1).atDay(1)
+                );
+
+        return rates.isEmpty()
+                ? null
+                : rates.getFirst().getRatePercent();
     }
 
     // =========================================================================

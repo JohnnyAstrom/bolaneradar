@@ -73,9 +73,21 @@ public class BankRateReadService {
 
             MortgageRate latestAvg = null;
             if (latestMonth != null) {
-                latestAvg = rateRepository.findAverageRateForBankAndTermAndMonth(
-                        bank.getId(), term, latestMonth, latestMonth.plusMonths(1)
-                );
+
+                List<MortgageRate> avgCandidates =
+                        rateRepository.findAverageRatesForBankAndTermAndMonth(
+                                bank.getId(), term, latestMonth, latestMonth.plusMonths(1)
+                        );
+
+                latestAvg = avgCandidates.stream()
+                        .max(Comparator
+                                .comparing(
+                                        MortgageRate::getLastChangedDate,
+                                        Comparator.nullsLast(Comparator.naturalOrder())
+                                )
+                                .thenComparing(MortgageRate::getId)
+                        )
+                        .orElse(null);
             }
 
             rows.add(BankRateMapper.toDto(termCode, latestList, latestAvg));

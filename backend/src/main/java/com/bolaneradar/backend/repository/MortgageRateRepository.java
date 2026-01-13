@@ -243,38 +243,38 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
     LocalDate findLatestAverageDateForBank(@Param("bankId") Long bankId);
 
 
-// ========================================================================
-// ===========  SNITTRÄNTA FÖR BANK + TERM INOM EN SPECIFIK MÅNAD  =========
-// ========================================================================
+    // ========================================================================
+    // ===========  SNITTRÄNTA FÖR BANK + TERM INOM EN SPECIFIK MÅNAD  ========
+    // ========================================================================
 
     /**
-     * Hämtar snittränta (AVERAGERATE) för en bank och en viss bindningstid,
+     * Hämtar alla snitträntor (AVERAGERATE) för en bank och en viss bindningstid,
      * inom en given månad.
      * <p>
-     * Logik:
-     * - monthStart = första dagen i månaden (t.ex. 2025-10-01)
-     * - monthEnd   = nästa månads första dag (t.ex. 2025-11-01)
+     * Returnerar en lista eftersom vissa banker kan korrigera snitträntan i efterhand,
+     * vilket kan ge flera rader för samma månad.
      * <p>
-     * Om banken saknar snittränta för just den månaden:
-     * - returneras null (exempel: 9 år saknas i oktober 2025)
-     * <p>
-     * Används av Bank-sidan för att visa avgRate per term.
+     * Service-lagret avgör vilken som ska användas (t.ex. senaste korrigeringen).
      */
     @Query("""
-            SELECT m FROM MortgageRate m
-            WHERE m.bank.id = :bankId
-              AND m.term = :term
-              AND m.rateType = 'AVERAGERATE'
-              AND m.effectiveDate >= :monthStart
-              AND m.effectiveDate < :monthEnd
-            ORDER BY m.effectiveDate DESC
-            """)
-    MortgageRate findAverageRateForBankAndTermAndMonth(
+    SELECT m FROM MortgageRate m
+    WHERE m.bank.id = :bankId
+      AND m.term = :term
+      AND m.rateType = 'AVERAGERATE'
+      AND m.effectiveDate >= :monthStart
+      AND m.effectiveDate < :monthEnd
+    ORDER BY
+      m.effectiveDate DESC,
+      m.lastChangedDate DESC,
+      m.id DESC
+    """)
+    List<MortgageRate> findAverageRatesForBankAndTermAndMonth(
             @Param("bankId") Long bankId,
             @Param("term") MortgageTerm term,
             @Param("monthStart") LocalDate monthStart,
             @Param("monthEnd") LocalDate monthEnd
     );
+
 
     // ========================================================================
     // ==========   MARKET SNAPSHOT – PRESTANDAKRITISK PROJECTION  ============
