@@ -67,16 +67,16 @@
       "description": "SEB offers mortgages focused on long-term customer relationships and comprehensive financial solutions. The bank considers your entire financial situation and places strong emphasis on advisory services, savings, and individual dialogue. Well suited for those seeking a personal banking relationship and a long-term partner.",
       "overviewText": "Interest rates are individually set and influenced by the overall relationship and dialogue with an advisor.",
       "bestFor": [
-        "those who value personal advisory services and long-term relationships",
-        "those who want to consolidate banking services to improve terms",
-        "those who prefer rates based on relationship and engagement rather than solely loan-to-value",
-        "those who want to influence their mortgage terms through dialogue and negotiation"
+        "those who value personal advisory services and long-term banking relationships",
+        "those who want to consolidate banking services to achieve better terms",
+        "those who prefer interest rates based on relationship and engagement rather than only loan-to-value",
+        "those who want the ability to influence their rate through dialogue and negotiation"
       ],
       "notFor": [
-        "those who want fixed, fully transparent pricing without negotiation",
-        "those unwilling or unable to monitor time-limited discounts",
-        "those who prioritize fast digital handling without advisor interaction",
-        "those who prefer strictly model-driven pricing"
+        "those who prefer fixed, fully transparent pricing without negotiation",
+        "those who do not want to monitor time-limited discounts",
+        "those who prioritize fast digital processes without advisor interaction",
+        "those who want interest rates strictly determined by a pricing model"
       ],
       "primaryCtaLabel": "SEB website",
       "primaryCtaUrl": "https://seb.se/privat/bolan",
@@ -92,13 +92,14 @@
       "bestFor": [
         "dig som vill ha personlig rådgivning och ett långsiktigt kundmöte",
         "dig som vill samla dina banktjänster för att få bättre villkor",
-        "dig som vill ha både digitala tjänster och mänsklig rådgivning",
-        "dig som vill kunna påverka räntan genom dialog och engagemang"
+        "dig som vill att räntan ska baseras mer på relation och engagemang än belåningsgrad",
+        "dig som vill kunna påverka räntan genom dialog och förhandling med din rådgivare"
       ],
       "notFor": [
         "dig som vill slippa förhandla och föredrar fasta, transparenta villkor",
-        "dig som prioriterar en helt automatisk process utan rådgivning",
-        "dig som vill ha exakt samma ränta som andra utan individuell bedömning"
+        "dig som inte vill eller hinner bevaka tidsbegränsade rabatter",
+        "dig som prioriterar snabb digital hantering utan kontakt med rådgivare",
+        "dig som helst vill ha en ränta som styrs helt av modell och inte påverkas av relationer"
       ],
       "primaryCtaLabel": "Nordeas hemsida",
       "primaryCtaUrl": "https://www.nordea.se/privat/produkter/bolan/",
@@ -109,15 +110,16 @@
       "description": "Nordea offers mortgages that combine strong digital accessibility with personal advisory services. The bank applies individual assessments where savings, financial situation, and long-term engagement influence the terms. Suitable for those who want modern services along with support and dialogue when needed.",
       "overviewText": "Interest rates are individually set and influenced by the overall relationship and dialogue with an advisor.",
       "bestFor": [
-        "those who value personal advisory services and long-term relationships",
-        "those who want to consolidate banking services to improve terms",
-        "those who want both digital tools and personal support",
-        "those who want the ability to influence their rate through engagement and dialogue"
+        "those who value personal advisory services and long-term banking relationships",
+        "those who want to consolidate banking services to achieve better terms",
+        "those who prefer interest rates based on relationship and engagement rather than only loan-to-value",
+        "those who want the ability to influence their rate through dialogue and negotiation"
       ],
       "notFor": [
         "those who prefer fixed, fully transparent pricing without negotiation",
-        "those who want a fully automated process without advisory contact",
-        "those who want identical pricing without individual assessment"
+        "those who do not want to monitor time-limited discounts",
+        "those who prioritize fast digital processes without advisor interaction",
+        "those who want interest rates strictly determined by a pricing model"
       ],
       "primaryCtaLabel": "Nordea website",
       "primaryCtaUrl": "https://www.nordea.se/privat/produkter/bolan/",
@@ -133,12 +135,14 @@
       "bestFor": [
         "dig som värdesätter personlig kontakt och lokala beslut",
         "dig som vill bygga en långsiktig relation med din bank",
-        "dig som vill kunna påverka räntan genom dialog och engagemang"
+        "dig som vill kunna påverka räntan genom dialog och engagemang",
+        "dig som föredrar att beslut tas nära kunden snarare än centralt"
       ],
       "notFor": [
         "dig som vill ha en helt digital och automatiserad process",
         "dig som vill ha en helt fast och modellstyrd ränta",
-        "dig som vill slippa rådgivningsmöten"
+        "dig som vill slippa rådgivningsmöten",
+        "dig som vill ha samma villkor oavsett kontor eller geografisk plats"
       ],
       "primaryCtaLabel": "Handelsbankens hemsida",
       "primaryCtaUrl": "https://www.handelsbanken.se/sv/privat/bolan",
@@ -151,12 +155,14 @@
       "bestFor": [
         "those who value personal contact and local decision-making",
         "those who want to build a long-term banking relationship",
-        "those who want to influence their rate through dialogue and engagement"
+        "those who want to influence their rate through dialogue and engagement",
+        "those who prefer decisions made close to the customer rather than centrally"
       ],
       "notFor": [
         "those who want a fully digital and automated process",
         "those who prefer strictly model-based pricing",
-        "those who want to avoid advisory meetings"
+        "those who want to avoid advisory meetings",
+        "those who expect identical terms regardless of branch or location"
       ],
       "primaryCtaLabel": "Handelsbanken website",
       "primaryCtaUrl": "https://www.handelsbanken.se/sv/privat/bolan",
@@ -172,12 +178,14 @@
       "bestFor": [
         "dig som vill samla bank, bolån och försäkringar",
         "dig som uppskattar personlig rådgivning och lokal närvaro",
-        "dig som vill bygga en långsiktig helhetsrelation med banken"
+        "dig som vill bygga en långsiktig helhetsrelation med banken",
+        "dig som föredrar regionalt anpassade villkor framför helt centraliserade beslut"
       ],
       "notFor": [
         "dig som vill ha en helt digital process utan kontakt",
         "dig som söker helt standardiserade villkor",
-        "dig som inte vill samla fler tjänster hos banken"
+        "dig som inte vill samla fler tjänster hos banken",
+        "dig som vill ha exakt samma bolånevillkor oavsett region eller länsbolag"
       ],
       "primaryCtaLabel": "Länsförsäkringars hemsida",
       "primaryCtaUrl": "https://www.lansforsakringar.se/privat/bank/bolan/",
@@ -190,12 +198,14 @@
       "bestFor": [
         "those who want to combine banking, mortgages, and insurance",
         "those who value personal advisory services and local presence",
-        "those seeking a long-term, comprehensive banking relationship"
+        "those seeking a long-term, comprehensive banking relationship",
+        "those who prefer regionally adapted terms rather than fully centralized decisions"
       ],
       "notFor": [
         "those who want a fully digital process without personal contact",
         "those who prefer fully standardized terms",
-        "those who do not want to consolidate additional services"
+        "those who do not want to consolidate additional services",
+        "those who expect identical mortgage terms regardless of region or local branch"
       ],
       "primaryCtaLabel": "Länsförsäkringar website",
       "primaryCtaUrl": "https://www.lansforsakringar.se/privat/bank/bolan/",

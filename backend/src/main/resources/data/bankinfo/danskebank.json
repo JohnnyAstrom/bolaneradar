@@ -5,23 +5,23 @@
 
     "deepInsights": [
       {
-        "heading": "1. Prissättning bygger på modell + fasta rabatter",
+        "heading": "Prissättning bygger på modell + fasta rabatter",
         "text": "Danske Bank använder en öppen räntemodell baserad på belåningsgrad. Utöver detta erbjuder banken rabatter för bland annat fackförbund, LO-förbund eller specifika samarbeten. Ingen förhandling sker — rabatterna är strukturerade och förutsägbara."
       },
       {
-        "heading": "2. En kombination av digitalt och traditionell bankupplevelse",
+        "heading": "En kombination av digitalt och traditionell bankupplevelse",
         "text": "Ansökan kan göras digitalt och går ofta snabbt. Banken erbjuder samtidigt rådgivning för de som vill ha det, men priset påverkas inte av rådgivningen."
       },
       {
-        "heading": "3. Bra för kunder som vill slippa förhandla men ändå kunna påverka priset via rabatter",
+        "heading": "Bra för kunder som vill slippa förhandla men ändå kunna påverka priset via rabatter",
         "text": "Du slipper dialog om ränta, men kan få fördelar genom medlemskap eller samarbeten. Det gör banken attraktiv för exempelvis många yrkesgrupper."
       },
       {
-        "heading": "4. Stabil och trygg bank – särskilt för dig med klar ekonomisk situation",
+        "heading": "Stabil och trygg bank – särskilt för dig med klar ekonomisk situation",
         "text": "Danske Bank fungerar bäst när du har tydliga och stabila förutsättningar, vilket passar deras modellstyrda räntesättning."
       },
       {
-        "heading": "5. Mindre flexibel för komplexa upplägg",
+        "heading": "Mindre flexibel för komplexa upplägg",
         "text": "Vid hög belåningsgrad, många ägare eller ovanliga situationer kan banken bli mindre flexibel. Då passar relationella banker bättre."
       }
     ],
@@ -55,23 +55,23 @@
 
     "deepInsights": [
       {
-        "heading": "1. Pricing is based on a model plus fixed discounts",
+        "heading": "Pricing is based on a model plus fixed discounts",
         "text": "Danske Bank uses an open interest rate model based on loan-to-value ratios. In addition, the bank offers discounts through trade unions, labor organizations, or specific partnerships. There is no negotiation — discounts are structured and predictable."
       },
       {
-        "heading": "2. A combination of digital and traditional banking",
+        "heading": "A combination of digital and traditional banking",
         "text": "Applications can be submitted digitally and are often processed quickly. At the same time, the bank offers advisory services for those who want them, but pricing is not affected by whether advisory support is used."
       },
       {
-        "heading": "3. Suitable for customers who want to avoid negotiation but still influence pricing through discounts",
+        "heading": "Suitable for customers who want to avoid negotiation but still influence pricing through discounts",
         "text": "You avoid direct interest rate negotiations, yet can benefit from membership-based or partnership discounts. This makes the bank attractive to many professional groups."
       },
       {
-        "heading": "4. A stable and reliable bank – especially for customers with a clear financial situation",
+        "heading": "A stable and reliable bank – especially for customers with a clear financial situation",
         "text": "Danske Bank works best when customers have stable and well-defined financial conditions, which aligns well with its model-based pricing structure."
       },
       {
-        "heading": "5. Less flexible for complex arrangements",
+        "heading": "Less flexible for complex arrangements",
         "text": "In cases of high loan-to-value ratios, multiple owners, or unusual circumstances, the bank may be less flexible. In such situations, relationship-focused banks may be more suitable."
       }
     ],

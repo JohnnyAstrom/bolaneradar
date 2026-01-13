@@ -3,17 +3,17 @@
     "sv": {
       "description": "Swedbank är en av Sveriges största banker och erbjuder stabila bolån med stort kontorsnät och fokus på lättillgänglig rådgivning.",
       "uspItems": [
-        "Stort kontorsnät i hela landet",
-        "Digital ansökan med snabb handläggning",
-        "Många kundförmåner genom olika paket"
+        "Många lokala kontor och möjlighet till personlig rådgivning",
+        "Du kan ansöka digitalt men även få hjälp via rådgivare",
+        "Rabatter och villkor påverkas av hur mycket du samlar hos banken"
       ]
     },
     "en": {
       "description": "Swedbank is one of Sweden’s largest banks, offering stable mortgages with a nationwide branch network and a strong focus on accessible advisory services.",
       "uspItems": [
-        "Extensive branch network across Sweden",
-        "Digital application with fast processing",
-        "Multiple customer benefits through bundled services"
+        "Many local branches with access to personal advisory services",
+        "Digital application combined with advisor support when needed",
+        "Mortgage terms are influenced by how much you consolidate with the bank"
       ]
     }
   },
@@ -22,17 +22,17 @@
     "sv": {
       "description": "SEB erbjuder bolån med fokus på långsiktiga kundrelationer, stabil rådgivning och breda finansieringstjänster.",
       "uspItems": [
-        "Personlig rådgivning och långa kundrelationer",
-        "Hållbarhetsfokus med grönt bolån",
-        "Välutvecklade digitala tjänster"
+        "Personlig rådgivning med fokus på långsiktig relation",
+        "Möjlighet till grönt bolån för energieffektiva bostäder",
+        "Både digitala tjänster och rådgivning via kontor"
       ]
     },
     "en": {
       "description": "SEB offers mortgages with a focus on long-term customer relationships, professional advisory services, and a broad range of financial solutions.",
       "uspItems": [
-        "Personal advisory services and long-term relationships",
-        "Sustainability focus with green mortgage options",
-        "Well-developed digital banking services"
+        "Personal advisory services focused on long-term relationships",
+        "Green mortgage options for energy-efficient homes",
+        "Combination of digital services and in-branch advisory support"
       ]
     }
   },
@@ -41,17 +41,17 @@
     "sv": {
       "description": "Nordea är en av Nordens största banker och erbjuder bolån med fokus på digitala tjänster och flexibla lånelösningar.",
       "uspItems": [
-        "Stark digital plattform och snabb ansökan",
-        "Flexibla bolånelösningar",
-        "Rådgivning både online och på kontor"
+        "Smidig digital ansökan och tydlig översikt i app och internetbank",
+        "Möjlighet att anpassa bolånet efter din ekonomi",
+        "Rådgivning både digitalt och via kontor"
       ]
     },
     "en": {
       "description": "Nordea is one of the largest banks in the Nordic region, offering mortgages with a strong focus on digital services and flexible loan solutions.",
       "uspItems": [
-        "Strong digital platform and fast application process",
-        "Flexible mortgage solutions",
-        "Advisory services both online and at local branches"
+        "Smooth digital application and clear overview in app and online banking",
+        "Mortgage solutions that can be adapted to your financial situation",
+        "Advisory services available both digitally and at local branches"
       ]
     }
   },
@@ -60,17 +60,17 @@
     "sv": {
       "description": "Handelsbanken erbjuder bolån med lokal beslutsprocess och fokus på långsiktigt sparande och kundrelationer.",
       "uspItems": [
-        "Lokala kontor fattar egna beslut",
-        "Hög kundnöjdhet över lång tid",
-        "Stort fokus på sparande och helhetslösningar"
+        "Beslut om ränta tas ofta på ditt lokala kontor",
+        "Samma rådgivare över tid ger kontinuitet",
+        "Bolånevillkor baseras på relation och helhetsbild"
       ]
     },
     "en": {
       "description": "Handelsbanken offers mortgages with local decision-making and a strong focus on long-term savings and customer relationships.",
       "uspItems": [
-        "Local branches make independent decisions",
-        "High customer satisfaction over many years",
-        "Strong focus on savings and comprehensive financial solutions"
+        "Interest rate decisions are often made at your local branch",
+        "Long-term relationship with the same advisor",
+        "Mortgage terms are based on overall relationship and financial situation"
       ]
     }
   },
@@ -79,17 +79,17 @@
     "sv": {
       "description": "Länsförsäkringar erbjuder bolån med lokal förankring genom länsbolagen och konkurrenskraftiga villkor för helkunder.",
       "uspItems": [
-        "Lokal förankring via länsbolagen",
-        "Förmånliga villkor för helkunder",
-        "Fokus på trygghet och försäkringslösningar"
+        "Bolån och försäkringar kan samlas hos samma aktör",
+        "Lokala länsbolag sätter villkor och ränta",
+        "Helhetsengagemang kan ge bättre bolånevillkor"
       ]
     },
     "en": {
       "description": "Länsförsäkringar offers mortgages through regional companies, providing strong local presence and competitive terms for full-service customers.",
       "uspItems": [
-        "Strong local presence through regional branches",
-        "Favorable terms for full-service customers",
-        "Focus on security and insurance-based solutions"
+        "Banking and insurance services can be combined with the same provider",
+        "Local regional companies set mortgage terms and interest rates",
+        "Broader customer engagement can lead to better mortgage conditions"
       ]
     }
   },
@@ -98,17 +98,17 @@
     "sv": {
       "description": "SBAB är en statlig bolånebank som fokuserar på enkla villkor, transparent prissättning och helt digital ansökan.",
       "uspItems": [
-        "Statligt ägd och digitalt fokus",
-        "Tydlig och transparent prissättning",
-        "Snabb digital ansökan utan krångel"
+        "Ingen förhandling – samma villkor för alla",
+        "Tydlig ränta utan tidsbegränsade rabatter",
+        "Helt digital ansökan och hantering"
       ]
     },
     "en": {
       "description": "SBAB is a government-owned mortgage bank focusing on simple terms, transparent pricing, and a fully digital application process.",
       "uspItems": [
-        "Government-owned with a strong digital focus",
-        "Clear and transparent pricing",
-        "Fast and hassle-free digital application"
+        "No negotiation – same terms for all customers",
+        "Transparent interest rates without temporary discounts",
+        "Fully digital application and management"
       ]
     }
   },
@@ -117,17 +117,17 @@
     "sv": {
       "description": "Skandiabanken erbjuder bolån med fokus på digital enkelhet och förmånliga villkor för kunder med sparande hos Skandia.",
       "uspItems": [
-        "Förmåner för sparande- och försäkringskunder",
-        "Helt digital bank utan kontor",
-        "Konkurrenskraftiga räntor"
+        "Fördelar för kunder med sparande eller försäkring hos Skandia",
+        "Helt digital bank utan fysiska kontor",
+        "Ofta konkurrenskraftiga räntor utan förhandling"
       ]
     },
     "en": {
       "description": "Skandiabanken offers mortgages focused on digital simplicity and favorable terms for customers with savings or insurance products at Skandia.",
       "uspItems": [
-        "Benefits for savings and insurance customers",
+        "Benefits for customers with savings or insurance at Skandia",
         "Fully digital bank without physical branches",
-        "Competitive mortgage interest rates"
+        "Often competitive interest rates without negotiation"
       ]
     }
   },
@@ -136,17 +136,17 @@
     "sv": {
       "description": "Danske Bank erbjuder bolån med nordisk räckvidd, personlig rådgivning och paketlösningar för både privatpersoner och företagare.",
       "uspItems": [
-        "Personlig rådgivning och helhetslösningar",
-        "Stark nordisk närvaro",
-        "Rabatter för akademiker genom samarbetsavtal"
+        "Personlig rådgivning för både privatpersoner och företagare",
+        "Möjlighet till paketlösningar för flera tjänster",
+        "Särskilda erbjudanden för vissa yrkesgrupper"
       ]
     },
     "en": {
       "description": "Danske Bank offers mortgages with a strong Nordic presence, personal advisory services, and bundled solutions for both private individuals and entrepreneurs.",
       "uspItems": [
-        "Personal advisory services and comprehensive solutions",
-        "Strong Nordic presence",
-        "Discounts for academics through partnership agreements"
+        "Personal advisory services for private individuals and business owners",
+        "Bundled solutions combining multiple banking services",
+        "Special offers available for certain professional groups"
       ]
     }
   },
@@ -155,17 +155,17 @@
     "sv": {
       "description": "ICA Banken erbjuder bolån med enkel digital process och förmåner för kunder som även använder ICA:s övriga tjänster.",
       "uspItems": [
-        "Digital ansökan och enkel helhetslösning",
-        "Förmåner kopplade till ICA:s kundprogram",
-        "Tydliga villkor och snabb handläggning"
+        "Enkel digital bolåneprocess",
+        "Bonus och förmåner kopplade till ICA-kortet",
+        "Tydliga villkor utan krångliga rabatter"
       ]
     },
     "en": {
       "description": "ICA Banken offers mortgages with a simple digital process and benefits for customers who also use other ICA services.",
       "uspItems": [
-        "Digital application and simple overall solution",
-        "Benefits linked to ICA’s customer loyalty program",
-        "Clear terms and fast processing"
+        "Simple digital mortgage application process",
+        "Bonuses and benefits linked to ICA loyalty programs",
+        "Clear terms without complex discount structures"
       ]
     }
   },
@@ -174,17 +174,17 @@
     "sv": {
       "description": "Landshypotek är en medlemsägd bank med lång tradition och erbjuder bolån med fokus på stabilitet och transparens.",
       "uspItems": [
-        "Medlemsägd bank med lång historik",
-        "Stabil prisbild och tydlig räntesättning",
-        "Fokus på boende och jordbruksrelaterade lån"
+        "Medlemsägd bank med fokus på stabilitet",
+        "Tydlig räntesättning utan aggressiva kampanjer",
+        "Särskilt stark inom boende och landsbygdsnära fastigheter"
       ]
     },
     "en": {
       "description": "Landshypotek is a member-owned bank with a long tradition, offering mortgages focused on stability and transparency.",
       "uspItems": [
-        "Member-owned bank with a long history",
-        "Stable pricing and clear interest rate structure",
-        "Focus on housing and agriculture-related lending"
+        "Member-owned bank focused on long-term stability",
+        "Clear interest rate structure without aggressive campaigns",
+        "Strong focus on housing and rural property financing"
       ]
     }
   },
@@ -194,16 +194,16 @@
       "description": "Ikano Bank erbjuder enkla bolån med digital ansökan och konkurrenskraftiga villkor, ofta kombinerat med olika kundförmåner.",
       "uspItems": [
         "Enkel digital ansökan",
-        "Konkurrenskraftiga bolåneräntor",
-        "Förmåner för lojala kunder"
+        "Ofta konkurrenskraftig ränta utan krav på helkund",
+        "Tydlig bolåneprodukt utan många tillägg"
       ]
     },
     "en": {
       "description": "Ikano Bank offers simple mortgages with digital applications and competitive terms, often combined with various customer benefits.",
       "uspItems": [
         "Simple digital application process",
-        "Competitive mortgage interest rates",
-        "Benefits for loyal customers"
+        "Often competitive rates without requiring full-service engagement",
+        "Straightforward mortgage product without complex add-ons"
       ]
     }
   },
@@ -212,17 +212,17 @@
     "sv": {
       "description": "Ålandsbanken erbjuder bolån med personlig service, långsiktiga kundrelationer och hållbarhetsinriktade finansiella produkter.",
       "uspItems": [
-        "Mycket hög grad av personlig service",
-        "Premiuminriktning med kundfokus",
-        "Fokus på hållbara investeringar och gröna alternativ"
+        "Mycket personlig service och nära kundkontakt",
+        "Passar kunder som söker mer skräddarsydda lösningar",
+        "Starkt fokus på hållbara investeringar"
       ]
     },
     "en": {
       "description": "Ålandsbanken offers mortgages with a high level of personal service, long-term customer relationships, and sustainability-focused financial products.",
       "uspItems": [
-        "Very high level of personal service",
-        "Premium-oriented banking with strong customer focus",
-        "Focus on sustainable investments and green alternatives"
+        "Very high level of personal service and close customer contact",
+        "Suitable for customers seeking tailored financial solutions",
+        "Strong focus on sustainable investments"
       ]
     }
   }
