@@ -37,9 +37,30 @@ const logoMap: Record<string, string> = {
     alandsbanken: "/logos/alandsbanken.svg",
 };
 
+/**
+ * Preload av bilder (används för bankloggor)
+ */
+function preloadImage(src: string) {
+    if (!src) return;
+    const img = new Image();
+    img.src = src;
+}
+
 const BankPage: FC = () => {
     const { bankKey } = useParams();
     const { t } = useTranslation();
+
+    /* ============================================================
+     * PRELOAD LOGO SÅ TIDIGT SOM MÖJLIGT
+     * ============================================================ */
+    useEffect(() => {
+        if (!bankKey) return;
+
+        const logoUrl = logoMap[bankKey];
+        if (logoUrl) {
+            preloadImage(logoUrl);
+        }
+    }, [bankKey]);
 
     /* ============================================================
      * HÄMTA INTRODATA
@@ -74,7 +95,9 @@ const BankPage: FC = () => {
         };
 
         load();
-        return () => { isMounted = false; };
+        return () => {
+            isMounted = false;
+        };
     }, [bankKey]);
 
     /* ============================================================

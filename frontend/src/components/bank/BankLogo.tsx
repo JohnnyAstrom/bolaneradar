@@ -9,7 +9,6 @@ interface BankLogoProps {
 
 const BankLogo: FC<BankLogoProps> = ({ src, alt, bankKey }) => {
     const config = brandConfig[bankKey] ?? {};
-
     const maxH = config.maxHeight ? `${config.maxHeight}px` : "56px";
 
     return (
@@ -24,6 +23,10 @@ const BankLogo: FC<BankLogoProps> = ({ src, alt, bankKey }) => {
             <img
                 src={src}
                 alt={alt}
+                loading="eager"
+                decoding="sync"
+                width={200}
+                height={56}
                 style={{
                     height: maxH,
                     width: "auto",
