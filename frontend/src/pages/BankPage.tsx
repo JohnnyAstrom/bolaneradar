@@ -10,6 +10,7 @@ import BankIntroSection from "../components/bank/BankIntroSection";
 import BankCurrentRatesTable from "../components/bank/BankCurrentRatesTable";
 import BankGraphSection from "../components/bank/BankGraphSection";
 import BankDetailsSection from "../components/bank/BankDetailsSection";
+import BankLogo from "../components/bank/BankLogo";
 
 import { bankDisplayNames } from "../config/bankDisplayNames";
 
@@ -152,12 +153,19 @@ const BankPage: FC = () => {
     return (
         <PageWrapper>
 
+            {/* LOGO – renderas direkt */}
+            <Section>
+                <BankLogo
+                    src={logoUrl}
+                    alt={displayName}
+                    bankKey={bankKey}
+                />
+            </Section>
+
             {/* INTRO */}
             <Section>
                 {introData ? (
                     <BankIntroSection
-                        bankKey={bankKey}
-                        logoUrl={logoUrl}
                         description={introData.description}
                         uspItems={introData.uspItems}
                     />
