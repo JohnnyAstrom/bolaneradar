@@ -39,7 +39,7 @@ const logoMap: Record<string, string> = {
 };
 
 /**
- * Preload av bilder (används för bankloggor)
+ * Preload av bilder (bankloggor)
  */
 function preloadImage(src: string) {
     if (!src) return;
@@ -56,24 +56,21 @@ const BankPage: FC = () => {
      * ============================================================ */
     useEffect(() => {
         if (!bankKey) return;
-
         const logoUrl = logoMap[bankKey];
-        if (logoUrl) {
-            preloadImage(logoUrl);
-        }
+        if (logoUrl) preloadImage(logoUrl);
     }, [bankKey]);
 
     /* ============================================================
-     * HÄMTA INTRODATA
+     * INTRODATA
      * ============================================================ */
     const {
         data: introData,
         loading: introLoading,
-        error: introError
+        error: introError,
     } = useBankIntro(bankKey || "");
 
     /* ============================================================
-     * HÄMTA RÄNTOR
+     * RÄNTOR
      * ============================================================ */
     const [rateData, setRateData] = useState<BankRateResponse | null>(null);
     const [ratesLoading, setRatesLoading] = useState(true);
@@ -108,43 +105,13 @@ const BankPage: FC = () => {
         return (
             <PageWrapper>
                 <Section>
-                    <p className="text-red-600">
-                        {t("bank.errors.notFound")}
-                    </p>
+                    <p className="text-red-600">{t("bank.errors.notFound")}</p>
                 </Section>
             </PageWrapper>
         );
     }
 
-    if (introLoading || ratesLoading) {
-        return (
-            <PageWrapper>
-                <Section>
-                    <p>{t("common.loading")}</p>
-                </Section>
-            </PageWrapper>
-        );
-    }
-
-    if (!rateData) {
-        return (
-            <PageWrapper>
-                <Section>
-                    <p className="text-red-600">
-                        {t("bank.errors.rateData")}
-                    </p>
-                </Section>
-            </PageWrapper>
-        );
-    }
-
-    /* ============================================================
-     * VISNINGSNAMN + LOGO
-     * ============================================================ */
-    const displayName =
-        bankDisplayNames[bankKey] ??
-        bankKey;
-
+    const displayName = bankDisplayNames[bankKey] ?? bankKey;
     const logoUrl = logoMap[bankKey] ?? "";
 
     /* ============================================================
@@ -153,58 +120,57 @@ const BankPage: FC = () => {
     return (
         <PageWrapper>
 
-            {/* LOGO – renderas direkt */}
+            {/* INTRO + LOGO (samma sektion, olika loading) */}
             <Section>
                 <BankLogo
                     src={logoUrl}
                     alt={displayName}
                     bankKey={bankKey}
                 />
-            </Section>
 
-            {/* INTRO */}
-            <Section>
-                {introData ? (
+                {introLoading ? (
+                    <p>{t("common.loading")}</p>
+                ) : introData ? (
                     <BankIntroSection
                         description={introData.description}
                         uspItems={introData.uspItems}
                     />
                 ) : (
                     <p className="text-red-600">
-                        {introError ?? t("bank.errors.intro", { bank: displayName })}
+                        {introError ??
+                            t("bank.errors.intro", { bank: displayName })}
                     </p>
                 )}
             </Section>
 
             {/* RÄNTOR */}
             <Section>
-                <div
-                    className="
-                        w-full max-w-full mx-auto
-                        p-0 bg-transparent border-none rounded-none
-                        sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
-                        sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
-                    "
-                >
-                    <BankCurrentRatesTable
-                        rows={rateData.rows}
-                        averageMonthFormatted={rateData.monthFormatted}
-                    />
-                </div>
+                {ratesLoading ? (
+                    <p>{t("common.loading")}</p>
+                ) : rateData ? (
+                    <div
+                        className="
+                            w-full max-w-full mx-auto
+                            p-0 bg-transparent border-none rounded-none
+                            sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
+                            sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
+                        "
+                    >
+                        <BankCurrentRatesTable
+                            rows={rateData.rows}
+                            averageMonthFormatted={rateData.monthFormatted}
+                        />
+                    </div>
+                ) : (
+                    <p className="text-red-600">
+                        {t("bank.errors.rateData")}
+                    </p>
+                )}
             </Section>
 
             {/* HISTORISK GRAF */}
             <Section>
-                <div
-                    className="
-                        w-full max-w-full mx-auto
-                        p-0 bg-transparent border-none rounded-none
-                        sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
-                        sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
-                    "
-                >
-                    <BankGraphSection bankName={bankKey} />
-                </div>
+                <BankGraphSection bankName={bankKey} />
             </Section>
 
             {/* BANK DETAILS */}
