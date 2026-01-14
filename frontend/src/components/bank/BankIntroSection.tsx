@@ -22,13 +22,7 @@ const BankIntroSection: FC<BankIntroSectionProps> = ({
     ];
 
     return (
-        <div
-            className="
-                max-w-4xl mx-auto
-                pt-0 pb-0 px-0
-                sm:py-4 sm:px-6
-            "
-        >
+        <div>
             <p className="text-text-secondary max-w-2xl leading-relaxed mb-6">
                 {description ?? fallbackDescription}
             </p>

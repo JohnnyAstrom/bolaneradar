@@ -11,20 +11,36 @@ import BankInfoPage from "./pages/BankInfoPage";
 
 export default function App() {
 
+    // Recharts kan logga en falsk varning om width/height = -1
+    // vid initial mount trots korrekt layout.
+    // Filtreras bort globalt eftersom den saknar signalvärde.
     useEffect(() => {
-        // Warmup: väck backend direkt (Render kan vara seg vid cold start)
-        // AbortController gör att vi inte lämnar hängande requests
-        // om komponenten unmountas (t.ex. vid snabb reload).
+        const originalWarn = console.warn;
+
+        console.warn = (...args: unknown[]) => {
+            if (
+                typeof args[0] === "string" &&
+                args[0].includes("The width(-1) and height(-1) of chart")
+            ) {
+                return;
+            }
+
+            originalWarn(...args);
+        };
+    }, []);
+
+    /* ============================================================
+     * WARMUP AV BACKEND (RENDER COLD START)
+     * ============================================================ */
+    useEffect(() => {
         const controller = new AbortController();
 
         fetch(`${import.meta.env.VITE_API_URL}/api/health`, {
             signal: controller.signal,
         }).catch(() => {
             // Ignorera fel – detta är bara ett warmup-anrop
-            // Backend kan vara nere eller långsam utan att det är ett problem här
         });
 
-        // Städa upp requesten om komponenten försvinner
         return () => {
             controller.abort();
         };

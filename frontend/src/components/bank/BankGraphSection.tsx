@@ -16,7 +16,8 @@ import {
     YAxis,
     Tooltip,
     CartesianGrid,
-    Area
+    Area,
+    ReferenceLine
 } from "recharts";
 
 interface Props {
@@ -149,7 +150,6 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
 
             <div
                 className="
-                    w-full
                     bg-white
                     border border-border
                     rounded-lg
@@ -190,14 +190,27 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                                     </linearGradient>
                                 </defs>
 
-                                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                                <CartesianGrid
+                                    strokeDasharray="3 3"
+                                    stroke="#E5E7EB"
+                                    vertical={false}
+                                />
+
+                                {data.map(point => (
+                                    <ReferenceLine
+                                        key={point.effectiveDate}
+                                        x={point.effectiveDate}
+                                        stroke="#E5E7EB"
+                                        strokeDasharray="3 3"
+                                    />
+                                ))}
 
                                 <XAxis
                                     dataKey="effectiveDate"
                                     tickFormatter={formatMonth}
                                     tick={{ fontSize: 10 }}
                                     stroke="#6B7280"
-                                    interval="preserveStartEnd"
+                                    ticks={data.map(d => d.effectiveDate)}
                                 />
 
                                 <YAxis

@@ -59,11 +59,10 @@ export default function BankInfoPage() {
             <Section>
                 <div
                     className="
-                        w-full mx-auto
-                        bg-white rounded-md
-                        p-0 mt-0
-                        sm:rounded-lg sm:p-6
-                        max-w-2xl sm:max-w-3xl
+                        w-full max-w-full mx-auto
+                        p-2 bg-transparent border-none rounded-none
+                        sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
+                        sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
                     "
                 >
                     <div className="mb-6">
@@ -85,11 +84,10 @@ export default function BankInfoPage() {
             <Section>
                 <div
                     className="
-                        w-full mx-auto
-                        bg-white rounded-md
-                        p-0 mt-0
-                        sm:rounded-lg sm:p-6
-                        max-w-2xl sm:max-w-3xl
+                        w-full max-w-full mx-auto
+                        p-2 bg-transparent border-none rounded-none
+                        sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
+                        sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
                     "
                 >
                     <h2 className="text-xl font-semibold mb-4 text-text-primary">
@@ -100,7 +98,7 @@ export default function BankInfoPage() {
                         {info.deepInsights.map((point, i) => (
                             <div
                                 key={i}
-                                className="bg-white border border-border rounded-lg p-5"
+                                className="bg-white border border-border rounded-lg p-2"
                             >
                                 <h3 className="font-medium text-text-primary mb-1">
                                     {point.heading}
@@ -118,11 +116,10 @@ export default function BankInfoPage() {
             <Section>
                 <div
                     className="
-                        w-full mx-auto
-                        bg-white rounded-md
-                        p-0 mt-0
-                        sm:rounded-lg sm:p-6
-                        max-w-2xl sm:max-w-3xl
+                        w-full max-w-full mx-auto
+                        p-2 bg-transparent border-none rounded-none
+                        sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
+                        sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
                     "
                 >
                     <h2 className="text-xl font-semibold mb-4 text-text-primary">
@@ -133,7 +130,7 @@ export default function BankInfoPage() {
                         {info.faq.map((f, i) => (
                             <div
                                 key={i}
-                                className="bg-white border border-border rounded-lg p-5"
+                                className="bg-white border border-border rounded-lg p-2"
                             >
                                 <p className="font-medium text-text-primary mb-1">
                                     {f.question}
@@ -151,12 +148,10 @@ export default function BankInfoPage() {
             <Section>
                 <div
                     className="
-                        w-full mx-auto
-                        bg-white rounded-md
-                        p-0 mt-0
-                        sm:rounded-lg sm:p-6
-                        max-w-2xl sm:max-w-3xl
-                        text-center
+                        w-full max-w-full mx-auto
+                        p-2 bg-transparent border-none rounded-none
+                        sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
+                        sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
                     "
                 >
                     <div className="flex flex-col sm:flex-row gap-4 mt-4">

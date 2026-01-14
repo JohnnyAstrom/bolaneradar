@@ -1,7 +1,7 @@
-import type { FC } from "react";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import type {FC} from "react";
+import {useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 
 import PageWrapper from "../components/layout/PageWrapper";
 import Section from "../components/layout/Section";
@@ -12,12 +12,14 @@ import BankGraphSection from "../components/bank/BankGraphSection";
 import BankDetailsSection from "../components/bank/BankDetailsSection";
 import BankLogo from "../components/bank/BankLogo";
 
-import { bankDisplayNames } from "../config/bankDisplayNames";
+import {bankDisplayNames} from "../config/bankDisplayNames";
 
-import { getBankRates } from "../client/bankApi";
-import type { BankRateResponse } from "../client/bankApi";
+import {preloadImage} from "../utils/preloadImage";
 
-import { useBankIntro } from "../hooks/useBankIntro";
+import {getBankRates} from "../client/bankApi";
+import type {BankRateResponse} from "../client/bankApi";
+
+import {useBankIntro} from "../hooks/useBankIntro";
 
 /**
  * Karta över logotyper per bank.
@@ -38,21 +40,12 @@ const logoMap: Record<string, string> = {
     alandsbanken: "/logos/alandsbanken.svg",
 };
 
-/**
- * Preload av bilder (bankloggor)
- */
-function preloadImage(src: string) {
-    if (!src) return;
-    const img = new Image();
-    img.src = src;
-}
-
 const BankPage: FC = () => {
-    const { bankKey } = useParams();
-    const { t } = useTranslation();
+    const {bankKey} = useParams();
+    const {t} = useTranslation();
 
     /* ============================================================
-     * PRELOAD LOGO SÅ TIDIGT SOM MÖJLIGT
+     * PRELOAD LOGO
      * ============================================================ */
     useEffect(() => {
         if (!bankKey) return;
@@ -120,27 +113,36 @@ const BankPage: FC = () => {
     return (
         <PageWrapper>
 
-            {/* INTRO + LOGO (samma sektion, olika loading) */}
+            {/* INTRO + LOGO */}
             <Section>
-                <BankLogo
-                    src={logoUrl}
-                    alt={displayName}
-                    bankKey={bankKey}
-                />
-
-                {introLoading ? (
-                    <p>{t("common.loading")}</p>
-                ) : introData ? (
-                    <BankIntroSection
-                        description={introData.description}
-                        uspItems={introData.uspItems}
+                {/* GEMENSAM LAYOUT-CONTAINER */}
+                <div
+                    className="
+                    max-w-4xl mx-auto
+                    pt-0 pb-0 px-0
+                    sm:py-4 sm:px-6
+                "
+                >
+                    <BankLogo
+                        src={logoUrl}
+                        alt={displayName}
+                        bankKey={bankKey}
                     />
-                ) : (
-                    <p className="text-red-600">
-                        {introError ??
-                            t("bank.errors.intro", { bank: displayName })}
-                    </p>
-                )}
+
+                    {introLoading ? (
+                        <p>{t("common.loading")}</p>
+                    ) : introData ? (
+                        <BankIntroSection
+                            description={introData.description}
+                            uspItems={introData.uspItems}
+                        />
+                    ) : (
+                        <p className="text-red-600">
+                            {introError ??
+                                t("bank.errors.intro", {bank: displayName})}
+                        </p>
+                    )}
+                </div>
             </Section>
 
             {/* RÄNTOR */}
@@ -150,11 +152,11 @@ const BankPage: FC = () => {
                 ) : rateData ? (
                     <div
                         className="
-                            w-full max-w-full mx-auto
-                            p-0 bg-transparent border-none rounded-none
-                            sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
-                            sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
-                        "
+                        w-full max-w-full mx-auto
+                        p-0 bg-transparent border-none rounded-none
+                        sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
+                        sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
+                    "
                     >
                         <BankCurrentRatesTable
                             rows={rateData.rows}
@@ -170,12 +172,20 @@ const BankPage: FC = () => {
 
             {/* HISTORISK GRAF */}
             <Section>
-                <BankGraphSection bankName={bankKey} />
+                <div
+                    className="
+                    max-w-4xl mx-auto
+                    pt-0 pb-0 px-0
+                    sm:py-4 sm:px-6
+                "
+                >
+                    <BankGraphSection bankName={bankKey}/>
+                </div>
             </Section>
 
             {/* BANK DETAILS */}
             <Section>
-                <BankDetailsSection bankKey={bankKey} />
+                <BankDetailsSection bankKey={bankKey}/>
             </Section>
 
         </PageWrapper>
