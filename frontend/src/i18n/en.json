@@ -298,6 +298,78 @@
     "email": "Email"
   },
 
+  "guide": {
+    "intro": {
+      "title": "Mortgage Guide",
+      "paragraphs": [
+        "The Mortgage Guide is designed to help you interpret and understand the information presented in BolåneRadar.",
+        "It explains how mortgage interest rates, comparisons, and analysis results can be read and used as decision support rather than absolute truths.",
+        "The guide is intended as a complement to figures and charts, providing context and reducing the risk of misinterpretation."
+      ]
+    },
+
+    "rates": {
+      "title": "How to interpret mortgage interest rates",
+      "paragraphs": [
+        "When comparing mortgage interest rates, it is important to understand the difference between different types of rates.",
+        "Listed rates are the banks’ official starting points and rarely reflect what customers actually pay.",
+        "Average rates instead show the average interest rate that the bank’s customers have had during a given period and often provide a more realistic picture of the interest level.",
+        "However, a low average rate does not automatically mean that the same terms are available to everyone. The interest rate is influenced by factors such as loan size, loan-to-value ratio, customer relationship, and negotiation position."
+      ]
+    },
+
+    "comparison": {
+      "title": "Comparing banks – what actually matters?",
+      "paragraphs": [
+        "Comparisons between banks should always be seen as indicative rather than definitive.",
+        "Banks have different customer bases, risk assessments, and business strategies, which means that average rates may differ even when market conditions are similar.",
+        "When comparing banks in BolåneRadar, it is therefore wise to focus on:"
+      ],
+      "points": [
+        "differences in average rates over time",
+        "how often interest rates are adjusted",
+        "stability rather than individual peak or low values"
+      ]
+    },
+
+    "history": {
+      "title": "Historical interest rates – context, not a forecast",
+      "paragraphs": [
+        "Historical interest rate development can provide valuable context but should not be interpreted as a forecast of future interest rate levels.",
+        "The charts in BolåneRadar show how average mortgage rates have changed over time and can help identify patterns, trends, and stability.",
+        "At the same time, interest rates are affected by factors such as inflation, policy rates, and economic conditions, making future levels uncertain. Historical data should therefore be seen as a tool for understanding rather than prediction."
+      ]
+    },
+
+    "smartRate": {
+      "title": "The Smart Rate Test – how to understand the result",
+      "paragraphs": [
+        "The Smart Rate Test analyzes your interest rate in relation to current market data.",
+        "The test can be used both with and without concrete rate offers and provides an indication of how competitive your rate is compared to the market.",
+        "The result is intended as decision support and can help you assess whether:"
+      ],
+      "points": [
+        "your interest rate is in line with the market",
+        "there is room for negotiation",
+        "it may be worth comparing additional alternatives"
+      ],
+      "note": "The analysis does not take all individual factors into account and should therefore not be considered personal financial advice."
+    },
+
+    "disclaimer": {
+      "title": "Limitations and responsibility",
+      "paragraphs": [
+        "BolåneRadar is an independent information and comparison service.",
+        "The service:"
+      ],
+      "points": [
+        "does not provide personal financial advice",
+        "does not replace contact with a bank or financial advisor",
+        "does not guarantee that specific interest rate levels can be achieved"
+      ],
+      "closing": "All information presented is based on publicly available data and is used at your own responsibility. The purpose is to strengthen the consumer’s decision-making basis, not to direct decisions."
+    }
+  },
 
   "footer": {
     "description": "BolåneRadar is an independent service for comparison and analysis of Swedish mortgage rates.",

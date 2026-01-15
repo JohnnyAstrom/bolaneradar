@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import PageWrapper from "../components/layout/PageWrapper";
 import Section from "../components/layout/Section";
 
-export default function AboutPage() {
+export default function AboutBolaneRadarPage() {
     const { t } = useTranslation();
 
     return (

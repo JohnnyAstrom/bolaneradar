@@ -287,6 +287,80 @@
     "email": "E-post"
   },
 
+  "guide": {
+    "intro": {
+      "title": "Bolåneguiden",
+      "paragraphs": [
+        "Bolåneguiden är till för att hjälpa dig tolka och förstå den information som visas i BolåneRadar.",
+        "Här förklaras hur bolåneräntor, jämförelser och analysresultat kan läsas och användas som beslutsstöd – inte som absoluta sanningar.",
+        "Guiden är tänkt som ett komplement till siffror och grafer, för att ge sammanhang och minska risken för feltolkningar."
+      ]
+    },
+
+    "rates": {
+      "title": "Hur man bör tolka bolåneräntor",
+      "paragraphs": [
+        "När man jämför bolåneräntor är det viktigt att förstå skillnaden mellan olika typer av räntor.",
+        "Listräntor är bankernas officiella utgångspriser och speglar sällan vad kunder faktiskt betalar.",
+        "Snitträntor visar istället den genomsnittliga räntan som bankens kunder haft under en viss period, och ger ofta en mer realistisk bild av räntenivån.",
+        "En låg snittränta betyder dock inte automatiskt att samma villkor är möjliga för alla. Räntan påverkas bland annat av lånebelopp, belåningsgrad, kundrelation och förhandlingsläge."
+      ]
+    },
+
+    "comparison": {
+      "title": "Jämförelser mellan banker – vad är relevant?",
+      "paragraphs": [
+        "Jämförelser mellan banker bör alltid ses som vägledande, inte som exakta facit.",
+        "Banker har olika kundbaser, riskbedömningar och affärsstrategier, vilket gör att snitträntor kan skilja sig även om marknadsläget är likartat.",
+        "När du jämför banker i BolåneRadar är det därför klokt att fokusera på:"
+      ],
+      "points": [
+        "skillnader i snittränta över tid",
+        "hur ofta räntor justeras",
+        "stabilitet snarare än enskilda topp- eller bottenvärden"
+      ]
+    },
+
+    "history": {
+      "title": "Historisk ränta – kontext, inte prognos",
+      "paragraphs": [
+        "Historisk ränteutveckling kan ge värdefull kontext, men ska inte tolkas som en prognos för framtiden.",
+        "Graferna i BolåneRadar visar hur snitträntor har förändrats över tid och kan hjälpa till att identifiera mönster, trender och stabilitet.",
+        "Samtidigt påverkas räntor av faktorer som inflation, styrräntor och konjunktur, vilket gör framtida nivåer osäkra. Historiken bör därför ses som ett underlag för förståelse – inte som ett förutsägelseverktyg."
+      ]
+    },
+
+    "smartRate": {
+      "title": "Smart Ränte-testet – hur resultatet ska förstås",
+      "paragraphs": [
+        "Smart Ränte-testet analyserar din ränta i relation till aktuell marknadsdata.",
+        "Testet kan användas både med och utan konkreta ränteerbjudanden och ger en indikation på hur konkurrenskraftig din ränta är jämfört med marknaden.",
+        "Resultatet är tänkt som ett beslutsstöd och kan hjälpa dig att avgöra om:"
+      ],
+      "points": [
+        "din ränta ligger i linje med marknaden",
+        "det finns utrymme för förhandling",
+        "det kan vara värt att jämföra fler alternativ"
+      ],
+      "note": "Analysen tar dock inte hänsyn till alla individuella faktorer och bör därför inte ses som personlig rådgivning."
+    },
+
+    "disclaimer": {
+      "title": "Begränsningar och ansvar",
+      "paragraphs": [
+        "BolåneRadar är en oberoende informations- och jämförelsetjänst.",
+        "Tjänsten:"
+      ],
+      "points": [
+        "ger inga personliga finansiella råd",
+        "ersätter inte kontakt med bank eller rådgivare",
+        "garanterar inte att specifika räntenivåer kan uppnås"
+      ],
+      "closing": "All information som presenteras bygger på öppet tillgänglig data och används på eget ansvar. Syftet är att stärka konsumentens beslutsunderlag – inte att styra beslut."
+    }
+  },
+
+
   "footer": {
     "description": "BolåneRadar är en oberoende tjänst för jämförelse och analys av svenska bolåneräntor.",
     "about": "Om BolåneRadar",
