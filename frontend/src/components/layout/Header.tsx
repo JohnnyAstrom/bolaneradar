@@ -40,7 +40,7 @@ export default function Header() {
                     <NavLink to="/guide" className={linkClass}>
                         {t("nav.guide")}
                     </NavLink>
-                    <NavLink to="/om-oss" className={linkClass}>
+                    <NavLink to="/om-bolaneradar" className={linkClass}>
                         {t("nav.about")}
                     </NavLink>
 
@@ -102,7 +102,7 @@ export default function Header() {
                         {t("nav.guide")}
                     </NavLink>
                     <NavLink
-                        to="/om-oss"
+                        to="/om-bolaneradar"
                         onClick={() => setOpen(false)}
                         className={linkClass}
                     >

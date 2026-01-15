@@ -2,7 +2,7 @@
   "nav": {
     "home": "Start",
     "guide": "Guide",
-    "about": "Om oss",
+    "about": "Om BolåneRadar",
     "menu": "Meny"
   },
 
@@ -269,8 +269,28 @@
     }
   },
 
+  "about": {
+    "title": "Om BolåneRadar",
+
+    "intro": "BolåneRadar är en oberoende webbtjänst för att jämföra och analysera svenska bolåneräntor. Syftet är att göra det enklare för privatpersoner att förstå ränteläget på marknaden och få ett bättre beslutsunderlag inför val av bank eller omförhandling av bolån.",
+
+    "noAds": "Till skillnad från många jämförelsetjänster är BolåneRadar fri från reklam, sponsrade placeringar och kommersiella incitament. All information som visas bygger på öppet tillgänglig data från bankernas egna publika källor och presenteras på ett konsekvent och transparent sätt.",
+
+    "smartRate": "En central del av tjänsten är Smart Ränte-testet, som hjälper användaren att sätta sin egen ränta i relation till marknaden. Genom att kombinera användarens uppgifter med aktuell och historisk marknadsdata ges en tydlig bild av hur konkurrenskraftigt ett erbjudande är – utan att kräva förkunskaper inom ekonomi.",
+
+    "architecture": "BolåneRadar är utvecklad med fokus på tydlig ansvarsfördelning, robust teknik och långsiktig underhållbarhet. All analys och databehandling sker i backend, medan frontenden är utformad för att vara snabb, lättöverskådlig och pedagogisk.",
+
+    "future": "Projektet utvecklas kontinuerligt med ambitionen att förbättra innehåll, användarupplevelse och analysfunktioner över tid. Källkoden är öppen för granskning och tjänsten bygger på principerna om neutralitet, korrekthet och konsumentnytta.",
+
+    "contactTitle": "Kontakt & ansvar",
+    "contactIntro": "BolåneRadar är ett självständigt utvecklingsprojekt som drivs och underhålls av Johnny Åström. Synpunkter, förbättringsförslag eller frågor kring tjänsten tas gärna emot.",
+    "email": "E-post"
+  },
+
   "footer": {
-    "copyright": "© {{year}} BolåneRadar. Alla rättigheter förbehållna."
+    "description": "BolåneRadar är en oberoende tjänst för jämförelse och analys av svenska bolåneräntor.",
+    "about": "Om BolåneRadar",
+    "copyright": "© {{year}} BolåneRadar"
   },
 
   "language": {

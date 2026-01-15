@@ -52,7 +52,7 @@ export default function App() {
                 <Route element={<Layout />}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/guide" element={<GuidePage />} />
-                    <Route path="/om-oss" element={<AboutPage />} />
+                    <Route path="/om-bolaneradar" element={<AboutPage />} />
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/bank/:bankKey" element={<BankPage />} />
                     <Route path="/bank/:bankKey/info" element={<BankInfoPage />} />

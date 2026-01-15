@@ -2,7 +2,7 @@
   "nav": {
     "home": "Home",
     "guide": "Guide",
-    "about": "About us",
+    "about": "About BolåneRadar",
     "menu": "Menu"
   },
 
@@ -280,8 +280,29 @@
     }
   },
 
+  "about": {
+    "title": "About BolåneRadar",
+
+    "intro": "BolåneRadar is an independent web service for comparing and analyzing Swedish mortgage rates. The purpose of the service is to make it easier for consumers to understand market interest rates and gain better decision support when choosing a bank or renegotiating a mortgage.",
+
+    "noAds": "Unlike many comparison services, BolåneRadar is free from advertising, sponsored placements, and commercial incentives. All information presented is based on publicly available data from the banks’ own sources and is displayed in a consistent and transparent manner.",
+
+    "smartRate": "A central part of the service is the Smart Rate Test, which helps users evaluate their own mortgage rate in relation to the market. By combining user-provided information with current and historical market data, the service provides a clear assessment of how competitive an offer is — without requiring prior financial expertise.",
+
+    "architecture": "BolåneRadar is developed with a strong focus on clear separation of responsibilities, robust technology, and long-term maintainability. All analysis and data processing are handled in the backend, while the frontend is designed to be fast, clear, and easy to understand.",
+
+    "future": "The project is continuously developed with the ambition to improve content, user experience, and analytical capabilities over time. The source code is open for review, and the service is built on principles of neutrality, accuracy, and consumer benefit.",
+
+    "contactTitle": "Contact & responsibility",
+    "contactIntro": "BolåneRadar is an independent development project created and maintained by Johnny Åström. Feedback, suggestions, or questions regarding the service are welcome.",
+    "email": "Email"
+  },
+
+
   "footer": {
-    "copyright": "© {{year}} BolåneRadar. All rights reserved."
+    "description": "BolåneRadar is an independent service for comparison and analysis of Swedish mortgage rates.",
+    "about": "About BolåneRadar",
+    "copyright": "© {{year}} BolåneRadar"
   },
 
   "language": {
