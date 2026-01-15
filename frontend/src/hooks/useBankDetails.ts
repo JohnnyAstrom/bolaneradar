@@ -13,7 +13,7 @@
  */
 
 import {useEffect, useState} from "react";
-import {getBankDetails} from "../client/bankApi";
+import {getBankDetails} from "../services/bankApi";
 import {useTranslation} from "react-i18next";
 
 export interface BankDetailsData {

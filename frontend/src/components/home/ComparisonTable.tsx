@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { bankDisplayNames } from "../../config/bankDisplayNames";
 import { preloadImage } from "../../utils/preloadImage";
-import { apiGet } from "../../client/client";
+import { apiGet } from "../../services/client";
 
 
 // bankName → urlKey (inverterar displaynames)

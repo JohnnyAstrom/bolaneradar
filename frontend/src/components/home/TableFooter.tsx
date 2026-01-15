@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { apiGet } from "../../client/client";
+import { apiGet } from "../../services/client";
 
 const TableFooter: FC = () => {
     const { t } = useTranslation();

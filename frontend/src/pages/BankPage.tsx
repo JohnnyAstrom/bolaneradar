@@ -16,8 +16,8 @@ import {bankDisplayNames} from "../config/bankDisplayNames";
 
 import {preloadImage} from "../utils/preloadImage";
 
-import {getBankRates} from "../client/bankApi";
-import type {BankRateResponse} from "../client/bankApi";
+import {getBankRates} from "../services/bankApi";
+import type {BankRateResponse} from "../services/bankApi";
 
 import {useBankIntro} from "../hooks/useBankIntro";
 

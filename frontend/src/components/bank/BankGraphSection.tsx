@@ -6,7 +6,7 @@ import {
     fetchAvailableTerms,
     fetchHistoricalRates,
     type HistoricalPoint
-} from "../../client/bankApi";
+} from "../../services/bankApi";
 
 import {
     ResponsiveContainer,

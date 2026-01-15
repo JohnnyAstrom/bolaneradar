@@ -6,8 +6,8 @@
 
 import { useEffect, useState, startTransition } from "react";
 import { useTranslation } from "react-i18next";
-import { getBankInfo } from "../client/bankApi";
-import type { BankInfo } from "../client/bankApi";
+import { getBankInfo } from "../services/bankApi";
+import type { BankInfo } from "../services/bankApi";
 
 export function useBankInfo(bankKey: string | undefined) {
     const { i18n } = useTranslation();

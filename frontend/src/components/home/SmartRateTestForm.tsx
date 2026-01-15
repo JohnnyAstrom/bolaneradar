@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { runSmartRateTest } from "../../client/smartRateApi";
+import { runSmartRateTest } from "../../services/smartRateApi";
 import type { SmartRateTestResult, SmartRateTestRequest } from "../../types/smartRate";
 import SmartRateTestResultView from "./SmartRateTestResult";
 import { mortgageTerms } from "../../config/mortgageTerms";

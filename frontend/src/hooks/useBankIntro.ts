@@ -10,7 +10,7 @@
  */
 
 import { useEffect, useState } from "react";
-import {type BankIntro, getBankIntro} from "../client/bankApi";
+import {type BankIntro, getBankIntro} from "../services/bankApi";
 import {useTranslation} from "react-i18next";
 
 export function useBankIntro(bankKey: string) {

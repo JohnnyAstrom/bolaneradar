@@ -12,7 +12,7 @@
 import type { FC } from "react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { BankRateRow } from "../../client/bankApi";
+import type { BankRateRow } from "../../services/bankApi";
 
 interface Props {
     rows: BankRateRow[];
