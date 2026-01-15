@@ -1,10 +1,11 @@
-import type {FC} from "react";
+import {type FC } from "react";
 import {useTranslation} from "react-i18next";
 import type {TFunction} from "i18next";
 import type {SmartRateStatus, SmartRateTestResult} from "../../types/smartRate";
 
 interface Props {
     result: SmartRateTestResult | null | undefined;
+    onScrollToRates: () => void;
 }
 
 const statusColors: Record<SmartRateStatus, string> = {
@@ -41,7 +42,7 @@ function formatYearlyEffect(value: number | null, t: TFunction): string {
         : t("smartRate.result.cheaperPerYear", {value: abs});
 }
 
-const SmartRateTestResultView: FC<Props> = ({result}) => {
+const SmartRateTestResultView: FC<Props> = ({result, onScrollToRates}) => {
     const {t} = useTranslation();
     if (!result) return null;
 
@@ -239,13 +240,18 @@ const SmartRateTestResultView: FC<Props> = ({result}) => {
 
             {/* ================= CTA ================= */}
             <section className="p-4 rounded-lg bg-blue-50 border border-blue-200 text-sm">
-                <p className="mb-2">{t("smartRate.result.ctaText")}</p>
-                <a
-                    href="#rates"
+                <p className="mb-2">
+                    {t("smartRate.result.ctaText")}
+                </p>
+
+                <button
+                    type="button"
+                    onClick={onScrollToRates}
                     className="inline-flex items-center text-blue-600 font-semibold hover:underline"
                 >
                     {t("smartRate.result.ctaLink")}
-                </a>
+                </button>
+
                 <p className="mt-3 text-gray-700">
                     {t("smartRate.result.ctaHint")}
                 </p>

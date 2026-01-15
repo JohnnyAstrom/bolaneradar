@@ -32,7 +32,7 @@ const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
             className="
                 w-full mx-auto
                 bg-white rounded-md
-                p-0 mt-0
+                p-1 mt-0
                 sm:rounded-lg sm:p-6
                 max-w-2xl sm:max-w-4xl
             "

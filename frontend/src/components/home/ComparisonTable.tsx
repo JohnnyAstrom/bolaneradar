@@ -162,7 +162,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
     );
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 px-1">
             {/* ===================== */}
             {/* TABELL: BANKER MED RÄNTOR (OFÖRÄNDRAD) */}
             {/* ===================== */}

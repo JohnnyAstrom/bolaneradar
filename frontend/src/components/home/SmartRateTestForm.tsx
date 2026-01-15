@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { runSmartRateTest } from "../../services/smartRateApi";
@@ -45,7 +45,11 @@ const bankNameMap: Record<string, string> = {
     annanbank: "Annan bank"
 };
 
-const SmartRateTestForm: FC = () => {
+interface Props {
+    onScrollToRates: () => void;
+}
+
+const SmartRateTestForm: FC<Props> = ({ onScrollToRates }) => {
     const { t, i18n } = useTranslation();
 
     // Sparar senaste payload för språkbyte
@@ -74,6 +78,8 @@ const SmartRateTestForm: FC = () => {
 
     // Visar vänligt felmeddelande om analysen misslyckas
     const [submitError, setSubmitError] = useState<string | null>(null);
+
+    const resultRef = useRef<HTMLDivElement | null>(null);
 
     // Kör om testet automatiskt när språk ändras
     useEffect(() => {
@@ -178,7 +184,15 @@ const SmartRateTestForm: FC = () => {
 
         try {
             const response = await runSmartRateTest(payload);
+
             setResult(response);
+
+            requestAnimationFrame(() => {
+                resultRef.current?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            });
         } catch (e) {
             // Render kan vara långsam eller tillfälligt otillgänglig
             // Visa ett lugnt och begripligt felmeddelande istället för att bara logga
@@ -391,8 +405,11 @@ const SmartRateTestForm: FC = () => {
 
             {/* Resultat */}
             {result && (
-                <div className="mt-8">
-                    <SmartRateTestResultView result={result} />
+                <div ref={resultRef} className="mt-8">
+                    <SmartRateTestResultView
+                        result={result}
+                        onScrollToRates={onScrollToRates}
+                    />
                 </div>
             )}
         </div>

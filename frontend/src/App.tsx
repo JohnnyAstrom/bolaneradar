@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
+import ScrollToTop from "./components/routing/ScrollToTop.tsx";
 
 import HomePage from "./pages/HomePage";
 import BolaneguidePage from "./pages/BolaneguidePage.tsx";
 import AboutBolaneRadarPage from "./pages/AboutBolaneRadarPage.tsx";
-import ContactPage from "./pages/ContactPage";
 import BankPage from "./pages/BankPage";
 import BankInfoPage from "./pages/BankInfoPage";
+
 
 export default function App() {
 
@@ -48,12 +49,12 @@ export default function App() {
 
     return (
         <BrowserRouter>
+            < ScrollToTop />
             <Routes>
                 <Route element={<Layout />}>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/bolaneguide" element={<BolaneguidePage />} />
                     <Route path="/om-bolaneradar" element={<AboutBolaneRadarPage />} />
-                    <Route path="/kontact" element={<ContactPage />} />
                     <Route path="/bank/:bankKey" element={<BankPage />} />
                     <Route path="/bank/:bankKey/info" element={<BankInfoPage />} />
                 </Route>

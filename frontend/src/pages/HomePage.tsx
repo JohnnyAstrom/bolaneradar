@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import PageWrapper from "../components/layout/PageWrapper";
 import Section from "../components/layout/Section";
@@ -14,6 +14,14 @@ import TableFooter from "../components/home/TableFooter";
 export default function HomePage() {
     const [smartTestActive, setSmartTestActive] = useState(false);
     const [activeTerm, setActiveTerm] = useState<string>("3m");
+    const ratesRef = useRef<HTMLDivElement | null>(null);
+
+    function scrollToRates() {
+        ratesRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    }
 
     return (
         <PageWrapper>
@@ -28,7 +36,7 @@ export default function HomePage() {
             {smartTestActive && (
                 <>
                     <Section>
-                        <SmartRateTestForm />
+                        <SmartRateTestForm onScrollToRates={scrollToRates} />
                     </Section>
                 </>
             )}
@@ -42,7 +50,9 @@ export default function HomePage() {
                     onSelectTerm={setActiveTerm}
                 />
 
-                <ComparisonTable activeTerm={activeTerm} />
+                <div ref={ratesRef} className="scroll-mt-24">
+                    <ComparisonTable activeTerm={activeTerm} />
+                </div>
 
                 <TableFooter />
             </Section>

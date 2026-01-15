@@ -35,7 +35,7 @@ const TableFooter: FC = () => {
     }, []);
 
     return (
-        <div className="mt-4 text-xs text-text-secondary leading-relaxed">
+        <div className="mt-4 text-xs text-text-secondary leading-relaxed px-1">
             <p>{t("rates.tableFooter.source")}</p>
             <p>
                 {t("rates.tableFooter.lastUpdated", {

@@ -104,7 +104,7 @@ const BankPage: FC = () => {
                 <div
                     className="
                     max-w-4xl mx-auto
-                    pt-0 pb-0 px-0
+                    pt-0 pb-0 px-1
                     sm:py-4 sm:px-6
                 "
                 >
@@ -138,7 +138,7 @@ const BankPage: FC = () => {
                     <div
                         className="
                         w-full max-w-full mx-auto
-                        p-0 bg-transparent border-none rounded-none
+                        p-1 bg-transparent border-none rounded-none
                         sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
                         sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
                     "
@@ -160,7 +160,7 @@ const BankPage: FC = () => {
                 <div
                     className="
                     max-w-4xl mx-auto
-                    pt-0 pb-0 px-0
+                    pt-0 pb-0 px-1
                     sm:py-4 sm:px-6
                 "
                 >

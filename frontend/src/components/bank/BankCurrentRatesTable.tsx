@@ -110,7 +110,7 @@ const BankCurrentRatesTable: FC<Props> = ({ rows, averageMonthFormatted }) => {
 
                                     {/* Listränta – klickbar på mobil */}
                                     <td
-                                        className="px-1 sm:px-4 py-3 cursor-pointer md:cursor-default"
+                                        className="px-0 sm:px-4 py-3 cursor-pointer md:cursor-default"
                                         onClick={() => toggleMobileRow(index)}
                                     >
                                         {row.currentRate != null ? (
@@ -118,7 +118,7 @@ const BankCurrentRatesTable: FC<Props> = ({ rows, averageMonthFormatted }) => {
                                                     <span
                                                         className={`
                                                             inline-flex items-center gap-1
-                                                            px-2 h-[26px] rounded-lg
+                                                            p-1 h-[26px] rounded-lg
                                                             text-xs sm:text-sm font-medium
                                                             ${rateClass}
                                                         `}

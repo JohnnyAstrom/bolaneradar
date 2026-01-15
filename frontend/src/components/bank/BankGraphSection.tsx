@@ -153,8 +153,8 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                     bg-white
                     border border-border
                     rounded-lg
-                    px-2 sm:px-4
-                    py-4
+                    px-0 sm:px-4
+                    py-2
                     text-text-secondary
                     text-xs sm:text-sm
                     h-[400px] sm:h-[450px] md:h-[500px]

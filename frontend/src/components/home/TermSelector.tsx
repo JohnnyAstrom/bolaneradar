@@ -31,11 +31,11 @@ const TermSelector: FC<TermSelectorProps> = ({
         terms: { value: string }[]
     ) => (
         <div>
-            <p className="text-sm font-semibold text-text-primary mb-2">
+            <p className="text-sm font-semibold text-text-primary mb-2 px-1">
                 {t(titleKey)}
             </p>
 
-            <div className="flex gap-3 flex-wrap justify-start">
+            <div className="flex gap-3 flex-wrap justify-start px-1">
                 {terms.map((tTerm) => (
                     <button
                         key={tTerm.value}
