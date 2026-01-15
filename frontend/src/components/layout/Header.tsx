@@ -21,8 +21,14 @@ export default function Header() {
                 <NavLink
                     to="/"
                     end
-                    className="text-xl font-bold text-primary flex items-center"
+                    className="text-xl font-semibold text-primary flex items-baseline gap-2"
                 >
+                    <img
+                        src="/android-chrome-192x192.png"
+                        alt=""
+                        className="w-6 h-6 relative top-[1px]"
+                        aria-hidden
+                    />
                     BolåneRadar
                 </NavLink>
 
