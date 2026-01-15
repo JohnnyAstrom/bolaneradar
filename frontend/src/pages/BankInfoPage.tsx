@@ -6,21 +6,7 @@ import PageWrapper from "../components/layout/PageWrapper";
 import Section from "../components/layout/Section";
 
 import { bankDisplayNames } from "../config/bankDisplayNames";
-
-const logoMap: Record<string, string> = {
-    swedbank: "/logos/swedbank.svg",
-    seb: "/logos/seb.svg",
-    nordea: "/logos/nordea.svg",
-    handelsbanken: "/logos/handelsbanken.svg",
-    lansforsakringarbank: "/logos/lansforsakringar.svg",
-    sbab: "/logos/sbab.svg",
-    skandiabanken: "/logos/skandiabanken.svg",
-    danskebank: "/logos/danskebank.svg",
-    icabanken: "/logos/icabanken.svg",
-    landshypotekbank: "/logos/landshypotek.svg",
-    ikanobank: "/logos/ikanobank.png",
-    alandsbanken: "/logos/alandsbanken.svg",
-};
+import { bankLogos } from "../config/bankLogos";
 
 export default function BankInfoPage() {
     const { bankKey } = useParams();
@@ -50,7 +36,7 @@ export default function BankInfoPage() {
     }
 
     const displayName = bankDisplayNames[bankKey!] ?? bankKey!;
-    const logoUrl = logoMap[bankKey!] ?? null;
+    const logoUrl = bankKey ? bankLogos[bankKey] ?? null : null;
 
     return (
         <PageWrapper>

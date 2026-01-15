@@ -5,31 +5,13 @@ import { useTranslation } from "react-i18next";
 import { bankDisplayNames } from "../../config/bankDisplayNames";
 import { preloadImage } from "../../utils/preloadImage";
 import { apiGet } from "../../services/client";
+import { bankLogos } from "../../config/bankLogos";
 
 
 // bankName → urlKey (inverterar displaynames)
 const bankNameToKey = Object.fromEntries(
     Object.entries(bankDisplayNames).map(([key, label]) => [label, key])
 );
-
-/**
- * Karta över logotyper per bank.
- * Nyckeln måste matcha URL-parametern.
- */
-const logoMap: Record<string, string> = {
-    swedbank: "/logos/swedbank.svg",
-    seb: "/logos/seb.svg",
-    nordea: "/logos/nordea.svg",
-    handelsbanken: "/logos/handelsbanken.svg",
-    lansforsakringarbank: "/logos/lansforsakringar.svg",
-    sbab: "/logos/sbab.svg",
-    skandiabanken: "/logos/skandiabanken.svg",
-    danskebank: "/logos/danskebank.svg",
-    icabanken: "/logos/icabanken.svg",
-    landshypotekbank: "/logos/landshypotek.svg",
-    ikanobank: "/logos/ikanobank.png",
-    alandsbanken: "/logos/alandsbanken.svg",
-};
 
 interface ComparisonTableProps {
     activeTerm: string;
@@ -368,12 +350,18 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                                 <div className="pl-2 sm:px-4 py-3">
                                     <NavLink
                                         to={`/bank/${bankNameToKey[row.bankName]}`}
-                                        onMouseEnter={() =>
-                                            preloadImage(logoMap[bankNameToKey[row.bankName]])
-                                        }
-                                        onFocus={() =>
-                                            preloadImage(logoMap[bankNameToKey[row.bankName]])
-                                        }
+                                        onMouseEnter={() => {
+                                            const bankKey = bankNameToKey[row.bankName];
+                                            if (bankKey) {
+                                                preloadImage(bankLogos[bankKey]);
+                                            }
+                                        }}
+                                        onFocus={() => {
+                                            const bankKey = bankNameToKey[row.bankName];
+                                            if (bankKey) {
+                                                preloadImage(bankLogos[bankKey]);
+                                            }
+                                        }}
                                         className="text-primary hover:underline ..."
                                     >
                                         {row.bankName}

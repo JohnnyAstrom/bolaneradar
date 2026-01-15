@@ -13,6 +13,7 @@ import BankDetailsSection from "../components/bank/BankDetailsSection";
 import BankLogo from "../components/bank/BankLogo";
 
 import {bankDisplayNames} from "../config/bankDisplayNames";
+import { bankLogos } from "../config/bankLogos";
 
 import {preloadImage} from "../utils/preloadImage";
 
@@ -20,25 +21,6 @@ import {getBankRates} from "../services/bankApi";
 import type {BankRateResponse} from "../services/bankApi";
 
 import {useBankIntro} from "../hooks/useBankIntro";
-
-/**
- * Karta över logotyper per bank.
- * Nyckeln måste matcha URL-parametern.
- */
-const logoMap: Record<string, string> = {
-    swedbank: "/logos/swedbank.svg",
-    seb: "/logos/seb.svg",
-    nordea: "/logos/nordea.svg",
-    handelsbanken: "/logos/handelsbanken.svg",
-    lansforsakringarbank: "/logos/lansforsakringar.svg",
-    sbab: "/logos/sbab.svg",
-    skandiabanken: "/logos/skandiabanken.svg",
-    danskebank: "/logos/danskebank.svg",
-    icabanken: "/logos/icabanken.svg",
-    landshypotekbank: "/logos/landshypotek.svg",
-    ikanobank: "/logos/ikanobank.png",
-    alandsbanken: "/logos/alandsbanken.svg",
-};
 
 const BankPage: FC = () => {
     const {bankKey} = useParams();
@@ -49,8 +31,11 @@ const BankPage: FC = () => {
      * ============================================================ */
     useEffect(() => {
         if (!bankKey) return;
-        const logoUrl = logoMap[bankKey];
-        if (logoUrl) preloadImage(logoUrl);
+
+        const logoUrl = bankLogos[bankKey];
+        if (logoUrl) {
+            preloadImage(logoUrl);
+        }
     }, [bankKey]);
 
     /* ============================================================
@@ -105,7 +90,7 @@ const BankPage: FC = () => {
     }
 
     const displayName = bankDisplayNames[bankKey] ?? bankKey;
-    const logoUrl = logoMap[bankKey] ?? "";
+    const logoUrl = bankLogos[bankKey] ?? "";
 
     /* ============================================================
      * RENDERING
