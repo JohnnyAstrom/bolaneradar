@@ -97,6 +97,12 @@ Frontend och backend kan utvecklas och driftsättas oberoende av varandra.
 
 ---
 
+För mer detaljer om respektive delsystem, se:
+- `backend/README.md`
+- `frontend/README.md`
+
+---
+
 ## Säkerhet
 
 - Publika GET-endpoints för användarvy
@@ -121,7 +127,7 @@ Frontend och backend kan utvecklas och driftsättas oberoende av varandra.
 git clone https://github.com/JohnnyAstrom/bolaneradar
 ```
 ### 2. Starta backend
-- Skapa databas (PostreSQL)
+- Skapa databas (PostgreSQL)
 - Konfigurera application.properties
 - Starta med:
 

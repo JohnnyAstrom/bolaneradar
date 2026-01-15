@@ -2,78 +2,105 @@
 
 Detta dokument beskriver backend-delen av BolåneRadar.
 
-För en övergripande beskrivning av systemet, användarflöden och funktionalitet,
-se projektets huvud-README i repository-roten.
+För en övergripande beskrivning av projektet, systemets syfte och användarflöden,
+se huvud-README i repository-roten.
 
-Backend är byggd med Spring Boot och ansvarar för datainsamling, analys,
-historik och API-exponering av svenska bolåneräntor samt Smart Ränte-testets
-analysresultat till frontend.
+Backenden är byggd med **Java + Spring Boot** och ansvarar för:
+- insamling och lagring av bolåneräntor
+- historik och jämförelselogik
+- Smart Ränte-testets analys
+- exponering av ett publikt REST-API till frontend
 
 ---
 
-# Funktionalitet
+## Funktionalitet
 
 ### Banker och räntor
-- CRUD för banker
-- Skapa och uppdatera bolåneräntor via admin-API
-- Publika endpoints för:
-  - räntehistorik
-  - nuvarande räntor
+- Hantering av banker och deras metadata
+- Lagring av aktuella och historiska bolåneräntor
+- Publika API-endpoints för:
   - bankintroduktion
-  - bankdetaljer
+  - bankdetaljer (”passar bäst för / mindre bra för”)
+  - aktuella räntor
+  - historisk ränteutveckling
   - jämförelser mellan banker
-  - senaste uppdateringar
-- Tydlig separation mellan admin-lager och publikt API
+  - senaste ränteuppdateringar
+
+All affärslogik ligger i service-lagret och exponeras via tydligt avgränsade API-endpoints.
+
+---
 
 ### Smart Ränte-test
 - Publikt API för analys av användarens ränta
-- Stöd för analys:
-  - utan offert (jämförelse mot marknadens snitt)
-  - med offerter (jämförelse mellan flera erbjudanden)
-- Beräkning av:
+- Stöd för två huvudflöden:
+  - **utan offert** – jämförelse mot marknadens snittränta
+  - **med offerter** – analys och rangordning av flera erbjudanden
+- Beräknar bland annat:
   - marknadsavvikelse
-  - årlig kostnadsskillnad
-- Konsumentvänligt analysresultat anpassat för frontend
-
-### Scraping av räntor
-- Flera bank-specifika `BankScraper`-implementationer
-- Central `ScraperService` som orkestrerar scraping
-- Loggning via `RateUpdateLogService`
-- Felhantering och dubblettkontroll
-- Manuell scraping via admin-API
-- E-postnotifiering vid fel
-
-### Loggning & historik
-- `RateUpdateLog` loggar varje scrapingkörning
-- Publika och admin-endpoints för loggar
-- Hämta senaste uppdatering per bank
-
-### Schedulerade jobb
-- **DatabaseBackupScheduler** – skapar dagliga `.dump`- och `.sql`-backuper
-- **ScraperScheduler** – kör scraping automatiskt
-
-### Säkerhet
-- Basic Auth för alla admin-routes
-- Alla GET-endpoints är publika
-- POST / PUT / DELETE under `/api/**` kräver autentisering
-- Swagger UI aktiverat med Basic Auth-stöd
-
-### Tester
-- Enhetstester (Mockito + JUnit 5)
-- Integrationstester (MockMvc)
-- Täckning av controllers, adminservices och scraperlogik
+  - relativ kostnadsnivå
+  - rekommenderad åtgärd
+- Resultatet är konsumentvänligt formaterat för direkt användning i frontend
 
 ---
 
+### Scraping av räntor
+- Varje bank har en egen `BankScraper`-implementation
+- Central `ScraperService` ansvarar för:
+  - matchning bank till scraper
+  - felhantering
+  - dubblettkontroll
+  - beräkning av ränteförändring och senaste ändringsdatum
+  - persistens av nya räntor
+  - loggning och notifiering vid fel
 
-# Projektstruktur
+Scraping är **helt frikopplad från användarflödet** och påverkar inte frontendens tillgänglighet.
+
+---
+
+### Loggning & historik
+- Varje scrapingkörning loggas via `RateUpdateLog`
+- Loggar innehåller:
+  - tidsstämpel
+  - status
+  - antal importerade räntor
+  - eventuella fel
+- Publika och admin-endpoints för att hämta senaste uppdateringar
+
+---
+
+## Schemaläggning
+
+Backenden innehåller **ingen intern schemaläggning för scraping** i produktion.
+
+Automatisk scraping initieras **externt via GitHub Actions**, där schemalagda
+arbetsflöden anropar backendens skyddade API-endpoints för datainhämtning.
+
+Backenden fungerar därmed som ett **rent API och datalager**, medan:
+- schemaläggning
+- exekvering
+- driftansvar
+
+hanteras utanför applikationen.
+
+Denna uppdelning:
+- minskar komplexiteten i backend
+- förenklar drift och felsökning
+- gör lösningen enklare att testa och vidareutveckla
+
+Utöver automatiserade körningar finns även stöd för:
+- manuell scraping via skyddade admin-endpoints
+- lokala körningar vid felsökning och verifiering
+
+---
+
+## Projektstruktur
 
 ```
 backend/
  ├── controller/
  │    ├── api/                         # Publika API-endpoints
  │    │     ├── banks/                 # Bankinformation & historik
- │    │     ├── rates/                 # Aktuella räntor & jämförelser
+ │    │     ├── rates/                 # Aktuella räntor & marknadsjämförelser
  │    │     └── smartrate/             # Smart Ränte-test
  │    │
  │    └── admin/                       # Admin-API (skyddade endpoints)
@@ -81,14 +108,11 @@ backend/
  │          ├── rates/                 # Manuell hantering av räntor
  │          ├── scraper/               # Manuell scraping
  │          ├── logs/                  # Scraping-loggar
- │          └── dev/                   # Utvecklingshjälp (DEV-profil)
+ │          └── dev/                   # Utvecklings- och felsökningsendpoints (DEV-profil)
  │
  ├── service/
- │    ├── client/                      # Logik för publika vyer
- │    ├── smartrate/                   # Smart Ränte-test – analys
- │    │     ├── SmartRateAnalysisService
- │    │     ├── SmartRateMarketDataService
- │    │     └── model/
+ │    ├── client/                      # Data till frontend
+ │    ├── smartrate/                   # Smart Ränte-test – analyslogik
  │    ├── admin/                       # Adminlogik
  │    └── integration/
  │          └── scraper/
@@ -96,18 +120,13 @@ backend/
  │                └── banks/           # Bank-specifika scrapers
  │
  ├── repository/                       # Databasåtkomst
- ├── entity/
- │    └── core/                        # Domänentiteter
+ ├── entity/                           # Domänentiteter                    
  │
  ├── dto/
  │    ├── api/                         # DTO:er för publika API
- │    │     ├── banks/
- │    │     ├── rates/
- │    │     └── smartrate/
  │    ├── admin/                       # DTO:er för admin-API
  │    └── mapper/                      # Mapping mellan entiteter och DTO
  │
- ├── scheduler/                        # Schemalagda jobb
  ├── config/                           # Spring- & säkerhetskonfiguration
  ├── exception/                        # Centraliserad felhantering
  │
@@ -117,37 +136,44 @@ backend/
 
 ---
 
-# Arkitektur
+## Arkitekturöversikt
 
-## Lagerindelning
-- **Controller-lagret**
-  - Exponerar HTTP-endpoints
-  - Publika controllers under ```/api/**```
-  - Admin controllers under ```/api/admin/**```
-- **Service-lagret**
-  - Innehåller all affärslogik
+Backenden är uppbyggd enligt en lagerindelad arkitektur med tydlig separation av ansvar.
+
+### Lager
+
+- **Controller-lager**
+  - Exponerar REST-endpoints
+  - Publika endpoints under `/api/**`
+  - Skyddade admin-endpoints under `/api/admin/**`
+
+- **Service-lager**
+  - Innehåller all affärs- och analyslogik
   - Uppdelat i:
-    - ``service.client`` - data till frontend
-    - ``service.smartrate`` - analyslogik och beslutsstöd
-    - ``service.admin`` - interna funktioner
-    - ``service.integration.scraper`` - extern datainsamling
-- **Repository-lagret**
-  - Ansvarar för all databasinteraktion
+    - `service.client` – data anpassad för frontend
+    - `service.smartrate` – analys och beslutslogik
+    - `service.admin` – interna och administrativa funktioner
+    - `service.integration.scraper` – extern datainsamling
+
+- **Repository-lager**
+  - Ansvarar för all databasåtkomst
   - Anropas endast från service-lagret
-- **DTO/Mapper-lager** 
-  - Skyddar domänentiteter från direkt exponering
-  - Uppdelad i ``dto.admin`` och ``dto.api``
-- **Scheduler-lager**
-  - Isolerar automatiserade jobb (scraping och backup)
+
+- **DTO- och mapper-lager**
+  - Separerar interna entiteter från API-kontrakt
+  - Uppdelat i publika (`dto.api`) och administrativa (`dto.admin`) DTO:er
+
+Automatisering och schemaläggning sker **utanför applikationen** och är därför
+inte en del av backendens interna lagerstruktur.
 
 ---
 
-# Scraping som integrationssubsystem
+## Scraping som integrationssubsystem
 
-Scraping är ett centralt integrationssubsystem i BolåneRadar och ansvarar för
-insamling av externa räntedata från banker.
+Scraping är ett isolerat integrationssubsystem som ansvarar för insamling av
+externa räntedata från banker.
 
-Subsystemet är medvetet isolerat från övrig affärslogik och används endast via ```ScraperService```.
+Subsystemet används endast via `ScraperService`.
 
 ```java
 public interface BankScraper {
@@ -160,8 +186,8 @@ public interface BankScraper {
 - Varje bank har sin egen scraperklass
 - Varje scraper ansvarar för att:
   - hämta data från bankens räntesida
-  - parsa HTML, tabeller eller API-format
-  - omvandla datan till ``MortgageRate``
+  - parsa HTML eller strukturerad data
+  - omvandla resultatet till `MortgageRate`
 - Scraper-klasser innehåller ingen affärslogik
 
 ## ScraperService
@@ -173,43 +199,28 @@ public interface BankScraper {
 - persistens av nya räntor
 - loggning och e-postnotifiering vid fel
 
-## Manuell skrapning av ICA Banken (CI-blockering)
-ICA Bankens webbplats blockerar ibland skrapning från CI-miljöer (GitHub Actions / Render). Vid dessa tillfällen kan ICA Bankens räntor uppdateras manuellt från en lokal dator.
+---
 
-### Instruktioner:
-
-Kör från backend-mappen:
-
-```
-mvn clean package
-$env:SPRING_PROFILES_ACTIVE="prod"
-java -jar target/backend-0.0.1-SNAPSHOT.jar --mode=scrape-ica
-```
-
-Detta:
-- kör skrapningen lokalt
-- använder produktionsdatabasen (Render)
-- uppdaterar endast ICA Banken
-
-# API-översikt
+## API-översikt
 
 ### Banker
 ```
-GET /api/banks/intro/{bankKey}
-GET /api/banks/details/{bankKey}
-GET /api/banks/history/{bankKey}
+GET /api/banks/{bankKey}/intro
+GET /api/banks/{bankKey}/details
+GET /api/banks/{bankKey}/info
 ```
 
 ### Räntor
 ```
-GET /api/rates/current/{bankKey}
+GET /api/banks/{bankKey}/rates
+GET /api/banks/{bankKey}/history/data
+GET /api/banks/{bankKey}/history/available-terms
 GET /api/rates/comparison
-GET /api/rates/updates/latest
 ```
 
 ### Smart Ränte-test
 ```
-POST /api/smartrate/analyze
+POST /api/smartrate/test
 ```
 
 ### Admin
@@ -223,7 +234,7 @@ GET  /api/admin/logs/latest
 
 ---
 
-# Säkerhet
+## Säkerhet
 Backend använder en tydlig och enkel säkerhetsmodell baserad på Basic Authentication.
 
 - Alla publika GET-endpoints är öppna
@@ -234,7 +245,7 @@ Backend använder en tydlig och enkel säkerhetsmodell baserad på Basic Authent
 
 ---
 
-# Swagger
+## Swagger
 
 - Swagger UI är aktiverat via OpenAPI-konfiguration
 - Alla publika och admin-endpoints listas
@@ -245,17 +256,9 @@ Backend använder en tydlig och enkel säkerhetsmodell baserad på Basic Authent
 http://localhost:8080/swagger-ui.html
 ```
 
-# Scheduler-jobb
-
-### ScraperScheduler
-Kör scraping automatiskt (om aktiverad).
-
-### DatabaseBackupScheduler
-Tar dagliga PostgreSQL-backups i både .dump och .sql.
-
 ---
 
-# Tester
+## Tester
 
 ### Enhetstester
 - Service-lager
@@ -270,7 +273,7 @@ Tar dagliga PostgreSQL-backups i både .dump och .sql.
 
 ---
 
-# Installation & Körning
+## Installation & Körning
 
 ### 1. Klona projektet
 ```
@@ -300,16 +303,6 @@ mvn spring-boot:run
 ```
 http://localhost:8080/swagger-ui.html
 ```
-
----
-
-# Backup-system
-
-``DatabaseBackupScheduler`` använder ``pg_dump`` för att spara:
-- `.dump` (binär)
-- `.sql` (text)
-
-Sparas i `/backups`.
 
 ---
 
