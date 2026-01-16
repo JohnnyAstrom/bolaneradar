@@ -4,7 +4,6 @@ export interface RateUpdateDay {
 }
 
 export interface RateUpdate {
-    bankKey: string;
     bankName: string;
     bindingPeriod: string;
     previousRate: number;

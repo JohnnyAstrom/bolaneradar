@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 public class RateUpdateDto {
 
-    private String bankKey;
     private String bankName;
 
     private String bindingPeriod;
@@ -16,25 +15,15 @@ public class RateUpdateDto {
     }
 
     public RateUpdateDto(
-            String bankKey,
             String bankName,
             String bindingPeriod,
             BigDecimal previousRate,
             BigDecimal newRate
     ) {
-        this.bankKey = bankKey;
         this.bankName = bankName;
         this.bindingPeriod = bindingPeriod;
         this.previousRate = previousRate;
         this.newRate = newRate;
-    }
-
-    public String getBankKey() {
-        return bankKey;
-    }
-
-    public void setBankKey(String bankKey) {
-        this.bankKey = bankKey;
     }
 
     public String getBankName() {

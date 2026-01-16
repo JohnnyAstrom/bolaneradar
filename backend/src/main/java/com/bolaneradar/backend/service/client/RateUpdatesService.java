@@ -67,7 +67,6 @@ public class RateUpdatesService {
 
                         RateUpdateDto dto = new RateUpdateDto(
                                 bank.getName(),
-                                bank.getName(),
                                 term.name(),
                                 previous.getRatePercent(),
                                 current.getRatePercent()
