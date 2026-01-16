@@ -8,7 +8,7 @@ import BolaneguidePage from "./pages/BolaneguidePage.tsx";
 import AboutBolaneRadarPage from "./pages/AboutBolaneRadarPage.tsx";
 import BankPage from "./pages/BankPage";
 import BankInfoPage from "./pages/BankInfoPage";
-
+import RateUpdatesPage from "./pages/RateUpdatesPage";
 
 export default function App() {
 
@@ -49,7 +49,7 @@ export default function App() {
 
     return (
         <BrowserRouter>
-            < ScrollToTop />
+            <ScrollToTop />
             <Routes>
                 <Route element={<Layout />}>
                     <Route path="/" element={<HomePage />} />
@@ -57,6 +57,7 @@ export default function App() {
                     <Route path="/om-bolaneradar" element={<AboutBolaneRadarPage />} />
                     <Route path="/bank/:bankKey" element={<BankPage />} />
                     <Route path="/bank/:bankKey/info" element={<BankInfoPage />} />
+                    <Route path="/rate-updates" element={<RateUpdatesPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>

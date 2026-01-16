@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "guide": "Guide",
+    "rateUpdates": "Rate updates",
     "about": "About BolåneRadar",
     "menu": "Menu"
   },
@@ -368,6 +369,24 @@
         "does not guarantee that specific interest rate levels can be achieved"
       ],
       "closing": "All information presented is based on publicly available data and is used at your own responsibility. The purpose is to strengthen the consumer’s decision-making basis, not to direct decisions."
+    }
+  },
+
+  "rateUpdates": {
+    "title": "Latest bank updates",
+    "loading": "Loading latest bank updates…",
+    "empty": "No rate updates found.",
+
+    "dayDescription": "Shows list rates adjusted on this day. The values show previous rate, change, and new rate.",
+
+    "columns": {
+      "term": "Term",
+      "before": "Previous listrate",
+      "change": "Change",
+      "after": "New listate",
+
+      "beforeShort": "Previous",
+      "afterShort": "New rate"
     }
   },
 

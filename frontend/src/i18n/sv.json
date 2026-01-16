@@ -2,6 +2,7 @@
   "nav": {
     "home": "Start",
     "guide": "Guide",
+    "rateUpdates": "Ränteuppdateringar",
     "about": "Om BolåneRadar",
     "menu": "Meny"
   },
@@ -360,6 +361,23 @@
     }
   },
 
+  "rateUpdates": {
+    "title": "Senaste bankuppdateringar",
+    "description": "Visar listräntor som justerats per datum. Tabellen visar tidigare ränta, förändring och ny ränta.",
+    "loading": "Laddar senaste bankuppdateringar…",
+    "empty": "Inga ränteuppdateringar hittades.",
+
+    "columns": {
+      "term": "Bindningstid",
+      "before": "Tidigare listränta",
+      "change": "Förändring",
+      "after": "Ny listränta",
+
+      "termShort": "Bindn.",
+      "beforeShort": "Tidigare",
+      "afterShort": "Ny listränta"
+    }
+  },
 
   "footer": {
     "description": "BolåneRadar är en oberoende tjänst för jämförelse och analys av svenska bolåneräntor.",

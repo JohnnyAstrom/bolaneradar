@@ -37,9 +37,15 @@ export default function Header() {
                     <NavLink to="/" end className={linkClass}>
                         {t("nav.home")}
                     </NavLink>
+
                     <NavLink to="/bolaneguide" className={linkClass}>
                         {t("nav.guide")}
                     </NavLink>
+
+                    <NavLink to="/rate-updates" className={linkClass}>
+                        {t("nav.rateUpdates")}
+                    </NavLink>
+
                     <NavLink to="/om-bolaneradar" className={linkClass}>
                         {t("nav.about")}
                     </NavLink>
@@ -94,6 +100,7 @@ export default function Header() {
                     >
                         {t("nav.home")}
                     </NavLink>
+
                     <NavLink
                         to="/bolaneguide"
                         onClick={() => setOpen(false)}
@@ -101,6 +108,15 @@ export default function Header() {
                     >
                         {t("nav.guide")}
                     </NavLink>
+
+                    <NavLink
+                        to="/rate-updates"
+                        onClick={() => setOpen(false)}
+                        className={linkClass}
+                    >
+                        {t("nav.rateUpdates")}
+                    </NavLink>
+
                     <NavLink
                         to="/om-bolaneradar"
                         onClick={() => setOpen(false)}
