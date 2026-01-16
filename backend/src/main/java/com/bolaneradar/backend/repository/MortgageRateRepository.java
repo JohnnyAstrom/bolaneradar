@@ -215,9 +215,46 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
             """)
     LocalDate findCommonEffectiveDateForAverageRates(@Param("term") MortgageTerm term);
 
+
     // ========================================================================
-// ==============     BANKENS SENASTE SNITTRÄNTA-MÅNAD     =================
-// ========================================================================
+    // ==========   ALLA LISTRÄNTOR (TIDSBEGRÄNSADE, SORTERADE)   ==============
+    // ========================================================================
+
+    /**
+     * Hämtar alla listräntor (LISTRATE) från och med ett visst datum,
+     * sorterade för effektiv vidare bearbetning i service-lagret.
+     * <p>
+     * Sorteringsordning:
+     * - Bank (id)
+     * - Bindningstid (term)
+     * - Senaste datum först (effectiveDate DESC)
+     * <p>
+     * Används av flödet "Senaste bankuppdateringar" för att:
+     * - läsa all relevant historik i ett enda DB-anrop
+     * - jämföra sekventiella ränteändringar per bank och bindningstid
+     * <p>
+     * OBS:
+     * - Ingen affärslogik här
+     * - Tidsavgränsning styrs av service-lagret
+     */
+    @Query("""
+                SELECT m
+                FROM MortgageRate m
+                WHERE m.rateType = 'LISTRATE'
+                  AND m.effectiveDate >= :fromDate
+                ORDER BY
+                    m.bank.id,
+                    m.term,
+                    m.effectiveDate DESC
+            """)
+    List<MortgageRate> findAllListRatesSortedFrom(
+            @Param("fromDate") LocalDate fromDate
+    );
+
+
+    // ========================================================================
+    // ==============     BANKENS SENASTE SNITTRÄNTA-MÅNAD     =================
+    // ========================================================================
 
     /**
      * Hämtar den senaste snitträntan (AVERAGERATE) för en specifik bank.
@@ -257,17 +294,17 @@ public interface MortgageRateRepository extends JpaRepository<MortgageRate, Long
      * Service-lagret avgör vilken som ska användas (t.ex. senaste korrigeringen).
      */
     @Query("""
-    SELECT m FROM MortgageRate m
-    WHERE m.bank.id = :bankId
-      AND m.term = :term
-      AND m.rateType = 'AVERAGERATE'
-      AND m.effectiveDate >= :monthStart
-      AND m.effectiveDate < :monthEnd
-    ORDER BY
-      m.effectiveDate DESC,
-      m.lastChangedDate DESC,
-      m.id DESC
-    """)
+            SELECT m FROM MortgageRate m
+            WHERE m.bank.id = :bankId
+              AND m.term = :term
+              AND m.rateType = 'AVERAGERATE'
+              AND m.effectiveDate >= :monthStart
+              AND m.effectiveDate < :monthEnd
+            ORDER BY
+              m.effectiveDate DESC,
+              m.lastChangedDate DESC,
+              m.id DESC
+            """)
     List<MortgageRate> findAverageRatesForBankAndTermAndMonth(
             @Param("bankId") Long bankId,
             @Param("term") MortgageTerm term,

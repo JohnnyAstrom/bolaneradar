@@ -2,11 +2,7 @@ package com.bolaneradar.backend.service.client;
 
 import com.bolaneradar.backend.dto.api.RateUpdateDayDto;
 import com.bolaneradar.backend.dto.api.RateUpdateDto;
-import com.bolaneradar.backend.entity.core.Bank;
 import com.bolaneradar.backend.entity.core.MortgageRate;
-import com.bolaneradar.backend.entity.enums.MortgageTerm;
-import com.bolaneradar.backend.entity.enums.RateType;
-import com.bolaneradar.backend.repository.BankRepository;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,88 +12,70 @@ import java.util.*;
 @Service
 public class RateUpdatesService {
 
-    private final BankRepository bankRepository;
     private final MortgageRateRepository mortgageRateRepository;
 
-    public RateUpdatesService(
-            BankRepository bankRepository,
-            MortgageRateRepository mortgageRateRepository
-    ) {
-        this.bankRepository = bankRepository;
+    public RateUpdatesService(MortgageRateRepository mortgageRateRepository) {
         this.mortgageRateRepository = mortgageRateRepository;
     }
 
     /**
      * Hämtar alla faktiska ändringar av listräntor,
      * grupperade per datum (senaste först).
+     *
+     * Prestanda:
+     * - Ett enda DB-anrop
+     * - All jämförelselogik sker i minnet
+     * - Historiken tidsbegränsas för rimlig svarstid
      */
     public List<RateUpdateDayDto> getRateUpdates() {
 
-        // 1. Temporär struktur: datum -> ändringar
+        // 1. Begränsa hur långt bak vi tittar (justerbart)
+        LocalDate fromDate = LocalDate.now().minusMonths(12);
+
+        // 2. Hämta alla relevanta listräntor i rätt sortering
+        List<MortgageRate> rates =
+                mortgageRateRepository.findAllListRatesSortedFrom(fromDate);
+
+        // 3. Datum -> ändringar
         Map<LocalDate, List<RateUpdateDto>> updatesByDate = new HashMap<>();
 
-        // 2. Hämta alla banker
-        List<Bank> banks = bankRepository.findAll();
+        // 4. Jämför sekventiellt (listan är redan sorterad)
+        for (int i = 0; i < rates.size() - 1; i++) {
 
-        for (Bank bank : banks) {
+            MortgageRate current = rates.get(i);
+            MortgageRate previous = rates.get(i + 1);
 
-            // 3. För varje bindningstid
-            for (MortgageTerm term : MortgageTerm.values()) {
+            // Säkerställ att vi jämför samma bank + bindningstid
+            if (!current.getBank().getId().equals(previous.getBank().getId())) {
+                continue;
+            }
+            if (current.getTerm() != previous.getTerm()) {
+                continue;
+            }
 
-                List<MortgageRate> history =
-                        mortgageRateRepository.findByBankAndTermAndRateTypeOrderByEffectiveDateDesc(
-                                bank,
-                                term,
-                                RateType.LISTRATE
-                        );
+            // Om räntan ändrats
+            if (current.getRatePercent().compareTo(previous.getRatePercent()) != 0) {
 
-                if (history.size() < 2) {
-                    continue;
-                }
+                LocalDate changeDate = current.getEffectiveDate();
 
-                // 4. Jämför sekventiellt
-                for (int i = 0; i < history.size() - 1; i++) {
+                RateUpdateDto dto = new RateUpdateDto(
+                        current.getBank().getName(),
+                        current.getTerm().name(),
+                        previous.getRatePercent(),
+                        current.getRatePercent()
+                );
 
-                    MortgageRate current = history.get(i);
-                    MortgageRate previous = history.get(i + 1);
-
-                    if (current.getRatePercent().compareTo(previous.getRatePercent()) != 0) {
-
-                        LocalDate changeDate = current.getEffectiveDate();
-
-                        RateUpdateDto dto = new RateUpdateDto(
-                                bank.getName(),
-                                term.name(),
-                                previous.getRatePercent(),
-                                current.getRatePercent()
-                        );
-
-                        updatesByDate
-                                .computeIfAbsent(changeDate, d -> new ArrayList<>())
-                                .add(dto);
-                    }
-                }
+                updatesByDate
+                        .computeIfAbsent(changeDate, d -> new ArrayList<>())
+                        .add(dto);
             }
         }
 
         // 5. Sortera datum: senaste först
-        List<LocalDate> sortedDates = updatesByDate.keySet()
+        return updatesByDate.entrySet()
                 .stream()
-                .sorted(Comparator.reverseOrder())
+                .sorted(Map.Entry.<LocalDate, List<RateUpdateDto>>comparingByKey().reversed())
+                .map(entry -> new RateUpdateDayDto(entry.getKey(), entry.getValue()))
                 .toList();
-
-        // 6. Bygg slutlig DTO-lista
-        List<RateUpdateDayDto> result = new ArrayList<>();
-
-        for (LocalDate date : sortedDates) {
-            result.add(
-                    new RateUpdateDayDto(
-                            date,
-                            updatesByDate.get(date)
-                    )
-            );
-        }
-
-        return result;
     }
 }
