@@ -362,8 +362,8 @@
   },
 
   "rateUpdates": {
-    "title": "Senaste bankuppdateringar",
-    "description": "Visar listräntor som justerats per datum. Tabellen visar tidigare ränta, förändring och ny ränta.",
+    "title": "Senaste ränteuppdateringar",
+    "description": "Visar listräntor som justerats per datum. Tabellen visar tidigare listränta, förändring och ny listränta.",
     "loading": "Laddar senaste bankuppdateringar…",
     "empty": "Inga ränteuppdateringar hittades.",
 

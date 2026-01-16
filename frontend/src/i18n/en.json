@@ -373,11 +373,10 @@
   },
 
   "rateUpdates": {
-    "title": "Latest bank updates",
+    "title": "Latest Rate Updates",
+    "description": "Shows list rates adjusted on this day. The values show previous listrate, change, and new listrate.",
     "loading": "Loading latest bank updates…",
     "empty": "No rate updates found.",
-
-    "dayDescription": "Shows list rates adjusted on this day. The values show previous rate, change, and new rate.",
 
     "columns": {
       "term": "Term",
