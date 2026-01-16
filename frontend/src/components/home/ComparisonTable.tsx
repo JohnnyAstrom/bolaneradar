@@ -126,6 +126,13 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
             if (A == null) return 1;
             if (B == null) return -1;
 
+            // Specialfall: senast ändrad ska vara omvänd sortering
+            if (sortColumn === "lastChanged") {
+                return sortDirection === "down"
+                    ? (B as number) - (A as number) // nyast först
+                    : (A as number) - (B as number);
+            }
+
             return sortDirection === "down"
                 ? (A as number) - (B as number)
                 : (B as number) - (A as number);
