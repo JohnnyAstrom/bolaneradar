@@ -14,6 +14,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * ================================================================
+ * SCRAPER SERVICE
+ * ================================================================
+ * <p>
+ * Central orkestrering av all webbskrapning av bolåneräntor.
+ * Denna service ansvarar för att:
+ * <p>
+ * Ansvar:
+ * - Köra scraping för enskild bank eller alla banker
+ * - Matcha bank mot korrekt BankScraper-implementation
+ * - Filtrera bort dubletter och hantera rateChange / lastChanged
+ * - Spara nya räntor till databasen
+ * - Logga resultat via RateUpdateLogService
+ * - Skicka notifiering vid fel (om EmailService finns)
+ * <p>
+ * Designprinciper:
+ * - Enda platsen där scraping får ske
+ * - Ingen affärslogik i controllers
+ * - BankScraper ansvarar endast för insamling, inte lagring
+ * <p>
+ * Prestanda & robusthet:
+ * - Körs bank för bank med individuell felhantering
+ * - Misslyckad bank stoppar inte övriga
+ * - Tidsmätning och resultat loggas per bank
+ * ================================================================
+ */
 @Service
 public class ScraperService {
 

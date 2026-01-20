@@ -1,13 +1,13 @@
-package com.bolaneradar.backend.service.smartrate;
+package com.bolaneradar.backend.service.client.smartrate;
 
 import com.bolaneradar.backend.dto.api.smartrate.*;
 import com.bolaneradar.backend.entity.enums.Language;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.smartrate.RateComparison;
 import com.bolaneradar.backend.entity.enums.smartrate.SmartRateStatus;
-import com.bolaneradar.backend.service.smartrate.model.MarketSnapshot;
-import com.bolaneradar.backend.service.smartrate.model.SmartRateAnalysisContext;
-import com.bolaneradar.backend.service.smartrate.text.SmartRateTexts;
+import com.bolaneradar.backend.service.client.smartrate.model.MarketSnapshot;
+import com.bolaneradar.backend.service.client.smartrate.model.SmartRateAnalysisContext;
+import com.bolaneradar.backend.service.client.smartrate.text.SmartRateTexts;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +21,36 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * ================================================================
+ * SMART RATE ANALYSIS SERVICE
+ * ================================================================
+ * <p>
+ * Ansvar:
+ * - Utför hela analysflödet för Smart Räntetest
+ * - Utgör kärnan i SmartRate-funktionaliteten
+ * <p>
+ * Funktionalitet:
+ * - Bygger analyskontext baserat på användarens input
+ * - Hämtar marknadsdata via snapshot (en gång per analys)
+ * - Kör rätt analysflöde beroende på:
+ *   - erbjudande (offer flow)
+ *   - rörlig ränta
+ *   - bunden ränta
+ * - Genererar analys, rekommendationer och alternativ
+ * <p>
+ * Designprinciper:
+ * - Ett tydligt entrypoint: analyze()
+ * - All affärslogik kapslad i service-lagret
+ * - Textproduktion hanteras av SmartRateTexts
+ * - Marknadsdata hämtas via SmartRateMarketDataService
+ * <p>
+ * Prestanda:
+ * - Snapshot byggs endast en gång per analys
+ * - Inga upprepade DB-anrop i analysflöden
+ * - Loggning av tidsåtgång per delsteg
+ * ================================================================
+ */
 @Service
 public class SmartRateAnalysisServiceImpl implements SmartRateAnalysisService {
 

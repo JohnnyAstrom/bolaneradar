@@ -10,8 +10,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * ================================================================
+ * OPENAPI / SWAGGER CONFIGURATION
+ * ================================================================
+ * <p>
  * Konfiguration för OpenAPI (Swagger UI).
- * Dokumenterar automatiskt alla endpoints och aktiverar Basic Auth i Swagger UI.
+ * <p>
+ * Ansvar:
+ * - Exponerar API-dokumentation via Swagger UI
+ * - Aktiverar HTTP Basic Auth-stöd i Swagger
+ * - Definierar metadata som titel, beskrivning och kontaktuppgifter
+ * <p>
+ * Gör det möjligt att testa både publika och skyddade endpoints
+ * direkt via Swagger-gränssnittet.
+ * ================================================================
  */
 @Configuration
 public class OpenApiConfig {

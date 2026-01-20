@@ -7,6 +7,22 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * ================================================================
+ * ADMIN DEV DATA CONTROLLER
+ * ================================================================
+ * <p>
+ * Utvecklingsverktyg för administrativ datahantering.
+ * Endast aktiv i DEV-profil.
+ * <p>
+ * Används för att:
+ * - Importera exempeldata
+ * - Rensa databasen
+ * - Ta bort räntor för en specifik bank
+ * <p>
+ * Ska aldrig vara aktiv i produktion.
+ * ================================================================
+ */
 @Profile("dev")  // Endast aktiv i utvecklingsmiljö
 @Tag(name = "Admin / Dev Tools")
 @RestController

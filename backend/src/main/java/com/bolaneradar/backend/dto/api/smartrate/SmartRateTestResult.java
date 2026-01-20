@@ -5,6 +5,13 @@ import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Huvudresultat-DTO för Smart Räntetestet.
+ * <p>
+ * Innehåller analys, rekommendationer,
+ * jämförelser mot marknaden samt eventuella
+ * alternativa räntescenarier.
+ */
 public record SmartRateTestResult(
 
         // Statusklassificering utifrån marknaden
@@ -50,4 +57,5 @@ public record SmartRateTestResult(
 
         // version 5: Avgöra om det är flera offers
         boolean multipleOffers
-) {}
+) {
+}

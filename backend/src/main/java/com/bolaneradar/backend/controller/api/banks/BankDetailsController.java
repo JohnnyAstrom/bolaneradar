@@ -1,13 +1,25 @@
 package com.bolaneradar.backend.controller.api.banks;
 
 import com.bolaneradar.backend.dto.api.BankDetailsDto;
-import com.bolaneradar.backend.service.client.BankDetailsService;
+import com.bolaneradar.backend.service.client.banks.BankDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+/**
+ * ================================================================
+ * BANK DETAILS CONTROLLER
+ * ================================================================
+ * <p>
+ * Publikt API för detaljerad bankpresentation.
+ * Innehåller beskrivningar, målgrupp, CTA-länkar m.m.
+ * <p>
+ * Datat är språkstyrt och filbaserat.
+ * ================================================================
+ */
 
 @Tag(name = "Public / Bank Details")
 @RestController

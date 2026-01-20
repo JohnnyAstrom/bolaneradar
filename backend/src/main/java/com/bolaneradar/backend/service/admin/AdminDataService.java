@@ -9,8 +9,28 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- * Service för administrativ datahantering under utveckling.
- * Kan användas för att skapa exempeldata eller rensa databasen.
+ * ================================================================
+ * ADMIN DATA SERVICE
+ * ================================================================
+ * <p>
+ * Ansvar:
+ * - Verktygsservice för administrativ datahantering under utveckling
+ * - Används för att rensa testdata, loggar och (vid behov) skapa exempeldata
+ * <p>
+ * Funktionalitet:
+ * - clearDatabase(): tar bort all bolåneräntedata + uppdateringsloggar
+ * - importExampleData(): skapar banker om de saknas (seed/dev-setup)
+ * - deleteRatesForBank(): rensar räntor för en specifik bank
+ * <p>
+ * Designprinciper:
+ * - Ska inte innehålla “riktig” affärslogik för klientflöden
+ * - Är avsedd för utvecklings- och underhållssyfte, inte för publik funktionalitet
+ * - Repository används endast för CRUD, ingen komplex querylogik här
+ * <p>
+ * Säkerhet & drift:
+ * - Bör endast vara åtkomlig i kontrollerade miljöer (dev/admin)
+ * - Metoderna är @Transactional eftersom de gör destruktiva ändringar
+ * ================================================================
  */
 @SuppressWarnings("unused")
 @Service

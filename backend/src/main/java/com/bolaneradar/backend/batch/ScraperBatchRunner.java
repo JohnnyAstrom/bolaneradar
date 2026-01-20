@@ -10,6 +10,29 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 
+/**
+ * ================================================================
+ * SCRAPER BATCH RUNNER
+ * ================================================================
+ * <p>
+ * Batch-entrypoint som körs automatiskt vid applikationsstart
+ * när applikationen startas med ett specificerat --mode-argument.
+ * <p>
+ * Ansvar:
+ * - Orkestrerar batch-körning av bank-scraping
+ * - Anropas utanför HTTP-flödet (cron, CI, manuell körning)
+ * - Returnerar tydliga exit codes för automation
+ * <p>
+ * Stödda lägen:
+ * - --mode=scrape      → kör scraping för alla banker
+ * - --mode=scrape-ica  → kör scraping endast för ICA Banken
+ * <p>
+ * Design:
+ * - Innehåller ingen scraping-logik
+ * - Delegerar allt arbete till ScraperService
+ * - Skriver tydlig logg/console-output för drift & felsökning
+ * ================================================================
+ */
 @Component
 public class ScraperBatchRunner implements ApplicationRunner {
 

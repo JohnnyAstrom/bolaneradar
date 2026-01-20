@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.client;
+package com.bolaneradar.backend.service.client.banks;
 
 import com.bolaneradar.backend.dto.api.BankInfoDto;
 import com.bolaneradar.backend.dto.api.BankInfoDto.Content;
@@ -12,6 +12,36 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * ================================================================
+ * BANK INFO SERVICE
+ * ================================================================
+ * <p>
+ * Ansvar:
+ * - Tillhandahåller fördjupad bankinformation (analys, FAQ, texter)
+ * - Används av banksidans informationsvy
+ * <p>
+ * Användning:
+ * - Anropas av bank-info-controller
+ * - Returnerar språkberoende innehåll per bank
+ * <p>
+ * Funktionalitet:
+ * - Läser statiska JSON-filer för varje bank vid applikationsstart
+ * - Lagrar all bankinformation i minnet (Map)
+ * - Väljer rätt språkversion baserat på Language-enum
+ * <p>
+ * Designprinciper:
+ * - Ingen databasåtkomst (redaktionellt innehåll)
+ * - All filinläsning sker vid startup, inte vid request
+ * - Service-lagret ansvarar för språkval och fallback
+ * - DTO används för att isolera frontend från filstruktur
+ * <p>
+ * Prestanda:
+ * - Inga I/O-operationer vid runtime
+ * - Endast snabba minnesuppslag per anrop
+ * - Mycket låg och förutsägbar svarstid
+ * ================================================================
+ */
 @Service
 public class BankInfoService {
 
@@ -34,7 +64,8 @@ public class BankInfoService {
                 continue;
             }
 
-            BankInfoDto dto = objectMapper.readValue(is, new TypeReference<>() {});
+            BankInfoDto dto = objectMapper.readValue(is, new TypeReference<>() {
+            });
             bankInfoMap.put(bank, dto);
         }
     }

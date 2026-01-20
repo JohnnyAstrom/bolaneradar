@@ -7,10 +7,22 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Service-lager för hantering av banker.
- * Innehåller affärslogiken mellan controller och repository.
- *
- * Utför endast datalogik – all DTO-hantering sker i controller- eller mapper-lagret.
+ * ================================================================
+ * BANK SERVICE
+ * ================================================================
+ * <p>
+ * Centralt service-lager för hantering av banker.
+ * Utgör gränssnittet mellan controller-lagret och BankRepository.
+ * <p>
+ * Ansvar:
+ * - Läsa och skriva Bank-entiteter
+ * - Kapsla repository-anrop relaterade till banker
+ * <p>
+ * Designprinciper:
+ * - Innehåller endast enkel affärslogik
+ * - Returnerar alltid entiteter (ingen DTO-mappning)
+ * - Återanvänds av både client- och admin-services
+ * ================================================================
  */
 @Service
 public class BankService {

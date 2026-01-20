@@ -14,6 +14,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * ================================================================
+ * SECURITY CONFIGURATION
+ * ================================================================
+ * <p>
+ * Central konfiguration för Spring Security i BolåneRadar.
+ * <p>
+ * Ansvar:
+ * - Säkerställer att admin-endpoints skyddas med Basic Auth
+ * - Tillåter fria GET-anrop till publika API:er
+ * - Konfigurerar ett stateless API (inga sessioner)
+ * <p>
+ * Regler i korthet:
+ * - Alla GET /api/** är publika
+ * - Alla POST/PUT/DELETE /api/** kräver autentisering
+ * - Alla /api/admin/** kräver ADMIN-roll
+ * - Swagger (OpenAPI) är alltid publik
+ * <p>
+ * Använder in-memory-användare för admin (konfigureras via properties).
+ * ================================================================
+ */
 @Configuration
 public class SecurityConfig {
 

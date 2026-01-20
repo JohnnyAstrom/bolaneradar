@@ -8,6 +8,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * ================================================================
+ * BANK RATE MAPPER
+ * ================================================================
+ * Mapper för bankens räntedata som visas på banksidorna.
+ * <p>
+ * Ansvar:
+ * - Översätter MortgageRate-entiteter till enkla DTO:er
+ * - Utför endast formatering och konvertering av värden
+ * <p>
+ * Innehåller:
+ * - Mapping för aktuella räntor per bindningstid
+ * - Mapping för historiska snitträntor (aggregerade per månad)
+ * <p>
+ * Designprinciper:
+ * - Ingen affärslogik
+ * - Ingen databasåtkomst
+ * - All beräkning sker i service-lagret
+ * ================================================================
+ */
+
 public class BankRateMapper {
 
     public static BankRateRowDto toDto(

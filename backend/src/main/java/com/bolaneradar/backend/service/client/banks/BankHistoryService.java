@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.client;
+package com.bolaneradar.backend.service.client.banks;
 
 import com.bolaneradar.backend.dto.api.BankRateHistoryDto;
 import com.bolaneradar.backend.dto.mapper.api.BankRateMapper;
@@ -14,6 +14,39 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ================================================================
+ * BANK HISTORY SERVICE
+ * ================================================================
+ * <p>
+ * Ansvar:
+ * - Tillhandahåller historisk snitträntedata per bank
+ * - Används av bankens graf- och historikvy
+ * <p>
+ * Användning:
+ * - Anropas av bank-history-controller
+ * - Stöder val av bindningstid (MortgageTerm)
+ * <p>
+ * Funktionalitet:
+ * - Hämtar snitträntor (AVERAGERATE) för vald bank och bindningstid
+ * - Begränsar historiken till de senaste 12 månaderna
+ * - Returnerar data i graf-vänligt DTO-format
+ * <p>
+ * Kompletterande logik:
+ * - Identifierar vilka bindningstider som har tillräcklig historik
+ * - En term anses giltig om den har minst ~10 datapunkter senaste året
+ * <p>
+ * Designprinciper:
+ * - Service-lagret innehåller all filtrering och affärslogik
+ * - Repository används endast för rå datainhämtning
+ * - Mapper ansvarar för DTO-konvertering
+ * <p>
+ * Prestanda:
+ * - Begränsad historik (12 månader)
+ * - Små datamängder per bank och term
+ * - Optimerad för grafrendering i frontend
+ * ================================================================
+ */
 @Service
 public class BankHistoryService {
 

@@ -7,12 +7,18 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Hanterar databasoperationer för Bank.
- * JpaRepository ger oss färdiga metoder som:
- * - findAll()
- * - findById()
- * - save()
- * - deleteById()
+ * ================================================================
+ * BANKREPOSITORY
+ * ================================================================
+ * Detta lager hanterar:
+ * - Alla direkta databasoperationer för Bank
+ * - Grundläggande CRUD via Spring Data JPA
+ * - Enkla sökfrågor baserade på banknamn
+ * <p></p>
+ * Repository-lagret ska:
+ * - Aldrig innehålla affärslogik
+ * - Endast exponera rådata till service-lagret
+ * ================================================================
  */
 @Repository
 public interface BankRepository extends JpaRepository<Bank, Long> {

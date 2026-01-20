@@ -2,6 +2,13 @@ package com.bolaneradar.backend.dto.api;
 
 import java.util.List;
 
+/**
+ * DTO som innehåller fördjupad bankinformation
+ * uppdelad per språk.
+ * <p>
+ * Används för informationssidor med längre
+ * texter, FAQ och call-to-action.
+ */
 public class BankInfoDto {
 
     public Content sv;

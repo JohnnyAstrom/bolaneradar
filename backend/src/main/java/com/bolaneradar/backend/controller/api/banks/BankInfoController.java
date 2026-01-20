@@ -2,12 +2,23 @@ package com.bolaneradar.backend.controller.api.banks;
 
 import com.bolaneradar.backend.dto.api.BankInfoDto;
 import com.bolaneradar.backend.entity.enums.Language;
-import com.bolaneradar.backend.service.client.BankInfoService;
+import com.bolaneradar.backend.service.client.banks.BankInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * ================================================================
+ * BANK INFO CONTROLLER
+ * ================================================================
+ * <p>
+ * Publikt API för fördjupad bankinformation.
+ * Exponerar innehåll för informations- och faktasidor per bank.
+ * <p>
+ * Datat hämtas från filbaserad JSON och är språkberoende.
+ * ================================================================
+ */
 @Tag(
         name = "Public / Bank Info",
         description = "Fördjupad information om varje bank (informationssidor)."

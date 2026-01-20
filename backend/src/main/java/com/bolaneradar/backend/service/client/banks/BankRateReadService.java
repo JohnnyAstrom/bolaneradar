@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.client;
+package com.bolaneradar.backend.service.client.banks;
 
 import com.bolaneradar.backend.dto.api.BankRateRowDto;
 import com.bolaneradar.backend.dto.mapper.api.BankRateMapper;
@@ -15,6 +15,36 @@ import java.time.format.TextStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * ================================================================
+ * MORTGAGE RATE COMPARISON SERVICE
+ * ================================================================
+ * <p>
+ * Ansvar:
+ * - Bygger jämförelsetabellen för bolåneräntor per bindningstid
+ * - Förser frontend med komplett underlag för jämförelsesidan
+ * <p>
+ * Användning:
+ * - Anropas av public API för räntetabellen
+ * - Driver innehållet i huvudjämförelsen mellan banker
+ * <p>
+ * Funktionalitet:
+ * - Hämtar senaste listränta per bank och bindningstid
+ * - Hämtar senaste snittränta för motsvarande bindningstid
+ * - Beräknar förändring (diff) och senaste ändringsdatum
+ * - Sammanställer resultatet i ett frontend-vänligt responsobjekt
+ * <p>
+ * Designprinciper:
+ * - All affärs- och sammanställningslogik ligger i service-lagret
+ * - Repository används endast för rå datainhämtning
+ * - Mapper ansvarar för översättning till DTO-strukturer
+ * <p>
+ * Prestanda:
+ * - Ett begränsat antal riktade queries per bank
+ * - Ingen onödig historik laddas
+ * - Optimerad för tydlighet, stabilitet och underhållbarhet
+ * ================================================================
+ */
 @Service
 public class BankRateReadService {
 

@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.smartrate.model;
+package com.bolaneradar.backend.service.client.smartrate.model;
 
 import com.bolaneradar.backend.dto.api.smartrate.SmartRateOfferDto;
 import com.bolaneradar.backend.entity.enums.Language;
@@ -9,8 +9,11 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Intern analysmodell för Smart Räntetestet.
- * Endast för internt bruk i analysmotorn.
+ * Intern kontextmodell för Smart Räntetestet.
+ * <p>
+ * Samlar all indata och härledd state som behövs
+ * under analysflödet. Används endast internt av
+ * SmartRate-analysmotorn – exponeras aldrig externt.
  */
 public record SmartRateAnalysisContext(
 

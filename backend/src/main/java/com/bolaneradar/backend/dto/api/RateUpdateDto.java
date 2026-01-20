@@ -2,6 +2,12 @@ package com.bolaneradar.backend.dto.api;
 
 import java.math.BigDecimal;
 
+/**
+ * DTO som representerar en faktisk ränteändring
+ * för en specifik bank och bindningstid.
+ * <p>
+ * Används som radobjekt i listan över ränteuppdateringar.
+ */
 public class RateUpdateDto {
 
     private String bankName;

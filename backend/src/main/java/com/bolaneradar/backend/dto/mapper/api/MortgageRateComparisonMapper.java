@@ -7,23 +7,23 @@ import java.time.LocalDate;
 
 /**
  * Mapper som bygger MortgageRateComparisonDto för startsidans jämförelsetabell.
- *
+ * <p>
  * Mappern ansvarar endast för:
- *   - Null-hantering
- *   - BigDecimal → Double-konvertering
- *   - LocalDate → String
- *   - Att skapa en ren DTO från rådata som redan bearbetats i service-lagret
- *
+ * - Null-hantering
+ * - BigDecimal → Double-konvertering
+ * - LocalDate → String
+ * - Att skapa en ren DTO från rådata som redan bearbetats i service-lagret
+ * <p>
  * Ingen affärslogik får placeras här.
  */
 public class MortgageRateComparisonMapper {
 
     /**
      * Skapar DTO baserat på:
-     *  - Senaste listränta
-     *  - Senaste snittränta
-     *  - Beräknad diff (skickas från service)
-     *  - lastChanged-datum (skickas från service)
+     * - Senaste listränta
+     * - Senaste snittränta
+     * - Beräknad diff (skickas från service)
+     * - lastChanged-datum (skickas från service)
      */
     public static MortgageRateComparisonDto toDto(
             String bankName,

@@ -11,6 +11,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * ================================================================
+ * ADMIN BANK CONTROLLER
+ * ================================================================
+ * <p>
+ * Administrativt API för CRUD-operationer på banker.
+ * Används för att:
+ * - Lista banker
+ * - Skapa nya banker
+ * - Ta bort banker
+ * <p>
+ * Använder BankService som enda källa till affärslogik.
+ * ================================================================
+ */
 @RestController
 @Tag(name = "Admin / Banks")
 @RequestMapping("/api/admin/banks")

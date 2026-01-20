@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.client;
+package com.bolaneradar.backend.service.client.banks;
 
 import com.bolaneradar.backend.dto.api.BankDetailsDto;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -6,6 +6,34 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+/**
+ * ================================================================
+ * BANK DETAILS SERVICE
+ * ================================================================
+ * <p>
+ * Ansvar:
+ * - Levererar fördjupad bankinformation till banksidan
+ * - Används för sektionen "Om banken / Detaljer"
+ * <p>
+ * Datakälla:
+ * - Läser statisk JSON-data från classpath (bankDetailsData.json)
+ * - Innehåller språkspecifikt innehåll (sv / en)
+ * <p>
+ * Funktionalitet:
+ * - Hämtar detaljer baserat på bankKey
+ * - Väljer språkversion baserat på angiven language-parameter
+ * - Faller tillbaka till svenska om önskat språk saknas
+ * <p>
+ * Designprinciper:
+ * - Ingen affärslogik eller databasanrop
+ * - Tjänar som adapter mellan statisk innehållsdata och API
+ * - DTO ansvarar för struktur och validering av utdata
+ * <p>
+ * Prestanda:
+ * - Filen läses vid anrop (liten datamängd)
+ * - Försumbar påverkan jämfört med DB-baserade tjänster
+ * ================================================================
+ */
 @Service
 public class BankDetailsService {
 

@@ -9,6 +9,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * ================================================================
+ * ADMIN MORTGAGE RATE CONTROLLER
+ * ================================================================
+ * <p>
+ * Administrativt API för att skapa eller uppdatera bolåneräntor.
+ * Används främst för manuell hantering eller test/import-scenarion.
+ * <p>
+ * Tar emot DTO-listor och delegerar all logik till service-lagret.
+ * ================================================================
+ */
 @RestController
 @Tag(name = "Admin / Rates")
 @RequestMapping("/api/admin/rates")

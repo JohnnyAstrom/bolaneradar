@@ -11,11 +11,26 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Service-lager som hanterar loggning och hämtning av uppdateringshistorik
- * för bolåneräntor. Används bl.a. av ScraperService för att spara information
- * om när en bank uppdaterades, hur lång tid det tog, och om processen lyckades.
- *
- * Arbetar endast med entiteter – mapping till DTO sker i controller-lagret.
+ * ================================================================
+ * RATE UPDATE LOG SERVICE
+ * ================================================================
+ * <p>
+ * Ansvar:
+ * - Loggar och tillhandahåller historik för ränteuppdateringar
+ * - Används av scraper- och adminflöden
+ * <p>
+ * Funktionalitet:
+ * - Sparar metadata om varje uppdateringskörning (tid, bank, status)
+ * - Möjliggör vyer som ”senast uppdaterad per bank”
+ * <p>
+ * Designprinciper:
+ * - Arbetar enbart med entiteter
+ * - Ingen DTO-mappning eller affärslogik
+ * <p>
+ * Användningsområde:
+ * - Drift, övervakning och felsökning
+ * - Ej avsedd för publik frontend
+ * ================================================================
  */
 @Service
 public class RateUpdateLogService {

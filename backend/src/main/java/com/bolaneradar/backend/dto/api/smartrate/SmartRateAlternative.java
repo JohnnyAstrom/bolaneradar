@@ -4,6 +4,13 @@ import com.bolaneradar.backend.entity.enums.MortgageTerm;
 
 import java.math.BigDecimal;
 
+/**
+ * DTO som representerar ett alternativt
+ * räntescenario i Smart Räntetestet.
+ * <p>
+ * Visar hur en annan bindningstid hade
+ * påverkat kundens kostnad.
+ */
 public record SmartRateAlternative(
 
         // Bindningstid för alternativet
@@ -17,4 +24,5 @@ public record SmartRateAlternative(
 
         // Årlig kostnadsökning/sänkning jämfört med marknaden
         BigDecimal yearlyCostDifference
-) {}
+) {
+}

@@ -2,7 +2,7 @@ package com.bolaneradar.backend.controller.api.rates;
 
 import com.bolaneradar.backend.dto.api.RateUpdateDayDto;
 import com.bolaneradar.backend.service.admin.RateUpdateLogService;
-import com.bolaneradar.backend.service.client.RateUpdatesService;
+import com.bolaneradar.backend.service.client.rates.RateUpdatePublicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
@@ -11,20 +11,33 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ================================================================
+ * RATE UPDATE PUBLIC CONTROLLER
+ * ================================================================
+ * <p>
+ * Publikt API för att visa senaste ränteändringar.
+ * Används av frontend för:
+ * - Lista ränteuppdateringar per datum
+ * - Visa senaste globala uppdateringstid
+ * <p>
+ * Hämtar data från service-lagret utan egen affärslogik.
+ * ================================================================
+ */
 @Tag(name = "Public / Rate Updates")
 @RestController
 @RequestMapping("/api/rates/updates")
 public class RateUpdatePublicController {
 
     private final RateUpdateLogService logService;
-    private final RateUpdatesService rateUpdatesService;
+    private final RateUpdatePublicService rateUpdatePublicService;
 
     public RateUpdatePublicController(
             RateUpdateLogService logService,
-            RateUpdatesService rateUpdatesService
+            RateUpdatePublicService rateUpdatePublicService
     ) {
         this.logService = logService;
-        this.rateUpdatesService = rateUpdatesService;
+        this.rateUpdatePublicService = rateUpdatePublicService;
     }
 
     @Operation(summary = "Hämta senaste globala uppdateringstiden")
@@ -42,6 +55,6 @@ public class RateUpdatePublicController {
     @Operation(summary = "Hämta senaste ränteändringar per bank")
     @GetMapping
     public List<RateUpdateDayDto> getRateUpdates() {
-        return rateUpdatesService.getRateUpdates();
+        return rateUpdatePublicService.getRateUpdates();
     }
 }

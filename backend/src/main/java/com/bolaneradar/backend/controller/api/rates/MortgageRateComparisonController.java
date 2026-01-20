@@ -1,12 +1,24 @@
 package com.bolaneradar.backend.controller.api.rates;
 
-import com.bolaneradar.backend.service.client.MortgageRateComparisonService;
+import com.bolaneradar.backend.service.client.rates.MortgageRateComparisonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * ================================================================
+ * MORTGAGE RATE COMPARISON CONTROLLER
+ * ================================================================
+ * <p>
+ * Publikt API för jämförelse av bolåneräntor.
+ * Returnerar listräntor, snitträntor och ändringsinformation
+ * för vald bindningstid.
+ * <p>
+ * Används av startsidans jämförelsetabell.
+ * ================================================================
+ */
 @Tag(name = "Public / Rate Comparison")
 @RestController
 @RequestMapping("/api/rates")

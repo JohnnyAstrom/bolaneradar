@@ -9,6 +9,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * ================================================================
+ * ADMIN RATE UPDATE LOG CONTROLLER
+ * ================================================================
+ * <p>
+ * Administrativt API för att läsa uppdateringsloggar
+ * kopplade till scraping och import av bolåneräntor.
+ * <p>
+ * Stödjer:
+ * - Hämtning av alla loggar
+ * - Hämtning av senaste logg per bank
+ * ================================================================
+ */
 @RestController
 @Tag(name = "Admin / Rate Update Logs")
 @RequestMapping("/api/admin/rates/updates")

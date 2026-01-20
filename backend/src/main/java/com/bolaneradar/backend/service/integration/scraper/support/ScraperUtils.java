@@ -15,6 +15,22 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * ================================================================
+ * SCRAPER UTILS
+ * ================================================================
+ * Gemensamma hjälpfunktioner för bank-scrapers.
+ * <p>
+ * Innehåller:
+ * - Standardiserad hämtning av HTML (Jsoup) och JSON
+ * - Parsning av bindningstider till MortgageTerm
+ * - Parsning av räntesträngar till BigDecimal
+ * - Tolkning av svenska månadsnamn
+ * <p>
+ * Används av flera BankScraper-implementationer
+ * för att undvika duplicerad parsing- och nätverkslogik.
+ * ================================================================
+ */
 public class ScraperUtils {
 
     private static final Map<String, Integer> MONTHS = Map.ofEntries(
@@ -26,7 +42,9 @@ public class ScraperUtils {
             Map.entry("november", 11), Map.entry("december", 12)
     );
 
-    /** Standardiserad Jsoup-hämtning med user-agent och timeout */
+    /**
+     * Standardiserad Jsoup-hämtning med user-agent och timeout
+     */
     public static Document fetchDocument(String url) throws IOException {
         System.out.println("FETCH DEBUG URL = [" + url + "]");
         return Jsoup.connect(url)
@@ -36,7 +54,9 @@ public class ScraperUtils {
                 .get();
     }
 
-    /** Standardiserad JSON-hämtning med timeout för externa API:er */
+    /**
+     * Standardiserad JSON-hämtning med timeout för externa API:er
+     */
     public static Map<String, Object> fetchJson(String url) {
         try {
             SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
@@ -50,7 +70,9 @@ public class ScraperUtils {
         }
     }
 
-    /** Försöker tolka text som "3 mån", "1 år" etc. till motsvarande term */
+    /**
+     * Försöker tolka text som "3 mån", "1 år" etc. till motsvarande term
+     */
     public static MortgageTerm parseTerm(String text) {
         if (text == null) return null;
         text = text.toLowerCase(Locale.ROOT).trim();
@@ -83,7 +105,9 @@ public class ScraperUtils {
         return null;
     }
 
-    /** Tar bort %, byter , till ., hanterar minus och whitespace */
+    /**
+     * Tar bort %, byter , till ., hanterar minus och whitespace
+     */
     public static BigDecimal parseRate(String text) {
         if (text == null) return null;
 
@@ -103,7 +127,9 @@ public class ScraperUtils {
         }
     }
 
-    /** Tolkar svensk månad + år ur text (ex. "september 2025") */
+    /**
+     * Tolkar svensk månad + år ur text (ex. "september 2025")
+     */
     public static YearMonth parseSwedishMonth(String text) {
         if (text == null) return YearMonth.from(LocalDate.now());
         String lower = text.toLowerCase(Locale.ROOT);
@@ -119,7 +145,9 @@ public class ScraperUtils {
         return YearMonth.from(LocalDate.now());
     }
 
-    /** Enklare loggfunktion för konsolutskrifter */
+    /**
+     * Enklare loggfunktion för konsolutskrifter
+     */
     public static void logResult(String bankName, int count) {
         System.out.println(bankName + ": hittade " + count + " räntor totalt.");
     }

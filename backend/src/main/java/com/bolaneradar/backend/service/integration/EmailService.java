@@ -7,7 +7,23 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 /**
- * Handles email notifications when scraping errors occur.
+ * ================================================================
+ * EMAIL SERVICE
+ * ================================================================
+ * Ansvarar för utskick av notifieringar via e-post.
+ * <p>
+ * Användning:
+ * - Anropas främst vid fel under scraping
+ * - Skickar enkla textbaserade felmeddelanden
+ * <p>
+ * Konfiguration:
+ * - Aktiveras endast om `app.email.enabled=true`
+ * - Mottagare styrs via `alert.email.to`
+ * <p>
+ * Design:
+ * - Valfri integration (ConditionalOnProperty)
+ * - Ingen affärslogik, endast notifiering
+ * ================================================================
  */
 @Service
 @ConditionalOnProperty(

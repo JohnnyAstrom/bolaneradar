@@ -6,6 +6,20 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * ================================================================
+ * ADMIN SCRAPER CONTROLLER
+ * ================================================================
+ * <p>
+ * Administrativt API för att trigga scraping av bolåneräntor.
+ * Används manuellt av admin för att:
+ * - Köra scraping för alla banker
+ * - Köra scraping för en specifik bank
+ * <p>
+ * Anropar ScraperService som innehåller all scrapinglogik.
+ * Ingen affärslogik finns i controllern.
+ * ================================================================
+ */
 @RestController
 @Tag(name = "Admin / Scraper")
 @RequestMapping("/api/admin/scrape")

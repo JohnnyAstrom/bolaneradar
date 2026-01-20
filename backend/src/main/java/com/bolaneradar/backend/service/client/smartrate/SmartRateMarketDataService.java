@@ -1,14 +1,33 @@
-package com.bolaneradar.backend.service.smartrate;
+package com.bolaneradar.backend.service.client.smartrate;
 
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
-import com.bolaneradar.backend.service.smartrate.model.MarketSnapshot;
+import com.bolaneradar.backend.service.client.smartrate.model.MarketSnapshot;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * ================================================================
+ * SMART RATE MARKET DATA SERVICE
+ * ================================================================
+ * <p>
+ * Publikt kontrakt för all marknads- och bankdata
+ * som används i Smart Räntetest-analysen.
+ * <p>
+ * Ansvar:
+ * - Levererar snitträntor för bank och marknad
+ * - Tillhandahåller preferensbaserade bindningstider
+ * - Bygger ett samlat MarketSnapshot för analysen
+ * <p>
+ * Designprinciper:
+ * - Interface innehåller endast läsoperationer
+ * - Implementation ansvarar för prestandaoptimering
+ * - Controller och analyslager är helt databasagnostiska
+ * ================================================================
+ */
 public interface SmartRateMarketDataService {
 
     /**

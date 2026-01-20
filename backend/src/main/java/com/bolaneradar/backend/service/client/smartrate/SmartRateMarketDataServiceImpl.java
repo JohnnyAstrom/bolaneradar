@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.smartrate;
+package com.bolaneradar.backend.service.client.smartrate;
 
 import com.bolaneradar.backend.entity.core.MortgageRate;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
@@ -6,7 +6,7 @@ import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.entity.enums.smartrate.RatePreference;
 import com.bolaneradar.backend.repository.MortgageRateRepository;
 import com.bolaneradar.backend.repository.projection.MarketRateSnapshotRow;
-import com.bolaneradar.backend.service.smartrate.model.MarketSnapshot;
+import com.bolaneradar.backend.service.client.smartrate.model.MarketSnapshot;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,6 +18,33 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+/**
+ * ================================================================
+ * SMART RATE MARKET DATA SERVICE
+ * ================================================================
+ * <p>
+ * Ansvar:
+ * - Tillhandahåller all marknadsdata som behövs för SmartRate-analysen
+ * - Fungerar som enda datakälla mellan analyslogik och databasen
+ * <p>
+ * Funktionalitet:
+ * - Hämtar bankens och marknadens snitträntor
+ * - Beräknar bästa och medianräntor per bindningstid
+ * - Tillhandahåller historiska rörliga räntor vid ändringsdatum
+ * - Bygger ett prestandaoptimerat MarketSnapshot via projection
+ * <p>
+ * Designprinciper:
+ * - Ren lässervice utan affärsbeslut
+ * - Ingen textlogik, ingen presentation
+ * - Snapshot används för att undvika upprepade DB-anrop
+ * <p>
+ * Prestanda:
+ * - Snapshot byggs med en enda DB-query (projection)
+ * - Inga JPA-entiteter exponeras i analysflödet
+ * - Optimerad för upprepade beräkningar i samma analys
+ * ================================================================
+ */
 
 @Service
 public class SmartRateMarketDataServiceImpl implements SmartRateMarketDataService {

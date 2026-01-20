@@ -2,13 +2,27 @@ package com.bolaneradar.backend.controller.api.banks;
 
 import com.bolaneradar.backend.dto.api.BankRateHistoryDto;
 import com.bolaneradar.backend.entity.enums.MortgageTerm;
-import com.bolaneradar.backend.service.client.BankHistoryService;
-import com.bolaneradar.backend.service.client.BankKeyResolverService;
+import com.bolaneradar.backend.service.client.banks.BankHistoryService;
+import com.bolaneradar.backend.service.client.banks.resolver.BankKeyResolver;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+/**
+ * ================================================================
+ * BANK HISTORY CONTROLLER
+ * ================================================================
+ * <p>
+ * Publikt API för historiska snitträntor per bank.
+ * Används för grafer och historikvyer i frontend.
+ * <p>
+ * Stöder både:
+ * - Historisk data per bindningstid
+ * - Lista över tillgängliga bindningstider
+ * ================================================================
+ */
 
 @Tag(name = "Public / Bank History")
 @RestController
@@ -16,14 +30,14 @@ import java.util.List;
 public class BankHistoryController {
 
     private final BankHistoryService historyService;
-    private final BankKeyResolverService bankKeyResolverService;
+    private final BankKeyResolver bankKeyResolver;
 
     public BankHistoryController(
             BankHistoryService historyService,
-            BankKeyResolverService bankKeyResolverService
+            BankKeyResolver bankKeyResolver
     ) {
         this.historyService = historyService;
-        this.bankKeyResolverService = bankKeyResolverService;
+        this.bankKeyResolver = bankKeyResolver;
     }
 
     @Operation(summary = "Hämta historiska snitträntor för en bank")
@@ -32,7 +46,7 @@ public class BankHistoryController {
             @PathVariable String bankKey,
             @RequestParam MortgageTerm term
     ) {
-        String bankName = bankKeyResolverService.resolve(bankKey);
+        String bankName = bankKeyResolver.resolve(bankKey);
 
         return historyService.getHistoricalAverageRates(bankName, term);
     }
@@ -41,7 +55,7 @@ public class BankHistoryController {
     @GetMapping("/{bankKey}/history/available-terms")
     public List<MortgageTerm> getAvailableTerms(@PathVariable String bankKey) {
 
-        String bankName = bankKeyResolverService.resolve(bankKey);
+        String bankName = bankKeyResolver.resolve(bankKey);
 
         return historyService.getAvailableTerms(bankName);
     }

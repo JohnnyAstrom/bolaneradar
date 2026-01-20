@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.smartrate.text;
+package com.bolaneradar.backend.service.client.smartrate.text;
 
 import com.bolaneradar.backend.entity.enums.Language;
 import com.bolaneradar.backend.entity.enums.smartrate.RateComparison;

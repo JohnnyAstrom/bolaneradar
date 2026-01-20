@@ -1,4 +1,4 @@
-package com.bolaneradar.backend.service.client;
+package com.bolaneradar.backend.service.client.rates;
 
 import com.bolaneradar.backend.dto.api.MortgageRateComparisonDto;
 import com.bolaneradar.backend.dto.mapper.api.MortgageRateComparisonMapper;
@@ -14,6 +14,31 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.*;
 
+/**
+ * ================================================================
+ * MORTGAGE RATE COMPARISON SERVICE
+ * ================================================================
+ * <p>
+ * Ansvar:
+ * - Bygger jämförelsetabellen för bolåneräntor per bindningstid
+ * - Används av publika jämförelsesidan ("/api/rates/comparison")
+ * <p>
+ * Funktionalitet:
+ * - Hämtar senaste listränta och snittränta per bank
+ * - Beräknar förändring (diff) och senaste ändringsdatum
+ * - Samlar allt i ett frontend-vänligt responsobjekt
+ * <p>
+ * Designprinciper:
+ * - Service-lagret innehåller all affärslogik
+ * - Repository används endast för datainhämtning
+ * - Mapper ansvarar för DTO-översättning
+ * <p>
+ * Prestanda:
+ * - En uppsättning riktade queries per bank
+ * - Ingen onödig historik laddas
+ * - Optimerad för läsbarhet och stabilitet
+ * ================================================================
+ */
 @Service
 public class MortgageRateComparisonService {
 
@@ -112,15 +137,12 @@ public class MortgageRateComparisonService {
         };
     }
 
-    private Double extractDiff(MortgageRate listRate)
-    {
-        if (listRate == null)
-        {
+    private Double extractDiff(MortgageRate listRate) {
+        if (listRate == null) {
             return null;
         }
 
-        if (listRate.getRateChange() == null)
-        {
+        if (listRate.getRateChange() == null) {
             return null;
         }
 
@@ -128,25 +150,20 @@ public class MortgageRateComparisonService {
     }
 
 
-    private LocalDate extractLastChanged(MortgageRate listRate)
-    {
-        if (listRate == null)
-        {
+    private LocalDate extractLastChanged(MortgageRate listRate) {
+        if (listRate == null) {
             return null;
         }
 
-        if (listRate.getLastChangedDate() == null)
-        {
+        if (listRate.getLastChangedDate() == null) {
             return null;
         }
 
         return listRate.getLastChangedDate();
     }
 
-    private String formatMonth(LocalDate date)
-    {
-        if (date == null)
-        {
+    private String formatMonth(LocalDate date) {
+        if (date == null) {
             return null;
         }
 
