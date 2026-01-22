@@ -2,8 +2,9 @@ name: Daily mortgage rate scraping
 
 on:
   schedule:
-    # Kör dagligen kl 09:00 UTC
-    - cron: "0 9 * * *"
+    # Triggas dagligen tidigast kl 09:00 UTC (körs när en runner finns tillgänglig)
+    # = 09:00 svensk vintertid / 10:00 svensk sommartid
+    - cron: "0 8 * * *"
 
   # Möjlighet att köra manuellt från GitHub UI
   workflow_dispatch:
