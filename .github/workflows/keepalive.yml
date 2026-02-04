@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Ping health endpoint
         run: |
-          curl -m 10 https://bolaneradar-backend.onrender.com/api/health
+          curl -L --retry 3 --retry-delay 10 --max-time 60 https://bolaneradar-backend.onrender.com/api/health || true
