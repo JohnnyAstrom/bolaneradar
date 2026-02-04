@@ -2,7 +2,7 @@ name: Keep Render Backend Alive
 
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Ping health endpoint
         run: |
-          curl -L --retry 3 --retry-delay 10 --max-time 60 https://bolaneradar-backend.onrender.com/api/health || true
+          curl -L --retry 3 --retry-delay 10 --max-time 90 https://bolaneradar-backend.onrender.com/api/health || true
