@@ -25,7 +25,13 @@ jobs:
 
       - name: Build backend
         working-directory: backend
-        run: mvn -B -DskipTests package
+        run: mvn -B clean package -DskipTests
+
+      - name: Debug built JAR
+        working-directory: backend
+        run: |
+          echo "JAR timestamp:"
+          ls -lh target/backend-0.0.1-SNAPSHOT.jar
 
       - name: Run scraper batch
         working-directory: backend
