@@ -69,13 +69,7 @@ public class LandshypotekBankScraper implements BankScraper {
                  *  - minus 1 månad
                  *  - använder år + månad från rubriken
                  */
-                YearMonth previousMonth = YearMonth.now().minusMonths(1);
-
-                YearMonth effectiveMonth =
-                        ScraperUtils.parseSwedishMonth(
-                                monthText + " " + previousMonth.getYear()
-                        );
-
+                YearMonth effectiveMonth = YearMonth.now().minusMonths(1);
                 LocalDate effectiveDate = effectiveMonth.atDay(1);
 
                 Element table = avgRateBlock.selectFirst("table");

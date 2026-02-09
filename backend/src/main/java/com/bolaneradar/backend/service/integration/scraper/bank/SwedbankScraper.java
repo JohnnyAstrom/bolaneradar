@@ -20,12 +20,25 @@ import java.util.List;
 
 /**
  * Webbskrapare för Swedbank.
- * Hämtar både aktuella (listräntor) och genomsnittliga (snitträntor) bolåneräntor.
+ *
+ * Design:
+ *  - LISTRATE: hämtas från bolåneräntesidan (listräntor-tabellen)
+ *  - AVERAGERATE: hämtas från "Historiska genomsnittsräntor"
+ *    och tar senaste månaden (första raden i tabellen).
+ *
+ * Varför:
+ *  - Att parsa "månad" från fri text på bolåneräntesidan kan ge fel
+ *    (t.ex. nämner sidan kommande uppdateringar).
+ *  - Historik-sidan har stabil struktur med månad som rad (t.ex. "jan. 2026").
  */
 @Service
 public class SwedbankScraper implements BankScraper {
 
-    private static final String URL = "https://www.swedbank.se/privat/boende-och-bolan/bolanerantor.html";
+    private static final String LIST_URL =
+            "https://www.swedbank.se/privat/boende-och-bolan/bolanerantor.html";
+
+    private static final String AVERAGE_URL =
+            "https://www.swedbank.se/privat/boende-och-bolan/bolanerantor/historiska-genomsnittsrantor.html";
 
     @Override
     public String getBankName() {
@@ -36,45 +49,45 @@ public class SwedbankScraper implements BankScraper {
     public List<MortgageRate> scrapeRates(Bank bank) throws IOException {
         List<MortgageRate> rates = new ArrayList<>();
 
-        // Hämta HTML-dokumentet via gemensam metod
-        Document doc = ScraperUtils.fetchDocument(URL);
+        // 1) LISTRÄNTOR (från LIST_URL)
+        Document listDoc = ScraperUtils.fetchDocument(LIST_URL);
+        extractListRates(listDoc, bank, rates);
 
-        // Hämta månad för snittränta (ex. "Genomsnittsränta, september 2025")
-        YearMonth averageMonth = ScraperUtils.parseSwedishMonth(doc.text());
-        LocalDate averageEffectiveDate = averageMonth.atDay(1);
+        // 2) SNITTRÄNTOR (från AVERAGE_URL)
+        Document avgDoc = ScraperUtils.fetchDocument(AVERAGE_URL);
+        extractLatestAverageRates(avgDoc, bank, rates);
 
-        // Hitta tabeller på sidan
+        ScraperUtils.logResult("Swedbank", rates.size());
+        return rates;
+    }
+
+    private void extractListRates(Document doc, Bank bank, List<MortgageRate> out) {
         Elements tables = doc.select("table");
 
         for (Element table : tables) {
-            // Försök identifiera vilken typ av tabell (list- eller snittränta)
             String caption = table.selectFirst("caption") != null
                     ? table.selectFirst("caption").text().toLowerCase()
                     : "";
 
             String heading = "";
             Element prev = table.previousElementSibling();
-            int checkDepth = 0;
-            while (prev != null && checkDepth < 5) {
+            int depth = 0;
+            while (prev != null && depth < 5) {
                 if (prev.tagName().matches("h2|h3|h4|strong|p")) {
                     heading = prev.text().toLowerCase();
                     break;
                 }
                 prev = prev.previousElementSibling();
-                checkDepth++;
+                depth++;
             }
 
-            String context = caption + " " + heading;
-            RateType rateType;
-            if (context.contains("genomsnitt")) {
-                rateType = RateType.AVERAGERATE;
-            } else if (context.contains("aktuella") || context.contains("list")) {
-                rateType = RateType.LISTRATE;
-            } else {
-                continue; // hoppa över okända tabeller
+            String context = (caption + " " + heading).trim();
+
+            // Vi vill bara ha listräntetabellen här
+            if (!(context.contains("aktuella") || context.contains("list"))) {
+                continue;
             }
 
-            // Loopa igenom rader i tabellen
             Elements rows = table.select("tbody tr");
             if (rows.isEmpty()) rows = table.select("tr");
 
@@ -82,23 +95,95 @@ public class SwedbankScraper implements BankScraper {
                 Elements cols = row.select("td");
                 if (cols.size() < 2) continue;
 
-                String termText = cols.get(0).text();
-                String rateText = cols.get(1).text();
+                MortgageTerm term = ScraperUtils.parseTerm(cols.get(0).text());
+                BigDecimal rate = ScraperUtils.parseRate(cols.get(1).text());
 
-                MortgageTerm term = ScraperUtils.parseTerm(termText);
-                BigDecimal rate = ScraperUtils.parseRate(rateText);
+                if (term == null || rate == null) continue;
 
-                if (term != null && rate != null) {
-                    LocalDate effectiveDate = (rateType == RateType.AVERAGERATE)
-                            ? averageEffectiveDate
-                            : LocalDate.now();
-
-                    rates.add(new MortgageRate(bank, term, rateType, rate, effectiveDate));
-                }
+                out.add(new MortgageRate(
+                        bank,
+                        term,
+                        RateType.LISTRATE,
+                        rate,
+                        LocalDate.now()
+                ));
             }
         }
+    }
 
-        ScraperUtils.logResult("Swedbank", rates.size());
-        return rates;
+    /**
+     * Hämtar senaste månaden från historik-tabellen (första raden).
+     * Tabellen brukar vara:
+     *  Rad 1: "jan. 2026" + värden för 3 mån, 1 år, 2 år, ...
+     */
+    private void extractLatestAverageRates(Document doc, Bank bank, List<MortgageRate> out) {
+        Element table = doc.selectFirst("table");
+        if (table == null) {
+            System.out.println("Swedbank: ingen tabell hittades på historik-sidan för snitträntor.");
+            return;
+        }
+
+        Elements headerCells = table.select("thead th");
+        if (headerCells.isEmpty()) {
+            System.out.println("Swedbank: saknar table header (thead th) på historik-sidan.");
+            return;
+        }
+
+        Elements rows = table.select("tbody tr");
+        if (rows.isEmpty()) rows = table.select("tr");
+        if (rows.isEmpty()) {
+            System.out.println("Swedbank: inga rader hittades i historik-tabellen.");
+            return;
+        }
+
+        // Första raden = senaste månaden
+        Element latestRow = rows.first();
+        Elements cols = latestRow.select("td");
+        if (cols.size() < 2) {
+            System.out.println("Swedbank: senaste raden i historik-tabellen har för få kolumner.");
+            return;
+        }
+
+        // Kolumn 0 = månadstext (t.ex. "jan. 2026")
+        String monthText = cols.get(0).text().toLowerCase();
+        YearMonth ym = ScraperUtils.parseSwedishMonth(monthText);
+
+        if (ym == null) {
+            System.out.println("Swedbank: kunde inte tolka månad från historik-rad: " + monthText);
+            return;
+        }
+
+        LocalDate effectiveDate = ym.minusMonths(1).atDay(1);
+
+        // Skydd: framtida snitträntor får inte förekomma
+        if (effectiveDate.isAfter(LocalDate.now())) {
+            System.out.println("Swedbank: ignorerar framtida snittränta " + effectiveDate);
+            return;
+        }
+
+        // Header: första kolumnen är "Bindningstid" eller tom, sen termer
+        // Cols: första kolumnen är månad, sen värden i samma ordning som headers
+        for (int i = 1; i < cols.size() && i < headerCells.size(); i++) {
+            String termText = headerCells.get(i).text();
+            String rateText = cols.get(i).text();
+
+            MortgageTerm term = ScraperUtils.parseTerm(termText);
+            BigDecimal rate = ScraperUtils.parseRate(rateText);
+
+            if (term == null || rate == null) continue;
+
+            out.add(new MortgageRate(
+                    bank,
+                    term,
+                    RateType.AVERAGERATE,
+                    rate,
+                    effectiveDate
+            ));
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Swedbank";
     }
 }
