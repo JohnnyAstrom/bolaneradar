@@ -17,7 +17,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,8 +29,9 @@ public class SkandiabankenScraper implements BankScraper {
     private static final String URL =
             "https://www.skandia.se/lana/bolan/bolanerantor";
 
+    // Mer tolerant regex – fångar hela objektet även om ; saknas
     private static final Pattern PAGE_CONTENT_PATTERN =
-            Pattern.compile("SKB\\.pageContent\\s*=\\s*(\\{.*?\\});", Pattern.DOTALL);
+            Pattern.compile("SKB\\.pageContent\\s*=\\s*(\\{.*\\})", Pattern.DOTALL);
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -46,51 +49,51 @@ public class SkandiabankenScraper implements BankScraper {
 
         Matcher matcher = PAGE_CONTENT_PATTERN.matcher(html);
         if (!matcher.find()) {
+            System.out.println("Skandiabanken: kunde inte hitta SKB.pageContent i HTML");
             return rates;
         }
 
-        JsonNode root = mapper.readTree(matcher.group(1));
+        JsonNode root;
+        try {
+            root = mapper.readTree(matcher.group(1));
+        } catch (Exception e) {
+            System.out.println("Skandiabanken: JSON-parse misslyckades");
+            return rates;
+        }
 
-        // =====================
-        // SNITTRÄNTOR
-        // =====================
-        JsonNode sectionContent1 = root.path("sectionContent1");
-        if (sectionContent1.isArray()) {
-            for (JsonNode block : sectionContent1) {
+        // Iterera över ALLA sektioner dynamiskt
+        Iterator<Map.Entry<String, JsonNode>> sections = root.fields();
+        while (sections.hasNext()) {
+            Map.Entry<String, JsonNode> entry = sections.next();
+            JsonNode section = entry.getValue();
+
+            if (!section.isArray()) continue;
+
+            for (JsonNode block : section) {
                 JsonNode expanded = block.path("contentLink").path("expanded");
-                String name = expanded.path("name").asText();
+                if (expanded.isMissingNode()) continue;
 
-                if (name.toLowerCase().contains("snit")) {
+                String name = expanded.path("name").asText("").toLowerCase();
 
-                    YearMonth averageMonth =
-                            ScraperUtils.parseSwedishMonth(name);
-
-                    LocalDate averageEffectiveDate =
-                            averageMonth != null
-                                    ? averageMonth.atDay(1)
-                                    : null;
+                // ===== SNITTRÄNTOR =====
+                if (name.contains("snit") || name.contains("genomsnitt")) {
+                    YearMonth month = ScraperUtils.parseSwedishMonth(name);
+                    if (month == null) {
+                        System.out.println("Skandiabanken: kunde inte tolka månad från '" + name + "'");
+                        continue;
+                    }
 
                     parseRateTable(
                             bank,
                             expanded,
                             RateType.AVERAGERATE,
-                            averageEffectiveDate,
+                            month.atDay(1),
                             rates
                     );
                 }
-            }
-        }
 
-        // =====================
-        // LISTRÄNTOR
-        // =====================
-        JsonNode sectionContent2 = root.path("sectionContent2");
-        if (sectionContent2.isArray()) {
-            for (JsonNode block : sectionContent2) {
-                JsonNode expanded = block.path("contentLink").path("expanded");
-                String name = expanded.path("name").asText();
-
-                if ("Listräntor".equalsIgnoreCase(name)) {
+                // ===== LISTRÄNTOR =====
+                if (name.contains("listränt")) {
                     parseRateTable(
                             bank,
                             expanded,
@@ -107,8 +110,8 @@ public class SkandiabankenScraper implements BankScraper {
     }
 
     /**
-     * Parser för Skandias TableBlock-struktur:
-     * columns[] -> cells[]
+     * Parser för Skandias table-block:
+     * columns[] -> contentLink.expanded.cells[]
      */
     private void parseRateTable(
             Bank bank,
@@ -117,10 +120,13 @@ public class SkandiabankenScraper implements BankScraper {
             LocalDate effectiveDate,
             List<MortgageRate> out
     ) {
-        JsonNode columns = block.path("columns");
-        if (!columns.isArray() || columns.size() < 2) {
+        if (effectiveDate == null) {
+            System.out.println("Skandiabanken: effectiveDate saknas – hoppar över block");
             return;
         }
+
+        JsonNode columns = block.path("columns");
+        if (!columns.isArray() || columns.size() < 2) return;
 
         JsonNode termCells = columns.get(0)
                 .path("contentLink")
@@ -132,26 +138,24 @@ public class SkandiabankenScraper implements BankScraper {
                 .path("expanded")
                 .path("cells");
 
-        for (int i = 0; i < termCells.size(); i++) {
+        if (!termCells.isArray() || !rateCells.isArray()) return;
+
+        for (int i = 0; i < Math.min(termCells.size(), rateCells.size()); i++) {
             String termText = Jsoup.parse(termCells.get(i).asText()).text();
             String rateText = Jsoup.parse(rateCells.get(i).asText()).text();
 
             MortgageTerm term = ScraperUtils.parseTerm(termText);
             BigDecimal rate = ScraperUtils.parseRate(rateText);
 
-            if (term == null || rate == null) {
-                continue;
-            }
+            if (term == null || rate == null) continue;
 
-            out.add(
-                    new MortgageRate(
-                            bank,
-                            term,
-                            rateType,
-                            rate,
-                            effectiveDate
-                    )
-            );
+            out.add(new MortgageRate(
+                    bank,
+                    term,
+                    rateType,
+                    rate,
+                    effectiveDate
+            ));
         }
     }
 

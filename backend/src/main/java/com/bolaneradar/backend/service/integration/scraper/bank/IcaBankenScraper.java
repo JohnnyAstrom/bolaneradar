@@ -6,6 +6,7 @@ import com.bolaneradar.backend.entity.enums.MortgageTerm;
 import com.bolaneradar.backend.entity.enums.RateType;
 import com.bolaneradar.backend.service.integration.scraper.api.BankScraper;
 import com.bolaneradar.backend.service.integration.scraper.support.ScraperUtils;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -46,14 +47,26 @@ public class IcaBankenScraper implements BankScraper {
         Document doc;
         try {
             doc = Jsoup.connect(URL)
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                    .userAgent(
+                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+                                    "AppleWebKit/537.36 (KHTML, like Gecko) " +
+                                    "Chrome/124.0.0.0 Safari/537.36"
+                    )
+                    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+                    .header("Accept-Language", "sv-SE,sv;q=0.9,en;q=0.8")
+                    .header("Accept-Encoding", "gzip, deflate, br")
+                    .header("Upgrade-Insecure-Requests", "1")
+                    .header("Connection", "keep-alive")
                     .referrer("https://www.google.com")
-                    .header("Accept-Language", "sv-SE,sv;q=0.9")
                     .timeout(15_000)
                     .get();
-        } catch (Exception e) {
-            System.err.println("ICA: Kunde inte hämta sida i CI: " + e.getMessage());
-            return List.of(); // viktigt: tom lista men kontrollerat
+        } catch (HttpStatusException e) {
+            if (e.getStatusCode() == 403) {
+                System.out.println("ICA Banken: blockeras (403) – använder senaste kända data");
+            } else {
+                System.err.println("ICA Banken: HTTP-fel: " + e.getStatusCode());
+            }
+            return List.of();
         }
 
         // === Listräntor ===
