@@ -78,6 +78,19 @@
   "smartRate": {
     "form": {
       "title": "Smart räntetest",
+      "intro": "Fyll i dina uppgifter så analyserar vi hur din ränta eller dina erbjudanden står sig mot marknaden just nu.",
+      "helpTitle": "Så fungerar testet",
+      "helpCurrent": "Ange din nuvarande ränta och vad du vill jämföra mot, så får du en snabb bedömning av hur din nivå står sig idag.",
+      "helpOffers": "Lägg in ett eller flera erbjudanden så jämför vi dem mot marknadens nivåer och visar vilket som står sig bäst.",
+      "submitHelp": "När du skickar in testet analyserar vi din nivå mot aktuella marknadsdata och visar ett resultat som är lätt att tolka.",
+      "sections": {
+        "basicsTitle": "Grunduppgifter",
+        "basicsDescription": "Vi behöver veta vilken bank du har idag och om du vill analysera din nuvarande ränta eller konkreta erbjudanden.",
+        "currentRateTitle": "Din nuvarande ränta",
+        "currentRateDescription": "Det här flödet passar dig som vill bedöma din nuvarande nivå och se hur den står sig mot marknaden.",
+        "offersTitle": "Dina erbjudanden",
+        "offersDescription": "Lägg till ett eller flera ränteerbjudanden så jämför vi dem mot marknaden och mot varandra."
+      },
       "bank": {
         "label": "Vilken bank har du ditt bolån hos?",
         "placeholder": "Välj bank"
@@ -95,7 +108,7 @@
       "currentRate": {
         "label": "Vilken ränta har du idag?",
         "placeholder": "Ex: 3.15",
-        "hint": "💡 Har du flera bolånedelar med olika räntor? Gör testet en gång per lånedel."
+        "hint": "Har du flera bolånedelar med olika räntor? Gör testet en gång per lånedel."
       },
       "currentRateType": {
         "label": "Har du rörlig eller bunden ränta idag?",
@@ -154,6 +167,10 @@
       },
 
       "preferenceTitle": "Rådgivning baserat på dina preferenser",
+      "metrics": {
+        "bestMarket": "Skillnad mot bästa nivå",
+        "bankAverage": "Skillnad mot bankens snitt"
+      },
       "alternativesTitle": "Räntor som passar din valda bindningstid",
 
       "table": {

@@ -36,7 +36,7 @@ const TableFooter: FC = () => {
 
     return (
         <div className="mt-5 px-1">
-            <div className="rounded-lg border border-border/70 bg-slate-50/80 px-4 py-3 text-xs text-text-secondary">
+            <div className="rounded-3xl border border-border/70 bg-slate-50/80 px-4 py-3 text-xs text-text-secondary">
                 <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3">
                     <p>{t("rates.tableFooter.source")}</p>
                     <p>

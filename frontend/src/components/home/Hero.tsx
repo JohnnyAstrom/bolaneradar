@@ -12,54 +12,65 @@ const Hero: FC<HeroProps> = ({ smartTestActive, onToggleTest }) => {
     return (
         <section
             className="
-                bg-bg-light
-                rounded-lg
-                p-2
-                mb-8
-                md:p-10
+                relative overflow-hidden
+                rounded-[28px]
+                border border-border/60
+                bg-gradient-to-br from-slate-50 via-white to-sky-50
+                mx-1 sm:mx-6
+                px-5 py-8
+                mb-6
+                shadow-sm
+                md:px-8
             "
+            style={{
+                paddingTop: smartTestActive ? "1.75rem" : "2.5rem",
+                paddingBottom: smartTestActive ? "2rem" : "2.5rem",
+            }}
         >
-            {/* Titel */}
+            <div className="absolute inset-y-0 right-0 hidden md:block w-1/3 bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.12),_transparent_65%)]" />
+
+            <div className="relative">
             <h1
                 className="
-                    text-2xl
+                    text-3xl
                     font-bold
+                    tracking-tight
                     text-text-primary
                     mb-3
-                    text-center
-                    md:text-left
-                    md:text-3xl
+                    text-left
+                    md:text-4xl
+                    md:max-w-3xl
                 "
             >
                 {t("home.hero.title")}
             </h1>
 
-            {/* Beskrivning */}
             <p
                 className="
                     text-text-secondary
-                    mb-6
-                    text-center
-                    md:text-left
+                    mb-7
+                    text-base leading-8
+                    text-left
                     md:max-w-2xl
                 "
             >
                 {t("home.hero.description")}
             </p>
 
-            {/* Knapp */}
-            <div className="flex justify-center md:justify-start">
+            <div className="flex justify-start">
                 <button
                     onClick={onToggleTest}
                     className={`
-                        px-6 py-3 
-                        rounded-lg 
-                        font-medium 
-                        transition-colors 
+                        inline-flex items-center justify-center
+                        min-w-[190px]
+                        px-6 py-3.5
+                        rounded-2xl
+                        font-semibold
+                        shadow-sm transition-all duration-200
                         text-white
                         ${smartTestActive
-                        ? "bg-primary-active hover:bg-primary-hover active:bg-primary"
-                        : "bg-primary hover:bg-primary-hover active:bg-primary-active"
+                        ? "bg-primary-active hover:bg-primary-hover active:bg-primary translate-y-0"
+                        : "bg-primary hover:bg-primary-hover active:bg-primary-active hover:-translate-y-[1px]"
                     }
                     `}
                 >
@@ -67,6 +78,7 @@ const Hero: FC<HeroProps> = ({ smartTestActive, onToggleTest }) => {
                         ? t("home.hero.ctaStop")
                         : t("home.hero.ctaStart")}
                 </button>
+            </div>
             </div>
         </section>
     );

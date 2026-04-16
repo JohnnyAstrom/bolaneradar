@@ -35,14 +35,14 @@ export default function HomePage() {
             {/* SmartTest block - shown only when active */}
             {smartTestActive && (
                 <>
-                    <Section>
+                    <Section contentClassName="rounded-[28px]">
                         <SmartRateTestForm onScrollToRates={scrollToRates} />
                     </Section>
                 </>
             )}
 
             {/* Rate table section */}
-            <Section id="rates">
+            <Section id="rates" contentClassName="rounded-[28px]">
                 <RatesHeader />
 
                 <TermSelector

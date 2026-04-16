@@ -7,7 +7,7 @@ export function RateUpdatesDay({day}: { day: RateUpdateDay }) {
     const groupedByBank = groupByBank(day.updates);
 
     return (
-        <div className="border border-gray-200 rounded-lg bg-white px-4 py-4">
+        <div className="border border-gray-200 rounded-3xl bg-white px-4 py-4 shadow-sm">
             {/* Datum */}
             <h2 className="text-sm font-semibold text-gray-700 mb-3">
                 {formatDate(day.date, i18n.language)}

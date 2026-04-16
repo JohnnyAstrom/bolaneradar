@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import { BadgeInfo, CircleAlert, Plus, Sparkles, Trash2 } from "lucide-react";
 import { runSmartRateTest } from "../../services/smartRateApi";
 import type { SmartRateTestResult, SmartRateTestRequest } from "../../types/smartRate";
 import SmartRateTestResultView from "./SmartRateTestResult";
@@ -49,6 +50,36 @@ interface Props {
     onScrollToRates: () => void;
 }
 
+interface OfferRow {
+    term: string;
+    rate: string;
+}
+
+interface FieldProps {
+    label: string;
+    error?: string;
+    children: ReactNode;
+    hint?: ReactNode;
+}
+
+const FormField: FC<FieldProps> = ({ label, error, children, hint }) => (
+    <div className="space-y-2.5">
+        <label className="font-semibold text-[0.98rem] text-text-primary">{label}</label>
+        {children}
+        {hint}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
+    </div>
+);
+
+const SectionIntro: FC<{ title: string; description?: string }> = ({ title, description }) => (
+    <div className="space-y-1">
+        <h3 className="text-lg font-semibold tracking-tight text-text-primary">{title}</h3>
+        {description && (
+            <p className="text-sm leading-6 text-text-secondary">{description}</p>
+        )}
+    </div>
+);
+
 const SmartRateTestForm: FC<Props> = ({ onScrollToRates }) => {
     const { t, i18n } = useTranslation();
 
@@ -69,7 +100,7 @@ const SmartRateTestForm: FC<Props> = ({ onScrollToRates }) => {
     const [futureRatePreference, setFutureRatePreference] = useState("");
 
     // FLOW B — MULTIPLE OFFERS
-    const [offers, setOffers] = useState<{ term: string; rate: string }[]>([
+    const [offers, setOffers] = useState<OfferRow[]>([
         { term: "", rate: "" }
     ]);
 
@@ -112,8 +143,10 @@ const SmartRateTestForm: FC<Props> = ({ onScrollToRates }) => {
 
     function inputClass(errorKey?: string) {
         const hasError = errorKey && errors[errorKey];
-        return `border rounded-lg px-4 py-2 bg-white ${
-            hasError ? "border-red-500" : "border-border"
+        return `w-full border rounded-2xl px-4 py-3 bg-white text-text-primary shadow-sm transition-colors ${
+            hasError
+                ? "border-red-500 focus:border-red-500 focus:ring-red-100"
+                : "border-border focus:border-primary/40 focus:ring-primary/10"
         }`;
     }
 
@@ -209,201 +242,284 @@ const SmartRateTestForm: FC<Props> = ({ onScrollToRates }) => {
     }
 
     return (
-        <div className="flex flex-col gap-6 w-full">
-            <h2 className="text-2xl font-bold text-text-primary text-center mb-2">
-                {t("smartRate.form.title")}
-            </h2>
+        <div className="w-full">
+            <div className="rounded-[28px] border border-border bg-white shadow-sm overflow-hidden">
+                <div className="border-b border-slate-200 bg-gradient-to-r from-slate-50 via-white to-sky-50 px-6 py-6 sm:px-7">
+                    <div className="flex items-start gap-4">
+                        <div className="hidden sm:inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                            <Sparkles size={22} />
+                        </div>
+                        <div className="space-y-2">
+                            <h2 className="text-3xl font-bold tracking-tight text-text-primary">
+                                {t("smartRate.form.title")}
+                            </h2>
+                            <p className="max-w-2xl text-sm leading-6 text-text-secondary">
+                                {t(
+                                    "smartRate.form.intro",
+                                    "Fyll i dina uppgifter så analyserar vi hur din ränta eller dina erbjudanden står sig mot marknaden just nu."
+                                )}
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-            {/* Bank */}
-            <label className="font-medium">{t("smartRate.form.bank.label")}</label>
-            <select value={bank} onChange={(e) => setBank(e.target.value)} className={inputClass("bank")}>
-                <option value="">{t("smartRate.form.bank.placeholder")}</option>
-                {Object.keys(bankIdMap).map((key) => (
-                    <option key={key} value={key}>
-                        {bankNameMap[key]}
-                    </option>
-                ))}
-            </select>
-            {errors.bank && <p className="text-red-600 text-sm mt-1">{errors.bank}</p>}
-
-            {/* Loan amount */}
-            <label className="font-medium">{t("smartRate.form.loanAmount.label")}</label>
-            <input
-                type="number"
-                placeholder={t("smartRate.form.loanAmount.placeholder")}
-                value={loanAmount}
-                onChange={(e) => setLoanAmount(e.target.value)}
-                className={inputClass()}
-            />
-
-            {/* Offer */}
-            <label className="font-medium">{t("smartRate.form.hasOffer.label")}</label>
-            <select
-                value={hasOffer}
-                onChange={(e) => setHasOffer(e.target.value as "yes" | "no" | "")}
-                className={inputClass("hasOffer")}
-            >
-                <option value="">{t("smartRate.form.hasOffer.placeholder")}</option>
-                <option value="yes">{t("smartRate.form.hasOffer.yes")}</option>
-                <option value="no">{t("smartRate.form.hasOffer.no")}</option>
-            </select>
-            {errors.hasOffer && <p className="text-red-600 text-sm mt-1">{errors.hasOffer}</p>}
-
-            {/* FLOW A */}
-            {hasOffer === "no" && (
-                <>
-                    <label className="font-medium">{t("smartRate.form.currentRate.label")}</label>
-                    <input
-                        type="number"
-                        step="0.01"
-                        placeholder={t("smartRate.form.currentRate.placeholder")}
-                        value={currentRate}
-                        onChange={(e) => setCurrentRate(e.target.value)}
-                        className={inputClass("currentRate")}
-                    />
-                    <p className="text-gray-500 text-sm">
-                        {t("smartRate.form.currentRate.hint")}
-                    </p>
-                    {errors.currentRate && <p className="text-red-600 text-sm mt-1">{errors.currentRate}</p>}
-
-                    <label className="font-medium">{t("smartRate.form.currentRateType.label")}</label>
-                    <select
-                        value={currentRateType}
-                        onChange={(e) => setCurrentRateType(e.target.value)}
-                        className={inputClass("currentRateType")}
-                    >
-                        <option value="">{t("smartRate.form.currentRateType.placeholder")}</option>
-                        {mortgageTerms.map((term) => (
-                            <option key={term} value={term}>
-                                {t(`mortgage.term.${term}`)}
-                            </option>
-                        ))}
-                    </select>
-                    {errors.currentRateType && <p className="text-red-600 text-sm mt-1">{errors.currentRateType}</p>}
-
-                    {currentRateType.startsWith("FIXED_") && (
-                        <>
-                            <label className="font-medium">{t("smartRate.form.bindingEndDate.label")}</label>
-                            <input
-                                type="date"
-                                value={bindingEndDate}
-                                onChange={(e) => setBindingEndDate(e.target.value)}
-                                className={inputClass("bindingEndDate")}
+                <div className="flex flex-col gap-8 px-6 py-6 sm:px-7 sm:py-7">
+                    <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+                        <div className="px-2 sm:px-3">
+                            <SectionIntro
+                                title={t("smartRate.form.sections.basicsTitle", "Grunduppgifter")}
+                                description={t("smartRate.form.sections.basicsDescription", "Vi behöver veta vilken bank du har idag och om du vill analysera din nuvarande ränta eller konkreta erbjudanden.")}
                             />
-                        </>
+
+                            <div className="mt-5 grid gap-5">
+                                <FormField label={t("smartRate.form.bank.label")} error={errors.bank}>
+                                    <select value={bank} onChange={(e) => setBank(e.target.value)} className={inputClass("bank")}>
+                                        <option value="">{t("smartRate.form.bank.placeholder")}</option>
+                                        {Object.keys(bankIdMap).map((key) => (
+                                            <option key={key} value={key}>
+                                                {bankNameMap[key]}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </FormField>
+
+                                <FormField label={t("smartRate.form.loanAmount.label")}>
+                                    <input
+                                        type="number"
+                                        placeholder={t("smartRate.form.loanAmount.placeholder")}
+                                        value={loanAmount}
+                                        onChange={(e) => setLoanAmount(e.target.value)}
+                                        className={inputClass()}
+                                    />
+                                </FormField>
+
+                                <FormField label={t("smartRate.form.hasOffer.label")} error={errors.hasOffer}>
+                                    <select
+                                        value={hasOffer}
+                                        onChange={(e) => setHasOffer(e.target.value as "yes" | "no" | "")}
+                                        className={inputClass("hasOffer")}
+                                    >
+                                        <option value="">{t("smartRate.form.hasOffer.placeholder")}</option>
+                                        <option value="yes">{t("smartRate.form.hasOffer.yes")}</option>
+                                        <option value="no">{t("smartRate.form.hasOffer.no")}</option>
+                                    </select>
+                                </FormField>
+                            </div>
+                        </div>
+
+                        <div className="rounded-3xl border border-sky-100 bg-sky-50/70 p-5 sm:p-6 self-start">
+                            <div className="flex items-start gap-3">
+                                <div className="mt-0.5 text-primary">
+                                    <BadgeInfo size={18} />
+                                </div>
+                                <div className="space-y-2">
+                                    <h3 className="text-base font-semibold text-text-primary">
+                                        {t("smartRate.form.helpTitle", "Så fungerar testet")}
+                                    </h3>
+                                    <p className="text-sm leading-6 text-text-secondary">
+                                        {hasOffer === "yes"
+                                            ? t("smartRate.form.helpOffers", "Lägg in ett eller flera erbjudanden så jämför vi dem mot marknadens nivåer och visar vilket som står sig bäst.")
+                                            : t("smartRate.form.helpCurrent", "Ange din nuvarande ränta och vad du vill jämföra mot, så får du en snabb bedömning av hur din nivå står sig idag.")}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {hasOffer === "no" && (
+                        <div className="border-t border-slate-200 pt-8 px-2 sm:px-3">
+                            <SectionIntro
+                                title={t("smartRate.form.sections.currentRateTitle", "Din nuvarande ränta")}
+                                description={t("smartRate.form.sections.currentRateDescription", "Det här flödet passar dig som vill bedöma din nuvarande nivå och se hur den står sig mot marknaden.")}
+                            />
+
+                            <div className="mt-5 grid gap-5">
+                                <FormField
+                                    label={t("smartRate.form.currentRate.label")}
+                                    error={errors.currentRate}
+                                    hint={
+                                        <div className="flex items-start gap-2 rounded-2xl bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                                            <span className="mt-0.5">💡</span>
+                                            <span>{t("smartRate.form.currentRate.hint")}</span>
+                                        </div>
+                                    }
+                                >
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        placeholder={t("smartRate.form.currentRate.placeholder")}
+                                        value={currentRate}
+                                        onChange={(e) => setCurrentRate(e.target.value)}
+                                        className={inputClass("currentRate")}
+                                    />
+                                </FormField>
+
+                                <div className="grid gap-5 lg:grid-cols-2">
+                                    <FormField label={t("smartRate.form.currentRateType.label")} error={errors.currentRateType}>
+                                        <select
+                                            value={currentRateType}
+                                            onChange={(e) => setCurrentRateType(e.target.value)}
+                                            className={inputClass("currentRateType")}
+                                        >
+                                            <option value="">{t("smartRate.form.currentRateType.placeholder")}</option>
+                                            {mortgageTerms.map((term) => (
+                                                <option key={term} value={term}>
+                                                    {t(`mortgage.term.${term}`)}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </FormField>
+
+                                    {currentRateType.startsWith("FIXED_") && (
+                                        <FormField label={t("smartRate.form.bindingEndDate.label")}>
+                                            <input
+                                                type="date"
+                                                value={bindingEndDate}
+                                                onChange={(e) => setBindingEndDate(e.target.value)}
+                                                className={inputClass("bindingEndDate")}
+                                            />
+                                        </FormField>
+                                    )}
+                                </div>
+
+                                <FormField label={t("smartRate.form.futurePreference.label")} error={errors.futureRatePreference}>
+                                    <select
+                                        value={futureRatePreference}
+                                        onChange={(e) => setFutureRatePreference(e.target.value)}
+                                        className={inputClass("futureRatePreference")}
+                                    >
+                                        <option value="">{t("smartRate.form.futurePreference.placeholder")}</option>
+                                        <option value="VARIABLE_3M">{t("smartRate.form.futurePreference.variable")}</option>
+                                        <option value="SHORT">{t("smartRate.form.futurePreference.short")}</option>
+                                        <option value="LONG">{t("smartRate.form.futurePreference.long")}</option>
+                                    </select>
+                                </FormField>
+                            </div>
+                        </div>
                     )}
 
-                    <label className="font-medium">{t("smartRate.form.futurePreference.label")}</label>
-                    <select
-                        value={futureRatePreference}
-                        onChange={(e) => setFutureRatePreference(e.target.value)}
-                        className={inputClass("futureRatePreference")}
-                    >
-                        <option value="">{t("smartRate.form.futurePreference.placeholder")}</option>
-                        <option value="VARIABLE_3M">{t("smartRate.form.futurePreference.variable")}</option>
-                        <option value="SHORT">{t("smartRate.form.futurePreference.short")}</option>
-                        <option value="LONG">{t("smartRate.form.futurePreference.long")}</option>
-                    </select>
-                    {errors.futureRatePreference && <p className="text-red-600 text-sm mt-1">{errors.futureRatePreference}</p>}
-                </>
-            )}
-
-            {/* FLOW B */}
-            {hasOffer === "yes" && (
-                <div className="flex flex-col gap-4">
-                    {errors.offers && <p className="text-red-600 text-sm">{errors.offers}</p>}
-
-                    {offers.map((offer, index) => (
-                        <div
-                            key={index}
-                            className={`p-4 border rounded-lg bg-gray-50 flex flex-col gap-2 ${
-                                errors.offers && (!offer.term || !offer.rate)
-                                    ? "border-red-400"
-                                    : "border-border"
-                            }`}
-                        >
-                            <h4 className="font-semibold">
-                                {t("smartRate.form.offer.title", { index: index + 1 })}
-                            </h4>
-
-                            <select
-                                value={offer.term}
-                                onChange={(e) => updateOffer(index, "term", e.target.value)}
-                                className={inputClass(errors.offers && !offer.term ? "offers" : undefined)}
-                            >
-                                <option value="">{t("smartRate.form.offer.termPlaceholder")}</option>
-                                {mortgageTerms.map((term) => (
-                                    <option key={term} value={term}>
-                                        {t(`mortgage.term.${term}`)}
-                                    </option>
-                                ))}
-                            </select>
-
-                            <input
-                                type="number"
-                                step="0.01"
-                                value={offer.rate}
-                                onChange={(e) => updateOffer(index, "rate", e.target.value)}
-                                className={inputClass(errors.offers && !offer.rate ? "offers" : undefined)}
-                                placeholder={t("smartRate.form.offer.ratePlaceholder")}
+                    {hasOffer === "yes" && (
+                        <div className="border-t border-slate-200 pt-8 px-2 sm:px-3">
+                            <SectionIntro
+                                title={t("smartRate.form.sections.offersTitle", "Dina erbjudanden")}
+                                description={t("smartRate.form.sections.offersDescription", "Lägg till ett eller flera ränteerbjudanden så jämför vi dem mot marknaden och mot varandra.")}
                             />
 
-                            {offers.length > 1 && (
+                            <div className="mt-5 flex flex-col gap-4">
+                                {errors.offers && (
+                                    <div className="flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                                        <CircleAlert size={16} className="mt-0.5 shrink-0" />
+                                        <span>{errors.offers}</span>
+                                    </div>
+                                )}
+
+                                {offers.map((offer, index) => (
+                                    <div
+                                        key={index}
+                                        className={`rounded-3xl border p-4 sm:p-5 ${
+                                            errors.offers && (!offer.term || !offer.rate)
+                                                ? "border-red-300 bg-red-50/30"
+                                                : "border-slate-200 bg-slate-50/60"
+                                        }`}
+                                    >
+                                        <div className="flex items-center justify-between gap-3">
+                                            <h4 className="text-base font-semibold text-text-primary">
+                                                {t("smartRate.form.offer.title", { index: index + 1 })}
+                                            </h4>
+                                            {offers.length > 1 && (
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+                                                    onClick={() => removeOffer(index)}
+                                                >
+                                                    <Trash2 size={14} />
+                                                    {t("smartRate.form.offer.remove")}
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_0.85fr]">
+                                            <select
+                                                value={offer.term}
+                                                onChange={(e) => updateOffer(index, "term", e.target.value)}
+                                                className={inputClass(errors.offers && !offer.term ? "offers" : undefined)}
+                                            >
+                                                <option value="">{t("smartRate.form.offer.termPlaceholder")}</option>
+                                                {mortgageTerms.map((term) => (
+                                                    <option key={term} value={term}>
+                                                        {t(`mortgage.term.${term}`)}
+                                                    </option>
+                                                ))}
+                                            </select>
+
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                value={offer.rate}
+                                                onChange={(e) => updateOffer(index, "rate", e.target.value)}
+                                                className={inputClass(errors.offers && !offer.rate ? "offers" : undefined)}
+                                                placeholder={t("smartRate.form.offer.ratePlaceholder")}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+
                                 <button
-                                    className="text-red-500 text-sm underline self-start"
-                                    onClick={() => removeOffer(index)}
+                                    type="button"
+                                    onClick={addOfferRow}
+                                    className="inline-flex items-center justify-center gap-2 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 font-medium text-primary transition-colors hover:bg-sky-100"
                                 >
-                                    {t("smartRate.form.offer.remove")}
+                                    <Plus size={16} />
+                                    {t("smartRate.form.offer.add")}
                                 </button>
-                            )}
+                            </div>
                         </div>
-                    ))}
+                    )}
 
-                    <button
-                        onClick={addOfferRow}
-                        className="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg"
-                    >
-                        {t("smartRate.form.offer.add")}
-                    </button>
+                    {(hasOffer === "yes" || hasOffer === "no") && (
+                        <div className="border-t border-slate-200 pt-8 px-2 sm:px-3">
+                            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                <p className="text-sm leading-6 text-text-secondary max-w-xl">
+                                    {t(
+                                        "smartRate.form.submitHelp",
+                                        "När du skickar in testet analyserar vi din nivå mot aktuella marknadsdata och visar ett resultat som är lätt att tolka."
+                                    )}
+                                </p>
+                                <button
+                                    onClick={handleSubmit}
+                                    disabled={loading}
+                                    className={`inline-flex items-center justify-center rounded-2xl bg-primary px-6 py-3.5 font-semibold text-white shadow-sm transition-all sm:min-w-[190px] ${
+                                        loading ? "opacity-60 cursor-not-allowed" : "hover:bg-primary-hover hover:-translate-y-[1px]"
+                                    }`}
+                                >
+                                    {loading
+                                        ? t("smartRate.form.loading", "Analyserar din ränta…")
+                                        : t("smartRate.form.submit")}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {loading && (
+                        <div className="rounded-3xl border border-sky-200 bg-sky-50 px-5 py-5 text-center">
+                            <div className="animate-spin mx-auto mb-3 h-7 w-7 border-2 border-primary border-t-transparent rounded-full" />
+                            <p className="text-sm text-text-secondary">
+                                {t(
+                                    "smartRate.form.loadingHint",
+                                    "Analyserar din ränta – detta kan ta upp till 20 sekunder"
+                                )}
+                            </p>
+                        </div>
+                    )}
+
+                    {submitError && (
+                        <div className="rounded-3xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
+                            {submitError}
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
 
-            {/* Submit-knapp */}
-            {(hasOffer === "yes" || hasOffer === "no") && (
-                <button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    className={`mt-4 bg-primary text-white px-6 py-2 rounded-lg ${
-                        loading ? "opacity-60 cursor-not-allowed" : ""
-                    }`}
-                >
-                    {loading
-                        ? t("smartRate.form.loading", "Analyserar din ränta…")
-                        : t("smartRate.form.submit")}
-                </button>
-            )}
-
-            {/* Loader + förklarande text */}
-            {loading && (
-                <div className="mt-6 text-center">
-                    <div className="animate-spin mx-auto mb-3 h-6 w-6 border-2 border-primary border-t-transparent rounded-full" />
-                    <p className="text-sm text-text-secondary">
-                        {t(
-                            "smartRate.form.loadingHint",
-                            "Analyserar din ränta – detta kan ta upp till 20 sekunder"
-                        )}
-                    </p>
-                </div>
-            )}
-
-            {/* Felmeddelande om analysen misslyckas eller tar för lång tid */}
-            {submitError && (
-                <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700">
-                    {submitError}
-                </div>
-            )}
-
-            {/* Resultat */}
             {result && (
                 <div ref={resultRef} className="mt-8">
                     <SmartRateTestResultView

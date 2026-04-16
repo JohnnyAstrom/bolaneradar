@@ -78,6 +78,19 @@
   "smartRate": {
     "form": {
       "title": "Smart rate test",
+      "intro": "Enter your details and we will analyze how your current rate or your offers compare with the market right now.",
+      "helpTitle": "How the test works",
+      "helpCurrent": "Enter your current rate and what you want to compare it against to get a quick assessment of how your level stands today.",
+      "helpOffers": "Add one or more offers and we will compare them with market levels and show which one stands out the most.",
+      "submitHelp": "When you submit the test, we compare your level with current market data and present the result in a simple, easy-to-read way.",
+      "sections": {
+        "basicsTitle": "Basic details",
+        "basicsDescription": "We need to know which bank you have today and whether you want to analyze your current rate or actual offers.",
+        "currentRateTitle": "Your current rate",
+        "currentRateDescription": "This flow is for you if you want to assess your current level and compare it with the market.",
+        "offersTitle": "Your offers",
+        "offersDescription": "Add one or more rate offers and we will compare them with the market and with each other."
+      },
 
       "bank": {
         "label": "Which bank holds your mortgage?",
@@ -164,6 +177,10 @@
       },
 
       "preferenceTitle": "Advice based on your preferences",
+      "metrics": {
+        "bestMarket": "Difference from best level",
+        "bankAverage": "Difference from bank average"
+      },
       "alternativesTitle": "Rates matching your selected fixed term",
 
       "table": {

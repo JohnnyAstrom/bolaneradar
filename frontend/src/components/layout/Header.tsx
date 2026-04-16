@@ -10,93 +10,84 @@ export default function Header() {
 
     const linkClass = ({ isActive }: { isActive: boolean }) =>
         isActive
-            ? "text-primary underline underline-offset-4"
-            : "hover:underline hover:underline-offset-4";
+            ? "text-primary bg-primary/8"
+            : "text-slate-700 hover:text-primary hover:bg-slate-50";
 
     return (
-        <header className="w-full bg-white border-b border-gray-200 px-4 py-3">
-            <div className="max-w-5xl mx-auto flex items-center justify-between">
+        <header className="sticky top-0 z-30 w-full bg-white/92 backdrop-blur border-b border-slate-200/80 px-4 py-3">
+            <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
 
-                {/* LOGO */}
                 <NavLink
                     to="/"
                     end
-                    className="text-xl font-semibold text-primary flex items-baseline gap-2"
+                    className="text-xl font-semibold text-primary flex items-center gap-2"
                 >
                     <img
                         src="/android-chrome-192x192.png"
                         alt=""
-                        className="w-6 h-6 relative top-[1px]"
+                        className="w-6 h-6"
                         aria-hidden
                     />
                     BolåneRadar
                 </NavLink>
 
-                {/* DESKTOP MENY */}
-                <nav className="hidden md:flex gap-6 text-gray-700 items-center">
-                    <NavLink to="/" end className={linkClass}>
+                <nav className="hidden md:flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/90 px-2 py-2 shadow-sm">
+                    <NavLink to="/" end className={({ isActive }) => `rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${linkClass({ isActive })}`}>
                         {t("nav.home")}
                     </NavLink>
 
-                    <NavLink to="/bolaneguide" className={linkClass}>
+                    <NavLink to="/bolaneguide" className={({ isActive }) => `rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${linkClass({ isActive })}`}>
                         {t("nav.guide")}
                     </NavLink>
 
-                    <NavLink to="/rate-updates" className={linkClass}>
+                    <NavLink to="/rate-updates" className={({ isActive }) => `rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${linkClass({ isActive })}`}>
                         {t("nav.rateUpdates")}
                     </NavLink>
 
-                    <NavLink to="/om-bolaneradar" className={linkClass}>
+                    <NavLink to="/om-bolaneradar" className={({ isActive }) => `rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${linkClass({ isActive })}`}>
                         {t("nav.about")}
                     </NavLink>
 
-                    {/* SPRÅK */}
-                    <LanguageToggle />
+                    <div className="ml-2 pl-3 border-l border-slate-200">
+                        <LanguageToggle />
+                    </div>
                 </nav>
 
-                {/* MOBIL KNAPP */}
                 <button
-                    className="md:hidden p-2 rounded hover:bg-gray-100"
+                    className="md:hidden p-2 rounded-xl hover:bg-gray-100 transition-colors"
                     onClick={() => setOpen(true)}
                 >
                     <Menu size={24} />
                 </button>
             </div>
 
-            {/* MOBIL MENY OVERLAY */}
-            {open && (
-                <div
-                    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
-                    onClick={() => setOpen(false)}
-                />
-            )}
-
-            {/* MOBIL MENY PANEL */}
             <aside
                 className={`
-                    fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50
-                    transform transition-transform duration-300
+                    fixed inset-0 z-50 bg-white shadow-xl
+                    transform transition-transform duration-300 md:hidden
                     ${open ? "translate-x-0" : "translate-x-full"}
                 `}
+                aria-hidden={!open}
             >
-                <div className="p-4 flex items-center justify-between border-b border-gray-200">
+                <div className="flex h-full flex-col bg-white">
+                <div className="p-4 flex items-center justify-between border-b border-slate-200 bg-white">
                     <span className="font-semibold text-lg">
                         {t("nav.menu")}
                     </span>
                     <button
-                        className="p-2 rounded hover:bg-gray-100"
+                        className="p-2 rounded-xl hover:bg-gray-100"
                         onClick={() => setOpen(false)}
                     >
                         <X size={26} />
                     </button>
                 </div>
 
-                <nav className="flex flex-col p-4 gap-4 text-gray-800">
+                <nav className="flex flex-1 flex-col p-4 gap-2 bg-white text-gray-800">
                     <NavLink
                         to="/"
                         end
                         onClick={() => setOpen(false)}
-                        className={linkClass}
+                        className={({ isActive }) => `rounded-xl px-3 py-2 text-sm font-medium transition-colors ${linkClass({ isActive })}`}
                     >
                         {t("nav.home")}
                     </NavLink>
@@ -104,7 +95,7 @@ export default function Header() {
                     <NavLink
                         to="/bolaneguide"
                         onClick={() => setOpen(false)}
-                        className={linkClass}
+                        className={({ isActive }) => `rounded-xl px-3 py-2 text-sm font-medium transition-colors ${linkClass({ isActive })}`}
                     >
                         {t("nav.guide")}
                     </NavLink>
@@ -112,7 +103,7 @@ export default function Header() {
                     <NavLink
                         to="/rate-updates"
                         onClick={() => setOpen(false)}
-                        className={linkClass}
+                        className={({ isActive }) => `rounded-xl px-3 py-2 text-sm font-medium transition-colors ${linkClass({ isActive })}`}
                     >
                         {t("nav.rateUpdates")}
                     </NavLink>
@@ -120,16 +111,16 @@ export default function Header() {
                     <NavLink
                         to="/om-bolaneradar"
                         onClick={() => setOpen(false)}
-                        className={linkClass}
+                        className={({ isActive }) => `rounded-xl px-3 py-2 text-sm font-medium transition-colors ${linkClass({ isActive })}`}
                     >
                         {t("nav.about")}
                     </NavLink>
 
-                    {/* SPRÅK – MOBIL */}
-                    <div className="mt-6">
+                    <div className="mt-4 border-t border-slate-200 pt-4">
                         <LanguageToggle />
                     </div>
                 </nav>
+                </div>
             </aside>
         </header>
     );

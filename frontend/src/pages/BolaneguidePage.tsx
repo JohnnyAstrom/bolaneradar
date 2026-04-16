@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import PageWrapper from "../components/layout/PageWrapper";
 import Section from "../components/layout/Section";
+import { BookOpen, CircleHelp, Scale, TrendingUp } from "lucide-react";
 
 function getArray(value: unknown): string[] {
     return Array.isArray(value) ? value : [];
@@ -47,9 +48,31 @@ export default function BolaneguidePage() {
 
     return (
         <PageWrapper>
+            <section className="px-1 sm:px-6 mb-4 sm:mb-8">
+                <div className="rounded-[28px] border border-border/60 bg-gradient-to-br from-slate-50 via-white to-sky-50 px-6 py-7 shadow-sm sm:px-8">
+                    <div className="flex items-start gap-4">
+                        <div className="hidden sm:inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                            <BookOpen size={22} />
+                        </div>
+                        <div className="max-w-3xl">
+                            <h1 className="text-3xl font-bold tracking-tight text-text-primary mb-3">
+                                {t("guide.intro.title")}
+                            </h1>
+                            {introParagraphs.slice(0, 2).map((text, i) => (
+                                <p
+                                    key={i}
+                                    className="text-text-secondary leading-7 mb-2 last:mb-0"
+                                >
+                                    {text}
+                                </p>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* INTRO */}
-            <Section>
+            <Section contentClassName="rounded-[28px]">
                 <div
                     className="
                         max-w-4xl mx-auto
@@ -57,11 +80,16 @@ export default function BolaneguidePage() {
                         sm:py-4 sm:px-6
                     "
                 >
-                    <h2 className="text-xl font-semibold mb-6">
-                        {t("guide.intro.title")}
-                    </h2>
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-primary">
+                            <CircleHelp size={18} />
+                        </div>
+                        <h2 className="text-xl font-semibold">
+                            {t("guide.comparison.title")}
+                        </h2>
+                    </div>
 
-                    {introParagraphs.map((text, i) => (
+                    {introParagraphs.slice(2).map((text, i) => (
                         <p
                             key={i}
                             className="text-text-secondary leading-relaxed mb-4"
@@ -73,11 +101,16 @@ export default function BolaneguidePage() {
             </Section>
 
             {/* RÄNTOR */}
-            <Section>
+            <Section contentClassName="rounded-[28px]">
                 <div className="max-w-4xl mx-auto p-2 sm:py-4 sm:px-6">
-                    <h2 className="text-xl font-semibold mb-6">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-primary">
+                            <TrendingUp size={18} />
+                        </div>
+                        <h2 className="text-xl font-semibold">
                         {t("guide.rates.title")}
-                    </h2>
+                        </h2>
+                    </div>
 
                     {ratesParagraphs.map((text, i) => (
                         <p
@@ -91,11 +124,16 @@ export default function BolaneguidePage() {
             </Section>
 
             {/* JÄMFÖRELSER */}
-            <Section>
+            <Section contentClassName="rounded-[28px]">
                 <div className="max-w-4xl mx-auto p-2 sm:py-4 sm:px-6">
-                    <h2 className="text-xl font-semibold mb-6">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-primary">
+                            <Scale size={18} />
+                        </div>
+                        <h2 className="text-xl font-semibold">
                         {t("guide.comparison.title")}
-                    </h2>
+                        </h2>
+                    </div>
 
                     {comparisonParagraphs.map((text, i) => (
                         <p
@@ -115,7 +153,7 @@ export default function BolaneguidePage() {
             </Section>
 
             {/* HISTORIK */}
-            <Section>
+            <Section contentClassName="rounded-[28px]">
                 <div className="max-w-4xl mx-auto p-2 sm:py-4 sm:px-6">
                     <h2 className="text-xl font-semibold mb-6">
                         {t("guide.history.title")}
@@ -133,7 +171,7 @@ export default function BolaneguidePage() {
             </Section>
 
             {/* SMART RÄNTE-TEST */}
-            <Section>
+            <Section contentClassName="rounded-[28px]">
                 <div className="max-w-4xl mx-auto p-2 sm:py-4 sm:px-6">
                     <h2 className="text-xl font-semibold mb-6">
                         {t("guide.smartRate.title")}
@@ -161,7 +199,7 @@ export default function BolaneguidePage() {
             </Section>
 
             {/* DISCLAIMER */}
-            <Section>
+            <Section contentClassName="rounded-[28px]">
                 <div className="max-w-4xl mx-auto p-2 sm:py-4 sm:px-6">
                     <h2 className="text-xl font-semibold mb-6">
                         {t("guide.disclaimer.title")}

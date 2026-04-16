@@ -230,7 +230,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
             {/* ===================== */}
             {/* TABELL: BANKER MED RÄNTOR (OFÖRÄNDRAD) */}
             {/* ===================== */}
-            <div className="overflow-x-auto border border-border rounded-lg bg-white">
+            <div className="overflow-x-auto border border-border rounded-3xl bg-white">
                 <table className="min-w-full">
                     <thead className="bg-bg-light text-text-primary">
                     <tr>
@@ -310,7 +310,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
 
                         return (
                             <React.Fragment key={row.bankName}>
-                                <tr className="hover:bg-row-hover">
+                                <tr className="border-t border-slate-100/80 hover:bg-slate-50/70 transition-colors">
                                     <td className="pl-2 sm:px-4 py-2 sm:py-3">
                                         <BankLink bankName={row.bankName} />
                                     </td>
@@ -397,7 +397,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
             {/* BOX: BANKER UTAN RÄNTOR (LISTA – SOM DIN REFERENSBILD) */}
             {/* ===================== */}
             {rowsWithoutRates.length > 0 && (
-                <div className="border border-border rounded-lg bg-slate-50/70 overflow-hidden">
+                <div className="border border-border rounded-3xl bg-slate-50/70 overflow-hidden">
                     <div className="bg-bg-light/90 text-text-primary border-b border-border/80">
                         <div className="pl-2 sm:px-4 py-3 text-left">
                             <div className="font-semibold text-sm">

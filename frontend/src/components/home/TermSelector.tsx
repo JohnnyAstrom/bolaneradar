@@ -31,7 +31,7 @@ const TermSelector: FC<TermSelectorProps> = ({
         terms: { value: string }[]
     ) => (
         <div>
-            <p className="text-sm font-semibold text-text-primary mb-2 px-1">
+            <p className="text-sm font-semibold tracking-tight text-text-primary mb-2.5 px-1">
                 {t(titleKey)}
             </p>
 
@@ -41,10 +41,12 @@ const TermSelector: FC<TermSelectorProps> = ({
                         key={tTerm.value}
                         onClick={() => onSelectTerm(tTerm.value)}
                         className={`
-                            px-4 py-2 rounded-lg border transition-colors min-w-[80px] text-center
+                            relative inline-flex items-center justify-center
+                            px-4 py-2.5 rounded-2xl border min-w-[84px] text-center
+                            text-sm font-medium transition-all duration-200
                             ${activeTerm === tTerm.value
-                            ? "bg-primary text-white border-primary"
-                            : "bg-white text-text-secondary border-border hover:bg-row-hover"
+                            ? "bg-primary text-white border-primary shadow-sm shadow-primary/20 -translate-y-[1px]"
+                            : "bg-white text-text-secondary border-border hover:bg-slate-50 hover:border-slate-300 hover:-translate-y-[1px]"
                         }
                         `}
                     >
@@ -56,7 +58,7 @@ const TermSelector: FC<TermSelectorProps> = ({
     );
 
     return (
-        <div className="flex flex-col gap-6 mb-6">
+        <div className="flex flex-col gap-7 mb-6">
             {renderGroup(
                 "rates.termSelector.shortTitle",
                 shortTerms
