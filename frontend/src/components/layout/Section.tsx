@@ -19,7 +19,7 @@ export default function Section({
             {...rest}   // ← Detta gör att id, style, aria osv funkar
             className={`mb-4 sm:mb-8 px-1 sm:px-6 ${className}`}
         >
-            <div className={`bg-white border border-border rounded-lg p-2 sm:p-6 shadow-sm ${contentClassName}`}>
+            <div className={`bg-white border border-border p-2 shadow-sm sm:p-6 ${contentClassName}`}>
                 {title && (
                     <h2 className="text-xl font-semibold text-text-primary mb-4">
                         {title}
