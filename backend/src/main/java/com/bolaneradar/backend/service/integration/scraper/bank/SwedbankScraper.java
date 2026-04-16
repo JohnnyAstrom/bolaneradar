@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Webbskrapare för Swedbank.
@@ -88,6 +89,11 @@ public class SwedbankScraper implements BankScraper {
                 continue;
             }
 
+            int listRateColumnIndex = findListRateColumnIndex(table);
+            if (listRateColumnIndex < 1) {
+                System.out.println("Swedbank: kunde inte identifiera listräntekolumn, använder sista kolumnen som fallback.");
+            }
+
             Elements rows = table.select("tbody tr");
             if (rows.isEmpty()) rows = table.select("tr");
 
@@ -96,7 +102,10 @@ public class SwedbankScraper implements BankScraper {
                 if (cols.size() < 2) continue;
 
                 MortgageTerm term = ScraperUtils.parseTerm(cols.get(0).text());
-                BigDecimal rate = ScraperUtils.parseRate(cols.get(1).text());
+                int safeRateColumnIndex = listRateColumnIndex >= 1 && listRateColumnIndex < cols.size()
+                        ? listRateColumnIndex
+                        : cols.size() - 1;
+                BigDecimal rate = ScraperUtils.parseRate(cols.get(safeRateColumnIndex).text());
 
                 if (term == null || rate == null) continue;
 
@@ -109,6 +118,50 @@ public class SwedbankScraper implements BankScraper {
                 ));
             }
         }
+    }
+
+    /**
+     * Identifierar vilken kolumn i listränte-tabellen som faktiskt innehåller listräntan.
+     * Swedbank har tidigare flyttat kolumner så vi förlitar oss inte på fast index.
+     */
+    private int findListRateColumnIndex(Element table) {
+        Elements headerCells = table.select("thead th, thead td");
+        if (headerCells.isEmpty()) {
+            Elements firstRowHeaders = table.select("tr").first() != null
+                    ? table.select("tr").first().select("th, td")
+                    : new Elements();
+            headerCells = firstRowHeaders;
+        }
+
+        int averageRateIndex = -1;
+        int listRateIndex = -1;
+
+        for (int i = 0; i < headerCells.size(); i++) {
+            String header = headerCells.get(i).text().toLowerCase(Locale.ROOT).trim();
+
+            if (header.isEmpty()) {
+                continue;
+            }
+
+            if (header.contains("list")) {
+                listRateIndex = i;
+            }
+
+            if (header.contains("snitt") || header.contains("genomsnitt")) {
+                averageRateIndex = i;
+            }
+        }
+
+        if (listRateIndex >= 1) {
+            return listRateIndex;
+        }
+
+        // Om vi ser en snittränta-kolumn antar vi att listräntan ligger direkt efter.
+        if (averageRateIndex >= 1 && averageRateIndex + 1 < headerCells.size()) {
+            return averageRateIndex + 1;
+        }
+
+        return -1;
     }
 
     /**
