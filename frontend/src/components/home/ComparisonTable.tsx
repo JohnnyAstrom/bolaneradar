@@ -6,6 +6,7 @@ import { bankDisplayNames } from "../../config/bankDisplayNames";
 import { preloadImage } from "../../utils/preloadImage";
 import { apiGet } from "../../services/client";
 import { bankLogos } from "../../config/bankLogos";
+import BankLogo from "../bank/BankLogo";
 
 
 // bankName → urlKey (inverterar displaynames)
@@ -232,6 +233,8 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                     {rowsWithRates.map((row, index) => {
                         const isOpen = openIndex === index;
                         const diff = row.diff;
+                        const bankKey = bankNameToKey[row.bankName];
+                        const logoUrl = bankKey ? bankLogos[bankKey] : undefined;
 
                         const rateClass =
                             diff == null
@@ -245,17 +248,37 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                                 <tr className="hover:bg-row-hover">
                                     <td className="pl-2 sm:px-4 py-2 sm:py-3">
                                         <NavLink
-                                            to={`/bank/${bankNameToKey[row.bankName]}`}
+                                            to={`/bank/${bankKey}`}
                                             className="
                                                 text-primary hover:underline
-                                                block
+                                                inline-flex items-center
+                                                min-h-[40px]
                                                 max-w-[140px] sm:max-w-none
-                                                sm:text-base
-                                                overflow-hidden
-                                                line-clamp-2
                                             "
+                                            title={row.bankName}
                                         >
-                                            {row.bankName}
+                                            {logoUrl && bankKey ? (
+                                                <>
+                                                    <span className="sr-only">{row.bankName}</span>
+                                                    <BankLogo
+                                                        src={logoUrl}
+                                                        alt={row.bankName}
+                                                        bankKey={bankKey}
+                                                        variant="table"
+                                                    />
+                                                </>
+                                            ) : (
+                                                <span
+                                                    className="
+                                                        block
+                                                        sm:text-base
+                                                        overflow-hidden
+                                                        line-clamp-2
+                                                    "
+                                                >
+                                                    {row.bankName}
+                                                </span>
+                                            )}
                                         </NavLink>
                                     </td>
 
@@ -355,24 +378,44 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                                 className="hover:bg-row-hover"
                             >
                                 <div className="pl-2 sm:px-4 py-3">
+                                    {(() => {
+                                        const bankKey = bankNameToKey[row.bankName];
+                                        const logoUrl = bankKey ? bankLogos[bankKey] : undefined;
+
+                                        return (
                                     <NavLink
-                                        to={`/bank/${bankNameToKey[row.bankName]}`}
+                                        to={`/bank/${bankKey}`}
                                         onMouseEnter={() => {
-                                            const bankKey = bankNameToKey[row.bankName];
                                             if (bankKey) {
                                                 preloadImage(bankLogos[bankKey]);
                                             }
                                         }}
                                         onFocus={() => {
-                                            const bankKey = bankNameToKey[row.bankName];
                                             if (bankKey) {
                                                 preloadImage(bankLogos[bankKey]);
                                             }
                                         }}
-                                        className="text-primary hover:underline ..."
+                                        className="text-primary hover:underline inline-flex items-center min-h-[40px] max-w-[140px] sm:max-w-none"
+                                        title={row.bankName}
                                     >
-                                        {row.bankName}
+                                        {logoUrl && bankKey ? (
+                                            <>
+                                                <span className="sr-only">{row.bankName}</span>
+                                                <BankLogo
+                                                    src={logoUrl}
+                                                    alt={row.bankName}
+                                                    bankKey={bankKey}
+                                                    variant="table"
+                                                />
+                                            </>
+                                        ) : (
+                                            <span className="block sm:text-base overflow-hidden line-clamp-2">
+                                                {row.bankName}
+                                            </span>
+                                        )}
                                     </NavLink>
+                                        );
+                                    })()}
                                 </div>
                             </div>
                         ))}
