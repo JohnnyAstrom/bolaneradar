@@ -261,7 +261,8 @@
         "lastChanged": "Senast ändrad"
       },
 
-      "noRatesTitle": "Banker utan räntor för vald bindningstid"
+      "noRatesTitle": "Banker utan räntor för vald bindningstid",
+      "noRatesDescription": "Dessa banker visar inga publika räntor för den valda bindningstiden just nu."
     },
 
     "tableFooter": {

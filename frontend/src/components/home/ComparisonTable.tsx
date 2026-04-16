@@ -2,6 +2,7 @@ import type { FC } from "react";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { ChevronDown, ChevronUp, ChevronsUpDown } from "lucide-react";
 import { bankDisplayNames } from "../../config/bankDisplayNames";
 import { preloadImage } from "../../utils/preloadImage";
 import { apiGet } from "../../services/client";
@@ -33,6 +34,61 @@ interface ComparisonResponse {
 }
 
 type SortDirection = "up" | "down";
+
+interface BankLinkProps {
+    bankName: string;
+}
+
+const BankLink: FC<BankLinkProps> = ({ bankName }) => {
+    const bankKey = bankNameToKey[bankName];
+    const logoUrl = bankKey ? bankLogos[bankKey] : undefined;
+
+    return (
+        <NavLink
+            to={`/bank/${bankKey}`}
+            onMouseEnter={() => {
+                if (bankKey) {
+                    preloadImage(bankLogos[bankKey]);
+                }
+            }}
+            onFocus={() => {
+                if (bankKey) {
+                    preloadImage(bankLogos[bankKey]);
+                }
+            }}
+            className="
+                text-primary hover:opacity-80 transition-opacity
+                inline-flex items-center
+                min-h-[40px]
+                max-w-[140px] sm:max-w-none
+            "
+            title={bankName}
+        >
+            {logoUrl && bankKey ? (
+                <>
+                    <span className="sr-only">{bankName}</span>
+                    <BankLogo
+                        src={logoUrl}
+                        alt={bankName}
+                        bankKey={bankKey}
+                        variant="table"
+                    />
+                </>
+            ) : (
+                <span
+                    className="
+                        block
+                        sm:text-base
+                        overflow-hidden
+                        line-clamp-2
+                    "
+                >
+                    {bankName}
+                </span>
+            )}
+        </NavLink>
+    );
+};
 
 const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
     const { t } = useTranslation();
@@ -144,11 +200,11 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
 
     function sortIcon(column: string) {
         if (sortColumn !== column || !sortDirection) {
-            return <span className="text-icon-neutral">▷</span>;
+            return <ChevronsUpDown size={14} strokeWidth={1.75} className="text-slate-400" />;
         }
         return sortDirection === "down"
-            ? <span className="text-primary">▼</span>
-            : <span className="text-primary">▲</span>;
+            ? <ChevronDown size={14} strokeWidth={2} className="text-primary" />
+            : <ChevronUp size={14} strokeWidth={2} className="text-primary" />;
     }
 
     // ============================================================
@@ -182,7 +238,10 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                             className="pl-2 pr-0 sm:px-4 py-2 sm:py-3 text-left whitespace-nowrap cursor-pointer text-sm sm:text-sm"
                             onClick={() => onHeaderClick("bankName")}
                         >
-                            {t("rates.comparison.columns.bank")} {sortIcon("bankName")}
+                            <span className="inline-flex items-center gap-1">
+                                {t("rates.comparison.columns.bank")}
+                                {sortIcon("bankName")}
+                            </span>
                         </th>
 
                         <th
@@ -199,14 +258,20 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                             className="hidden md:table-cell px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("diff")}
                         >
-                            {t("rates.comparison.columns.change")} {sortIcon("diff")}
+                            <span className="inline-flex items-center gap-1">
+                                {t("rates.comparison.columns.change")}
+                                {sortIcon("diff")}
+                            </span>
                         </th>
 
                         <th
                             className="hidden md:table-cell px-4 py-3 text-left cursor-pointer select-none"
                             onClick={() => onHeaderClick("lastChanged")}
                         >
-                            {t("rates.comparison.columns.lastChanged")} {sortIcon("lastChanged")}
+                            <span className="inline-flex items-center gap-1">
+                                {t("rates.comparison.columns.lastChanged")}
+                                {sortIcon("lastChanged")}
+                            </span>
                         </th>
 
                         <th
@@ -224,7 +289,9 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                                 {averageMonthFormatted ? `(${averageMonthFormatted})` : ""}
                             </span>
 
-                            {sortIcon("avgRate")}
+                            <span className="inline-flex align-middle ml-1">
+                                {sortIcon("avgRate")}
+                            </span>
                         </th>
                     </tr>
                     </thead>
@@ -233,8 +300,6 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                     {rowsWithRates.map((row, index) => {
                         const isOpen = openIndex === index;
                         const diff = row.diff;
-                        const bankKey = bankNameToKey[row.bankName];
-                        const logoUrl = bankKey ? bankLogos[bankKey] : undefined;
 
                         const rateClass =
                             diff == null
@@ -247,39 +312,7 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
                             <React.Fragment key={row.bankName}>
                                 <tr className="hover:bg-row-hover">
                                     <td className="pl-2 sm:px-4 py-2 sm:py-3">
-                                        <NavLink
-                                            to={`/bank/${bankKey}`}
-                                            className="
-                                                text-primary hover:underline
-                                                inline-flex items-center
-                                                min-h-[40px]
-                                                max-w-[140px] sm:max-w-none
-                                            "
-                                            title={row.bankName}
-                                        >
-                                            {logoUrl && bankKey ? (
-                                                <>
-                                                    <span className="sr-only">{row.bankName}</span>
-                                                    <BankLogo
-                                                        src={logoUrl}
-                                                        alt={row.bankName}
-                                                        bankKey={bankKey}
-                                                        variant="table"
-                                                    />
-                                                </>
-                                            ) : (
-                                                <span
-                                                    className="
-                                                        block
-                                                        sm:text-base
-                                                        overflow-hidden
-                                                        line-clamp-2
-                                                    "
-                                                >
-                                                    {row.bankName}
-                                                </span>
-                                            )}
-                                        </NavLink>
+                                        <BankLink bankName={row.bankName} />
                                     </td>
 
                                     <td
@@ -364,58 +397,26 @@ const ComparisonTable: FC<ComparisonTableProps> = ({ activeTerm }) => {
             {/* BOX: BANKER UTAN RÄNTOR (LISTA – SOM DIN REFERENSBILD) */}
             {/* ===================== */}
             {rowsWithoutRates.length > 0 && (
-                <div className="border border-border rounded-lg bg-white overflow-hidden">
-                    <div className="bg-bg-light text-text-primary">
-                        <div className="pl-2 sm:px-4 py-3 text-left font-semibold text-sm">
-                            Banker utan räntor för vald bindningstid
+                <div className="border border-border rounded-lg bg-slate-50/70 overflow-hidden">
+                    <div className="bg-bg-light/90 text-text-primary border-b border-border/80">
+                        <div className="pl-2 sm:px-4 py-3 text-left">
+                            <div className="font-semibold text-sm">
+                                {t("rates.comparison.noRatesTitle")}
+                            </div>
+                            <div className="text-xs text-text-secondary mt-1">
+                                {t("rates.comparison.noRatesDescription")}
+                            </div>
                         </div>
                     </div>
 
-                    <div>
+                    <div className="grid gap-px bg-border/70 sm:grid-cols-2">
                         {rowsWithoutRates.map((row) => (
                             <div
                                 key={row.bankName}
-                                className="hover:bg-row-hover"
+                                className="bg-white hover:bg-row-hover transition-colors"
                             >
-                                <div className="pl-2 sm:px-4 py-3">
-                                    {(() => {
-                                        const bankKey = bankNameToKey[row.bankName];
-                                        const logoUrl = bankKey ? bankLogos[bankKey] : undefined;
-
-                                        return (
-                                    <NavLink
-                                        to={`/bank/${bankKey}`}
-                                        onMouseEnter={() => {
-                                            if (bankKey) {
-                                                preloadImage(bankLogos[bankKey]);
-                                            }
-                                        }}
-                                        onFocus={() => {
-                                            if (bankKey) {
-                                                preloadImage(bankLogos[bankKey]);
-                                            }
-                                        }}
-                                        className="text-primary hover:underline inline-flex items-center min-h-[40px] max-w-[140px] sm:max-w-none"
-                                        title={row.bankName}
-                                    >
-                                        {logoUrl && bankKey ? (
-                                            <>
-                                                <span className="sr-only">{row.bankName}</span>
-                                                <BankLogo
-                                                    src={logoUrl}
-                                                    alt={row.bankName}
-                                                    bankKey={bankKey}
-                                                    variant="table"
-                                                />
-                                            </>
-                                        ) : (
-                                            <span className="block sm:text-base overflow-hidden line-clamp-2">
-                                                {row.bankName}
-                                            </span>
-                                        )}
-                                    </NavLink>
-                                        );
-                                    })()}
+                                <div className="pl-2 sm:px-4 py-2.5">
+                                    <BankLink bankName={row.bankName} />
                                 </div>
                             </div>
                         ))}

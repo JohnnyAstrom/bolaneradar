@@ -272,7 +272,8 @@
         "lastChanged": "Last updated"
       },
 
-      "noRatesTitle": "Banks without rates for selected term"
+      "noRatesTitle": "Banks without rates for selected term",
+      "noRatesDescription": "These banks do not currently show public rates for the selected fixed term."
     },
 
     "tableFooter": {
