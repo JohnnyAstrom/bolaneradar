@@ -29,7 +29,7 @@ const BankLogo: FC<BankLogoProps> = ({
     const containerClasses =
         variant === "table"
             ? "inline-flex items-center justify-start w-[120px] h-[40px]"
-            : "inline-flex items-center mb-6";
+            : "inline-flex items-center";
 
     return (
         <div

@@ -27,6 +27,9 @@
     },
 
     "intro": {
+      "eyebrow": "Bank profile",
+      "highlightTitle": "Quick overview",
+      "highlightDescription": "See current rates, historical development and what type of mortgage customer the bank tends to suit best.",
       "fallbackDescription": "A short summary about the bank will appear here. This will later be replaced by dynamic content from the backend.",
       "fallbackUsp1": "USP placeholder – replaced later with dynamic bank data.",
       "fallbackUsp2": "USP placeholder – for example benefits or customer terms.",
@@ -35,6 +38,7 @@
 
     "rates": {
       "title": "Current mortgage rates",
+      "intro": "See current list rates, recent changes and how the bank’s average rates compare with the market.",
       "headers": {
         "term": "Fixed term",
         "listRate": "List rate",
@@ -51,13 +55,18 @@
     "graph": {
       "title": "Historical development",
       "description": "Shows the bank’s average mortgage rate over the past 12 months.",
-      "selectHint": "Select a fixed term from the dropdown below:",
+      "selectHint": "Select fixed term",
       "selectPlaceholder": "Select fixed term",
       "noTerm": "Select a fixed term to display the chart",
       "error": "Unable to fetch historical data",
       "noData": "No historical data available for this fixed term.",
       "avgRate": "Average rate",
-      "date": "Date"
+      "date": "Date",
+      "latestRate": "Latest level",
+      "change12Months": "12-month change",
+      "trendDown": "Lower than 12 months ago",
+      "trendUp": "Higher than 12 months ago",
+      "trendStable": "Stable level over the past year"
     },
 
     "details": {

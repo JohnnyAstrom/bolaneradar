@@ -111,56 +111,90 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
         return () => { isCancelled = true; };
     }, [selectedTerm, bankName, t]);
 
+    const firstPoint = data[0];
+    const latestPoint = data[data.length - 1];
+    const delta =
+        firstPoint && latestPoint
+            ? Number((latestPoint.ratePercent - firstPoint.ratePercent).toFixed(2))
+            : null;
+
     /* ---------------------------------------
      * 3) Render
      * --------------------------------------- */
     return (
         <div>
-            <h2 className="text-2xl font-semibold text-text-primary mb-2">
-                {t("bank.graph.title")}
-            </h2>
+            <div className="grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
+                <div className="rounded-[24px] border border-slate-200 bg-slate-50/60 p-4 sm:p-5">
+                    <h2 className="text-2xl font-semibold text-text-primary mb-2">
+                        {t("bank.graph.title")}
+                    </h2>
 
-            <p className="text-text-secondary text-sm mb-6">
-                {t("bank.graph.description")}
-                <br />
-                {t("bank.graph.selectHint")}
-            </p>
+                    <p className="text-sm leading-6 text-text-secondary">
+                        {t("bank.graph.description")}
+                    </p>
 
-            <div className="flex mb-6">
-                <select
-                    value={selectedTerm}
-                    onChange={(e) => setSelectedTerm(e.target.value)}
+                    <div className="mt-5">
+                        <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">
+                            {t("bank.graph.selectHint")}
+                        </label>
+                        <select
+                            value={selectedTerm}
+                            onChange={(e) => setSelectedTerm(e.target.value)}
+                            className="
+                                w-full px-4 py-2.5 border border-border rounded-xl bg-white
+                                text-text-primary text-sm
+                                hover:border-icon-neutral focus:outline-none focus:ring-2 focus:ring-primary-light
+                            "
+                        >
+                            <option value="">
+                                {t("bank.graph.selectPlaceholder")}
+                            </option>
+
+                            {terms.map((tTerm) => (
+                                <option key={tTerm} value={tTerm}>
+                                    {t(`mortgage.term.${tTerm}`)}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {selectedTerm && latestPoint && (
+                        <div className="mt-4 grid gap-3">
+                            <div className="rounded-[20px] border border-white/80 bg-white p-3.5">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">
+                                    {t("bank.graph.latestRate")}
+                                </p>
+                                <p className="mt-2 text-xl font-semibold text-text-primary">
+                                    {latestPoint.ratePercent.toFixed(2)}%
+                                </p>
+                            </div>
+
+                            <div className="rounded-[20px] border border-white/80 bg-white p-3.5">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">
+                                    {t("bank.graph.change12Months")}
+                                </p>
+                                <p className="mt-2 text-xl font-semibold text-text-primary">
+                                    {delta == null ? "–" : `${delta > 0 ? "+" : ""}${delta.toFixed(2)}%`}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div
                     className="
-                        px-4 py-2 border border-border rounded-md bg-white
-                        text-text-primary text-sm
-                        hover:border-icon-neutral focus:outline-none focus:ring-2 focus:ring-primary-light
+                        bg-white
+                        border border-slate-200
+                        rounded-[24px]
+                        px-0 sm:px-5
+                        py-3
+                        shadow-sm
+                        text-text-secondary
+                        text-xs sm:text-sm
+                        h-[340px] sm:h-[390px] md:h-[430px]
+                        min-h-[300px]
                     "
                 >
-                    <option value="">
-                        {t("bank.graph.selectPlaceholder")}
-                    </option>
-
-                    {terms.map((tTerm) => (
-                        <option key={tTerm} value={tTerm}>
-                            {t(`mortgage.term.${tTerm}`)}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div
-                className="
-                    bg-white
-                    border border-border
-                    rounded-lg
-                    px-0 sm:px-4
-                    py-2
-                    text-text-secondary
-                    text-xs sm:text-sm
-                    h-[400px] sm:h-[450px] md:h-[500px]
-                    min-h-[300px]
-                "
-            >
                 {!selectedTerm && (
                     <div className="w-full h-full flex items-center justify-center">
                         <span>{t("bank.graph.noTerm")}</span>
@@ -252,7 +286,7 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                                     dataKey="ratePercent"
                                     name={t("bank.graph.avgRate")}
                                     stroke="#2563eb"
-                                    strokeWidth={2}
+                                    strokeWidth={2.5}
                                     dot={{ r: 3 }}
                                     activeDot={{ r: 5 }}
                                 />
@@ -266,6 +300,7 @@ const BankGraphSection: FC<Props> = ({ bankName }) => {
                         <span>{t("bank.graph.noData")}</span>
                     </div>
                 )}
+                </div>
             </div>
         </div>
     );

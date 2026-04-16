@@ -30,95 +30,97 @@ const BankDetailsSection: FC<BankDetailsSectionProps> = ({ bankKey }) => {
     return (
         <div
             className="
-                w-full mx-auto
-                bg-white rounded-md
-                p-1 mt-0
-                sm:rounded-lg sm:p-6
-                max-w-2xl sm:max-w-4xl
+                w-full max-w-5xl mx-auto px-1 sm:px-6
             "
         >
-            {/* Titel */}
-            <h2 className="text-xl font-semibold text-text-primary mb-4">
-                {t("bank.details.about", { bank: displayName })}
-            </h2>
+            <div className="p-1 sm:p-0 lg:rounded-[24px] lg:border lg:border-slate-200 lg:bg-white lg:p-6 lg:shadow-sm">
+                {/* Titel */}
+                <h2 className="text-2xl font-semibold text-text-primary mb-4">
+                    {t("bank.details.about", { bank: displayName })}
+                </h2>
 
-            {/* Översiktstext */}
-            <p className="text-text-secondary mb-8 leading-relaxed">
-                {details.overviewText}
-            </p>
+                {/* Översiktstext */}
+                <p className="max-w-3xl text-text-secondary mb-8 leading-8">
+                    {details.overviewText}
+                </p>
 
-            {/* Passar bäst för */}
-            <div className="mb-10">
-                <h3 className="text-lg font-semibold text-text-primary mb-4">
-                    {t("bank.details.bestFor")}
-                </h3>
+                <div className="mb-10 grid gap-5 lg:grid-cols-2">
+                    <div className="rounded-[24px] border border-emerald-100 bg-emerald-50/50 p-5 sm:p-6">
+                        <h3 className="text-lg font-semibold text-text-primary mb-4">
+                            {t("bank.details.bestFor")}
+                        </h3>
 
-                <ul className="space-y-3">
-                    {details.bestFor.map((item: string, i: number) => (
-                        <li key={i} className="flex items-start gap-2">
-                            <Check size={18} className="text-primary mt-1" />
-                            <span>{item}</span>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                        <ul className="space-y-3">
+                            {details.bestFor.map((item: string, i: number) => (
+                                <li key={i} className="flex items-start gap-3">
+                                    <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-primary shadow-sm">
+                                        <Check size={16} />
+                                    </span>
+                                    <span className="leading-7">{item}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-            {/* Mindre bra för */}
-            <div className="mb-10">
-                <h3 className="text-lg font-semibold text-text-primary mb-4">
-                    {t("bank.details.notFor")}
-                </h3>
+                    <div className="rounded-[24px] border border-rose-100 bg-rose-50/50 p-5 sm:p-6">
+                        <h3 className="text-lg font-semibold text-text-primary mb-4">
+                            {t("bank.details.notFor")}
+                        </h3>
 
-                <ul className="space-y-3">
-                    {details.notFor.map((item: string, i: number) => (
-                        <li key={i} className="flex items-start gap-2">
-                            <X size={18} className="text-red-500 mt-1" />
-                            <span>{item}</span>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                        <ul className="space-y-3">
+                            {details.notFor.map((item: string, i: number) => (
+                                <li key={i} className="flex items-start gap-3">
+                                    <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-red-500 shadow-sm">
+                                        <X size={16} />
+                                    </span>
+                                    <span className="leading-7">{item}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
 
-            {/* CTA Sektion */}
-            <div className="pt-6 mt-6 border-t border-border flex flex-wrap gap-3 sm:gap-5">
+                {/* CTA Sektion */}
+                <div className="pt-6 mt-6 border-t border-border flex flex-wrap items-center gap-3 sm:gap-5">
 
-                {/* Sekundär CTA — Läs mer om banken */}
-                {details.secondaryCtaLabel && (
-                    <Link
-                        to={`/bank/${bankKey}/info`}
-                        className="
-                            inline-flex items-center justify-center
-                            px-5 py-3
-                            border border-primary text-primary rounded-lg text-sm font-medium
-                            whitespace-nowrap
-                            hover:bg-primary/10 active:bg-primary/20
-                            transition
-                            flex-1 sm:flex-none
-                        "
-                    >
-                        {details.secondaryCtaLabel}
-                    </Link>
-                )}
+                    {/* Sekundär CTA — Läs mer om banken */}
+                    {details.secondaryCtaLabel && (
+                        <Link
+                            to={`/bank/${bankKey}/info`}
+                            className="
+                                inline-flex items-center justify-center
+                                px-5 py-3
+                                border border-primary text-primary rounded-xl text-sm font-medium
+                                whitespace-nowrap
+                                hover:bg-primary/10 active:bg-primary/20
+                                transition
+                                flex-1 sm:flex-none
+                            "
+                        >
+                            {details.secondaryCtaLabel}
+                        </Link>
+                    )}
 
-                {/* Primär CTA — besök bankens hemsida */}
-                {details.primaryCtaLabel && details.primaryCtaUrl && (
-                    <a
-                        href={details.primaryCtaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="
-                            inline-flex items-center justify-center
-                            px-5 py-3
-                            bg-primary text-white rounded-lg text-sm font-medium
-                            whitespace-nowrap
-                            hover:bg-primary-hover active:bg-primary-active
-                            transition
-                            flex-1 sm:flex-none
-                        "
-                    >
-                        {details.primaryCtaLabel}
-                    </a>
-                )}
+                    {/* Primär CTA — besök bankens hemsida */}
+                    {details.primaryCtaLabel && details.primaryCtaUrl && (
+                        <a
+                            href={details.primaryCtaUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="
+                                inline-flex items-center justify-center
+                                px-6 py-3
+                                bg-primary text-white rounded-xl text-sm font-medium
+                                whitespace-nowrap
+                                hover:bg-primary-hover active:bg-primary-active
+                                transition
+                                flex-1 sm:flex-none
+                            "
+                        >
+                            {details.primaryCtaLabel}
+                        </a>
+                    )}
+                </div>
             </div>
         </div>
     );

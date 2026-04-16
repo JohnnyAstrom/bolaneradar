@@ -99,48 +99,47 @@ const BankPage: FC = () => {
         <PageWrapper>
 
             {/* INTRO + LOGO */}
-            <Section>
-                {/* GEMENSAM LAYOUT-CONTAINER */}
+            <Section contentClassName="rounded-[28px]">
                 <div
                     className="
-                    max-w-4xl mx-auto
-                    pt-0 pb-0 px-1
-                    sm:py-4 sm:px-6
+                    w-full max-w-5xl mx-auto px-1 sm:px-6
                 "
                 >
-                    <BankLogo
-                        src={logoUrl}
-                        alt={displayName}
-                        bankKey={bankKey}
-                    />
+                    <div className="p-1 sm:p-0 lg:rounded-[24px] lg:border lg:border-slate-200 lg:bg-white lg:p-6 lg:shadow-sm">
+                        <div className="mb-3">
+                            <BankLogo
+                                src={logoUrl}
+                                alt={displayName}
+                                bankKey={bankKey}
+                            />
+                        </div>
 
-                    {introLoading ? (
-                        <p>{t("common.loading")}</p>
-                    ) : introData ? (
-                        <BankIntroSection
-                            description={introData.description}
-                            uspItems={introData.uspItems}
-                        />
-                    ) : (
-                        <p className="text-red-600">
-                            {introError ??
-                                t("bank.errors.intro", {bank: displayName})}
-                        </p>
-                    )}
+                        {introLoading ? (
+                            <p>{t("common.loading")}</p>
+                        ) : introData ? (
+                            <BankIntroSection
+                                description={introData.description}
+                                uspItems={introData.uspItems}
+                            />
+                        ) : (
+                            <p className="text-red-600">
+                                {introError ??
+                                    t("bank.errors.intro", {bank: displayName})}
+                            </p>
+                        )}
+                    </div>
                 </div>
             </Section>
 
             {/* RÄNTOR */}
-            <Section>
+            <Section contentClassName="rounded-[28px]">
                 {ratesLoading ? (
                     <p>{t("common.loading")}</p>
                 ) : rateData ? (
                     <div
                         className="
-                        w-full max-w-full mx-auto
-                        p-1 bg-transparent border-none rounded-none
-                        sm:p-6 sm:bg-white sm:border sm:border-border sm:rounded-lg
-                        sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
+                        w-full max-w-5xl mx-auto
+                        px-1 sm:px-6
                     "
                     >
                         <BankCurrentRatesTable
@@ -156,12 +155,11 @@ const BankPage: FC = () => {
             </Section>
 
             {/* HISTORISK GRAF */}
-            <Section>
+            <Section contentClassName="rounded-[28px]">
                 <div
                     className="
-                    max-w-4xl mx-auto
-                    pt-0 pb-0 px-1
-                    sm:py-4 sm:px-6
+                    max-w-5xl mx-auto
+                    px-1 sm:px-6
                 "
                 >
                     <BankGraphSection bankName={bankKey}/>
@@ -169,7 +167,7 @@ const BankPage: FC = () => {
             </Section>
 
             {/* BANK DETAILS */}
-            <Section>
+            <Section contentClassName="rounded-[28px]">
                 <BankDetailsSection bankKey={bankKey}/>
             </Section>
 

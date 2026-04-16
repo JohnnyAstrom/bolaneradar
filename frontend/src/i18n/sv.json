@@ -27,6 +27,9 @@
     },
 
     "intro": {
+      "eyebrow": "Bankprofil",
+      "highlightTitle": "Snabb överblick",
+      "highlightDescription": "Se aktuella räntor, historisk utveckling och vilken typ av bolånekund banken brukar passa bäst för.",
       "fallbackDescription": "Här kommer en kortfattad sammanfattning om banken. Detta ersätts senare av dynamisk text från backend.",
       "fallbackUsp1": "USP placeholder – ersätts med dynamisk bankdata.",
       "fallbackUsp2": "USP placeholder – till exempel förmåner eller kundvillkor.",
@@ -35,6 +38,7 @@
 
     "rates": {
       "title": "Aktuella bolåneräntor",
+      "intro": "Se aktuella listräntor, senaste förändringar och hur bankens snitträntor står sig mot marknaden.",
       "headers": {
         "term": "Bindningstid",
         "listRate": "Listränta",
@@ -51,13 +55,18 @@
     "graph": {
       "title": "Historisk utveckling",
       "description": "Visar bankens genomsnittliga bolåneränta de senaste 12 månaderna.",
-      "selectHint": "Välj bindningstid i dropdown-menyn nedan:",
+      "selectHint": "Välj bindningstid",
       "selectPlaceholder": "Välj bindningstid",
       "noTerm": "Välj bindningstid för att visa graf",
       "error": "Kunde inte hämta historik",
       "noData": "Ingen historik finns för denna bindningstid.",
       "avgRate": "Snittränta",
-      "date": "Datum"
+      "date": "Datum",
+      "latestRate": "Senaste nivå",
+      "change12Months": "Förändring 12 mån",
+      "trendDown": "Lägre än för 12 månader sedan",
+      "trendUp": "Högre än för 12 månader sedan",
+      "trendStable": "Stabil nivå senaste året"
     },
 
     "details": {
