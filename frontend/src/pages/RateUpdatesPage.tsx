@@ -43,7 +43,7 @@ export default function RateUpdatesPage() {
             </section>
 
             <Section contentClassName="rounded-[28px]">
-                <div className="max-w-4xl mx-auto p-2 sm:py-4 sm:px-6">
+                <div className="max-w-5xl mx-auto p-2 sm:py-4 sm:px-6 lg:px-10">
                     {loading ? (
                         <p className="text-text-secondary">
                             {t("rateUpdates.loading")}

@@ -5,22 +5,25 @@ import {RateUpdateRow} from "./RateUpdateRow";
 export function RateUpdatesDay({day}: { day: RateUpdateDay }) {
     const {t, i18n} = useTranslation();
     const groupedByBank = groupByBank(day.updates);
+    const bankEntries = Object.entries(groupedByBank);
 
     return (
-        <div className="border border-gray-200 rounded-3xl bg-white px-4 py-4 shadow-sm">
+        <div className="border border-gray-200 rounded-3xl bg-white px-4 py-4 shadow-sm sm:px-5 lg:px-6 lg:py-5">
             {/* Datum */}
             <h2 className="text-sm font-semibold text-gray-700 mb-3">
                 {formatDate(day.date, i18n.language)}
             </h2>
 
-            <div className="flex flex-col gap-4">
-                {Object.entries(groupedByBank).map(([bankName, updates]) => (
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                {bankEntries.map(([bankName, updates]) => (
                     <div
                         key={bankName}
-                        className="pb-3 mb-3 border-b border-gray-100 last:border-0"
+                        className={`rounded-2xl border border-slate-100 bg-slate-50/55 px-4 py-4 ${
+                            bankEntries.length === 1 ? "lg:max-w-[460px]" : ""
+                        }`}
                     >
                         {/* Banknamn */}
-                        <h3 className="font-medium text-gray-900 mb-2">
+                        <h3 className="mb-3 font-semibold text-gray-900">
                             {bankName}
                         </h3>
 
@@ -28,14 +31,18 @@ export function RateUpdatesDay({day}: { day: RateUpdateDay }) {
                         <div
                             className="
                             grid
-                            grid-cols-[0.8fr_1fr_1fr_1fr]
-                            sm:grid-cols-[90px_110px_110px_100px]
-                            text-xs font-medium text-gray-800
-                            mb-1 pl-0
+                            grid-cols-[minmax(0,0.95fr)_0.95fr_0.95fr_0.95fr]
+                            w-full
+                            gap-x-2
+                            sm:grid-cols-[minmax(0,1fr)_88px_88px_88px]
+                            lg:grid-cols-[minmax(0,1fr)_96px_96px_96px]
+                            text-[11px] font-medium text-gray-700
+                            sm:text-xs
+                            mb-2 pl-0
                         "
                         >
                             {/* Bindningstid */}
-                            <span>
+                            <span className="min-w-0">
                                 <span className="sm:hidden">
                                     {t("rateUpdates.columns.termShort")}
                                 </span>

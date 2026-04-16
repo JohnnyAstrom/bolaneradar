@@ -12,13 +12,15 @@ export function RateUpdateRow({ update }: { update: RateUpdate }) {
         <li
             className="
             grid
-            grid-cols-[0.8fr_1fr_1fr_1fr]
-            sm:grid-cols-[90px_110px_110px_100px]
-
+            grid-cols-[minmax(0,0.95fr)_0.95fr_0.95fr_0.95fr]
+            w-full
+            gap-x-2
+            sm:grid-cols-[minmax(0,1fr)_88px_88px_88px]
+            lg:grid-cols-[minmax(0,1fr)_96px_96px_96px]
             "
         >
             {/* Bindningstid */}
-            <span className="text-gray-600">
+            <span className="min-w-0 text-gray-600">
                 {t(`mortgage.termShort.${update.bindingPeriod}`)}
             </span>
 
