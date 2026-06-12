@@ -2,8 +2,8 @@ name: Daily mortgage rate scraping
 
 on:
   schedule:
-    # Kör dagligen 08:17 svensk tid
-    - cron: "17 8 * * *"
+    # Försök få faktisk körning runt ca 08–09 svensk tid. Brukar vara ca 3 timmar fördröjning.
+    - cron: "15 5 * * *"
       timezone: "Europe/Stockholm"
 
   workflow_dispatch:
