@@ -16,9 +16,12 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,6 +37,11 @@ public class SkandiabankenScraper implements BankScraper {
             Pattern.compile("SKB\\.pageContent\\s*=\\s*(\\{.*\\})", Pattern.DOTALL);
 
     private final ObjectMapper mapper = new ObjectMapper();
+
+    private static final Pattern AVERAGE_MONTH_PATTERN = Pattern.compile(
+            "(?iu)\\b(januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december)\\s+(20\\d{2})\\b");
+    private static final DateTimeFormatter AVERAGE_MONTH_FORMAT = new DateTimeFormatterBuilder()
+            .parseCaseInsensitive().appendPattern("MMMM uuuu").toFormatter(Locale.forLanguageTag("sv-SE"));
 
     @Override
     public String getBankName() {
@@ -77,11 +85,10 @@ public class SkandiabankenScraper implements BankScraper {
 
                 // ===== SNITTRÄNTOR =====
                 if (name.contains("snit") || name.contains("genomsnitt")) {
-                    YearMonth month = ScraperUtils.parseSwedishMonth(name);
-                    if (month == null) {
-                        System.out.println("Skandiabanken: kunde inte tolka månad från '" + name + "'");
-                        continue;
-                    }
+                    // Även informationsblock kan heta "Snitträntor"; endast tabeller har räntor.
+                    JsonNode columns = expanded.path("columns");
+                    if (!columns.isArray() || columns.size() < 2) continue;
+                    YearMonth month = parseAverageMonth(expanded);
 
                     parseRateTable(
                             bank,
@@ -107,6 +114,28 @@ public class SkandiabankenScraper implements BankScraper {
 
         ScraperUtils.logResult("Skandiabanken", rates.size());
         return rates;
+    }
+
+    private YearMonth parseAverageMonth(JsonNode block) throws IOException {
+        // Publicerad månad finns i tabellens ingress, inte i CMS-namnet.
+        String ingress = Jsoup.parse(block.path("ingress").asText("")).text()
+                .replace('\u00a0', ' ').replace('\u202f', ' ');
+        Matcher matcher = AVERAGE_MONTH_PATTERN.matcher(ingress);
+        YearMonth month = null;
+        while (matcher.find()) {
+            YearMonth found = YearMonth.parse(matcher.group(1) + " " + matcher.group(2), AVERAGE_MONTH_FORMAT);
+            if (month != null && !month.equals(found)) {
+                throw new IOException("Skandiabanken: flera olika snitträntemånader i ingressen: " + ingress);
+            }
+            month = found;
+        }
+        if (month == null) {
+            throw new IOException("Skandiabanken: kunde inte tolka snitträntans månad och år från ingressen: " + ingress);
+        }
+        if (month.isAfter(YearMonth.now())) {
+            throw new IOException("Skandiabanken: framtida snitträntemånad i ingressen: " + month);
+        }
+        return month;
     }
 
     /**
