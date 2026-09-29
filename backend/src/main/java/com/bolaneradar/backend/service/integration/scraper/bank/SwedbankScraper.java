@@ -18,6 +18,7 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * Webbskrapare för Swedbank.
@@ -34,6 +35,8 @@ import java.util.Locale;
  */
 @Service
 public class SwedbankScraper implements BankScraper {
+
+    private static final Pattern HISTORY_MONTH = Pattern.compile("([a-zåäö]+)\\.?\\s+(20\\d{2})");
 
     private static final String LIST_URL =
             "https://www.swedbank.se/privat/boende-och-bolan/bolanerantor.html";
@@ -169,7 +172,7 @@ public class SwedbankScraper implements BankScraper {
      * Tabellen brukar vara:
      *  Rad 1: "jan. 2026" + värden för 3 mån, 1 år, 2 år, ...
      */
-    private void extractLatestAverageRates(Document doc, Bank bank, List<MortgageRate> out) {
+    private void extractLatestAverageRates(Document doc, Bank bank, List<MortgageRate> out) throws IOException {
         Element table = doc.selectFirst("table");
         if (table == null) {
             System.out.println("Swedbank: ingen tabell hittades på historik-sidan för snitträntor.");
@@ -198,15 +201,9 @@ public class SwedbankScraper implements BankScraper {
         }
 
         // Kolumn 0 = månadstext (t.ex. "jan. 2026")
-        String monthText = cols.get(0).text().toLowerCase();
-        YearMonth ym = ScraperUtils.parseSwedishMonth(monthText);
-
-        if (ym == null) {
-            System.out.println("Swedbank: kunde inte tolka månad från historik-rad: " + monthText);
-            return;
-        }
-
-        LocalDate effectiveDate = ym.minusMonths(1).atDay(1);
+        String monthText = cols.get(0).text();
+        // Historikraden anger räntans månad, inte publiceringsmånaden.
+        LocalDate effectiveDate = parseHistoryMonth(monthText).atDay(1);
 
         // Skydd: framtida snitträntor får inte förekomma
         if (effectiveDate.isAfter(LocalDate.now())) {
@@ -233,6 +230,30 @@ public class SwedbankScraper implements BankScraper {
                     effectiveDate
             ));
         }
+    }
+
+    private YearMonth parseHistoryMonth(String text) throws IOException {
+        var matcher = HISTORY_MONTH.matcher(text.toLowerCase(Locale.ROOT)
+                .replace('\u00a0', ' ').replace('\u202f', ' ').trim());
+        if (matcher.matches()) {
+            int month = switch (matcher.group(1)) {
+                case "jan", "januari" -> 1;
+                case "feb", "februari" -> 2;
+                case "mar", "mars" -> 3;
+                case "apr", "april" -> 4;
+                case "maj" -> 5;
+                case "jun", "juni" -> 6;
+                case "jul", "juli" -> 7;
+                case "aug", "augusti" -> 8;
+                case "sep", "sept", "september" -> 9;
+                case "okt", "oktober" -> 10;
+                case "nov", "november" -> 11;
+                case "dec", "december" -> 12;
+                default -> 0;
+            };
+            if (month != 0) return YearMonth.of(Integer.parseInt(matcher.group(2)), month);
+        }
+        throw new IOException("Swedbank: kunde inte tolka månad från historik-rad: " + text);
     }
 
     @Override
